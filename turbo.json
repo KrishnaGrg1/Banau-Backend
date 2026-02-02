@@ -11,7 +11,9 @@
         "DATABASE_URL",
         "JWT_SECRET",
         "JWT_EXPIRES_IN",
-        "PORT"
+        "PORT",
+        "VITE_API_URL",
+        "VITE_APP_TITLE"
       ]
     },
     "dev": {
