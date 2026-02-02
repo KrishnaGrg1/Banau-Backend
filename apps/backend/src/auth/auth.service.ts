@@ -87,8 +87,8 @@ export class AuthServices {
     const token = await this.generateToken(existingUser);
     res.cookie('uid', token, {
       httpOnly: true,
-      secure: true, // true in production
-      sameSite: 'lax',
+      secure: true,
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days in milliseconds
     });
     
