@@ -17,7 +17,7 @@ export class AuthController {
   @Post('register')
   async register(
     @Body() createUserDto: CreateUserDto,
-  ): Promise<ApiResponseDto<RegisterResponse>> {
+  ) {
     const data = await this.userServies.register(createUserDto);
     return ApiResponseDto.success(data, 'Registered successful');
   }

@@ -29,10 +29,8 @@ export class AuthServices {
 
     const accessToken = this.jwtService.sign(payload, {
       secret: this.configService.get<string>('JWT_SECRET') || 'your-secret-key',
-      // Cast here to resolve the "string is not assignable to StringValue" error
-      expiresIn: (this.configService.get<string>('JWT_EXPIRES_IN') ||
-        '7d') as any,
-    });
+      expiresIn: this.configService.get<string>('JWT_EXPIRES_IN') || '7d',
+    } as any);
 
     // 2. Store the token (Ideally, this should be a Refresh Token)
     const expiresAt = new Date();

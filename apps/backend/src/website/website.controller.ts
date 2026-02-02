@@ -18,21 +18,21 @@ export class WebsiteController {
 
   @UseGuards(AuthGuard)
   @Post()
-  async create(@Request() req, @Body() dto: CreateWebsiteDto):Promise<ApiResponseDto<WebsiteResponse>> {
+  async create(@Request() req, @Body() dto: CreateWebsiteDto) {
     const data = await this.websitesService.addDomain(req.user.id, dto);
     return ApiResponseDto.success(data, 'Added Domain successfully');
   }
 
   @UseGuards(AuthGuard)
   @Put('publish')
-  async publishWebsite(@Request() req):Promise<ApiResponseDto<WebsiteResponse>>  {
+  async publishWebsite(@Request() req) {
     const data = await this.websitesService.publishWebsite(req.user.id);
     return ApiResponseDto.success(data, 'Published website successfully');
   }
 
   @UseGuards(AuthGuard)
   @Get('')
-  async getWebiste(@Request() req):Promise<ApiResponseDto<WebsiteResponse>>  {
+  async getWebiste(@Request() req) {
     const data = await this.websitesService.getWebsiteDetails(req.user.id);
     return ApiResponseDto.success(
       data,
