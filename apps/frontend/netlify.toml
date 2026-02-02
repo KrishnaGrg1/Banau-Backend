@@ -1,7 +1,17 @@
 [build]
-  command = "vite build"
-  dir = "dist/client"
+  command = "cd ../.. && pnpm turbo run build --filter=frontend"
+  publish = "dist/client"
+  
+[functions]
+  directory = ".netlify/v1/functions"
+  node_bundler = "esbuild"
+
 [dev]
-  command = "npm run dev"
+  command = "pnpm dev"
   targetPort = 3000
   port = 8888
+
+[[redirects]]
+  from = "/*"
+  to = "/.netlify/functions/server"
+  status = 200
