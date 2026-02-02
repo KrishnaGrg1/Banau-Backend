@@ -2,16 +2,22 @@ import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { ConfigService } from '@nestjs/config';
 
+interface RequestWithHeaders extends Request {
+  headers: {
+    [key: string]: string | string[] | undefined;
+  };
+}
+
 @Injectable()
 export class SubdomainMiddleware implements NestMiddleware {
   constructor(private configService: ConfigService) {}
 
   use(req: Request, res: Response, next: () => void): void {
-    req['subdomain'] = this.getFrontendSubdomain(req);
+    req['subdomain'] = this.getFrontendSubdomain(req as RequestWithHeaders);
     next();
   }
 
-  private getFrontendSubdomain(req: Request): string | null {
+  private getFrontendSubdomain(req: RequestWithHeaders): string | null {
     const nodeEnv = this.configService.get('NODE_ENV');
 
     // In development or staging mode, return "dev"
