@@ -12,7 +12,7 @@ export class SubdomainMiddleware implements NestMiddleware {
   }
 
   private getFrontendSubdomain(req: Request): string | null {
-    const nodeEnv = this.configService.get<string>('NODE_ENV');
+    const nodeEnv = this.configService.get('NODE_ENV');
 
     // In development or staging mode, return "dev"
     if (nodeEnv === 'development' || nodeEnv === 'staging') {
@@ -20,28 +20,28 @@ export class SubdomainMiddleware implements NestMiddleware {
     }
 
     // Try Origin header first
-    const origin = req.headers.origin;
+    const origin = req.get('origin');
     if (origin) {
       const subdomain = this.extractSubdomain(origin);
       if (subdomain) return subdomain;
     }
 
     // Try Referer header
-    const referer = req.headers.referer;
+    const referer = req.get('referer');
     if (referer) {
       const subdomain = this.extractSubdomain(referer);
       if (subdomain) return subdomain;
     }
 
     // Try custom header
-    const customHeader = req.headers['x-frontend-domain'] as string;
+    const customHeader = req.get('x-frontend-domain');
     if (customHeader) {
       const subdomain = this.extractSubdomain(customHeader);
       if (subdomain) return subdomain;
     }
 
     // Finally try Host header
-    const host = req.headers.host;
+    const host = req.get('host');
     if (host) {
       return this.extractSubdomain(host);
     }
