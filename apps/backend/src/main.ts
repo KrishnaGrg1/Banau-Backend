@@ -86,8 +86,17 @@ async function getApp() {
 
 // Export for Vercel
 export default async (req: any, res: any) => {
-  const app = await getApp();
-  return app(req, res);
+  try {
+    const app = await getApp();
+    return app(req, res);
+  } catch (error) {
+    console.error('Serverless function error:', error);
+    return res.status(500).json({
+      error: 'Internal Server Error',
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: process.env.NODE_ENV === 'development' ? error instanceof Error ? error.stack : undefined : undefined
+    });
+  }
 };
 
 // For local development
