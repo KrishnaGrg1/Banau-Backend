@@ -1,17 +1,17 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class SubdomainMiddleware implements NestMiddleware {
   constructor(private configService: ConfigService) {}
 
-  use(req: Request, res: Response, next: NextFunction): void {
+  use(req: Request, res: Response, next: () => void): void {
     req['subdomain'] = this.getFrontendSubdomain(req);
     next();
   }
 
-  private getFrontendSubdomain(req: Request & { headers: any }): string | null {
+  private getFrontendSubdomain(req: Request): string | null {
     const nodeEnv = this.configService.get<string>('NODE_ENV');
 
     // In development or staging mode, return "dev"
@@ -20,28 +20,28 @@ export class SubdomainMiddleware implements NestMiddleware {
     }
 
     // Try Origin header first
-    const origin = req.headers?.origin;
+    const origin = req.headers.origin;
     if (origin) {
       const subdomain = this.extractSubdomain(origin);
       if (subdomain) return subdomain;
     }
 
     // Try Referer header
-    const referer = req.headers?.referer;
+    const referer = req.headers.referer;
     if (referer) {
       const subdomain = this.extractSubdomain(referer);
       if (subdomain) return subdomain;
     }
 
     // Try custom header
-    const customHeader = req.headers?.['x-frontend-domain'] as string;
+    const customHeader = req.headers['x-frontend-domain'] as string;
     if (customHeader) {
       const subdomain = this.extractSubdomain(customHeader);
       if (subdomain) return subdomain;
     }
 
     // Finally try Host header
-    const host = req.headers?.host;
+    const host = req.headers.host;
     if (host) {
       return this.extractSubdomain(host);
     }
