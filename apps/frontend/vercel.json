@@ -1,7 +1,13 @@
 {
   "buildCommand": "cd ../.. && pnpm turbo run build --filter=frontend",
-  "outputDirectory": "dist",
+  "outputDirectory": "dist/client",
   "installCommand": "pnpm install",
   "framework": null,
-  "devCommand": "pnpm dev"
+  "devCommand": "pnpm dev",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
 }
