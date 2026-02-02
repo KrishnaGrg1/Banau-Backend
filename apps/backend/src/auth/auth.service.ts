@@ -10,7 +10,6 @@ import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { User } from '@repo/db/src/generated/prisma/client';
-import { email } from 'zod';
 
 @Injectable()
 export class AuthServices {
