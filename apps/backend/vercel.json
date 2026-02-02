@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "cd ../.. && pnpm turbo run build --filter=@repo/backend",
+  "buildCommand": "cd ../.. && pnpm --filter @repo/db build && pnpm turbo run build --filter=banau",
   "outputDirectory": "dist",
   "installCommand": "pnpm install",
   "builds": [
