@@ -9,9 +9,14 @@ async function bootstrap() {
   const logger = new Logger('Bootstrap');
   const app = await NestFactory.create(AppModule);
   app.enableCors({
-    origin:['http://localhost:3000','https://banau.netlify.app'],
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Specify allowed methods
-    allowedHeaders: 'Content-Type, Authorization', // Specify allowed headers
+    origin: [
+      'http://localhost:3000',
+      'https://banau.netlify.app',
+      'https://krishnabgurung.com.np',
+      /^https:\/\/.*\.krishnabgurung\.com\.np$/
+    ],
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    allowedHeaders: 'Content-Type, Authorization',
     credentials: true,
   });
   app.setGlobalPrefix('/api/v1');
