@@ -9,7 +9,7 @@ async function bootstrap() {
   const logger = new Logger('Bootstrap');
   const app = await NestFactory.create(AppModule);
   app.enableCors({
-    origin:['http://localhost:3000','https://69807c6e35d9ca9fde8fa1b0--dashing-faun-d062b5.netlify.app','https://dashing-faun-d062b5.netlify.app'],
+    origin:['http://localhost:3000','https://banau.netlify.app'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Specify allowed methods
     allowedHeaders: 'Content-Type, Authorization', // Specify allowed headers
     credentials: true,
