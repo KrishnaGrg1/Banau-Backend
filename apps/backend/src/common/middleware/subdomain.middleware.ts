@@ -20,28 +20,28 @@ export class SubdomainMiddleware implements NestMiddleware {
     }
 
     // Try Origin header first
-    const origin = req.get('origin');
+    const origin = (req.headers['origin'] || req.headers['Origin']) as string | undefined;
     if (origin) {
       const subdomain = this.extractSubdomain(origin);
       if (subdomain) return subdomain;
     }
 
     // Try Referer header
-    const referer = req.get('referer');
+    const referer = (req.headers['referer'] || req.headers['Referer']) as string | undefined;
     if (referer) {
       const subdomain = this.extractSubdomain(referer);
       if (subdomain) return subdomain;
     }
 
     // Try custom header
-    const customHeader = req.get('x-frontend-domain');
+    const customHeader = req.headers['x-frontend-domain'] as string | undefined;
     if (customHeader) {
       const subdomain = this.extractSubdomain(customHeader);
       if (subdomain) return subdomain;
     }
 
     // Finally try Host header
-    const host = req.get('host');
+    const host = (req.headers['host'] || req.headers['Host']) as string | undefined;
     if (host) {
       return this.extractSubdomain(host);
     }
