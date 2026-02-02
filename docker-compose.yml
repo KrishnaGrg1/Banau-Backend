@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: banau-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: banau
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Backend API
+  backend:
+    build:
+      context: .
+      dockerfile: apps/backend/Dockerfile
+    container_name: banau-backend
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/banau?schema=public
+      JWT_SECRET: your-super-secret-jwt-key-min-32-characters-long
+      JWT_EXPIRES_IN: 7d
+      NODE_ENV: development
+      PORT: 3000
+    ports:
+      - "3001:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      # For development hot reload (optional)
+      - ./apps/backend/src:/app/apps/backend/src
+      - ./packages:/app/packages
+    command: sh -c "cd /app/packages/db && pnpm exec prisma migrate deploy && node /app/apps/backend/dist/main.js"
+    restart: unless-stopped
+
+  # Frontend
+  frontend:
+    build:
+      context: .
+      dockerfile: apps/frontend/Dockerfile
+      args:
+        VITE_API_URL: http://localhost:3001
+    container_name: banau-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

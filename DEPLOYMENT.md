@@ -45,7 +45,7 @@ pnpm --filter @repo/db db:push
 2. **Configure Build Settings**
    - Framework Preset: **Other**
    - Root Directory: `apps/backend`
-   - Build Command: `cd ../.. && pnpm turbo run build --filter=@repo/backend`
+   - Build Command: `cd ../.. && pnpm --filter @repo/db db:generate && pnpm turbo run build --filter=banau`
    - Output Directory: `dist`
    - Install Command: `pnpm install`
 
