@@ -2,16 +2,10 @@
   "version": 2,
   "buildCommand": "cd ../.. && pnpm --filter @repo/shared build && pnpm --filter @repo/db build && pnpm turbo run build --filter=banau",
   "installCommand": "pnpm install --prod=false",
-  "functions": {
-    "dist/main.js": {
-      "memory": 1024,
-      "maxDuration": 10
-    }
-  },
   "rewrites": [
     {
       "source": "/(.*)",
-      "destination": "/dist/main"
+      "destination": "/api"
     }
   ]
 }
