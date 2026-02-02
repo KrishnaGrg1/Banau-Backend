@@ -1,7 +1,7 @@
 {
   "version": 2,
   "buildCommand": "cd ../.. && pnpm --filter @repo/shared build && pnpm --filter @repo/db build && pnpm turbo run build --filter=banau",
-  "installCommand": "pnpm install",
+  "installCommand": "pnpm install --prod=false",
   "rewrites": [
     {
       "source": "/api/v1/(.*)",
