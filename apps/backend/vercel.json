@@ -2,16 +2,14 @@
   "version": 2,
   "buildCommand": "cd ../.. && pnpm --filter @repo/shared build && pnpm --filter @repo/db build && pnpm turbo run build --filter=banau",
   "installCommand": "pnpm install",
-  "builds": [
+  "rewrites": [
     {
-      "src": "dist/main.js",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
+      "source": "/api/v1/(.*)",
+      "destination": "/api"
+    },
     {
-      "src": "/(.*)",
-      "dest": "/dist/main.js"
+      "source": "/(.*)",
+      "destination": "/api"
     }
   ]
 }
