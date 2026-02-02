@@ -3,19 +3,23 @@ import { AppModule } from './app.module';
 import cookieParser from 'cookie-parser';
 import { ValidationPipe, Logger } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import * as fs from 'fs';
-import * as path from 'path';
+import { ExpressAdapter } from '@nestjs/platform-express';
+import express from 'express';
+
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
   const app = await NestFactory.create(AppModule);
+  
   app.enableCors({
-    origin:['http://localhost:3000'],
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Specify allowed methods
-    allowedHeaders: 'Content-Type, Authorization', // Specify allowed headers
+    origin: ['http://localhost:3000', 'https://*.vercel.app'],
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    allowedHeaders: 'Content-Type, Authorization',
     credentials: true,
   });
+  
   app.setGlobalPrefix('/api/v1');
   app.use(cookieParser());
+  
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -26,6 +30,7 @@ async function bootstrap() {
       },
     }),
   );
+  
   const config = new DocumentBuilder()
     .setTitle('Banau Backend API')
     .setDescription('Production-ready API for exploring the Banau.')
@@ -33,19 +38,59 @@ async function bootstrap() {
     .addTag('Authentication', 'User registration and login')
     .addBearerAuth()
     .build();
+    
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
-  app.use('/openapi.json', (req, res) => {
-    res.json(document);
-  });
-  // ✅ Also write the Swagger JSON file for frontend codegen
-  try {
-    const outputPath = path.join(process.cwd(), 'openapi.json');
-    fs.writeFileSync(outputPath, JSON.stringify(document, null, 2));
-    logger.log(`📄 Swagger schema generated at: ${outputPath}`);
-  } catch (error) {
-    logger.error('❌ Failed to write Swagger schema file', error);
-  }
+  
   await app.listen(process.env.PORT ?? 3000);
+  logger.log(`🚀 Application is running on: http://localhost:${process.env.PORT ?? 3000}`);
 }
-bootstrap();
+
+// For Vercel serverless
+let cachedApp: any;
+
+async function getApp() {
+  if (!cachedApp) {
+    const expressApp = express();
+    const app = await NestFactory.create(
+      AppModule,
+      new ExpressAdapter(expressApp),
+    );
+    
+    app.enableCors({
+      origin: ['http://localhost:3000', 'https://*.vercel.app'],
+      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+      allowedHeaders: 'Content-Type, Authorization',
+      credentials: true,
+    });
+    
+    app.setGlobalPrefix('/api/v1');
+    app.use(cookieParser());
+    
+    app.useGlobalPipes(
+      new ValidationPipe({
+        whitelist: true,
+        forbidNonWhitelisted: true,
+        transform: true,
+        transformOptions: {
+          enableImplicitConversion: true,
+        },
+      }),
+    );
+    
+    await app.init();
+    cachedApp = expressApp;
+  }
+  return cachedApp;
+}
+
+// Export for Vercel
+export default async (req: any, res: any) => {
+  const app = await getApp();
+  return app(req, res);
+};
+
+// For local development
+if (require.main === module) {
+  bootstrap();
+}

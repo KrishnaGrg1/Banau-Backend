@@ -1,18 +1,17 @@
 {
   "version": 2,
   "buildCommand": "cd ../.. && pnpm --filter @repo/shared build && pnpm --filter @repo/db build && pnpm turbo run build --filter=banau",
-  "outputDirectory": "dist",
   "installCommand": "pnpm install",
   "builds": [
     {
-      "src": "src/main.ts",
+      "src": "dist/main.js",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "dist/main.js"
+      "dest": "/dist/main.js"
     }
   ]
 }
