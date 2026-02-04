@@ -7,7 +7,7 @@ export function PublicWebsite() {
 
   if (!subdomain) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-50">
+      <div className="flex min-h-screen items-center justify-center ">
         <Card className="w-full max-w-md text-center">
           <CardHeader>
             <CardTitle>Website Not Found</CardTitle>
@@ -32,7 +32,7 @@ export function PublicWebsite() {
 
   if (isError || !data) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-50">
+      <div className="flex min-h-screen items-center justify-center ">
         <Card className="w-full max-w-md text-center">
           <CardHeader>
             <CardTitle>Website Unavailable</CardTitle>
@@ -48,9 +48,9 @@ export function PublicWebsite() {
   const siteName =
     data.name || subdomain.charAt(0).toUpperCase() + subdomain.slice(1)
   return (
-    <div className="min-h-screen  from-indigo-50 via-white to-blue-50">
+    <div className="min-h-screen ">
       {/* HERO */}
-      <header className="border-b bg-white/80 backdrop-blur">
+      <header className="border-b ">
         <div className="container mx-auto px-4 py-12 text-center">
           <h1 className="text-4xl font-bold text-gray-900">{siteName}</h1>
           <p className="mt-3 text-gray-600">
@@ -106,7 +106,7 @@ export function PublicWebsite() {
       </main>
 
       {/* FOOTER */}
-      <footer className="border-t bg-white py-6">
+      <footer className="border-t  py-6">
         <div className="container mx-auto px-4 text-center text-sm text-gray-600">
           © {new Date().getFullYear()} {siteName}. Powered by{' '}
           <span className="font-semibold text-gray-900">Banau</span>
