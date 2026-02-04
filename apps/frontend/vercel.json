@@ -1,13 +1,7 @@
 {
   "buildCommand": "cd ../.. && pnpm turbo run build --filter=frontend",
-  "outputDirectory": "dist/client",
+  "outputDirectory": ".vercel/output",
   "installCommand": "pnpm install",
   "framework": null,
-  "devCommand": "pnpm dev",
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
-  ]
+  "devCommand": "pnpm dev"
 }
