@@ -15,7 +15,7 @@ export function getSubdomain(): string | null {
   }
 
   const hostname = window.location.hostname
-  
+
   // Handle localhost
   if (hostname === 'localhost' || hostname === '127.0.0.1') {
     return 'admin' // Default to admin for local dev
@@ -23,7 +23,7 @@ export function getSubdomain(): string | null {
 
   // Split hostname by dots
   const parts = hostname.split('.')
-  
+
   // If only domain (banau.com), treat as admin
   if (parts.length <= 2) {
     return 'admin'

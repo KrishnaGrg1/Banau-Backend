@@ -1,8 +1,6 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { getWebsite } from '@/lib/services/website.service'
-import { logout } from '@/lib/services/auth.services'
-import { useAuth } from '@/hooks/use-auth'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -12,6 +10,8 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { useEffect } from 'react'
+import { useLogOut } from '@/hooks/user-auth'
+import { useAuthStore } from '@/lib/stores/auth.stores'
 
 export const Route = createFileRoute('/dashboard')({
   component: DashboardPage,
@@ -19,14 +19,13 @@ export const Route = createFileRoute('/dashboard')({
 
 function DashboardPage() {
   const navigate = useNavigate()
-  const queryClient = useQueryClient()
-  const { isAuthenticated, isLoading: authLoading } = useAuth()
+  const { isAuthenticated } = useAuthStore()
 
   useEffect(() => {
-    if (!authLoading && !isAuthenticated) {
+    if (!isAuthenticated) {
       navigate({ to: '/login' })
     }
-  }, [isAuthenticated, authLoading, navigate])
+  }, [isAuthenticated, navigate])
 
   const {
     data: website,
@@ -35,31 +34,12 @@ function DashboardPage() {
   } = useQuery({
     queryKey: ['website'],
     queryFn: getWebsite,
-    enabled: isAuthenticated,
   })
 
-  const logoutMutation = useMutation({
-    mutationFn: logout,
-    onSuccess: () => {
-      queryClient.clear()
-      navigate({ to: '/login' })
-    },
-  })
+  const { mutate: logoutMutation } = useLogOut()
 
   const handleLogout = () => {
-    logoutMutation.mutate()
-  }
-
-  if (authLoading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <p>Loading...</p>
-      </div>
-    )
-  }
-
-  if (!isAuthenticated) {
-    return null
+    logoutMutation()
   }
 
   return (
@@ -111,10 +91,10 @@ function DashboardPage() {
                     <p className="text-sm font-medium">Status</p>
                     <p
                       className={
-                        website.isPublished ? 'text-green-600' : 'text-gray-600'
+                        website.published ? 'text-green-600' : 'text-gray-600'
                       }
                     >
-                      {website.isPublished ? 'Published' : 'Draft'}
+                      {website.published ? 'Published' : 'Draft'}
                     </p>
                   </div>
                   <Button
@@ -142,7 +122,7 @@ function DashboardPage() {
                 <div className="flex justify-between">
                   <span className="text-sm text-gray-600">Published</span>
                   <span className="font-medium">
-                    {website?.isPublished ? 1 : 0}
+                    {website?.published ? 1 : 0}
                   </span>
                 </div>
               </div>
@@ -183,7 +163,7 @@ function DashboardPage() {
                     >
                       Preview site
                     </Button>
-                    {website.isPublished && (
+                    {website.published && (
                       <Button
                         onClick={() => {
                           window.open(

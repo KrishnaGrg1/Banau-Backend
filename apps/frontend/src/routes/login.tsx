@@ -1,8 +1,5 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useForm } from '@tanstack/react-form'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { login } from '@/lib/services/auth.services'
-import { useAuth } from '@/hooks/use-auth'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -13,7 +10,9 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
+import { LoginDtoSchema } from '@repo/shared'
+import { useLogin } from '@/hooks/user-auth'
 
 export const Route = createFileRoute('/login')({
   component: LoginPage,
@@ -21,35 +20,19 @@ export const Route = createFileRoute('/login')({
 
 function LoginPage() {
   const navigate = useNavigate()
-  const queryClient = useQueryClient()
   const [error, setError] = useState<string | null>(null)
-  const { isAuthenticated, isLoading: authLoading } = useAuth()
-
-  useEffect(() => {
-    if (!authLoading && isAuthenticated) {
-      navigate({ to: '/dashboard' })
-    }
-  }, [isAuthenticated, authLoading, navigate])
-
-  const loginMutation = useMutation({
-    mutationFn: login,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['auth'] })
-      navigate({ to: '/dashboard' })
-    },
-    onError: (err: Error) => {
-      setError(err.message)
-    },
-  })
-
+  const { mutate: login, isPending } = useLogin()
   const form = useForm({
     defaultValues: {
       email: '',
       password: '',
     },
+    validators: {
+      onSubmit: LoginDtoSchema,
+    },
     onSubmit: async ({ value }) => {
       setError(null)
-      loginMutation.mutate(value)
+      login(value)
     },
   })
 
@@ -96,7 +79,9 @@ function LoginPage() {
                   />
                   {field.state.meta.errors && (
                     <p className="text-sm text-red-600">
-                      {field.state.meta.errors[0]}
+                      {typeof field.state.meta.errors[0] === 'string'
+                        ? field.state.meta.errors[0]
+                        : field.state.meta.errors[0]?.message}
                     </p>
                   )}
                 </div>
@@ -128,7 +113,9 @@ function LoginPage() {
                   />
                   {field.state.meta.errors && (
                     <p className="text-sm text-red-600">
-                      {field.state.meta.errors[0]}
+                      {typeof field.state.meta.errors[0] === 'string'
+                        ? field.state.meta.errors[0]
+                        : field.state.meta.errors[0]?.message}
                     </p>
                   )}
                 </div>
@@ -141,12 +128,8 @@ function LoginPage() {
               </div>
             )}
 
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={loginMutation.isPending}
-            >
-              {loginMutation.isPending ? 'Logging in...' : 'Login'}
+            <Button type="submit" className="w-full" disabled={isPending}>
+              {isPending ? 'Logging in...' : 'Login'}
             </Button>
 
             <div className="text-center text-sm">

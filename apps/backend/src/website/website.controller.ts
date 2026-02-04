@@ -2,41 +2,55 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
   Put,
-  Request,
   UseGuards,
 } from '@nestjs/common';
 import { WebsiteService } from './webiste.service';
 import { AuthGuard } from 'src/common/guard/auth.guard';
-import type { CreateWebsiteDto, WebsiteResponse } from '@repo/shared';
 import { ApiResponseDto } from 'src/common/dto/response.dto';
+import type { CreateWebsiteDto } from '@repo/shared';
+import { User } from 'src/common/decorators/user.decorator';
 
+@UseGuards(AuthGuard)
 @Controller('website')
 export class WebsiteController {
-  constructor(private websitesService: WebsiteService) {}
+  constructor(private readonly websitesService: WebsiteService) {}
 
-  @UseGuards(AuthGuard)
   @Post()
-  async create(@Request() req, @Body() dto: CreateWebsiteDto) {
-    const data = await this.websitesService.addDomain(req.user.id, dto);
-    return ApiResponseDto.success(data, 'Added Domain successfully');
+  async create(@User('id') userId: string, @Body() dto: CreateWebsiteDto) {
+    const data = await this.websitesService.addDomain(userId, dto);
+    return ApiResponseDto.success(data, 'Domain added successfully');
   }
 
-  @UseGuards(AuthGuard)
   @Put('publish')
-  async publishWebsite(@Request() req) {
-    const data = await this.websitesService.publishWebsite(req.user.id);
-    return ApiResponseDto.success(data, 'Published website successfully');
+  async publish(@User('id') userId: string) {
+    const data = await this.websitesService.publishWebsite(userId);
+    return ApiResponseDto.success(data, 'Website published successfully');
   }
 
-  @UseGuards(AuthGuard)
-  @Get('')
-  async getWebiste(@Request() req) {
-    const data = await this.websitesService.getWebsiteDetails(req.user.id);
+  @Get()
+  async getDetails(@User('id') userId: string) {
+    const data = await this.websitesService.getWebsiteDetails(userId);
     return ApiResponseDto.success(
       data,
-      `Retrieved user's website details successfully`,
+      'Website details retrieved successfully',
+    );
+  }
+
+  @Get(':subdomain')
+  async getBySubdomain(
+    @User('id') userId: string,
+    @Param('subdomain') subdomain: string,
+  ) {
+    const website = await this.websitesService.getWebsiteDetailsBySubdomain(
+      userId,
+      subdomain,
+    );
+    return ApiResponseDto.success(
+      website,
+      'Website details retrieved successfully',
     );
   }
 }

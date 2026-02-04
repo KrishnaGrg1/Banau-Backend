@@ -4,7 +4,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import type{ CreateUserDto ,LoginDto} from '@repo/shared';
+import type { CreateUserDto, LoginDto } from '@repo/shared';
 import * as bcrypt from 'bcrypt';
 
 import { JwtService } from '@nestjs/jwt';
@@ -60,9 +60,9 @@ export class AuthServices {
         email: data.email,
         name: data.name,
         password: hashPassword,
-      }
+      },
     });
-    
+
     // Remove password from response
     const { password, ...userWithoutPassword } = user;
     return userWithoutPassword;
@@ -91,7 +91,7 @@ export class AuthServices {
       sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days in milliseconds
     });
-    
+
     // Remove password from response
     const { password, ...userWithoutPassword } = existingUser;
     return { user: userWithoutPassword, token };

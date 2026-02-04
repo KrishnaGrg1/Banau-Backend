@@ -15,11 +15,11 @@
    - **Branch**: `main`
    - **Root Directory**: `apps/backend`
    - **Runtime**: `Node`
-   - **Build Command**: 
+   - **Build Command**:
      ```bash
      cd ../.. && pnpm install --prod=false && pnpm --filter @repo/shared build && pnpm --filter @repo/db build && pnpm turbo run build --filter=banau
      ```
-   - **Start Command**: 
+   - **Start Command**:
      ```bash
      node dist/main.js
      ```
@@ -38,6 +38,7 @@
 Your API will be available at: `https://banau-backend.onrender.com`
 
 ## Advantages over Vercel
+
 - ✅ No serverless complexity
 - ✅ Persistent connections (better for databases)
 - ✅ WebSockets support
@@ -45,6 +46,7 @@ Your API will be available at: `https://banau-backend.onrender.com`
 - ✅ Free tier available
 
 ## Test Your API
+
 ```bash
 curl -X POST https://banau-backend.onrender.com/api/v1/auth/login \
   -H "Content-Type: application/json" \

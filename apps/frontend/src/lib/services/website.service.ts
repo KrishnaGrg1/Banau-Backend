@@ -1,26 +1,26 @@
-import  { CreateWebsiteDto, WebsiteResponse } from "@repo/shared"
-import axiosInstance from "../axios"
+import { CreateWebsiteDto, WebsiteResponse } from '@repo/shared'
+import axiosInstance from '../axios'
 
 export const createWebsite = async (data: CreateWebsiteDto) => {
   try {
     const response = await axiosInstance.post<WebsiteResponse>('/website', data)
-    return response.data.data 
-   } catch (error: unknown) {
+    return response.data.data
+  } catch (error: unknown) {
     const err = error as {
       response?: { data?: { body?: { message?: string }; message?: string } }
     }
     const errorMessage =
       err.response?.data?.body?.message ||
       err.response?.data?.message ||
-      'Failed to fetch communities'
+      'Failed to process website request'
     throw new Error(errorMessage)
   }
 }
 
-
-export const publilshWebsite = async () => {
+export const publishWebsite = async () => {
   try {
-    const response = await axiosInstance.put<WebsiteResponse>('/website/publish')
+    const response =
+      await axiosInstance.put<WebsiteResponse>('/website/publish')
     return response.data
   } catch (error: unknown) {
     const err = error as {
@@ -29,11 +29,10 @@ export const publilshWebsite = async () => {
     const errorMessage =
       err.response?.data?.body?.message ||
       err.response?.data?.message ||
-      'Failed to fetch communities'
+      'Failed to process website request'
     throw new Error(errorMessage)
   }
 }
-
 
 export const getWebsite = async () => {
   try {
@@ -46,7 +45,25 @@ export const getWebsite = async () => {
     const errorMessage =
       err.response?.data?.body?.message ||
       err.response?.data?.message ||
-      'Failed to fetch communities'
+      'Failed to process website request'
+    throw new Error(errorMessage)
+  }
+}
+
+export const getWebsiteDetailsBySubdomain = async (subdomain: string) => {
+  try {
+    const response = await axiosInstance.get<WebsiteResponse>(
+      `/website/${subdomain}`,
+    )
+    return response.data.data
+  } catch (error: unknown) {
+    const err = error as {
+      response?: { data?: { body?: { message?: string }; message?: string } }
+    }
+    const errorMessage =
+      err.response?.data?.body?.message ||
+      err.response?.data?.message ||
+      'Failed to process website request'
     throw new Error(errorMessage)
   }
 }

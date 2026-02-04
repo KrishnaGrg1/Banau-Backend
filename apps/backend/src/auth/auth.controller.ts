@@ -15,9 +15,7 @@ export class AuthController {
   constructor(private readonly userServies: AuthServices) {}
 
   @Post('register')
-  async register(
-    @Body() createUserDto: CreateUserDto,
-  ) {
+  async register(@Body() createUserDto: CreateUserDto) {
     const data = await this.userServies.register(createUserDto);
     return ApiResponseDto.success(data, 'Registered successful');
   }

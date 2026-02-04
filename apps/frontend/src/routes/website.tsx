@@ -1,12 +1,6 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useForm } from '@tanstack/react-form'
-import {
-  getWebsite,
-  createWebsite,
-  publilshWebsite,
-} from '@/lib/services/website.service'
-import { useAuth } from '@/hooks/use-auth'
+
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -19,6 +13,13 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { useState, useEffect } from 'react'
+import { useGetMe } from '@/hooks/use-user'
+import {
+  useCreateWebsite,
+  useGetWebsite,
+  usePublishWebsite,
+} from '@/hooks/use-website'
+import { useAuthStore } from '@/lib/stores/auth.stores'
 
 export const Route = createFileRoute('/website')({
   component: WebsitePage,
@@ -26,39 +27,22 @@ export const Route = createFileRoute('/website')({
 
 function WebsitePage() {
   const navigate = useNavigate()
-  const queryClient = useQueryClient()
   const [error, setError] = useState<string | null>(null)
-  const { isAuthenticated, isLoading: authLoading } = useAuth()
-
+  const { isLoading: authLoading } = useGetMe()
+  const { isAuthenticated } = useAuthStore()
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
       navigate({ to: '/login' })
     }
   }, [isAuthenticated, authLoading, navigate])
 
-  const { data: website, isLoading } = useQuery({
-    queryKey: ['website'],
-    queryFn: getWebsite,
-    enabled: isAuthenticated,
-  })
+  const { data: website, isLoading } = useGetWebsite()
 
-  const createMutation = useMutation({
-    mutationFn: createWebsite,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['website'] })
-      setError(null)
-    },
-    onError: (err: Error) => {
-      setError(err.message)
-    },
-  })
+  const { mutate: createWebsite, isError: createWebsiteError } =
+    useCreateWebsite()
 
-  const publishMutation = useMutation({
-    mutationFn: publilshWebsite,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['website'] })
-    },
-  })
+  const { mutate: publishWebsite, isError: publishWebsiteError } =
+    usePublishWebsite()
 
   const form = useForm({
     defaultValues: {
@@ -67,12 +51,12 @@ function WebsitePage() {
     },
     onSubmit: async ({ value }) => {
       setError(null)
-      createMutation.mutate(value)
+      createWebsite(value)
     },
   })
 
   const handlePublishToggle = () => {
-    publishMutation.mutate()
+    publishWebsite()
   }
 
   if (authLoading || isLoading) {
@@ -159,7 +143,7 @@ function WebsitePage() {
                   <Switch
                     checked={website.published}
                     onCheckedChange={handlePublishToggle}
-                    disabled={publishMutation.isPending}
+                    disabled={publishWebsiteError}
                   />
                 </div>
 
@@ -321,9 +305,9 @@ function WebsitePage() {
                 <Button
                   type="submit"
                   className="w-full"
-                  disabled={createMutation.isPending}
+                  disabled={createWebsiteError}
                 >
-                  {createMutation.isPending ? 'Creating...' : 'Create Website'}
+                  {createWebsiteError ? 'Creating...' : 'Create Website'}
                 </Button>
               </form>
             </CardContent>

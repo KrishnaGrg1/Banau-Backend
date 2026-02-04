@@ -3,6 +3,7 @@
 ## 🚀 Quick Deploy
 
 ### Prerequisites
+
 1. [Vercel Account](https://vercel.com)
 2. [Neon PostgreSQL](https://neon.tech) or any PostgreSQL database
 3. GitHub repository
@@ -12,18 +13,21 @@
 ## 📦 Step 1: Prepare Database
 
 ### Option A: Neon (Recommended)
+
 1. Go to [console.neon.tech](https://console.neon.tech)
 2. Create new project
 3. Copy connection string
 4. It looks like: `postgresql://user:password@host.neon.tech/neondb?sslmode=require`
 
 ### Option B: Supabase
+
 1. Go to [supabase.com](https://supabase.com)
 2. Create new project
 3. Go to Settings > Database
 4. Copy connection string (Transaction pooler)
 
 ### Apply Database Schema
+
 ```bash
 cd /Users/developer/Projects/banau/banau
 cp apps/backend/.env packages/db/.env
@@ -50,6 +54,7 @@ pnpm --filter @repo/db db:push
    - Install Command: `pnpm install`
 
 3. **Add Environment Variables**
+
    ```
    DATABASE_URL=postgresql://...your-neon-url...
    JWT_SECRET=your-super-secret-key-min-32-chars
@@ -97,6 +102,7 @@ vercel env add JWT_EXPIRES_IN
    - Install Command: `pnpm install`
 
 3. **Add Environment Variables**
+
    ```
    VITE_API_URL=https://your-backend.vercel.app/api
    VITE_APP_TITLE=Banau
@@ -122,12 +128,14 @@ vercel env add VITE_APP_TITLE
 ## 🔗 Step 4: Configure Custom Domain (Optional)
 
 ### Add Custom Domain to Frontend
+
 1. Go to Vercel Project Settings > Domains
 2. Add your domain: `banau.com`
 3. Add wildcard subdomain: `*.banau.com`
 4. Update DNS records as instructed
 
 ### DNS Configuration
+
 Add these records to your domain:
 
 ```
@@ -138,6 +146,7 @@ CNAME   www     cname.vercel-dns.com
 ```
 
 ### Backend Domain (Optional)
+
 - Add `api.banau.com` to backend project
 - Update `VITE_API_URL` in frontend to `https://api.banau.com`
 
@@ -150,10 +159,10 @@ Update `apps/backend/src/main.ts`:
 ```typescript
 app.enableCors({
   origin: [
-    'https://banau.com',
-    'https://www.banau.com',
-    'https://*.banau.com',
-    'http://localhost:3000' // for development
+    "https://banau.com",
+    "https://www.banau.com",
+    "https://*.banau.com",
+    "http://localhost:3000", // for development
   ],
   credentials: true,
 });
@@ -166,11 +175,14 @@ Redeploy backend after changes.
 ## 🔄 Step 6: Continuous Deployment
 
 ### Automatic Deployments
+
 Vercel automatically deploys on:
+
 - **Production**: Push to `main` branch
 - **Preview**: Push to any other branch or PR
 
 ### Manual Deployments
+
 ```bash
 # Production
 vercel --prod
@@ -184,6 +196,7 @@ vercel
 ## 📊 Monitoring & Logs
 
 ### View Logs
+
 ```bash
 # Backend logs
 vercel logs https://your-backend.vercel.app
@@ -193,6 +206,7 @@ vercel logs https://your-frontend.vercel.app
 ```
 
 ### Vercel Dashboard
+
 - Real-time logs
 - Analytics
 - Deployment history
@@ -218,22 +232,26 @@ vercel logs https://your-frontend.vercel.app
 ### Backend Issues
 
 **Error: Cannot connect to database**
+
 - Check DATABASE_URL is correct
 - Ensure database allows connections from Vercel IPs
 - For Neon: Use connection pooler URL
 
 **Error: Module not found @repo/db**
+
 - Ensure build command includes `--filter=@repo/backend`
 - Check pnpm-workspace.yaml is present
 
 ### Frontend Issues
 
 **Error: API calls failing**
+
 - Check VITE_API_URL is set correctly
 - Verify CORS is configured on backend
 - Check backend is deployed and running
 
 **Subdomain routing not working**
+
 - Ensure wildcard domain `*.banau.com` is added
 - Check DNS records are correct
 - Wait for DNS propagation (up to 48 hours)
@@ -241,6 +259,7 @@ vercel logs https://your-frontend.vercel.app
 ### Build Issues
 
 **Turborepo build failing**
+
 - Ensure build command starts from root: `cd ../..`
 - Check all workspace packages are properly linked
 - Run `pnpm install` in root

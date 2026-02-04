@@ -71,7 +71,7 @@
         ]
       },
       "get": {
-        "operationId": "WebsiteController_getWebiste",
+        "operationId": "WebsiteController_getDetails",
         "parameters": [],
         "responses": {
           "200": {
@@ -85,8 +85,31 @@
     },
     "/api/v1/website/publish": {
       "put": {
-        "operationId": "WebsiteController_publishWebsite",
+        "operationId": "WebsiteController_publish",
         "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Website"
+        ]
+      }
+    },
+    "/api/v1/website/{subdomain}": {
+      "get": {
+        "operationId": "WebsiteController_getBySubdomain",
+        "parameters": [
+          {
+            "name": "subdomain",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": ""

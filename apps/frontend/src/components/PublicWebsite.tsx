@@ -1,4 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { useGetWebsiteBySubdomain } from '@/hooks/use-website'
 import { getPublicSubdomain } from '@/utils/host'
 
 export function PublicWebsite() {
@@ -7,82 +8,108 @@ export function PublicWebsite() {
   if (!subdomain) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-gray-50">
-        <Card className="max-w-md">
+        <Card className="w-full max-w-md text-center">
           <CardHeader>
             <CardTitle>Website Not Found</CardTitle>
           </CardHeader>
-          <CardContent>
-            <p className="text-gray-600">
-              This website is not available. Please check the URL and try again.
-            </p>
+          <CardContent className="text-gray-600">
+            This website does not exist or the URL is incorrect.
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
+  console.log('domain, asdfas', subdomain)
+  const { data, isLoading, isError } = useGetWebsiteBySubdomain(subdomain)
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <p className="text-gray-600">Loading website…</p>
+      </div>
+    )
+  }
+
+  if (isError || !data) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-gray-50">
+        <Card className="w-full max-w-md text-center">
+          <CardHeader>
+            <CardTitle>Website Unavailable</CardTitle>
+          </CardHeader>
+          <CardContent className="text-gray-600">
+            This website is not registered or not published yet.
           </CardContent>
         </Card>
       </div>
     )
   }
 
-  const siteName = subdomain.charAt(0).toUpperCase() + subdomain.slice(1)
-
+  const siteName =
+    data.name || subdomain.charAt(0).toUpperCase() + subdomain.slice(1)
   return (
-    <div className="min-h-screen bg-linear-to-br from-blue-50 to-indigo-100">
-      <header className="border-b bg-white shadow-sm">
-        <div className="container mx-auto px-4 py-6">
-          <h1 className="text-3xl font-bold text-gray-900">{siteName}</h1>
+    <div className="min-h-screen  from-indigo-50 via-white to-blue-50">
+      {/* HERO */}
+      <header className="border-b bg-white/80 backdrop-blur">
+        <div className="container mx-auto px-4 py-12 text-center">
+          <h1 className="text-4xl font-bold text-gray-900">{siteName}</h1>
+          <p className="mt-3 text-gray-600">
+            Welcome to the official website of {siteName}
+          </p>
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-12">
-        <div className="mx-auto max-w-4xl">
-          <Card className="mb-8">
+      {/* CONTENT */}
+      <main className="container mx-auto px-4 py-16">
+        <div className="mx-auto max-w-5xl space-y-10">
+          <Card>
             <CardHeader>
-              <CardTitle>Welcome to {siteName}</CardTitle>
+              <CardTitle>About This Website</CardTitle>
             </CardHeader>
-            <CardContent>
-              <p className="text-gray-600">
-                This is your public website powered by Banau. Customize this
-                page through your admin dashboard.
-              </p>
+            <CardContent className="text-gray-600">
+              {/* {data.description || */}
+              'This website is powered by Banau. You can manage and customize it
+              from your admin dashboard.
+              {/* '} */}
             </CardContent>
           </Card>
 
           <div className="grid gap-6 md:grid-cols-2">
             <Card>
               <CardHeader>
-                <CardTitle>About This Site</CardTitle>
+                <CardTitle>Site Details</CardTitle>
               </CardHeader>
-              <CardContent>
-                <p className="text-sm text-gray-600">
-                  This website was created using Banau, a powerful platform for
-                  building and managing subdomain-based websites.
-                </p>
+              <CardContent className="space-y-3 text-sm">
+                <div>
+                  <p className="font-medium text-gray-700">Subdomain</p>
+                  <p className="text-gray-600">{subdomain}</p>
+                </div>
+
+                <div>
+                  <p className="font-medium text-gray-700">Status</p>
+                  <p className="text-green-600 font-medium">Published</p>
+                </div>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader>
-                <CardTitle>Site Information</CardTitle>
+                <CardTitle>Powered By</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-2">
-                <div>
-                  <p className="text-sm font-medium text-gray-700">Subdomain</p>
-                  <p className="text-sm text-gray-600">{subdomain}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-700">Status</p>
-                  <p className="text-sm text-green-600">Published</p>
-                </div>
+              <CardContent className="text-sm text-gray-600">
+                Banau helps you build and manage modern subdomain-based websites
+                with ease.
               </CardContent>
             </Card>
           </div>
         </div>
       </main>
 
-      <footer className="mt-12 border-t bg-white py-6">
-        <div className="container mx-auto px-4 text-center">
-          <p className="text-sm text-gray-600">
-            Powered by{' '}
-            <span className="font-semibold text-gray-900">Banau</span>
-          </p>
+      {/* FOOTER */}
+      <footer className="border-t bg-white py-6">
+        <div className="container mx-auto px-4 text-center text-sm text-gray-600">
+          © {new Date().getFullYear()} {siteName}. Powered by{' '}
+          <span className="font-semibold text-gray-900">Banau</span>
         </div>
       </footer>
     </div>

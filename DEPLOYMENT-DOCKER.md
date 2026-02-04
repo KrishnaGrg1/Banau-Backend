@@ -7,33 +7,39 @@ This guide covers deploying the Banau application using Docker containers.
 ### Local Development
 
 1. **Clone the repository**
+
 ```bash
 git clone <your-repo>
 cd banau
 ```
 
 2. **Set up environment variables**
+
 ```bash
 # Create .env file in root (for local development)
 cp .env.example .env
 ```
 
 3. **Start all services**
+
 ```bash
 docker-compose up -d
 ```
 
 This will start:
+
 - PostgreSQL database on port 5432
 - Backend API on port 3001
 - Frontend on port 3000
 
 4. **View logs**
+
 ```bash
 docker-compose logs -f
 ```
 
 5. **Stop services**
+
 ```bash
 docker-compose down
 ```
@@ -64,11 +70,13 @@ docker push your-username/banau-frontend:latest
 #### Step 2: Deploy on Server
 
 1. **SSH into your server**
+
 ```bash
 ssh user@your-server-ip
 ```
 
 2. **Install Docker and Docker Compose**
+
 ```bash
 # Ubuntu/Debian
 curl -fsSL https://get.docker.com -o get-docker.sh
@@ -77,8 +85,9 @@ sudo apt install docker-compose-plugin
 ```
 
 3. **Create production docker-compose.yml**
+
 ```yaml
-version: '3.8'
+version: "3.8"
 
 services:
   postgres:
@@ -117,6 +126,7 @@ volumes:
 ```
 
 4. **Create .env file**
+
 ```bash
 cat > .env << EOF
 DB_USER=banau_user
@@ -126,6 +136,7 @@ EOF
 ```
 
 5. **Start services**
+
 ```bash
 docker-compose up -d
 ```
@@ -135,6 +146,7 @@ docker-compose up -d
 ### Option 2: AWS ECS (Elastic Container Service)
 
 1. **Push images to ECR**
+
 ```bash
 # Login to ECR
 aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin your-account.dkr.ecr.us-east-1.amazonaws.com
@@ -221,6 +233,7 @@ az container create \
 See [kubernetes/README.md](./kubernetes/README.md) for detailed Kubernetes deployment instructions.
 
 Basic example:
+
 ```bash
 # Apply configurations
 kubectl apply -f kubernetes/namespace.yaml
@@ -252,6 +265,7 @@ Update your `DATABASE_URL` environment variable to point to the managed database
 ## 🔧 Environment Variables
 
 ### Backend
+
 ```env
 DATABASE_URL=postgresql://user:password@host:5432/database
 JWT_SECRET=your-super-secret-jwt-key-minimum-32-characters
@@ -261,6 +275,7 @@ PORT=3000
 ```
 
 ### Frontend
+
 ```env
 VITE_API_URL=https://api.yourdomain.com
 ```
@@ -270,6 +285,7 @@ VITE_API_URL=https://api.yourdomain.com
 ## 📊 Monitoring and Logs
 
 ### View logs
+
 ```bash
 # All services
 docker-compose logs -f
@@ -283,6 +299,7 @@ docker-compose logs -f -t backend
 ```
 
 ### Container stats
+
 ```bash
 docker stats
 ```
@@ -305,13 +322,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Login to Docker Hub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-      
+
       - name: Build and push backend
         uses: docker/build-push-action@v4
         with:
@@ -319,7 +336,7 @@ jobs:
           file: apps/backend/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/banau-backend:latest
-      
+
       - name: Build and push frontend
         uses: docker/build-push-action@v4
         with:
@@ -336,6 +353,7 @@ jobs:
 ## 🛠️ Troubleshooting
 
 ### Container won't start
+
 ```bash
 # Check logs
 docker-compose logs backend
@@ -348,6 +366,7 @@ docker-compose up -d --build backend
 ```
 
 ### Database connection issues
+
 ```bash
 # Check if postgres is running
 docker-compose ps
@@ -357,6 +376,7 @@ docker-compose exec postgres psql -U postgres -d banau
 ```
 
 ### Clear everything and start fresh
+
 ```bash
 docker-compose down -v
 docker-compose up -d --build

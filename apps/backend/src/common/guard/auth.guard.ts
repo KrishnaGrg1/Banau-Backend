@@ -7,6 +7,7 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
+import { RequestWithUser } from '../interfaces/request.interface';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -16,26 +17,27 @@ export class AuthGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context.switchToHttp().getRequest();
+    const request = context.switchToHttp().getRequest<RequestWithUser>();
     const token = this.extractTokenFromHeader(request);
+
     if (!token) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('No authentication token provided');
     }
+
     try {
-      // 💡 Here the JWT secret key that's used for verifying the payload
-      // is the key that was passsed in the JwtModule
-      // Fix inside AuthGuard
+      // Verify JWT token using the secret from environment
       const payload = await this.jwtService.verifyAsync(token, {
         secret:
           this.configService.get<string>('JWT_SECRET') || 'your-secret-key',
       });
-      // 💡 We're assigning the payload to the request object here
-      // so that we can access it in our route handlers
-      request['user'] = { id: payload.sub };
-      request['token'] = token; // Store the token for logout
-    } catch {
-      throw new UnauthorizedException();
+
+      // Attach user data to request for use in decorators and controllers
+      request.user = { id: payload.sub };
+      request.token = token; // Store the token for logout operations
+    } catch (error) {
+      throw new UnauthorizedException('Invalid or expired token');
     }
+
     return true;
   }
 

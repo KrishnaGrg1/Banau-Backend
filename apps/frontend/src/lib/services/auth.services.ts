@@ -1,25 +1,34 @@
-import { CreateUserDto, LoginDto, LoginResponse, RegisterResponse } from '@repo/shared'
+import {
+  CreateUserDto,
+  LoginDto,
+  LoginResponse,
+  RegisterResponse,
+} from '@repo/shared'
 import axiosInstance from '../axios'
 
 export const register = async (data: CreateUserDto) => {
   try {
-    const response = await axiosInstance.post<RegisterResponse>('/auth/register', data)
+    const response = await axiosInstance.post<RegisterResponse>(
+      '/auth/register',
+      data,
+    )
     return response.data
   } catch (error: unknown) {
     const err = error as {
       response?: { data?: { body?: { message?: string }; message?: string } }
     }
     const errorMessage =
-      err.response?.data?.body?.message ||
-      err.response?.data?.message
+      err.response?.data?.body?.message || err.response?.data?.message
     throw new Error(errorMessage)
   }
 }
 
-
 export const login = async (data: LoginDto) => {
   try {
-    const response = await axiosInstance.post<LoginResponse>('/auth/login', data)
+    const response = await axiosInstance.post<LoginResponse>(
+      '/auth/login',
+      data,
+    )
     return response.data
   } catch (error: unknown) {
     console.log(error)
@@ -27,12 +36,10 @@ export const login = async (data: LoginDto) => {
       response?: { data?: { body?: { message?: string }; message?: string } }
     }
     const errorMessage =
-      err.response?.data?.body?.message ||
-      err.response?.data?.message 
+      err.response?.data?.body?.message || err.response?.data?.message
     throw new Error(errorMessage)
   }
 }
-
 
 export const logout = async () => {
   try {

@@ -9,10 +9,7 @@ async function bootstrap() {
   const logger = new Logger('Bootstrap');
   const app = await NestFactory.create(AppModule);
   app.enableCors({
-    origin: [
-      'http://localhost:3000',
-      'https://banau.vercel.app'
-    ],
+    origin: ['http://localhost:3000', 'https://banau.vercel.app'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     allowedHeaders: 'Content-Type, Authorization',
     credentials: true,
@@ -49,7 +46,7 @@ async function bootstrap() {
   } catch (error) {
     logger.error('❌ Failed to write Swagger schema file', error);
   }
-  
+
   const port = process.env.PORT ?? 3000;
   await app.listen(port, '0.0.0.0');
   logger.log(`🚀 Application is running on: http://0.0.0.0:${port}`);

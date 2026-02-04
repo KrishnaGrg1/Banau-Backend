@@ -1,8 +1,5 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useForm } from '@tanstack/react-form'
-import { useMutation } from '@tanstack/react-query'
-import { register } from '@/lib/services/auth.services'
-import { useAuth } from '@/hooks/use-auth'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -13,8 +10,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { useState, useEffect } from 'react'
-
+import { useState } from 'react'
+import { useRegister } from '@/hooks/user-auth'
 export const Route = createFileRoute('/register')({
   component: RegisterPage,
 })
@@ -22,23 +19,8 @@ export const Route = createFileRoute('/register')({
 function RegisterPage() {
   const navigate = useNavigate()
   const [error, setError] = useState<string | null>(null)
-  const { isAuthenticated, isLoading: authLoading } = useAuth()
 
-  useEffect(() => {
-    if (!authLoading && isAuthenticated) {
-      navigate({ to: '/dashboard' })
-    }
-  }, [isAuthenticated, authLoading, navigate])
-
-  const registerMutation = useMutation({
-    mutationFn: register,
-    onSuccess: () => {
-      navigate({ to: '/login' })
-    },
-    onError: (err: Error) => {
-      setError(err.message)
-    },
-  })
+  const { mutate: registerMutation, isPending } = useRegister()
 
   const form = useForm({
     defaultValues: {
@@ -55,7 +37,7 @@ function RegisterPage() {
 
       setError(null)
       const { confirmPassword, ...registerData } = value
-      registerMutation.mutate(registerData)
+      registerMutation(registerData)
     },
   })
 
@@ -207,12 +189,8 @@ function RegisterPage() {
               </div>
             )}
 
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={registerMutation.isPending}
-            >
-              {registerMutation.isPending ? 'Creating account...' : 'Register'}
+            <Button type="submit" className="w-full" disabled={isPending}>
+              {isPending ? 'Creating account...' : 'Register'}
             </Button>
 
             <div className="text-center text-sm">

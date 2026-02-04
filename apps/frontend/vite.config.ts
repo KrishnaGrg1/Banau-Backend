@@ -14,10 +14,17 @@ const config = defineConfig({
   },
   build: {
     outDir: 'dist/client',
+    commonjsOptions: {
+      include: [/node_modules/, /packages/],
+    },
+  },
+  optimizeDeps: {
+    include: ['@repo/shared'],
+    force: true,
   },
   plugins: [
     devtools(),
-   tanstackStart(),
+    tanstackStart(),
     nitro(),
     viteReact(),
     // this is the plugin that enables path aliases

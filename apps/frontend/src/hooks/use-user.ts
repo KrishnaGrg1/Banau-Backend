@@ -2,8 +2,13 @@ import { useQuery } from '@tanstack/react-query'
 
 import { getMe } from '@/lib/services/user.services'
 
-export function useAuth() {
-  const { data: user, isLoading, error, refetch } = useQuery({
+export function useGetMe() {
+  const {
+    data: user,
+    isLoading,
+    error,
+    refetch,
+  } = useQuery({
     queryKey: ['auth', 'me'],
     queryFn: getMe,
     retry: false,
@@ -12,7 +17,6 @@ export function useAuth() {
 
   return {
     user,
-    isAuthenticated: !!user && !error,
     isLoading,
     error,
     refetch,

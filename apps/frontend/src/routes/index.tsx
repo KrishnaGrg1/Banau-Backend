@@ -1,8 +1,8 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useEffect } from 'react'
 import { isAdminSite } from '@/utils/host'
-import { useAuth } from '@/hooks/use-auth'
 import { PublicWebsite } from '@/components/PublicWebsite'
+import { useAuthStore } from '@/lib/stores/auth.stores'
 
 export const Route = createFileRoute('/')({
   component: IndexPage,
@@ -11,22 +11,19 @@ export const Route = createFileRoute('/')({
 function IndexPage() {
   const navigate = useNavigate()
   const admin = isAdminSite()
-  const { isAuthenticated, isLoading } = useAuth()
-
+  const { isAuthenticated } = useAuthStore()
   useEffect(() => {
     // If admin site
     if (admin) {
-      if (!isLoading) {
-        if (isAuthenticated) {
-          // Redirect authenticated users to dashboard
-          navigate({ to: '/dashboard' })
-        } else {
-          // Redirect unauthenticated users to login
-          navigate({ to: '/login' })
-        }
+      if (isAuthenticated) {
+        // Redirect authenticated users to dashboard
+        navigate({ to: '/dashboard' })
+      } else {
+        // Redirect unauthenticated users to login
+        navigate({ to: '/login' })
       }
     }
-  }, [admin, isAuthenticated, isLoading, navigate])
+  }, [admin, isAuthenticated, navigate])
 
   // If admin site, show loading while redirecting
   if (admin) {
