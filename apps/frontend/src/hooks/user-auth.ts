@@ -2,6 +2,7 @@ import { login, logout, register } from '@/lib/services/auth.services'
 import { useAuthStore } from '@/lib/stores/auth.stores'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
+import { toast } from 'sonner'
 
 export function useLogin() {
   const queryClient = useQueryClient()
@@ -15,6 +16,7 @@ export function useLogin() {
       setAuthSession(data.data.token)
       setAuthenticated(true)
       navigate({ to: '/dashboard' })
+      toast.success('Login successfully ')
     },
     onError: (err: Error) => {
       console.log('Login error', err)
@@ -28,6 +30,7 @@ export function useRegister() {
     mutationFn: register,
     onSuccess: () => {
       navigate({ to: '/login' })
+     toast.success('Register successfully ')
     },
     onError: (err: Error) => {
       console.log('Register Error', err.message)
@@ -45,6 +48,7 @@ export function useLogOut() {
       queryClient.clear()
       loggingOutStore()
       navigate({ to: '/login' })
+      toast.success("Logout successfully")
     },
   })
 }
