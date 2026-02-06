@@ -49,9 +49,9 @@ export class WebsiteService {
     return website;
   }
 
-  async getWebsiteDetailsBySubdomain(userId: string, subdomain: string) {
+  async getWebsiteDetailsBySubdomain(subdomain: string) {
     const website = await this.prisma.website.findFirst({
-      where: { ownerId: userId, subdomain },
+      where: { subdomain },
     });
 
     if (!website) throw new ConflictException('Website not found');

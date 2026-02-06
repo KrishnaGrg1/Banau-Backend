@@ -13,7 +13,6 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { useState, useEffect } from 'react'
-import { useGetMe } from '@/hooks/use-user'
 import {
   useCreateWebsite,
   useGetWebsite,
@@ -28,13 +27,13 @@ export const Route = createFileRoute('/website')({
 function WebsitePage() {
   const navigate = useNavigate()
   const [error, setError] = useState<string | null>(null)
-  const { isLoading: authLoading } = useGetMe()
+  // const { isLoading: authLoading } = useGetMe()
   const { isAuthenticated } = useAuthStore()
   useEffect(() => {
-    if (!authLoading && !isAuthenticated) {
+    if (!isAuthenticated) {
       navigate({ to: '/login' })
     }
-  }, [isAuthenticated, authLoading, navigate])
+  }, [isAuthenticated, navigate])
 
   const { data: website, isLoading } = useGetWebsite()
 
@@ -59,7 +58,7 @@ function WebsitePage() {
     publishWebsite()
   }
 
-  if (authLoading || isLoading) {
+  if (isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <p>Loading...</p>

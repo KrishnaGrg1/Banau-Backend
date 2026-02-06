@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { persist, devtools, createJSONStorage } from 'zustand/middleware'
+import { persist,  createJSONStorage } from 'zustand/middleware'
 import { User } from '@repo/shared'
 
 interface AuthState {
@@ -13,7 +13,6 @@ interface AuthState {
 }
 
 export const useAuthStore = create<AuthState>()(
-  devtools(
     persist(
       (set) => ({
         isAuthenticated: false,
@@ -21,15 +20,14 @@ export const useAuthStore = create<AuthState>()(
         token: undefined,
 
         setUser: (user) =>
-          set({ user, isAuthenticated: !!user }, false, 'auth/setUser'),
+          set({ user, isAuthenticated: !!user }, false),
 
-        setAuthSession: (token) => set({ token }, false, 'auth/setSession'),
+        setAuthSession: (token) => set({ token }, false),
         setAuthenticated: (value) => set({ isAuthenticated: value }),
         logout: () =>
           set(
             { user: undefined, token: undefined, isAuthenticated: false },
             false,
-            'auth/logout',
           ),
       }),
       {
@@ -41,8 +39,12 @@ export const useAuthStore = create<AuthState>()(
           user: state.user,
           isAuthenticated: state.isAuthenticated,
         }),
+        // Rehydrate isAuthenticated based on token/user presence
+        onRehydrateStorage: () => (state) => {
+          if (state && (state.token || state.user)) {
+            state.isAuthenticated = true
+          }
+        },
       },
     ),
-    { name: 'AuthStore' },
-  ),
 )

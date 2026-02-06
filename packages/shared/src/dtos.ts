@@ -64,6 +64,7 @@ export interface WebsiteResponse {
     name: string;
     subdomain: string;
     published: boolean;
+    ownerId: string;
     createdAt: Date | string;
     updatedAt: Date | string;
   };

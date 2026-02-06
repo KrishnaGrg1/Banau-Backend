@@ -28,7 +28,7 @@ export function useCreateWebsite() {
       queryClient.invalidateQueries({
         queryKey: ['website'],
       })
-       toast.success("Website created successfully")
+      toast.success('Website created successfully')
     },
     onError(error) {
       console.log(error)
@@ -46,7 +46,7 @@ export function usePublishWebsite() {
       queryClient.invalidateQueries({
         queryKey: ['website'],
       })
-       toast.success("Website published successfully")
+      toast.success('Website published successfully')
     },
   })
 }

@@ -13,23 +13,25 @@ import { ApiResponseDto } from 'src/common/dto/response.dto';
 import type { CreateWebsiteDto } from '@repo/shared';
 import { User } from 'src/common/decorators/user.decorator';
 
-@UseGuards(AuthGuard)
 @Controller('website')
 export class WebsiteController {
   constructor(private readonly websitesService: WebsiteService) {}
 
+  @UseGuards(AuthGuard)
   @Post()
   async create(@User('id') userId: string, @Body() dto: CreateWebsiteDto) {
     const data = await this.websitesService.addDomain(userId, dto);
     return ApiResponseDto.success(data, 'Domain added successfully');
   }
 
+  @UseGuards(AuthGuard)
   @Put('publish')
   async publish(@User('id') userId: string) {
     const data = await this.websitesService.publishWebsite(userId);
     return ApiResponseDto.success(data, 'Website published successfully');
   }
 
+  @UseGuards(AuthGuard)
   @Get()
   async getDetails(@User('id') userId: string) {
     const data = await this.websitesService.getWebsiteDetails(userId);
@@ -40,14 +42,9 @@ export class WebsiteController {
   }
 
   @Get(':subdomain')
-  async getBySubdomain(
-    @User('id') userId: string,
-    @Param('subdomain') subdomain: string,
-  ) {
-    const website = await this.websitesService.getWebsiteDetailsBySubdomain(
-      userId,
-      subdomain,
-    );
+  async getBySubdomain(@Param('subdomain') subdomain: string) {
+    const website =
+      await this.websitesService.getWebsiteDetailsBySubdomain(subdomain);
     return ApiResponseDto.success(
       website,
       'Website details retrieved successfully',

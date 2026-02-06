@@ -1,39 +1,27 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { useEffect } from 'react'
-import { isAdminSite } from '@/utils/host'
+import { createFileRoute } from '@tanstack/react-router'
 import { PublicWebsite } from '@/components/PublicWebsite'
-import { useAuthStore } from '@/lib/stores/auth.stores'
+// import { useWebsiteStore } from '@/lib/stores/website.stores'
+import { getServerData } from '@/utils/middleware'
 
 export const Route = createFileRoute('/')({
+  loader: () => {
+    return getServerData()
+  },
   component: IndexPage,
 })
 
 function IndexPage() {
-  const navigate = useNavigate()
-  const admin = isAdminSite()
-  const { isAuthenticated } = useAuthStore()
-  useEffect(() => {
-    // If admin site
-    if (admin) {
-      if (isAuthenticated) {
-        // Redirect authenticated users to dashboard
-        navigate({ to: '/dashboard' })
-      } else {
-        // Redirect unauthenticated users to login
-        navigate({ to: '/login' })
-      }
-    }
-  }, [admin, isAuthenticated, navigate])
+  const { subdomain } = Route.useLoaderData()
 
-  // If admin site, show loading while redirecting
-  if (admin) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <p>Loading...</p>
-      </div>
-    )
+  // useEffect(() => {
+  //   if (subdomain && (!website || website.subdomain !== subdomain)) {
+  //     fetchWebsite(subdomain)
+  //   }
+  // }, [subdomain, website, fetchWebsite])
+
+  if (subdomain) {
+    return <PublicWebsite />
   }
 
-  // Otherwise, render public website
-  return <PublicWebsite />
+  return null
 }

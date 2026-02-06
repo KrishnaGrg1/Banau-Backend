@@ -1,11 +1,18 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { useGetWebsiteBySubdomain } from '@/hooks/use-website'
-import { getPublicSubdomain } from '@/utils/host'
+import { useWebsiteStore } from '@/lib/stores/website.stores'
 
 export function PublicWebsite() {
-  const subdomain = getPublicSubdomain()
+  const { website } = useWebsiteStore()
 
-  if (!subdomain) {
+  // if (loading) {
+  //   return (
+  //     <div className="flex min-h-screen items-center justify-center">
+  //       <p className="text-gray-600">Loading website…</p>
+  //     </div>
+  //   )
+  // }
+
+  if (!website) {
     return (
       <div className="flex min-h-screen items-center justify-center ">
         <Card className="w-full max-w-md text-center">
@@ -13,32 +20,7 @@ export function PublicWebsite() {
             <CardTitle>Website Not Found</CardTitle>
           </CardHeader>
           <CardContent className="text-gray-600">
-            This website does not exist or the URL is incorrect.
-          </CardContent>
-        </Card>
-      </div>
-    )
-  }
-  console.log('domain, asdfas', subdomain)
-  const { data, isLoading, isError } = useGetWebsiteBySubdomain(subdomain)
-
-  if (isLoading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <p className="text-gray-600">Loading website…</p>
-      </div>
-    )
-  }
-
-  if (isError || !data) {
-    return (
-      <div className="flex min-h-screen items-center justify-center ">
-        <Card className="w-full max-w-md text-center">
-          <CardHeader>
-            <CardTitle>Website Unavailable</CardTitle>
-          </CardHeader>
-          <CardContent className="text-gray-600">
-            This website is not registered or not published yet.
+            This website does not exist or has not been published yet.
           </CardContent>
         </Card>
       </div>
@@ -46,7 +28,8 @@ export function PublicWebsite() {
   }
 
   const siteName =
-    data.name || subdomain.charAt(0).toUpperCase() + subdomain.slice(1)
+    website.name ||
+    website.subdomain.charAt(0).toUpperCase() + website.subdomain.slice(1)
   return (
     <div className="min-h-screen ">
       {/* HERO */}
@@ -82,7 +65,7 @@ export function PublicWebsite() {
               <CardContent className="space-y-3 text-sm">
                 <div>
                   <p className="font-medium text-gray-700">Subdomain</p>
-                  <p className="text-gray-600">{subdomain}</p>
+                  <p className="text-gray-600">{website.subdomain}</p>
                 </div>
 
                 <div>

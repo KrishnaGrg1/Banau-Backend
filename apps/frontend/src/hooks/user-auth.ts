@@ -30,7 +30,7 @@ export function useRegister() {
     mutationFn: register,
     onSuccess: () => {
       navigate({ to: '/login' })
-     toast.success('Register successfully ')
+      toast.success('Register successfully ')
     },
     onError: (err: Error) => {
       console.log('Register Error', err.message)
@@ -48,7 +48,7 @@ export function useLogOut() {
       queryClient.clear()
       loggingOutStore()
       navigate({ to: '/login' })
-      toast.success("Logout successfully")
+      toast.success('Logout successfully')
     },
   })
 }

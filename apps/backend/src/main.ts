@@ -8,16 +8,36 @@ import * as path from 'path';
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
   const app = await NestFactory.create(AppModule);
-  app.enableCors({
-    origin: [
+app.enableCors({
+  origin: (origin, callback) => {
+    // Allow non-browser requests (Postman, server-to-server)
+    if (!origin) {
+      return callback(null, true)
+    }
+
+    const allowedOrigins = [
       'http://localhost:3000',
       'https://banau.vercel.app',
       'https://banau-frontend.vercel.app',
-    ],
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    allowedHeaders: 'Content-Type, Authorization',
-    credentials: true,
-  });
+    ]
+
+    // Allow *.localhost:3000
+    const localhostRegex = /^http:\/\/([a-z0-9-]+)\.localhost:3000$/i
+
+    if (
+      allowedOrigins.includes(origin) ||
+      localhostRegex.test(origin)
+    ) {
+      return callback(null, true)
+    }
+
+    callback(new Error(`CORS blocked for origin: ${origin}`))
+  },
+  credentials: true,
+  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+})
+
   app.setGlobalPrefix('/api/v1');
   app.use(cookieParser());
   app.useGlobalPipes(
