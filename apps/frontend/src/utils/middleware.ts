@@ -46,7 +46,7 @@ export const subdomainMiddleware = createMiddleware().server(
  async ({ request, next }) => {
     const subdomain = extractSubdomain(request)
     // const {set}=useWebsiteStore()
-    console.log('subdomain from middleware', subdomain)
+    // console.log('subdomain from middleware', subdomain)
     
     return next({
       context: {
@@ -88,7 +88,7 @@ export const getServerData = createServerFn().middleware([subdomainMiddleware]).
         console.error('Failed to fetch website:', err)
       }
     }
-    console.log("website",websiteData)
+    // console.log("website",websiteData)
     // Return the data to the client
     return {
      website:websiteData,subdomain
