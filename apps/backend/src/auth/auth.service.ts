@@ -58,13 +58,16 @@ export class AuthServices {
     const user = await this.prisma.user.create({
       data: {
         email: data.email,
-        name: data.name,
+        firstName: data.firstName,
+        lastName: data.lastName,
         password: hashPassword,
+        role: data.role,
       },
     });
 
     // Remove password from response
     const { password, ...userWithoutPassword } = user;
+    
     return userWithoutPassword;
   }
 

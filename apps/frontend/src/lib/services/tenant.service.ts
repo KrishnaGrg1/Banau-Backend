@@ -71,7 +71,7 @@ export const getTenantDetailsBySubdomain = createServerFn({ method: 'GET' })
   .inputValidator((input) => getTenantDetailsBySubdomainSchema.parse(input))
   .handler(async ({ data }) => {
     try {
-      const response = await api<{ data: Tenant }>(`/tenant/${data.subdomain}`, {
+      const response = await api<{ data:Tenant }>(`/tenant/${data.subdomain}`, {
         method: 'GET'
       })
       console.log("subdomain",response.data.data)

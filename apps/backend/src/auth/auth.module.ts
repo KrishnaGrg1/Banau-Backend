@@ -5,11 +5,14 @@ import { PrismaService } from '../prisma/prisma.service';
 import { PrismaModule } from 'src/prisma/prisma.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
+import { EmailService } from 'src/email/email.service';
+import { EmailModule } from 'src/email/email.module';
 
 @Module({
   imports: [
     PrismaModule,
     ConfigModule,
+    EmailModule,
     // Register the JwtModule so JwtService becomes available
     JwtModule.registerAsync({
       imports: [ConfigModule],
@@ -25,7 +28,7 @@ import { JwtModule } from '@nestjs/jwt';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthServices, PrismaService],
+  providers: [AuthServices, PrismaService,EmailService],
   exports: [JwtModule],
 })
 export class AuthModule {}

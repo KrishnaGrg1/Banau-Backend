@@ -4,7 +4,9 @@ import { z } from "zod";
 export const CreateUserDtoSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8),
-  name: z.string().min(2),
+  firstName: z.string().min(2),
+  lastName:z.string().min(2),
+  role:z.enum(['SUPER_ADMIN','TENANT_OWNER','TENANT_STAFF','CUSTOMER'])
 });
 
 export type CreateUserDto = z.infer<typeof CreateUserDtoSchema>;
