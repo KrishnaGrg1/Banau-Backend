@@ -1,22 +1,30 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { PublicWebsite } from '@/components/PublicWebsite'
-// import { useWebsiteStore } from '@/lib/stores/website.stores'
-// import { useEffect } from 'react'
+import { createFileRoute, redirect } from '@tanstack/react-router'
+import { PublicTenant } from '@/components/PublicTenant'
+// import { useGetTenantBySubdomain } from '@/hooks/use-tenant'
+import { getTenantDetailsBySubdomain } from '@/lib/services/tenant.service'
 
 export const Route = createFileRoute('/preview/$subdomain')({
+  loader: async ({ params }) => {
+    const { subdomain } = params
+
+    if (!subdomain) {
+      throw redirect({ to: '/login' })
+    }
+
+    try {
+      const tenant = await getTenantDetailsBySubdomain({
+        data: { subdomain },
+      })
+      return { tenant }
+    } catch (error) {
+      return { tenant: null }
+    }
+  },
   component: PreviewPage,
 })
 
 function PreviewPage() {
-  // const { subdomain } = Route.useParams()
-  // const { website } = useWebsiteStore()
+  const { tenant } = Route.useLoaderData()
 
-  // useEffect(() => {
-  //   // Fetch website for this subdomain if not already loaded
-  //   if (!website || website.subdomain !== subdomain) {
-  //     fetchWebsite(subdomain)
-  //   }
-  // }, [subdomain, fetchWebsite, website])
-
-  return <PublicWebsite />
+  return <PublicTenant tenant={tenant} />
 }

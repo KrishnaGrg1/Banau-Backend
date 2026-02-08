@@ -13,8 +13,22 @@ import {
 import { useState } from 'react'
 import { LoginDtoSchema } from '@repo/shared'
 import { useLogin } from '@/hooks/user-auth'
+// import { getServerData } from '@/utils/middleware'
+// import { useAppSession } from '@/lib/session'
 
 export const Route = createFileRoute('/login')({
+  // loader: async () => {
+  //   const session = await useAppSession()
+
+  //   // If user is already logged in (has a token), redirect to dashboard
+  //   if (session.data.token) {
+  //     throw redirect({
+  //       to: '/dashboard',
+  //     })
+  //   }
+
+  //   return null
+  // },
   component: LoginPage,
 })
 
@@ -32,7 +46,7 @@ function LoginPage() {
     },
     onSubmit: async ({ value }) => {
       setError(null)
-      login(value)
+      login({ data: value })
     },
   })
 

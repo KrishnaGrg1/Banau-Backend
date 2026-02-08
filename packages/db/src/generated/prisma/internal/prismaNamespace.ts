@@ -413,7 +413,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never
 
 export const ModelName = {
   User: "User",
-  Website: "Website",
+  Tenant: "Tenant",
   Token: "Token",
 } as const;
 
@@ -436,7 +436,7 @@ export type TypeMap<
     omit: GlobalOmitOptions;
   };
   meta: {
-    modelProps: "user" | "website" | "token";
+    modelProps: "user" | "tenant" | "token";
     txIsolationLevel: TransactionIsolationLevel;
   };
   model: {
@@ -516,78 +516,78 @@ export type TypeMap<
         };
       };
     };
-    Website: {
-      payload: Prisma.$WebsitePayload<ExtArgs>;
-      fields: Prisma.WebsiteFieldRefs;
+    Tenant: {
+      payload: Prisma.$TenantPayload<ExtArgs>;
+      fields: Prisma.TenantFieldRefs;
       operations: {
         findUnique: {
-          args: Prisma.WebsiteFindUniqueArgs<ExtArgs>;
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$WebsitePayload> | null;
+          args: Prisma.TenantFindUniqueArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TenantPayload> | null;
         };
         findUniqueOrThrow: {
-          args: Prisma.WebsiteFindUniqueOrThrowArgs<ExtArgs>;
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$WebsitePayload>;
+          args: Prisma.TenantFindUniqueOrThrowArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TenantPayload>;
         };
         findFirst: {
-          args: Prisma.WebsiteFindFirstArgs<ExtArgs>;
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$WebsitePayload> | null;
+          args: Prisma.TenantFindFirstArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TenantPayload> | null;
         };
         findFirstOrThrow: {
-          args: Prisma.WebsiteFindFirstOrThrowArgs<ExtArgs>;
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$WebsitePayload>;
+          args: Prisma.TenantFindFirstOrThrowArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TenantPayload>;
         };
         findMany: {
-          args: Prisma.WebsiteFindManyArgs<ExtArgs>;
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$WebsitePayload>[];
+          args: Prisma.TenantFindManyArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TenantPayload>[];
         };
         create: {
-          args: Prisma.WebsiteCreateArgs<ExtArgs>;
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$WebsitePayload>;
+          args: Prisma.TenantCreateArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TenantPayload>;
         };
         createMany: {
-          args: Prisma.WebsiteCreateManyArgs<ExtArgs>;
+          args: Prisma.TenantCreateManyArgs<ExtArgs>;
           result: BatchPayload;
         };
         createManyAndReturn: {
-          args: Prisma.WebsiteCreateManyAndReturnArgs<ExtArgs>;
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$WebsitePayload>[];
+          args: Prisma.TenantCreateManyAndReturnArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TenantPayload>[];
         };
         delete: {
-          args: Prisma.WebsiteDeleteArgs<ExtArgs>;
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$WebsitePayload>;
+          args: Prisma.TenantDeleteArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TenantPayload>;
         };
         update: {
-          args: Prisma.WebsiteUpdateArgs<ExtArgs>;
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$WebsitePayload>;
+          args: Prisma.TenantUpdateArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TenantPayload>;
         };
         deleteMany: {
-          args: Prisma.WebsiteDeleteManyArgs<ExtArgs>;
+          args: Prisma.TenantDeleteManyArgs<ExtArgs>;
           result: BatchPayload;
         };
         updateMany: {
-          args: Prisma.WebsiteUpdateManyArgs<ExtArgs>;
+          args: Prisma.TenantUpdateManyArgs<ExtArgs>;
           result: BatchPayload;
         };
         updateManyAndReturn: {
-          args: Prisma.WebsiteUpdateManyAndReturnArgs<ExtArgs>;
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$WebsitePayload>[];
+          args: Prisma.TenantUpdateManyAndReturnArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TenantPayload>[];
         };
         upsert: {
-          args: Prisma.WebsiteUpsertArgs<ExtArgs>;
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$WebsitePayload>;
+          args: Prisma.TenantUpsertArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TenantPayload>;
         };
         aggregate: {
-          args: Prisma.WebsiteAggregateArgs<ExtArgs>;
-          result: runtime.Types.Utils.Optional<Prisma.AggregateWebsite>;
+          args: Prisma.TenantAggregateArgs<ExtArgs>;
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTenant>;
         };
         groupBy: {
-          args: Prisma.WebsiteGroupByArgs<ExtArgs>;
-          result: runtime.Types.Utils.Optional<Prisma.WebsiteGroupByOutputType>[];
+          args: Prisma.TenantGroupByArgs<ExtArgs>;
+          result: runtime.Types.Utils.Optional<Prisma.TenantGroupByOutputType>[];
         };
         count: {
-          args: Prisma.WebsiteCountArgs<ExtArgs>;
+          args: Prisma.TenantCountArgs<ExtArgs>;
           result:
-            | runtime.Types.Utils.Optional<Prisma.WebsiteCountAggregateOutputType>
+            | runtime.Types.Utils.Optional<Prisma.TenantCountAggregateOutputType>
             | number;
         };
       };
@@ -719,7 +719,7 @@ export const UserScalarFieldEnum = {
 export type UserScalarFieldEnum =
   (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum];
 
-export const WebsiteScalarFieldEnum = {
+export const TenantScalarFieldEnum = {
   id: "id",
   name: "name",
   subdomain: "subdomain",
@@ -729,8 +729,8 @@ export const WebsiteScalarFieldEnum = {
   updatedAt: "updatedAt",
 } as const;
 
-export type WebsiteScalarFieldEnum =
-  (typeof WebsiteScalarFieldEnum)[keyof typeof WebsiteScalarFieldEnum];
+export type TenantScalarFieldEnum =
+  (typeof TenantScalarFieldEnum)[keyof typeof TenantScalarFieldEnum];
 
 export const TokenScalarFieldEnum = {
   id: "id",
@@ -920,7 +920,7 @@ export type PrismaClientOptions = (
 };
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit;
-  website?: Prisma.WebsiteOmit;
+  tenant?: Prisma.TenantOmit;
   token?: Prisma.TokenOmit;
 };
 

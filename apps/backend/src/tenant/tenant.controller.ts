@@ -7,46 +7,46 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
-import { WebsiteService } from './webiste.service';
+import { TenantService } from './tenant.service';
 import { AuthGuard } from 'src/common/guard/auth.guard';
 import { ApiResponseDto } from 'src/common/dto/response.dto';
-import type { CreateWebsiteDto } from '@repo/shared';
+import type { CreateTenantDto } from '@repo/shared';
 import { User } from 'src/common/decorators/user.decorator';
 
-@Controller('website')
-export class WebsiteController {
-  constructor(private readonly websitesService: WebsiteService) {}
+@Controller('tenant')
+export class TenantController {
+  constructor(private readonly tenantsService: TenantService) {}
 
   @UseGuards(AuthGuard)
   @Post()
-  async create(@User('id') userId: string, @Body() dto: CreateWebsiteDto) {
-    const data = await this.websitesService.addDomain(userId, dto);
+  async create(@User('id') userId: string, @Body() dto: CreateTenantDto) {
+    const data = await this.tenantsService.addDomain(userId, dto);
     return ApiResponseDto.success(data, 'Domain added successfully');
   }
 
   @UseGuards(AuthGuard)
   @Put('publish')
   async publish(@User('id') userId: string) {
-    const data = await this.websitesService.publishWebsite(userId);
-    return ApiResponseDto.success(data, 'Website published successfully');
+    const data = await this.tenantsService.publishTenantWebsite(userId);
+    return ApiResponseDto.success(data, 'Tenant published successfully');
   }
 
   @UseGuards(AuthGuard)
   @Get()
   async getDetails(@User('id') userId: string) {
-    const data = await this.websitesService.getWebsiteDetails(userId);
+    const data = await this.tenantsService.getTenantDetails(userId);
     return ApiResponseDto.success(
       data,
-      'Website details retrieved successfully',
+      'Tenant details retrieved successfully',
     );
   }
 
   @Get(':subdomain')
   async getBySubdomain(@Param('subdomain') subdomain: string) {
-    const website =
-      await this.websitesService.getWebsiteDetailsBySubdomain(subdomain);
+    const tenant =
+      await this.tenantsService.getTenantDetailsBySubdomain(subdomain);
     return ApiResponseDto.success(
-      website,
+      tenant,
       'Website details retrieved successfully',
     );
   }

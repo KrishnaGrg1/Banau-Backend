@@ -37,7 +37,7 @@ function RegisterPage() {
 
       setError(null)
       const { confirmPassword, ...registerData } = value
-      registerMutation(registerData)
+      registerMutation({ data: registerData })
     },
   })
 

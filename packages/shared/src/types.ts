@@ -8,7 +8,7 @@ export interface User {
   updatedAt: Date | string;
 }
 
-export interface Website {
+export interface Tenant {
   id: string;
   name: string;
   subdomain: string;

@@ -3,7 +3,7 @@
 // biome-ignore-all lint: generated file
 // @ts-nocheck
 /*
- * This file exports the `Website` model and its related types.
+ * This file exports the `Tenant` model and its related types.
  *
  * 🟢 You can import this file directly.
  */
@@ -12,19 +12,19 @@ import type * as $Enums from "../enums";
 import type * as Prisma from "../internal/prismaNamespace";
 
 /**
- * Model Website
+ * Model Tenant
  *
  */
-export type WebsiteModel =
-  runtime.Types.Result.DefaultSelection<Prisma.$WebsitePayload>;
+export type TenantModel =
+  runtime.Types.Result.DefaultSelection<Prisma.$TenantPayload>;
 
-export type AggregateWebsite = {
-  _count: WebsiteCountAggregateOutputType | null;
-  _min: WebsiteMinAggregateOutputType | null;
-  _max: WebsiteMaxAggregateOutputType | null;
+export type AggregateTenant = {
+  _count: TenantCountAggregateOutputType | null;
+  _min: TenantMinAggregateOutputType | null;
+  _max: TenantMaxAggregateOutputType | null;
 };
 
-export type WebsiteMinAggregateOutputType = {
+export type TenantMinAggregateOutputType = {
   id: string | null;
   name: string | null;
   subdomain: string | null;
@@ -34,7 +34,7 @@ export type WebsiteMinAggregateOutputType = {
   updatedAt: Date | null;
 };
 
-export type WebsiteMaxAggregateOutputType = {
+export type TenantMaxAggregateOutputType = {
   id: string | null;
   name: string | null;
   subdomain: string | null;
@@ -44,7 +44,7 @@ export type WebsiteMaxAggregateOutputType = {
   updatedAt: Date | null;
 };
 
-export type WebsiteCountAggregateOutputType = {
+export type TenantCountAggregateOutputType = {
   id: number;
   name: number;
   subdomain: number;
@@ -55,7 +55,7 @@ export type WebsiteCountAggregateOutputType = {
   _all: number;
 };
 
-export type WebsiteMinAggregateInputType = {
+export type TenantMinAggregateInputType = {
   id?: true;
   name?: true;
   subdomain?: true;
@@ -65,7 +65,7 @@ export type WebsiteMinAggregateInputType = {
   updatedAt?: true;
 };
 
-export type WebsiteMaxAggregateInputType = {
+export type TenantMaxAggregateInputType = {
   id?: true;
   name?: true;
   subdomain?: true;
@@ -75,7 +75,7 @@ export type WebsiteMaxAggregateInputType = {
   updatedAt?: true;
 };
 
-export type WebsiteCountAggregateInputType = {
+export type TenantCountAggregateInputType = {
   id?: true;
   name?: true;
   subdomain?: true;
@@ -86,86 +86,86 @@ export type WebsiteCountAggregateInputType = {
   _all?: true;
 };
 
-export type WebsiteAggregateArgs<
+export type TenantAggregateArgs<
   ExtArgs extends runtime.Types.Extensions.InternalArgs =
     runtime.Types.Extensions.DefaultArgs,
 > = {
   /**
-   * Filter which Website to aggregate.
+   * Filter which Tenant to aggregate.
    */
-  where?: Prisma.WebsiteWhereInput;
+  where?: Prisma.TenantWhereInput;
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
-   * Determine the order of Websites to fetch.
+   * Determine the order of Tenants to fetch.
    */
   orderBy?:
-    | Prisma.WebsiteOrderByWithRelationInput
-    | Prisma.WebsiteOrderByWithRelationInput[];
+    | Prisma.TenantOrderByWithRelationInput
+    | Prisma.TenantOrderByWithRelationInput[];
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
    *
    * Sets the start position
    */
-  cursor?: Prisma.WebsiteWhereUniqueInput;
+  cursor?: Prisma.TenantWhereUniqueInput;
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
-   * Take `±n` Websites from the position of the cursor.
+   * Take `±n` Tenants from the position of the cursor.
    */
   take?: number;
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
-   * Skip the first `n` Websites.
+   * Skip the first `n` Tenants.
    */
   skip?: number;
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    *
-   * Count returned Websites
+   * Count returned Tenants
    **/
-  _count?: true | WebsiteCountAggregateInputType;
+  _count?: true | TenantCountAggregateInputType;
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    *
    * Select which fields to find the minimum value
    **/
-  _min?: WebsiteMinAggregateInputType;
+  _min?: TenantMinAggregateInputType;
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    *
    * Select which fields to find the maximum value
    **/
-  _max?: WebsiteMaxAggregateInputType;
+  _max?: TenantMaxAggregateInputType;
 };
 
-export type GetWebsiteAggregateType<T extends WebsiteAggregateArgs> = {
-  [P in keyof T & keyof AggregateWebsite]: P extends "_count" | "count"
+export type GetTenantAggregateType<T extends TenantAggregateArgs> = {
+  [P in keyof T & keyof AggregateTenant]: P extends "_count" | "count"
     ? T[P] extends true
       ? number
-      : Prisma.GetScalarType<T[P], AggregateWebsite[P]>
-    : Prisma.GetScalarType<T[P], AggregateWebsite[P]>;
+      : Prisma.GetScalarType<T[P], AggregateTenant[P]>
+    : Prisma.GetScalarType<T[P], AggregateTenant[P]>;
 };
 
-export type WebsiteGroupByArgs<
+export type TenantGroupByArgs<
   ExtArgs extends runtime.Types.Extensions.InternalArgs =
     runtime.Types.Extensions.DefaultArgs,
 > = {
-  where?: Prisma.WebsiteWhereInput;
+  where?: Prisma.TenantWhereInput;
   orderBy?:
-    | Prisma.WebsiteOrderByWithAggregationInput
-    | Prisma.WebsiteOrderByWithAggregationInput[];
-  by: Prisma.WebsiteScalarFieldEnum[] | Prisma.WebsiteScalarFieldEnum;
-  having?: Prisma.WebsiteScalarWhereWithAggregatesInput;
+    | Prisma.TenantOrderByWithAggregationInput
+    | Prisma.TenantOrderByWithAggregationInput[];
+  by: Prisma.TenantScalarFieldEnum[] | Prisma.TenantScalarFieldEnum;
+  having?: Prisma.TenantScalarWhereWithAggregatesInput;
   take?: number;
   skip?: number;
-  _count?: WebsiteCountAggregateInputType | true;
-  _min?: WebsiteMinAggregateInputType;
-  _max?: WebsiteMaxAggregateInputType;
+  _count?: TenantCountAggregateInputType | true;
+  _min?: TenantMinAggregateInputType;
+  _max?: TenantMaxAggregateInputType;
 };
 
-export type WebsiteGroupByOutputType = {
+export type TenantGroupByOutputType = {
   id: string;
   name: string;
   subdomain: string;
@@ -173,39 +173,39 @@ export type WebsiteGroupByOutputType = {
   ownerId: string;
   createdAt: Date;
   updatedAt: Date;
-  _count: WebsiteCountAggregateOutputType | null;
-  _min: WebsiteMinAggregateOutputType | null;
-  _max: WebsiteMaxAggregateOutputType | null;
+  _count: TenantCountAggregateOutputType | null;
+  _min: TenantMinAggregateOutputType | null;
+  _max: TenantMaxAggregateOutputType | null;
 };
 
-type GetWebsiteGroupByPayload<T extends WebsiteGroupByArgs> =
+type GetTenantGroupByPayload<T extends TenantGroupByArgs> =
   Prisma.PrismaPromise<
     Array<
-      Prisma.PickEnumerable<WebsiteGroupByOutputType, T["by"]> & {
-        [P in keyof T & keyof WebsiteGroupByOutputType]: P extends "_count"
+      Prisma.PickEnumerable<TenantGroupByOutputType, T["by"]> & {
+        [P in keyof T & keyof TenantGroupByOutputType]: P extends "_count"
           ? T[P] extends boolean
             ? number
-            : Prisma.GetScalarType<T[P], WebsiteGroupByOutputType[P]>
-          : Prisma.GetScalarType<T[P], WebsiteGroupByOutputType[P]>;
+            : Prisma.GetScalarType<T[P], TenantGroupByOutputType[P]>
+          : Prisma.GetScalarType<T[P], TenantGroupByOutputType[P]>;
       }
     >
   >;
 
-export type WebsiteWhereInput = {
-  AND?: Prisma.WebsiteWhereInput | Prisma.WebsiteWhereInput[];
-  OR?: Prisma.WebsiteWhereInput[];
-  NOT?: Prisma.WebsiteWhereInput | Prisma.WebsiteWhereInput[];
-  id?: Prisma.StringFilter<"Website"> | string;
-  name?: Prisma.StringFilter<"Website"> | string;
-  subdomain?: Prisma.StringFilter<"Website"> | string;
-  published?: Prisma.BoolFilter<"Website"> | boolean;
-  ownerId?: Prisma.StringFilter<"Website"> | string;
-  createdAt?: Prisma.DateTimeFilter<"Website"> | Date | string;
-  updatedAt?: Prisma.DateTimeFilter<"Website"> | Date | string;
+export type TenantWhereInput = {
+  AND?: Prisma.TenantWhereInput | Prisma.TenantWhereInput[];
+  OR?: Prisma.TenantWhereInput[];
+  NOT?: Prisma.TenantWhereInput | Prisma.TenantWhereInput[];
+  id?: Prisma.StringFilter<"Tenant"> | string;
+  name?: Prisma.StringFilter<"Tenant"> | string;
+  subdomain?: Prisma.StringFilter<"Tenant"> | string;
+  published?: Prisma.BoolFilter<"Tenant"> | boolean;
+  ownerId?: Prisma.StringFilter<"Tenant"> | string;
+  createdAt?: Prisma.DateTimeFilter<"Tenant"> | Date | string;
+  updatedAt?: Prisma.DateTimeFilter<"Tenant"> | Date | string;
   owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>;
 };
 
-export type WebsiteOrderByWithRelationInput = {
+export type TenantOrderByWithRelationInput = {
   id?: Prisma.SortOrder;
   name?: Prisma.SortOrder;
   subdomain?: Prisma.SortOrder;
@@ -216,24 +216,24 @@ export type WebsiteOrderByWithRelationInput = {
   owner?: Prisma.UserOrderByWithRelationInput;
 };
 
-export type WebsiteWhereUniqueInput = Prisma.AtLeast<
+export type TenantWhereUniqueInput = Prisma.AtLeast<
   {
     id?: string;
     subdomain?: string;
     ownerId?: string;
-    AND?: Prisma.WebsiteWhereInput | Prisma.WebsiteWhereInput[];
-    OR?: Prisma.WebsiteWhereInput[];
-    NOT?: Prisma.WebsiteWhereInput | Prisma.WebsiteWhereInput[];
-    name?: Prisma.StringFilter<"Website"> | string;
-    published?: Prisma.BoolFilter<"Website"> | boolean;
-    createdAt?: Prisma.DateTimeFilter<"Website"> | Date | string;
-    updatedAt?: Prisma.DateTimeFilter<"Website"> | Date | string;
+    AND?: Prisma.TenantWhereInput | Prisma.TenantWhereInput[];
+    OR?: Prisma.TenantWhereInput[];
+    NOT?: Prisma.TenantWhereInput | Prisma.TenantWhereInput[];
+    name?: Prisma.StringFilter<"Tenant"> | string;
+    published?: Prisma.BoolFilter<"Tenant"> | boolean;
+    createdAt?: Prisma.DateTimeFilter<"Tenant"> | Date | string;
+    updatedAt?: Prisma.DateTimeFilter<"Tenant"> | Date | string;
     owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>;
   },
   "id" | "subdomain" | "ownerId"
 >;
 
-export type WebsiteOrderByWithAggregationInput = {
+export type TenantOrderByWithAggregationInput = {
   id?: Prisma.SortOrder;
   name?: Prisma.SortOrder;
   subdomain?: Prisma.SortOrder;
@@ -241,69 +241,39 @@ export type WebsiteOrderByWithAggregationInput = {
   ownerId?: Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
   updatedAt?: Prisma.SortOrder;
-  _count?: Prisma.WebsiteCountOrderByAggregateInput;
-  _max?: Prisma.WebsiteMaxOrderByAggregateInput;
-  _min?: Prisma.WebsiteMinOrderByAggregateInput;
+  _count?: Prisma.TenantCountOrderByAggregateInput;
+  _max?: Prisma.TenantMaxOrderByAggregateInput;
+  _min?: Prisma.TenantMinOrderByAggregateInput;
 };
 
-export type WebsiteScalarWhereWithAggregatesInput = {
+export type TenantScalarWhereWithAggregatesInput = {
   AND?:
-    | Prisma.WebsiteScalarWhereWithAggregatesInput
-    | Prisma.WebsiteScalarWhereWithAggregatesInput[];
-  OR?: Prisma.WebsiteScalarWhereWithAggregatesInput[];
+    | Prisma.TenantScalarWhereWithAggregatesInput
+    | Prisma.TenantScalarWhereWithAggregatesInput[];
+  OR?: Prisma.TenantScalarWhereWithAggregatesInput[];
   NOT?:
-    | Prisma.WebsiteScalarWhereWithAggregatesInput
-    | Prisma.WebsiteScalarWhereWithAggregatesInput[];
-  id?: Prisma.StringWithAggregatesFilter<"Website"> | string;
-  name?: Prisma.StringWithAggregatesFilter<"Website"> | string;
-  subdomain?: Prisma.StringWithAggregatesFilter<"Website"> | string;
-  published?: Prisma.BoolWithAggregatesFilter<"Website"> | boolean;
-  ownerId?: Prisma.StringWithAggregatesFilter<"Website"> | string;
-  createdAt?: Prisma.DateTimeWithAggregatesFilter<"Website"> | Date | string;
-  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Website"> | Date | string;
+    | Prisma.TenantScalarWhereWithAggregatesInput
+    | Prisma.TenantScalarWhereWithAggregatesInput[];
+  id?: Prisma.StringWithAggregatesFilter<"Tenant"> | string;
+  name?: Prisma.StringWithAggregatesFilter<"Tenant"> | string;
+  subdomain?: Prisma.StringWithAggregatesFilter<"Tenant"> | string;
+  published?: Prisma.BoolWithAggregatesFilter<"Tenant"> | boolean;
+  ownerId?: Prisma.StringWithAggregatesFilter<"Tenant"> | string;
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"Tenant"> | Date | string;
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Tenant"> | Date | string;
 };
 
-export type WebsiteCreateInput = {
+export type TenantCreateInput = {
   id?: string;
   name: string;
   subdomain: string;
   published?: boolean;
   createdAt?: Date | string;
   updatedAt?: Date | string;
-  owner: Prisma.UserCreateNestedOneWithoutWebsiteInput;
+  owner: Prisma.UserCreateNestedOneWithoutTenantInput;
 };
 
-export type WebsiteUncheckedCreateInput = {
-  id?: string;
-  name: string;
-  subdomain: string;
-  published?: boolean;
-  ownerId: string;
-  createdAt?: Date | string;
-  updatedAt?: Date | string;
-};
-
-export type WebsiteUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string;
-  name?: Prisma.StringFieldUpdateOperationsInput | string;
-  subdomain?: Prisma.StringFieldUpdateOperationsInput | string;
-  published?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-  owner?: Prisma.UserUpdateOneRequiredWithoutWebsiteNestedInput;
-};
-
-export type WebsiteUncheckedUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string;
-  name?: Prisma.StringFieldUpdateOperationsInput | string;
-  subdomain?: Prisma.StringFieldUpdateOperationsInput | string;
-  published?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-  ownerId?: Prisma.StringFieldUpdateOperationsInput | string;
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-};
-
-export type WebsiteCreateManyInput = {
+export type TenantUncheckedCreateInput = {
   id?: string;
   name: string;
   subdomain: string;
@@ -313,16 +283,17 @@ export type WebsiteCreateManyInput = {
   updatedAt?: Date | string;
 };
 
-export type WebsiteUpdateManyMutationInput = {
+export type TenantUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   name?: Prisma.StringFieldUpdateOperationsInput | string;
   subdomain?: Prisma.StringFieldUpdateOperationsInput | string;
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  owner?: Prisma.UserUpdateOneRequiredWithoutTenantNestedInput;
 };
 
-export type WebsiteUncheckedUpdateManyInput = {
+export type TenantUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   name?: Prisma.StringFieldUpdateOperationsInput | string;
   subdomain?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -332,12 +303,41 @@ export type WebsiteUncheckedUpdateManyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 
-export type WebsiteNullableScalarRelationFilter = {
-  is?: Prisma.WebsiteWhereInput | null;
-  isNot?: Prisma.WebsiteWhereInput | null;
+export type TenantCreateManyInput = {
+  id?: string;
+  name: string;
+  subdomain: string;
+  published?: boolean;
+  ownerId: string;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
 };
 
-export type WebsiteCountOrderByAggregateInput = {
+export type TenantUpdateManyMutationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string;
+  name?: Prisma.StringFieldUpdateOperationsInput | string;
+  subdomain?: Prisma.StringFieldUpdateOperationsInput | string;
+  published?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+};
+
+export type TenantUncheckedUpdateManyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string;
+  name?: Prisma.StringFieldUpdateOperationsInput | string;
+  subdomain?: Prisma.StringFieldUpdateOperationsInput | string;
+  published?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+  ownerId?: Prisma.StringFieldUpdateOperationsInput | string;
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+};
+
+export type TenantNullableScalarRelationFilter = {
+  is?: Prisma.TenantWhereInput | null;
+  isNot?: Prisma.TenantWhereInput | null;
+};
+
+export type TenantCountOrderByAggregateInput = {
   id?: Prisma.SortOrder;
   name?: Prisma.SortOrder;
   subdomain?: Prisma.SortOrder;
@@ -347,7 +347,7 @@ export type WebsiteCountOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder;
 };
 
-export type WebsiteMaxOrderByAggregateInput = {
+export type TenantMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder;
   name?: Prisma.SortOrder;
   subdomain?: Prisma.SortOrder;
@@ -357,7 +357,7 @@ export type WebsiteMaxOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder;
 };
 
-export type WebsiteMinOrderByAggregateInput = {
+export type TenantMinOrderByAggregateInput = {
   id?: Prisma.SortOrder;
   name?: Prisma.SortOrder;
   subdomain?: Prisma.SortOrder;
@@ -367,59 +367,59 @@ export type WebsiteMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder;
 };
 
-export type WebsiteCreateNestedOneWithoutOwnerInput = {
+export type TenantCreateNestedOneWithoutOwnerInput = {
   create?: Prisma.XOR<
-    Prisma.WebsiteCreateWithoutOwnerInput,
-    Prisma.WebsiteUncheckedCreateWithoutOwnerInput
+    Prisma.TenantCreateWithoutOwnerInput,
+    Prisma.TenantUncheckedCreateWithoutOwnerInput
   >;
-  connectOrCreate?: Prisma.WebsiteCreateOrConnectWithoutOwnerInput;
-  connect?: Prisma.WebsiteWhereUniqueInput;
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutOwnerInput;
+  connect?: Prisma.TenantWhereUniqueInput;
 };
 
-export type WebsiteUncheckedCreateNestedOneWithoutOwnerInput = {
+export type TenantUncheckedCreateNestedOneWithoutOwnerInput = {
   create?: Prisma.XOR<
-    Prisma.WebsiteCreateWithoutOwnerInput,
-    Prisma.WebsiteUncheckedCreateWithoutOwnerInput
+    Prisma.TenantCreateWithoutOwnerInput,
+    Prisma.TenantUncheckedCreateWithoutOwnerInput
   >;
-  connectOrCreate?: Prisma.WebsiteCreateOrConnectWithoutOwnerInput;
-  connect?: Prisma.WebsiteWhereUniqueInput;
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutOwnerInput;
+  connect?: Prisma.TenantWhereUniqueInput;
 };
 
-export type WebsiteUpdateOneWithoutOwnerNestedInput = {
+export type TenantUpdateOneWithoutOwnerNestedInput = {
   create?: Prisma.XOR<
-    Prisma.WebsiteCreateWithoutOwnerInput,
-    Prisma.WebsiteUncheckedCreateWithoutOwnerInput
+    Prisma.TenantCreateWithoutOwnerInput,
+    Prisma.TenantUncheckedCreateWithoutOwnerInput
   >;
-  connectOrCreate?: Prisma.WebsiteCreateOrConnectWithoutOwnerInput;
-  upsert?: Prisma.WebsiteUpsertWithoutOwnerInput;
-  disconnect?: Prisma.WebsiteWhereInput | boolean;
-  delete?: Prisma.WebsiteWhereInput | boolean;
-  connect?: Prisma.WebsiteWhereUniqueInput;
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutOwnerInput;
+  upsert?: Prisma.TenantUpsertWithoutOwnerInput;
+  disconnect?: Prisma.TenantWhereInput | boolean;
+  delete?: Prisma.TenantWhereInput | boolean;
+  connect?: Prisma.TenantWhereUniqueInput;
   update?: Prisma.XOR<
     Prisma.XOR<
-      Prisma.WebsiteUpdateToOneWithWhereWithoutOwnerInput,
-      Prisma.WebsiteUpdateWithoutOwnerInput
+      Prisma.TenantUpdateToOneWithWhereWithoutOwnerInput,
+      Prisma.TenantUpdateWithoutOwnerInput
     >,
-    Prisma.WebsiteUncheckedUpdateWithoutOwnerInput
+    Prisma.TenantUncheckedUpdateWithoutOwnerInput
   >;
 };
 
-export type WebsiteUncheckedUpdateOneWithoutOwnerNestedInput = {
+export type TenantUncheckedUpdateOneWithoutOwnerNestedInput = {
   create?: Prisma.XOR<
-    Prisma.WebsiteCreateWithoutOwnerInput,
-    Prisma.WebsiteUncheckedCreateWithoutOwnerInput
+    Prisma.TenantCreateWithoutOwnerInput,
+    Prisma.TenantUncheckedCreateWithoutOwnerInput
   >;
-  connectOrCreate?: Prisma.WebsiteCreateOrConnectWithoutOwnerInput;
-  upsert?: Prisma.WebsiteUpsertWithoutOwnerInput;
-  disconnect?: Prisma.WebsiteWhereInput | boolean;
-  delete?: Prisma.WebsiteWhereInput | boolean;
-  connect?: Prisma.WebsiteWhereUniqueInput;
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutOwnerInput;
+  upsert?: Prisma.TenantUpsertWithoutOwnerInput;
+  disconnect?: Prisma.TenantWhereInput | boolean;
+  delete?: Prisma.TenantWhereInput | boolean;
+  connect?: Prisma.TenantWhereUniqueInput;
   update?: Prisma.XOR<
     Prisma.XOR<
-      Prisma.WebsiteUpdateToOneWithWhereWithoutOwnerInput,
-      Prisma.WebsiteUpdateWithoutOwnerInput
+      Prisma.TenantUpdateToOneWithWhereWithoutOwnerInput,
+      Prisma.TenantUpdateWithoutOwnerInput
     >,
-    Prisma.WebsiteUncheckedUpdateWithoutOwnerInput
+    Prisma.TenantUncheckedUpdateWithoutOwnerInput
   >;
 };
 
@@ -427,7 +427,7 @@ export type BoolFieldUpdateOperationsInput = {
   set?: boolean;
 };
 
-export type WebsiteCreateWithoutOwnerInput = {
+export type TenantCreateWithoutOwnerInput = {
   id?: string;
   name: string;
   subdomain: string;
@@ -436,7 +436,7 @@ export type WebsiteCreateWithoutOwnerInput = {
   updatedAt?: Date | string;
 };
 
-export type WebsiteUncheckedCreateWithoutOwnerInput = {
+export type TenantUncheckedCreateWithoutOwnerInput = {
   id?: string;
   name: string;
   subdomain: string;
@@ -445,35 +445,35 @@ export type WebsiteUncheckedCreateWithoutOwnerInput = {
   updatedAt?: Date | string;
 };
 
-export type WebsiteCreateOrConnectWithoutOwnerInput = {
-  where: Prisma.WebsiteWhereUniqueInput;
+export type TenantCreateOrConnectWithoutOwnerInput = {
+  where: Prisma.TenantWhereUniqueInput;
   create: Prisma.XOR<
-    Prisma.WebsiteCreateWithoutOwnerInput,
-    Prisma.WebsiteUncheckedCreateWithoutOwnerInput
+    Prisma.TenantCreateWithoutOwnerInput,
+    Prisma.TenantUncheckedCreateWithoutOwnerInput
   >;
 };
 
-export type WebsiteUpsertWithoutOwnerInput = {
+export type TenantUpsertWithoutOwnerInput = {
   update: Prisma.XOR<
-    Prisma.WebsiteUpdateWithoutOwnerInput,
-    Prisma.WebsiteUncheckedUpdateWithoutOwnerInput
+    Prisma.TenantUpdateWithoutOwnerInput,
+    Prisma.TenantUncheckedUpdateWithoutOwnerInput
   >;
   create: Prisma.XOR<
-    Prisma.WebsiteCreateWithoutOwnerInput,
-    Prisma.WebsiteUncheckedCreateWithoutOwnerInput
+    Prisma.TenantCreateWithoutOwnerInput,
+    Prisma.TenantUncheckedCreateWithoutOwnerInput
   >;
-  where?: Prisma.WebsiteWhereInput;
+  where?: Prisma.TenantWhereInput;
 };
 
-export type WebsiteUpdateToOneWithWhereWithoutOwnerInput = {
-  where?: Prisma.WebsiteWhereInput;
+export type TenantUpdateToOneWithWhereWithoutOwnerInput = {
+  where?: Prisma.TenantWhereInput;
   data: Prisma.XOR<
-    Prisma.WebsiteUpdateWithoutOwnerInput,
-    Prisma.WebsiteUncheckedUpdateWithoutOwnerInput
+    Prisma.TenantUpdateWithoutOwnerInput,
+    Prisma.TenantUncheckedUpdateWithoutOwnerInput
   >;
 };
 
-export type WebsiteUpdateWithoutOwnerInput = {
+export type TenantUpdateWithoutOwnerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   name?: Prisma.StringFieldUpdateOperationsInput | string;
   subdomain?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -482,7 +482,7 @@ export type WebsiteUpdateWithoutOwnerInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 
-export type WebsiteUncheckedUpdateWithoutOwnerInput = {
+export type TenantUncheckedUpdateWithoutOwnerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   name?: Prisma.StringFieldUpdateOperationsInput | string;
   subdomain?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -491,7 +491,7 @@ export type WebsiteUncheckedUpdateWithoutOwnerInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 
-export type WebsiteSelect<
+export type TenantSelect<
   ExtArgs extends runtime.Types.Extensions.InternalArgs =
     runtime.Types.Extensions.DefaultArgs,
 > = runtime.Types.Extensions.GetSelect<
@@ -505,10 +505,10 @@ export type WebsiteSelect<
     updatedAt?: boolean;
     owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
   },
-  ExtArgs["result"]["website"]
+  ExtArgs["result"]["tenant"]
 >;
 
-export type WebsiteSelectCreateManyAndReturn<
+export type TenantSelectCreateManyAndReturn<
   ExtArgs extends runtime.Types.Extensions.InternalArgs =
     runtime.Types.Extensions.DefaultArgs,
 > = runtime.Types.Extensions.GetSelect<
@@ -522,10 +522,10 @@ export type WebsiteSelectCreateManyAndReturn<
     updatedAt?: boolean;
     owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
   },
-  ExtArgs["result"]["website"]
+  ExtArgs["result"]["tenant"]
 >;
 
-export type WebsiteSelectUpdateManyAndReturn<
+export type TenantSelectUpdateManyAndReturn<
   ExtArgs extends runtime.Types.Extensions.InternalArgs =
     runtime.Types.Extensions.DefaultArgs,
 > = runtime.Types.Extensions.GetSelect<
@@ -539,10 +539,10 @@ export type WebsiteSelectUpdateManyAndReturn<
     updatedAt?: boolean;
     owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
   },
-  ExtArgs["result"]["website"]
+  ExtArgs["result"]["tenant"]
 >;
 
-export type WebsiteSelectScalar = {
+export type TenantSelectScalar = {
   id?: boolean;
   name?: boolean;
   subdomain?: boolean;
@@ -552,7 +552,7 @@ export type WebsiteSelectScalar = {
   updatedAt?: boolean;
 };
 
-export type WebsiteOmit<
+export type TenantOmit<
   ExtArgs extends runtime.Types.Extensions.InternalArgs =
     runtime.Types.Extensions.DefaultArgs,
 > = runtime.Types.Extensions.GetOmit<
@@ -563,32 +563,32 @@ export type WebsiteOmit<
   | "ownerId"
   | "createdAt"
   | "updatedAt",
-  ExtArgs["result"]["website"]
+  ExtArgs["result"]["tenant"]
 >;
-export type WebsiteInclude<
+export type TenantInclude<
   ExtArgs extends runtime.Types.Extensions.InternalArgs =
     runtime.Types.Extensions.DefaultArgs,
 > = {
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
 };
-export type WebsiteIncludeCreateManyAndReturn<
+export type TenantIncludeCreateManyAndReturn<
   ExtArgs extends runtime.Types.Extensions.InternalArgs =
     runtime.Types.Extensions.DefaultArgs,
 > = {
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
 };
-export type WebsiteIncludeUpdateManyAndReturn<
+export type TenantIncludeUpdateManyAndReturn<
   ExtArgs extends runtime.Types.Extensions.InternalArgs =
     runtime.Types.Extensions.DefaultArgs,
 > = {
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
 };
 
-export type $WebsitePayload<
+export type $TenantPayload<
   ExtArgs extends runtime.Types.Extensions.InternalArgs =
     runtime.Types.Extensions.DefaultArgs,
 > = {
-  name: "Website";
+  name: "Tenant";
   objects: {
     owner: Prisma.$UserPayload<ExtArgs>;
   };
@@ -602,47 +602,47 @@ export type $WebsitePayload<
       createdAt: Date;
       updatedAt: Date;
     },
-    ExtArgs["result"]["website"]
+    ExtArgs["result"]["tenant"]
   >;
   composites: {};
 };
 
-export type WebsiteGetPayload<
-  S extends boolean | null | undefined | WebsiteDefaultArgs,
-> = runtime.Types.Result.GetResult<Prisma.$WebsitePayload, S>;
+export type TenantGetPayload<
+  S extends boolean | null | undefined | TenantDefaultArgs,
+> = runtime.Types.Result.GetResult<Prisma.$TenantPayload, S>;
 
-export type WebsiteCountArgs<
+export type TenantCountArgs<
   ExtArgs extends runtime.Types.Extensions.InternalArgs =
     runtime.Types.Extensions.DefaultArgs,
-> = Omit<WebsiteFindManyArgs, "select" | "include" | "distinct" | "omit"> & {
-  select?: WebsiteCountAggregateInputType | true;
+> = Omit<TenantFindManyArgs, "select" | "include" | "distinct" | "omit"> & {
+  select?: TenantCountAggregateInputType | true;
 };
 
-export interface WebsiteDelegate<
+export interface TenantDelegate<
   ExtArgs extends runtime.Types.Extensions.InternalArgs =
     runtime.Types.Extensions.DefaultArgs,
   GlobalOmitOptions = {},
 > {
   [K: symbol]: {
-    types: Prisma.TypeMap<ExtArgs>["model"]["Website"];
-    meta: { name: "Website" };
+    types: Prisma.TypeMap<ExtArgs>["model"]["Tenant"];
+    meta: { name: "Tenant" };
   };
   /**
-   * Find zero or one Website that matches the filter.
-   * @param {WebsiteFindUniqueArgs} args - Arguments to find a Website
+   * Find zero or one Tenant that matches the filter.
+   * @param {TenantFindUniqueArgs} args - Arguments to find a Tenant
    * @example
-   * // Get one Website
-   * const website = await prisma.website.findUnique({
+   * // Get one Tenant
+   * const tenant = await prisma.tenant.findUnique({
    *   where: {
    *     // ... provide filter here
    *   }
    * })
    */
-  findUnique<T extends WebsiteFindUniqueArgs>(
-    args: Prisma.SelectSubset<T, WebsiteFindUniqueArgs<ExtArgs>>,
-  ): Prisma.Prisma__WebsiteClient<
+  findUnique<T extends TenantFindUniqueArgs>(
+    args: Prisma.SelectSubset<T, TenantFindUniqueArgs<ExtArgs>>,
+  ): Prisma.Prisma__TenantClient<
     runtime.Types.Result.GetResult<
-      Prisma.$WebsitePayload<ExtArgs>,
+      Prisma.$TenantPayload<ExtArgs>,
       T,
       "findUnique",
       GlobalOmitOptions
@@ -653,22 +653,22 @@ export interface WebsiteDelegate<
   >;
 
   /**
-   * Find one Website that matches the filter or throw an error with `error.code='P2025'`
+   * Find one Tenant that matches the filter or throw an error with `error.code='P2025'`
    * if no matches were found.
-   * @param {WebsiteFindUniqueOrThrowArgs} args - Arguments to find a Website
+   * @param {TenantFindUniqueOrThrowArgs} args - Arguments to find a Tenant
    * @example
-   * // Get one Website
-   * const website = await prisma.website.findUniqueOrThrow({
+   * // Get one Tenant
+   * const tenant = await prisma.tenant.findUniqueOrThrow({
    *   where: {
    *     // ... provide filter here
    *   }
    * })
    */
-  findUniqueOrThrow<T extends WebsiteFindUniqueOrThrowArgs>(
-    args: Prisma.SelectSubset<T, WebsiteFindUniqueOrThrowArgs<ExtArgs>>,
-  ): Prisma.Prisma__WebsiteClient<
+  findUniqueOrThrow<T extends TenantFindUniqueOrThrowArgs>(
+    args: Prisma.SelectSubset<T, TenantFindUniqueOrThrowArgs<ExtArgs>>,
+  ): Prisma.Prisma__TenantClient<
     runtime.Types.Result.GetResult<
-      Prisma.$WebsitePayload<ExtArgs>,
+      Prisma.$TenantPayload<ExtArgs>,
       T,
       "findUniqueOrThrow",
       GlobalOmitOptions
@@ -679,23 +679,23 @@ export interface WebsiteDelegate<
   >;
 
   /**
-   * Find the first Website that matches the filter.
+   * Find the first Tenant that matches the filter.
    * Note, that providing `undefined` is treated as the value not being there.
    * Read more here: https://pris.ly/d/null-undefined
-   * @param {WebsiteFindFirstArgs} args - Arguments to find a Website
+   * @param {TenantFindFirstArgs} args - Arguments to find a Tenant
    * @example
-   * // Get one Website
-   * const website = await prisma.website.findFirst({
+   * // Get one Tenant
+   * const tenant = await prisma.tenant.findFirst({
    *   where: {
    *     // ... provide filter here
    *   }
    * })
    */
-  findFirst<T extends WebsiteFindFirstArgs>(
-    args?: Prisma.SelectSubset<T, WebsiteFindFirstArgs<ExtArgs>>,
-  ): Prisma.Prisma__WebsiteClient<
+  findFirst<T extends TenantFindFirstArgs>(
+    args?: Prisma.SelectSubset<T, TenantFindFirstArgs<ExtArgs>>,
+  ): Prisma.Prisma__TenantClient<
     runtime.Types.Result.GetResult<
-      Prisma.$WebsitePayload<ExtArgs>,
+      Prisma.$TenantPayload<ExtArgs>,
       T,
       "findFirst",
       GlobalOmitOptions
@@ -706,24 +706,24 @@ export interface WebsiteDelegate<
   >;
 
   /**
-   * Find the first Website that matches the filter or
+   * Find the first Tenant that matches the filter or
    * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
    * Note, that providing `undefined` is treated as the value not being there.
    * Read more here: https://pris.ly/d/null-undefined
-   * @param {WebsiteFindFirstOrThrowArgs} args - Arguments to find a Website
+   * @param {TenantFindFirstOrThrowArgs} args - Arguments to find a Tenant
    * @example
-   * // Get one Website
-   * const website = await prisma.website.findFirstOrThrow({
+   * // Get one Tenant
+   * const tenant = await prisma.tenant.findFirstOrThrow({
    *   where: {
    *     // ... provide filter here
    *   }
    * })
    */
-  findFirstOrThrow<T extends WebsiteFindFirstOrThrowArgs>(
-    args?: Prisma.SelectSubset<T, WebsiteFindFirstOrThrowArgs<ExtArgs>>,
-  ): Prisma.Prisma__WebsiteClient<
+  findFirstOrThrow<T extends TenantFindFirstOrThrowArgs>(
+    args?: Prisma.SelectSubset<T, TenantFindFirstOrThrowArgs<ExtArgs>>,
+  ): Prisma.Prisma__TenantClient<
     runtime.Types.Result.GetResult<
-      Prisma.$WebsitePayload<ExtArgs>,
+      Prisma.$TenantPayload<ExtArgs>,
       T,
       "findFirstOrThrow",
       GlobalOmitOptions
@@ -734,26 +734,26 @@ export interface WebsiteDelegate<
   >;
 
   /**
-   * Find zero or more Websites that matches the filter.
+   * Find zero or more Tenants that matches the filter.
    * Note, that providing `undefined` is treated as the value not being there.
    * Read more here: https://pris.ly/d/null-undefined
-   * @param {WebsiteFindManyArgs} args - Arguments to filter and select certain fields only.
+   * @param {TenantFindManyArgs} args - Arguments to filter and select certain fields only.
    * @example
-   * // Get all Websites
-   * const websites = await prisma.website.findMany()
+   * // Get all Tenants
+   * const tenants = await prisma.tenant.findMany()
    *
-   * // Get first 10 Websites
-   * const websites = await prisma.website.findMany({ take: 10 })
+   * // Get first 10 Tenants
+   * const tenants = await prisma.tenant.findMany({ take: 10 })
    *
    * // Only select the `id`
-   * const websiteWithIdOnly = await prisma.website.findMany({ select: { id: true } })
+   * const tenantWithIdOnly = await prisma.tenant.findMany({ select: { id: true } })
    *
    */
-  findMany<T extends WebsiteFindManyArgs>(
-    args?: Prisma.SelectSubset<T, WebsiteFindManyArgs<ExtArgs>>,
+  findMany<T extends TenantFindManyArgs>(
+    args?: Prisma.SelectSubset<T, TenantFindManyArgs<ExtArgs>>,
   ): Prisma.PrismaPromise<
     runtime.Types.Result.GetResult<
-      Prisma.$WebsitePayload<ExtArgs>,
+      Prisma.$TenantPayload<ExtArgs>,
       T,
       "findMany",
       GlobalOmitOptions
@@ -761,22 +761,22 @@ export interface WebsiteDelegate<
   >;
 
   /**
-   * Create a Website.
-   * @param {WebsiteCreateArgs} args - Arguments to create a Website.
+   * Create a Tenant.
+   * @param {TenantCreateArgs} args - Arguments to create a Tenant.
    * @example
-   * // Create one Website
-   * const Website = await prisma.website.create({
+   * // Create one Tenant
+   * const Tenant = await prisma.tenant.create({
    *   data: {
-   *     // ... data to create a Website
+   *     // ... data to create a Tenant
    *   }
    * })
    *
    */
-  create<T extends WebsiteCreateArgs>(
-    args: Prisma.SelectSubset<T, WebsiteCreateArgs<ExtArgs>>,
-  ): Prisma.Prisma__WebsiteClient<
+  create<T extends TenantCreateArgs>(
+    args: Prisma.SelectSubset<T, TenantCreateArgs<ExtArgs>>,
+  ): Prisma.Prisma__TenantClient<
     runtime.Types.Result.GetResult<
-      Prisma.$WebsitePayload<ExtArgs>,
+      Prisma.$TenantPayload<ExtArgs>,
       T,
       "create",
       GlobalOmitOptions
@@ -787,34 +787,34 @@ export interface WebsiteDelegate<
   >;
 
   /**
-   * Create many Websites.
-   * @param {WebsiteCreateManyArgs} args - Arguments to create many Websites.
+   * Create many Tenants.
+   * @param {TenantCreateManyArgs} args - Arguments to create many Tenants.
    * @example
-   * // Create many Websites
-   * const website = await prisma.website.createMany({
+   * // Create many Tenants
+   * const tenant = await prisma.tenant.createMany({
    *   data: [
    *     // ... provide data here
    *   ]
    * })
    *
    */
-  createMany<T extends WebsiteCreateManyArgs>(
-    args?: Prisma.SelectSubset<T, WebsiteCreateManyArgs<ExtArgs>>,
+  createMany<T extends TenantCreateManyArgs>(
+    args?: Prisma.SelectSubset<T, TenantCreateManyArgs<ExtArgs>>,
   ): Prisma.PrismaPromise<Prisma.BatchPayload>;
 
   /**
-   * Create many Websites and returns the data saved in the database.
-   * @param {WebsiteCreateManyAndReturnArgs} args - Arguments to create many Websites.
+   * Create many Tenants and returns the data saved in the database.
+   * @param {TenantCreateManyAndReturnArgs} args - Arguments to create many Tenants.
    * @example
-   * // Create many Websites
-   * const website = await prisma.website.createManyAndReturn({
+   * // Create many Tenants
+   * const tenant = await prisma.tenant.createManyAndReturn({
    *   data: [
    *     // ... provide data here
    *   ]
    * })
    *
-   * // Create many Websites and only return the `id`
-   * const websiteWithIdOnly = await prisma.website.createManyAndReturn({
+   * // Create many Tenants and only return the `id`
+   * const tenantWithIdOnly = await prisma.tenant.createManyAndReturn({
    *   select: { id: true },
    *   data: [
    *     // ... provide data here
@@ -824,11 +824,11 @@ export interface WebsiteDelegate<
    * Read more here: https://pris.ly/d/null-undefined
    *
    */
-  createManyAndReturn<T extends WebsiteCreateManyAndReturnArgs>(
-    args?: Prisma.SelectSubset<T, WebsiteCreateManyAndReturnArgs<ExtArgs>>,
+  createManyAndReturn<T extends TenantCreateManyAndReturnArgs>(
+    args?: Prisma.SelectSubset<T, TenantCreateManyAndReturnArgs<ExtArgs>>,
   ): Prisma.PrismaPromise<
     runtime.Types.Result.GetResult<
-      Prisma.$WebsitePayload<ExtArgs>,
+      Prisma.$TenantPayload<ExtArgs>,
       T,
       "createManyAndReturn",
       GlobalOmitOptions
@@ -836,22 +836,22 @@ export interface WebsiteDelegate<
   >;
 
   /**
-   * Delete a Website.
-   * @param {WebsiteDeleteArgs} args - Arguments to delete one Website.
+   * Delete a Tenant.
+   * @param {TenantDeleteArgs} args - Arguments to delete one Tenant.
    * @example
-   * // Delete one Website
-   * const Website = await prisma.website.delete({
+   * // Delete one Tenant
+   * const Tenant = await prisma.tenant.delete({
    *   where: {
-   *     // ... filter to delete one Website
+   *     // ... filter to delete one Tenant
    *   }
    * })
    *
    */
-  delete<T extends WebsiteDeleteArgs>(
-    args: Prisma.SelectSubset<T, WebsiteDeleteArgs<ExtArgs>>,
-  ): Prisma.Prisma__WebsiteClient<
+  delete<T extends TenantDeleteArgs>(
+    args: Prisma.SelectSubset<T, TenantDeleteArgs<ExtArgs>>,
+  ): Prisma.Prisma__TenantClient<
     runtime.Types.Result.GetResult<
-      Prisma.$WebsitePayload<ExtArgs>,
+      Prisma.$TenantPayload<ExtArgs>,
       T,
       "delete",
       GlobalOmitOptions
@@ -862,11 +862,11 @@ export interface WebsiteDelegate<
   >;
 
   /**
-   * Update one Website.
-   * @param {WebsiteUpdateArgs} args - Arguments to update one Website.
+   * Update one Tenant.
+   * @param {TenantUpdateArgs} args - Arguments to update one Tenant.
    * @example
-   * // Update one Website
-   * const website = await prisma.website.update({
+   * // Update one Tenant
+   * const tenant = await prisma.tenant.update({
    *   where: {
    *     // ... provide filter here
    *   },
@@ -876,11 +876,11 @@ export interface WebsiteDelegate<
    * })
    *
    */
-  update<T extends WebsiteUpdateArgs>(
-    args: Prisma.SelectSubset<T, WebsiteUpdateArgs<ExtArgs>>,
-  ): Prisma.Prisma__WebsiteClient<
+  update<T extends TenantUpdateArgs>(
+    args: Prisma.SelectSubset<T, TenantUpdateArgs<ExtArgs>>,
+  ): Prisma.Prisma__TenantClient<
     runtime.Types.Result.GetResult<
-      Prisma.$WebsitePayload<ExtArgs>,
+      Prisma.$TenantPayload<ExtArgs>,
       T,
       "update",
       GlobalOmitOptions
@@ -891,29 +891,29 @@ export interface WebsiteDelegate<
   >;
 
   /**
-   * Delete zero or more Websites.
-   * @param {WebsiteDeleteManyArgs} args - Arguments to filter Websites to delete.
+   * Delete zero or more Tenants.
+   * @param {TenantDeleteManyArgs} args - Arguments to filter Tenants to delete.
    * @example
-   * // Delete a few Websites
-   * const { count } = await prisma.website.deleteMany({
+   * // Delete a few Tenants
+   * const { count } = await prisma.tenant.deleteMany({
    *   where: {
    *     // ... provide filter here
    *   }
    * })
    *
    */
-  deleteMany<T extends WebsiteDeleteManyArgs>(
-    args?: Prisma.SelectSubset<T, WebsiteDeleteManyArgs<ExtArgs>>,
+  deleteMany<T extends TenantDeleteManyArgs>(
+    args?: Prisma.SelectSubset<T, TenantDeleteManyArgs<ExtArgs>>,
   ): Prisma.PrismaPromise<Prisma.BatchPayload>;
 
   /**
-   * Update zero or more Websites.
+   * Update zero or more Tenants.
    * Note, that providing `undefined` is treated as the value not being there.
    * Read more here: https://pris.ly/d/null-undefined
-   * @param {WebsiteUpdateManyArgs} args - Arguments to update one or more rows.
+   * @param {TenantUpdateManyArgs} args - Arguments to update one or more rows.
    * @example
-   * // Update many Websites
-   * const website = await prisma.website.updateMany({
+   * // Update many Tenants
+   * const tenant = await prisma.tenant.updateMany({
    *   where: {
    *     // ... provide filter here
    *   },
@@ -923,16 +923,16 @@ export interface WebsiteDelegate<
    * })
    *
    */
-  updateMany<T extends WebsiteUpdateManyArgs>(
-    args: Prisma.SelectSubset<T, WebsiteUpdateManyArgs<ExtArgs>>,
+  updateMany<T extends TenantUpdateManyArgs>(
+    args: Prisma.SelectSubset<T, TenantUpdateManyArgs<ExtArgs>>,
   ): Prisma.PrismaPromise<Prisma.BatchPayload>;
 
   /**
-   * Update zero or more Websites and returns the data updated in the database.
-   * @param {WebsiteUpdateManyAndReturnArgs} args - Arguments to update many Websites.
+   * Update zero or more Tenants and returns the data updated in the database.
+   * @param {TenantUpdateManyAndReturnArgs} args - Arguments to update many Tenants.
    * @example
-   * // Update many Websites
-   * const website = await prisma.website.updateManyAndReturn({
+   * // Update many Tenants
+   * const tenant = await prisma.tenant.updateManyAndReturn({
    *   where: {
    *     // ... provide filter here
    *   },
@@ -941,8 +941,8 @@ export interface WebsiteDelegate<
    *   ]
    * })
    *
-   * // Update zero or more Websites and only return the `id`
-   * const websiteWithIdOnly = await prisma.website.updateManyAndReturn({
+   * // Update zero or more Tenants and only return the `id`
+   * const tenantWithIdOnly = await prisma.tenant.updateManyAndReturn({
    *   select: { id: true },
    *   where: {
    *     // ... provide filter here
@@ -955,11 +955,11 @@ export interface WebsiteDelegate<
    * Read more here: https://pris.ly/d/null-undefined
    *
    */
-  updateManyAndReturn<T extends WebsiteUpdateManyAndReturnArgs>(
-    args: Prisma.SelectSubset<T, WebsiteUpdateManyAndReturnArgs<ExtArgs>>,
+  updateManyAndReturn<T extends TenantUpdateManyAndReturnArgs>(
+    args: Prisma.SelectSubset<T, TenantUpdateManyAndReturnArgs<ExtArgs>>,
   ): Prisma.PrismaPromise<
     runtime.Types.Result.GetResult<
-      Prisma.$WebsitePayload<ExtArgs>,
+      Prisma.$TenantPayload<ExtArgs>,
       T,
       "updateManyAndReturn",
       GlobalOmitOptions
@@ -967,27 +967,27 @@ export interface WebsiteDelegate<
   >;
 
   /**
-   * Create or update one Website.
-   * @param {WebsiteUpsertArgs} args - Arguments to update or create a Website.
+   * Create or update one Tenant.
+   * @param {TenantUpsertArgs} args - Arguments to update or create a Tenant.
    * @example
-   * // Update or create a Website
-   * const website = await prisma.website.upsert({
+   * // Update or create a Tenant
+   * const tenant = await prisma.tenant.upsert({
    *   create: {
-   *     // ... data to create a Website
+   *     // ... data to create a Tenant
    *   },
    *   update: {
    *     // ... in case it already exists, update
    *   },
    *   where: {
-   *     // ... the filter for the Website we want to update
+   *     // ... the filter for the Tenant we want to update
    *   }
    * })
    */
-  upsert<T extends WebsiteUpsertArgs>(
-    args: Prisma.SelectSubset<T, WebsiteUpsertArgs<ExtArgs>>,
-  ): Prisma.Prisma__WebsiteClient<
+  upsert<T extends TenantUpsertArgs>(
+    args: Prisma.SelectSubset<T, TenantUpsertArgs<ExtArgs>>,
+  ): Prisma.Prisma__TenantClient<
     runtime.Types.Result.GetResult<
-      Prisma.$WebsitePayload<ExtArgs>,
+      Prisma.$TenantPayload<ExtArgs>,
       T,
       "upsert",
       GlobalOmitOptions
@@ -998,33 +998,33 @@ export interface WebsiteDelegate<
   >;
 
   /**
-   * Count the number of Websites.
+   * Count the number of Tenants.
    * Note, that providing `undefined` is treated as the value not being there.
    * Read more here: https://pris.ly/d/null-undefined
-   * @param {WebsiteCountArgs} args - Arguments to filter Websites to count.
+   * @param {TenantCountArgs} args - Arguments to filter Tenants to count.
    * @example
-   * // Count the number of Websites
-   * const count = await prisma.website.count({
+   * // Count the number of Tenants
+   * const count = await prisma.tenant.count({
    *   where: {
-   *     // ... the filter for the Websites we want to count
+   *     // ... the filter for the Tenants we want to count
    *   }
    * })
    **/
-  count<T extends WebsiteCountArgs>(
-    args?: Prisma.Subset<T, WebsiteCountArgs>,
+  count<T extends TenantCountArgs>(
+    args?: Prisma.Subset<T, TenantCountArgs>,
   ): Prisma.PrismaPromise<
     T extends runtime.Types.Utils.Record<"select", any>
       ? T["select"] extends true
         ? number
-        : Prisma.GetScalarType<T["select"], WebsiteCountAggregateOutputType>
+        : Prisma.GetScalarType<T["select"], TenantCountAggregateOutputType>
       : number
   >;
 
   /**
-   * Allows you to perform aggregations operations on a Website.
+   * Allows you to perform aggregations operations on a Tenant.
    * Note, that providing `undefined` is treated as the value not being there.
    * Read more here: https://pris.ly/d/null-undefined
-   * @param {WebsiteAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+   * @param {TenantAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
    * @example
    * // Ordered by age ascending
    * // Where email contains prisma.io
@@ -1044,15 +1044,15 @@ export interface WebsiteDelegate<
    *   take: 10,
    * })
    **/
-  aggregate<T extends WebsiteAggregateArgs>(
-    args: Prisma.Subset<T, WebsiteAggregateArgs>,
-  ): Prisma.PrismaPromise<GetWebsiteAggregateType<T>>;
+  aggregate<T extends TenantAggregateArgs>(
+    args: Prisma.Subset<T, TenantAggregateArgs>,
+  ): Prisma.PrismaPromise<GetTenantAggregateType<T>>;
 
   /**
-   * Group by Website.
+   * Group by Tenant.
    * Note, that providing `undefined` is treated as the value not being there.
    * Read more here: https://pris.ly/d/null-undefined
-   * @param {WebsiteGroupByArgs} args - Group by arguments.
+   * @param {TenantGroupByArgs} args - Group by arguments.
    * @example
    * // Group by city, order by createdAt, get count
    * const result = await prisma.user.groupBy({
@@ -1067,14 +1067,14 @@ export interface WebsiteDelegate<
    *
    **/
   groupBy<
-    T extends WebsiteGroupByArgs,
+    T extends TenantGroupByArgs,
     HasSelectOrTake extends Prisma.Or<
       Prisma.Extends<"skip", Prisma.Keys<T>>,
       Prisma.Extends<"take", Prisma.Keys<T>>
     >,
     OrderByArg extends Prisma.True extends HasSelectOrTake
-      ? { orderBy: WebsiteGroupByArgs["orderBy"] }
-      : { orderBy?: WebsiteGroupByArgs["orderBy"] },
+      ? { orderBy: TenantGroupByArgs["orderBy"] }
+      : { orderBy?: TenantGroupByArgs["orderBy"] },
     OrderFields extends Prisma.ExcludeUnderscoreKeys<
       Prisma.Keys<Prisma.MaybeTupleToUnion<T["orderBy"]>>
     >,
@@ -1126,24 +1126,24 @@ export interface WebsiteDelegate<
                     : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
                 }[OrderFields],
   >(
-    args: Prisma.SubsetIntersection<T, WebsiteGroupByArgs, OrderByArg> &
+    args: Prisma.SubsetIntersection<T, TenantGroupByArgs, OrderByArg> &
       InputErrors,
   ): {} extends InputErrors
-    ? GetWebsiteGroupByPayload<T>
+    ? GetTenantGroupByPayload<T>
     : Prisma.PrismaPromise<InputErrors>;
   /**
-   * Fields of the Website model
+   * Fields of the Tenant model
    */
-  readonly fields: WebsiteFieldRefs;
+  readonly fields: TenantFieldRefs;
 }
 
 /**
- * The delegate class that acts as a "Promise-like" for Website.
+ * The delegate class that acts as a "Promise-like" for Tenant.
  * Why is this prefixed with `Prisma__`?
  * Because we want to prevent naming conflicts as mentioned in
  * https://github.com/prisma/prisma-client-js/issues/707
  */
-export interface Prisma__WebsiteClient<
+export interface Prisma__TenantClient<
   T,
   Null = never,
   ExtArgs extends runtime.Types.Extensions.InternalArgs =
@@ -1204,493 +1204,487 @@ export interface Prisma__WebsiteClient<
 }
 
 /**
- * Fields of the Website model
+ * Fields of the Tenant model
  */
-export interface WebsiteFieldRefs {
-  readonly id: Prisma.FieldRef<"Website", "String">;
-  readonly name: Prisma.FieldRef<"Website", "String">;
-  readonly subdomain: Prisma.FieldRef<"Website", "String">;
-  readonly published: Prisma.FieldRef<"Website", "Boolean">;
-  readonly ownerId: Prisma.FieldRef<"Website", "String">;
-  readonly createdAt: Prisma.FieldRef<"Website", "DateTime">;
-  readonly updatedAt: Prisma.FieldRef<"Website", "DateTime">;
+export interface TenantFieldRefs {
+  readonly id: Prisma.FieldRef<"Tenant", "String">;
+  readonly name: Prisma.FieldRef<"Tenant", "String">;
+  readonly subdomain: Prisma.FieldRef<"Tenant", "String">;
+  readonly published: Prisma.FieldRef<"Tenant", "Boolean">;
+  readonly ownerId: Prisma.FieldRef<"Tenant", "String">;
+  readonly createdAt: Prisma.FieldRef<"Tenant", "DateTime">;
+  readonly updatedAt: Prisma.FieldRef<"Tenant", "DateTime">;
 }
 
 // Custom InputTypes
 /**
- * Website findUnique
+ * Tenant findUnique
  */
-export type WebsiteFindUniqueArgs<
+export type TenantFindUniqueArgs<
   ExtArgs extends runtime.Types.Extensions.InternalArgs =
     runtime.Types.Extensions.DefaultArgs,
 > = {
   /**
-   * Select specific fields to fetch from the Website
+   * Select specific fields to fetch from the Tenant
    */
-  select?: Prisma.WebsiteSelect<ExtArgs> | null;
+  select?: Prisma.TenantSelect<ExtArgs> | null;
   /**
-   * Omit specific fields from the Website
+   * Omit specific fields from the Tenant
    */
-  omit?: Prisma.WebsiteOmit<ExtArgs> | null;
+  omit?: Prisma.TenantOmit<ExtArgs> | null;
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.WebsiteInclude<ExtArgs> | null;
+  include?: Prisma.TenantInclude<ExtArgs> | null;
   /**
-   * Filter, which Website to fetch.
+   * Filter, which Tenant to fetch.
    */
-  where: Prisma.WebsiteWhereUniqueInput;
+  where: Prisma.TenantWhereUniqueInput;
 };
 
 /**
- * Website findUniqueOrThrow
+ * Tenant findUniqueOrThrow
  */
-export type WebsiteFindUniqueOrThrowArgs<
+export type TenantFindUniqueOrThrowArgs<
   ExtArgs extends runtime.Types.Extensions.InternalArgs =
     runtime.Types.Extensions.DefaultArgs,
 > = {
   /**
-   * Select specific fields to fetch from the Website
+   * Select specific fields to fetch from the Tenant
    */
-  select?: Prisma.WebsiteSelect<ExtArgs> | null;
+  select?: Prisma.TenantSelect<ExtArgs> | null;
   /**
-   * Omit specific fields from the Website
+   * Omit specific fields from the Tenant
    */
-  omit?: Prisma.WebsiteOmit<ExtArgs> | null;
+  omit?: Prisma.TenantOmit<ExtArgs> | null;
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.WebsiteInclude<ExtArgs> | null;
+  include?: Prisma.TenantInclude<ExtArgs> | null;
   /**
-   * Filter, which Website to fetch.
+   * Filter, which Tenant to fetch.
    */
-  where: Prisma.WebsiteWhereUniqueInput;
+  where: Prisma.TenantWhereUniqueInput;
 };
 
 /**
- * Website findFirst
+ * Tenant findFirst
  */
-export type WebsiteFindFirstArgs<
+export type TenantFindFirstArgs<
   ExtArgs extends runtime.Types.Extensions.InternalArgs =
     runtime.Types.Extensions.DefaultArgs,
 > = {
   /**
-   * Select specific fields to fetch from the Website
+   * Select specific fields to fetch from the Tenant
    */
-  select?: Prisma.WebsiteSelect<ExtArgs> | null;
+  select?: Prisma.TenantSelect<ExtArgs> | null;
   /**
-   * Omit specific fields from the Website
+   * Omit specific fields from the Tenant
    */
-  omit?: Prisma.WebsiteOmit<ExtArgs> | null;
+  omit?: Prisma.TenantOmit<ExtArgs> | null;
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.WebsiteInclude<ExtArgs> | null;
+  include?: Prisma.TenantInclude<ExtArgs> | null;
   /**
-   * Filter, which Website to fetch.
+   * Filter, which Tenant to fetch.
    */
-  where?: Prisma.WebsiteWhereInput;
+  where?: Prisma.TenantWhereInput;
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
-   * Determine the order of Websites to fetch.
+   * Determine the order of Tenants to fetch.
    */
   orderBy?:
-    | Prisma.WebsiteOrderByWithRelationInput
-    | Prisma.WebsiteOrderByWithRelationInput[];
+    | Prisma.TenantOrderByWithRelationInput
+    | Prisma.TenantOrderByWithRelationInput[];
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
    *
-   * Sets the position for searching for Websites.
+   * Sets the position for searching for Tenants.
    */
-  cursor?: Prisma.WebsiteWhereUniqueInput;
+  cursor?: Prisma.TenantWhereUniqueInput;
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
-   * Take `±n` Websites from the position of the cursor.
+   * Take `±n` Tenants from the position of the cursor.
    */
   take?: number;
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
-   * Skip the first `n` Websites.
+   * Skip the first `n` Tenants.
    */
   skip?: number;
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
    *
-   * Filter by unique combinations of Websites.
+   * Filter by unique combinations of Tenants.
    */
-  distinct?: Prisma.WebsiteScalarFieldEnum | Prisma.WebsiteScalarFieldEnum[];
+  distinct?: Prisma.TenantScalarFieldEnum | Prisma.TenantScalarFieldEnum[];
 };
 
 /**
- * Website findFirstOrThrow
+ * Tenant findFirstOrThrow
  */
-export type WebsiteFindFirstOrThrowArgs<
+export type TenantFindFirstOrThrowArgs<
   ExtArgs extends runtime.Types.Extensions.InternalArgs =
     runtime.Types.Extensions.DefaultArgs,
 > = {
   /**
-   * Select specific fields to fetch from the Website
+   * Select specific fields to fetch from the Tenant
    */
-  select?: Prisma.WebsiteSelect<ExtArgs> | null;
+  select?: Prisma.TenantSelect<ExtArgs> | null;
   /**
-   * Omit specific fields from the Website
+   * Omit specific fields from the Tenant
    */
-  omit?: Prisma.WebsiteOmit<ExtArgs> | null;
+  omit?: Prisma.TenantOmit<ExtArgs> | null;
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.WebsiteInclude<ExtArgs> | null;
+  include?: Prisma.TenantInclude<ExtArgs> | null;
   /**
-   * Filter, which Website to fetch.
+   * Filter, which Tenant to fetch.
    */
-  where?: Prisma.WebsiteWhereInput;
+  where?: Prisma.TenantWhereInput;
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
-   * Determine the order of Websites to fetch.
+   * Determine the order of Tenants to fetch.
    */
   orderBy?:
-    | Prisma.WebsiteOrderByWithRelationInput
-    | Prisma.WebsiteOrderByWithRelationInput[];
+    | Prisma.TenantOrderByWithRelationInput
+    | Prisma.TenantOrderByWithRelationInput[];
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
    *
-   * Sets the position for searching for Websites.
+   * Sets the position for searching for Tenants.
    */
-  cursor?: Prisma.WebsiteWhereUniqueInput;
+  cursor?: Prisma.TenantWhereUniqueInput;
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
-   * Take `±n` Websites from the position of the cursor.
+   * Take `±n` Tenants from the position of the cursor.
    */
   take?: number;
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
-   * Skip the first `n` Websites.
+   * Skip the first `n` Tenants.
    */
   skip?: number;
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
    *
-   * Filter by unique combinations of Websites.
+   * Filter by unique combinations of Tenants.
    */
-  distinct?: Prisma.WebsiteScalarFieldEnum | Prisma.WebsiteScalarFieldEnum[];
+  distinct?: Prisma.TenantScalarFieldEnum | Prisma.TenantScalarFieldEnum[];
 };
 
 /**
- * Website findMany
+ * Tenant findMany
  */
-export type WebsiteFindManyArgs<
+export type TenantFindManyArgs<
   ExtArgs extends runtime.Types.Extensions.InternalArgs =
     runtime.Types.Extensions.DefaultArgs,
 > = {
   /**
-   * Select specific fields to fetch from the Website
+   * Select specific fields to fetch from the Tenant
    */
-  select?: Prisma.WebsiteSelect<ExtArgs> | null;
+  select?: Prisma.TenantSelect<ExtArgs> | null;
   /**
-   * Omit specific fields from the Website
+   * Omit specific fields from the Tenant
    */
-  omit?: Prisma.WebsiteOmit<ExtArgs> | null;
+  omit?: Prisma.TenantOmit<ExtArgs> | null;
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.WebsiteInclude<ExtArgs> | null;
+  include?: Prisma.TenantInclude<ExtArgs> | null;
   /**
-   * Filter, which Websites to fetch.
+   * Filter, which Tenants to fetch.
    */
-  where?: Prisma.WebsiteWhereInput;
+  where?: Prisma.TenantWhereInput;
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
-   * Determine the order of Websites to fetch.
+   * Determine the order of Tenants to fetch.
    */
   orderBy?:
-    | Prisma.WebsiteOrderByWithRelationInput
-    | Prisma.WebsiteOrderByWithRelationInput[];
+    | Prisma.TenantOrderByWithRelationInput
+    | Prisma.TenantOrderByWithRelationInput[];
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
    *
-   * Sets the position for listing Websites.
+   * Sets the position for listing Tenants.
    */
-  cursor?: Prisma.WebsiteWhereUniqueInput;
+  cursor?: Prisma.TenantWhereUniqueInput;
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
-   * Take `±n` Websites from the position of the cursor.
+   * Take `±n` Tenants from the position of the cursor.
    */
   take?: number;
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
-   * Skip the first `n` Websites.
+   * Skip the first `n` Tenants.
    */
   skip?: number;
-  distinct?: Prisma.WebsiteScalarFieldEnum | Prisma.WebsiteScalarFieldEnum[];
+  distinct?: Prisma.TenantScalarFieldEnum | Prisma.TenantScalarFieldEnum[];
 };
 
 /**
- * Website create
+ * Tenant create
  */
-export type WebsiteCreateArgs<
+export type TenantCreateArgs<
   ExtArgs extends runtime.Types.Extensions.InternalArgs =
     runtime.Types.Extensions.DefaultArgs,
 > = {
   /**
-   * Select specific fields to fetch from the Website
+   * Select specific fields to fetch from the Tenant
    */
-  select?: Prisma.WebsiteSelect<ExtArgs> | null;
+  select?: Prisma.TenantSelect<ExtArgs> | null;
   /**
-   * Omit specific fields from the Website
+   * Omit specific fields from the Tenant
    */
-  omit?: Prisma.WebsiteOmit<ExtArgs> | null;
+  omit?: Prisma.TenantOmit<ExtArgs> | null;
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.WebsiteInclude<ExtArgs> | null;
+  include?: Prisma.TenantInclude<ExtArgs> | null;
   /**
-   * The data needed to create a Website.
+   * The data needed to create a Tenant.
    */
-  data: Prisma.XOR<
-    Prisma.WebsiteCreateInput,
-    Prisma.WebsiteUncheckedCreateInput
-  >;
+  data: Prisma.XOR<Prisma.TenantCreateInput, Prisma.TenantUncheckedCreateInput>;
 };
 
 /**
- * Website createMany
+ * Tenant createMany
  */
-export type WebsiteCreateManyArgs<
+export type TenantCreateManyArgs<
   ExtArgs extends runtime.Types.Extensions.InternalArgs =
     runtime.Types.Extensions.DefaultArgs,
 > = {
   /**
-   * The data used to create many Websites.
+   * The data used to create many Tenants.
    */
-  data: Prisma.WebsiteCreateManyInput | Prisma.WebsiteCreateManyInput[];
+  data: Prisma.TenantCreateManyInput | Prisma.TenantCreateManyInput[];
   skipDuplicates?: boolean;
 };
 
 /**
- * Website createManyAndReturn
+ * Tenant createManyAndReturn
  */
-export type WebsiteCreateManyAndReturnArgs<
+export type TenantCreateManyAndReturnArgs<
   ExtArgs extends runtime.Types.Extensions.InternalArgs =
     runtime.Types.Extensions.DefaultArgs,
 > = {
   /**
-   * Select specific fields to fetch from the Website
+   * Select specific fields to fetch from the Tenant
    */
-  select?: Prisma.WebsiteSelectCreateManyAndReturn<ExtArgs> | null;
+  select?: Prisma.TenantSelectCreateManyAndReturn<ExtArgs> | null;
   /**
-   * Omit specific fields from the Website
+   * Omit specific fields from the Tenant
    */
-  omit?: Prisma.WebsiteOmit<ExtArgs> | null;
+  omit?: Prisma.TenantOmit<ExtArgs> | null;
   /**
-   * The data used to create many Websites.
+   * The data used to create many Tenants.
    */
-  data: Prisma.WebsiteCreateManyInput | Prisma.WebsiteCreateManyInput[];
+  data: Prisma.TenantCreateManyInput | Prisma.TenantCreateManyInput[];
   skipDuplicates?: boolean;
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.WebsiteIncludeCreateManyAndReturn<ExtArgs> | null;
+  include?: Prisma.TenantIncludeCreateManyAndReturn<ExtArgs> | null;
 };
 
 /**
- * Website update
+ * Tenant update
  */
-export type WebsiteUpdateArgs<
+export type TenantUpdateArgs<
   ExtArgs extends runtime.Types.Extensions.InternalArgs =
     runtime.Types.Extensions.DefaultArgs,
 > = {
   /**
-   * Select specific fields to fetch from the Website
+   * Select specific fields to fetch from the Tenant
    */
-  select?: Prisma.WebsiteSelect<ExtArgs> | null;
+  select?: Prisma.TenantSelect<ExtArgs> | null;
   /**
-   * Omit specific fields from the Website
+   * Omit specific fields from the Tenant
    */
-  omit?: Prisma.WebsiteOmit<ExtArgs> | null;
+  omit?: Prisma.TenantOmit<ExtArgs> | null;
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.WebsiteInclude<ExtArgs> | null;
+  include?: Prisma.TenantInclude<ExtArgs> | null;
   /**
-   * The data needed to update a Website.
+   * The data needed to update a Tenant.
    */
-  data: Prisma.XOR<
-    Prisma.WebsiteUpdateInput,
-    Prisma.WebsiteUncheckedUpdateInput
-  >;
+  data: Prisma.XOR<Prisma.TenantUpdateInput, Prisma.TenantUncheckedUpdateInput>;
   /**
-   * Choose, which Website to update.
+   * Choose, which Tenant to update.
    */
-  where: Prisma.WebsiteWhereUniqueInput;
+  where: Prisma.TenantWhereUniqueInput;
 };
 
 /**
- * Website updateMany
+ * Tenant updateMany
  */
-export type WebsiteUpdateManyArgs<
+export type TenantUpdateManyArgs<
   ExtArgs extends runtime.Types.Extensions.InternalArgs =
     runtime.Types.Extensions.DefaultArgs,
 > = {
   /**
-   * The data used to update Websites.
+   * The data used to update Tenants.
    */
   data: Prisma.XOR<
-    Prisma.WebsiteUpdateManyMutationInput,
-    Prisma.WebsiteUncheckedUpdateManyInput
+    Prisma.TenantUpdateManyMutationInput,
+    Prisma.TenantUncheckedUpdateManyInput
   >;
   /**
-   * Filter which Websites to update
+   * Filter which Tenants to update
    */
-  where?: Prisma.WebsiteWhereInput;
+  where?: Prisma.TenantWhereInput;
   /**
-   * Limit how many Websites to update.
+   * Limit how many Tenants to update.
    */
   limit?: number;
 };
 
 /**
- * Website updateManyAndReturn
+ * Tenant updateManyAndReturn
  */
-export type WebsiteUpdateManyAndReturnArgs<
+export type TenantUpdateManyAndReturnArgs<
   ExtArgs extends runtime.Types.Extensions.InternalArgs =
     runtime.Types.Extensions.DefaultArgs,
 > = {
   /**
-   * Select specific fields to fetch from the Website
+   * Select specific fields to fetch from the Tenant
    */
-  select?: Prisma.WebsiteSelectUpdateManyAndReturn<ExtArgs> | null;
+  select?: Prisma.TenantSelectUpdateManyAndReturn<ExtArgs> | null;
   /**
-   * Omit specific fields from the Website
+   * Omit specific fields from the Tenant
    */
-  omit?: Prisma.WebsiteOmit<ExtArgs> | null;
+  omit?: Prisma.TenantOmit<ExtArgs> | null;
   /**
-   * The data used to update Websites.
+   * The data used to update Tenants.
    */
   data: Prisma.XOR<
-    Prisma.WebsiteUpdateManyMutationInput,
-    Prisma.WebsiteUncheckedUpdateManyInput
+    Prisma.TenantUpdateManyMutationInput,
+    Prisma.TenantUncheckedUpdateManyInput
   >;
   /**
-   * Filter which Websites to update
+   * Filter which Tenants to update
    */
-  where?: Prisma.WebsiteWhereInput;
+  where?: Prisma.TenantWhereInput;
   /**
-   * Limit how many Websites to update.
+   * Limit how many Tenants to update.
    */
   limit?: number;
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.WebsiteIncludeUpdateManyAndReturn<ExtArgs> | null;
+  include?: Prisma.TenantIncludeUpdateManyAndReturn<ExtArgs> | null;
 };
 
 /**
- * Website upsert
+ * Tenant upsert
  */
-export type WebsiteUpsertArgs<
+export type TenantUpsertArgs<
   ExtArgs extends runtime.Types.Extensions.InternalArgs =
     runtime.Types.Extensions.DefaultArgs,
 > = {
   /**
-   * Select specific fields to fetch from the Website
+   * Select specific fields to fetch from the Tenant
    */
-  select?: Prisma.WebsiteSelect<ExtArgs> | null;
+  select?: Prisma.TenantSelect<ExtArgs> | null;
   /**
-   * Omit specific fields from the Website
+   * Omit specific fields from the Tenant
    */
-  omit?: Prisma.WebsiteOmit<ExtArgs> | null;
+  omit?: Prisma.TenantOmit<ExtArgs> | null;
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.WebsiteInclude<ExtArgs> | null;
+  include?: Prisma.TenantInclude<ExtArgs> | null;
   /**
-   * The filter to search for the Website to update in case it exists.
+   * The filter to search for the Tenant to update in case it exists.
    */
-  where: Prisma.WebsiteWhereUniqueInput;
+  where: Prisma.TenantWhereUniqueInput;
   /**
-   * In case the Website found by the `where` argument doesn't exist, create a new Website with this data.
+   * In case the Tenant found by the `where` argument doesn't exist, create a new Tenant with this data.
    */
   create: Prisma.XOR<
-    Prisma.WebsiteCreateInput,
-    Prisma.WebsiteUncheckedCreateInput
+    Prisma.TenantCreateInput,
+    Prisma.TenantUncheckedCreateInput
   >;
   /**
-   * In case the Website was found with the provided `where` argument, update it with this data.
+   * In case the Tenant was found with the provided `where` argument, update it with this data.
    */
   update: Prisma.XOR<
-    Prisma.WebsiteUpdateInput,
-    Prisma.WebsiteUncheckedUpdateInput
+    Prisma.TenantUpdateInput,
+    Prisma.TenantUncheckedUpdateInput
   >;
 };
 
 /**
- * Website delete
+ * Tenant delete
  */
-export type WebsiteDeleteArgs<
+export type TenantDeleteArgs<
   ExtArgs extends runtime.Types.Extensions.InternalArgs =
     runtime.Types.Extensions.DefaultArgs,
 > = {
   /**
-   * Select specific fields to fetch from the Website
+   * Select specific fields to fetch from the Tenant
    */
-  select?: Prisma.WebsiteSelect<ExtArgs> | null;
+  select?: Prisma.TenantSelect<ExtArgs> | null;
   /**
-   * Omit specific fields from the Website
+   * Omit specific fields from the Tenant
    */
-  omit?: Prisma.WebsiteOmit<ExtArgs> | null;
+  omit?: Prisma.TenantOmit<ExtArgs> | null;
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.WebsiteInclude<ExtArgs> | null;
+  include?: Prisma.TenantInclude<ExtArgs> | null;
   /**
-   * Filter which Website to delete.
+   * Filter which Tenant to delete.
    */
-  where: Prisma.WebsiteWhereUniqueInput;
+  where: Prisma.TenantWhereUniqueInput;
 };
 
 /**
- * Website deleteMany
+ * Tenant deleteMany
  */
-export type WebsiteDeleteManyArgs<
+export type TenantDeleteManyArgs<
   ExtArgs extends runtime.Types.Extensions.InternalArgs =
     runtime.Types.Extensions.DefaultArgs,
 > = {
   /**
-   * Filter which Websites to delete
+   * Filter which Tenants to delete
    */
-  where?: Prisma.WebsiteWhereInput;
+  where?: Prisma.TenantWhereInput;
   /**
-   * Limit how many Websites to delete.
+   * Limit how many Tenants to delete.
    */
   limit?: number;
 };
 
 /**
- * Website without action
+ * Tenant without action
  */
-export type WebsiteDefaultArgs<
+export type TenantDefaultArgs<
   ExtArgs extends runtime.Types.Extensions.InternalArgs =
     runtime.Types.Extensions.DefaultArgs,
 > = {
   /**
-   * Select specific fields to fetch from the Website
+   * Select specific fields to fetch from the Tenant
    */
-  select?: Prisma.WebsiteSelect<ExtArgs> | null;
+  select?: Prisma.TenantSelect<ExtArgs> | null;
   /**
-   * Omit specific fields from the Website
+   * Omit specific fields from the Tenant
    */
-  omit?: Prisma.WebsiteOmit<ExtArgs> | null;
+  omit?: Prisma.TenantOmit<ExtArgs> | null;
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.WebsiteInclude<ExtArgs> | null;
+  include?: Prisma.TenantInclude<ExtArgs> | null;
 };

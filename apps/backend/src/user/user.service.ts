@@ -11,7 +11,7 @@ export class UserServices {
         id: userId,
       },
       select: {
-        website: {
+        tenant: {
           select: {
             name: true,
             subdomain: true,

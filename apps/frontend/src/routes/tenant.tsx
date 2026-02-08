@@ -12,36 +12,28 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import {
-  useCreateWebsite,
-  useGetWebsite,
-  usePublishWebsite,
-} from '@/hooks/use-website'
-import { useAuthStore } from '@/lib/stores/auth.stores'
+  useCreateTenant,
+  useGetTenant,
+  usePublishTenant,
+} from '@/hooks/use-tenant'
+// import { useAuthStore } from '@/lib/stores/auth.stores'
 
-export const Route = createFileRoute('/website')({
-  component: WebsitePage,
+export const Route = createFileRoute('/tenant')({
+  component: TenantPage,
 })
 
-function WebsitePage() {
+function TenantPage() {
   const navigate = useNavigate()
   const [error, setError] = useState<string | null>(null)
   // const { isLoading: authLoading } = useGetMe()
-  const { isAuthenticated } = useAuthStore()
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigate({ to: '/login' })
-    }
-  }, [isAuthenticated, navigate])
 
-  const { data: website, isLoading } = useGetWebsite()
+  const { data: tenant, isLoading } = useGetTenant()
 
-  const { mutate: createWebsite, isError: createWebsiteError } =
-    useCreateWebsite()
+  const { mutate: createTenant, isError: createTenantError } = useCreateTenant()
 
-  const { mutate: publishWebsite, isError: publishWebsiteError } =
-    usePublishWebsite()
+  const { mutate: publishTenant, isPending: isPublishing } = usePublishTenant()
 
   const form = useForm({
     defaultValues: {
@@ -50,12 +42,12 @@ function WebsitePage() {
     },
     onSubmit: async ({ value }) => {
       setError(null)
-      createWebsite(value)
+      createTenant({ data: value })
     },
   })
 
   const handlePublishToggle = () => {
-    publishWebsite()
+    publishTenant()
   }
 
   if (isLoading) {
@@ -66,15 +58,11 @@ function WebsitePage() {
     )
   }
 
-  if (!isAuthenticated) {
-    return null
-  }
-
   return (
     <div className="min-h-screen ">
       <header className="border-b ">
         <div className="container mx-auto flex items-center justify-between px-4 py-4">
-          <h1 className="text-2xl font-bold">Website Management</h1>
+          <h1 className="text-2xl font-bold">Tenant Management</h1>
           <Button
             variant="outline"
             onClick={() => navigate({ to: '/dashboard' })}
@@ -83,50 +71,48 @@ function WebsitePage() {
           </Button>
         </div>
       </header>
-
       <main className="container mx-auto px-4 py-8">
-        {website ? (
-          // Show existing website
+        {tenant ? (
+          // Show existing tenant
           <div className="grid gap-6 md:grid-cols-2">
             <Card>
               <CardHeader>
-                <CardTitle>Website Information</CardTitle>
-                <CardDescription>Your website details</CardDescription>
+                <CardTitle>Tenant Information</CardTitle>
+                <CardDescription>Your Tenant details</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
                   <Label>Name</Label>
-                  <p className="text-lg font-medium">{website.name}</p>
+                  <p className="text-lg font-medium">{tenant.name}</p>
                 </div>
                 <div>
                   <Label>Subdomain</Label>
-                  <p className="text-lg font-medium">{website.subdomain}</p>
+                  <p className="text-lg font-medium">{tenant.subdomain}</p>
                   <p className="mt-1 text-sm text-gray-500">
                     Your site is available at:{' '}
                     <a
-                      href={`https://${website.subdomain}.banau.com`}
+                      href={`https://${tenant.subdomain}.banau.com`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-blue-600 hover:underline"
                     >
-                      {website.subdomain}.banau.com
+                      {tenant.subdomain}.banau.com
                     </a>
                   </p>
                 </div>
                 <div>
                   <Label>Created</Label>
                   <p className="text-sm text-gray-600">
-                    {new Date(website.createdAt).toLocaleDateString()}
+                    {new Date(tenant.createdAt).toLocaleDateString()}
                   </p>
                 </div>
               </CardContent>
             </Card>
-
             <Card>
               <CardHeader>
                 <CardTitle>Publication Settings</CardTitle>
                 <CardDescription>
-                  Control your website visibility
+                  Control your tenant visibility
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -134,36 +120,36 @@ function WebsitePage() {
                   <div>
                     <Label>Publish Status</Label>
                     <p className="text-sm text-gray-500">
-                      {website.published
-                        ? 'Your website is live and visible to everyone'
-                        : 'Your website is currently unpublished'}
+                      {tenant.published
+                        ? 'Your tenant is live and visible to everyone'
+                        : 'Your tenant is currently unpublished'}
                     </p>
                   </div>
                   <Switch
-                    checked={website.published}
+                    checked={tenant.published}
                     onCheckedChange={handlePublishToggle}
-                    disabled={publishWebsiteError}
+                    disabled={isPublishing}
                   />
                 </div>
 
-                {website.published ? (
+                {tenant.published ? (
                   <div className="rounded-md bg-green-50 p-4">
                     <p className="text-sm text-green-800">
-                      ✓ Your website is published and accessible at{' '}
+                      ✓ Your tenant is published and accessible at{' '}
                       <a
-                        href={`https://${website.subdomain}.banau.com`}
+                        href={`https://${tenant.subdomain}.banau.com`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="font-medium underline"
                       >
-                        {website.subdomain}.banau.com
+                        {tenant.subdomain}.banau.com
                       </a>
                     </p>
                   </div>
                 ) : (
                   <div className="rounded-md bg-yellow-50 p-4">
                     <p className="text-sm text-yellow-800">
-                      Your website is currently unpublished. Toggle the switch
+                      Your tenant is currently unpublished. Toggle the switch
                       above to make it live.
                     </p>
                   </div>
@@ -172,7 +158,7 @@ function WebsitePage() {
                 <div className="space-y-2">
                   <Button
                     onClick={() =>
-                      navigate({ to: `/preview/${website.subdomain}` })
+                      navigate({ to: `/preview/${tenant.subdomain}` })
                     }
                     variant="outline"
                     className="w-full"
@@ -182,13 +168,13 @@ function WebsitePage() {
                   <Button
                     onClick={() =>
                       window.open(
-                        `https://${website.subdomain}.banau.com`,
+                        `https://${tenant.subdomain}.banau.com`,
                         '_blank',
                       )
                     }
                     variant="outline"
                     className="w-full"
-                    disabled={!website.published}
+                    disabled={!tenant.published}
                   >
                     View Live Site (Production)
                   </Button>
@@ -200,9 +186,9 @@ function WebsitePage() {
           // Show create form
           <Card className="mx-auto max-w-2xl">
             <CardHeader>
-              <CardTitle>Create Your Website</CardTitle>
+              <CardTitle>Create Your Tenant</CardTitle>
               <CardDescription>
-                Set up your new website with a unique subdomain
+                Set up your new tenant with a unique subdomain
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -219,7 +205,7 @@ function WebsitePage() {
                   validators={{
                     onChange: ({ value }) =>
                       !value
-                        ? 'Website name is required'
+                        ? 'Tenant name is required'
                         : value.length < 3
                           ? 'Name must be at least 3 characters'
                           : undefined,
@@ -227,12 +213,12 @@ function WebsitePage() {
                 >
                   {(field) => (
                     <div className="space-y-2">
-                      <Label htmlFor={field.name}>Website Name</Label>
+                      <Label htmlFor={field.name}>Tenant Name</Label>
                       <Input
                         id={field.name}
                         name={field.name}
                         type="text"
-                        placeholder="My Awesome Website"
+                        placeholder="My Awesome Tenant"
                         value={field.state.value}
                         onChange={(e) => field.handleChange(e.target.value)}
                         onBlur={field.handleBlur}
@@ -288,7 +274,7 @@ function WebsitePage() {
                         </p>
                       )}
                       <p className="text-sm text-gray-500">
-                        Your website will be accessible at{' '}
+                        Your tenant will be accessible at{' '}
                         {field.state.value || 'your-subdomain'}.banau.com
                       </p>
                     </div>
@@ -304,9 +290,9 @@ function WebsitePage() {
                 <Button
                   type="submit"
                   className="w-full"
-                  disabled={createWebsiteError}
+                  disabled={createTenantError}
                 >
-                  {createWebsiteError ? 'Creating...' : 'Create Website'}
+                  {createTenantError ? 'Creating...' : 'Create Tenant'}
                 </Button>
               </form>
             </CardContent>

@@ -15,12 +15,12 @@ datasource db {
 }
 
 model User {
-  id       String   @id @default(uuid())
-  email    String   @unique
+  id       String  @id @default(uuid())
+  email    String  @unique
   password String
   name     String
   // isVerified Boolean  @default(false)
-  website  Website?
+  tenant   Tenant?
 
   tokens Token[]
 
@@ -28,7 +28,7 @@ model User {
   updatedAt DateTime @updatedAt
 }
 
-model Website {
+model Tenant {
   id        String  @id @default(uuid())
   name      String
   subdomain String  @unique

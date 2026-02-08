@@ -1,9 +1,12 @@
-import axiosInstance from '../axios'
+import { User } from '@repo/shared'
+import  { api } from '../axios'
+import { createServerFn } from '@tanstack/react-start'
 
-export const getMe = async () => {
+export const getMe = createServerFn({ method: 'GET' }).handler(
+async () => {
   try {
-    const response = await axiosInstance.get('/user/me', {
-      withCredentials: true,
+    const response = await api<User>('/user/me', {
+      method:'GET'
     })
     return response.data
   } catch (error: unknown) {
@@ -17,3 +20,4 @@ export const getMe = async () => {
     throw new Error(errorMessage)
   }
 }
+)

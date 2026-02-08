@@ -1,44 +1,96 @@
-import axios, { AxiosInstance } from 'axios'
-import { useAuthStore } from './stores/auth.stores'
+// apps/web/app/lib/axios.ts
+import axios, {
+  type AxiosInstance,
+  type AxiosRequestConfig,
+  type AxiosResponse,
+  type AxiosError,
+} from 'axios'
+import { useAppSession } from './session'
 
+// ============================================
+// CREATE AXIOS INSTANCE
+// ============================================
 const axiosInstance: AxiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
+  timeout: 10000,
+  headers: {
+    'Content-Type': 'application/json',
+  },
   withCredentials: true,
 })
 
-axiosInstance.interceptors.request.use((config) => {
-  // Get token from auth store
-  const token = useAuthStore.getState().token
-  
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`
-  }
-  
-  return config
-})
-
-// Add response interceptor to handle 401 errors
-axiosInstance.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response?.status === 401) {
-      const pathname = window.location.pathname
-      
-      // Don't logout on preview routes or public website endpoints
-      const isPreviewRoute = pathname.startsWith('/preview/')
-      const isPublicEndpoint = error.config?.url?.match(/^\/website\/[^/]+$/)
-      
-      // Only clear auth if we're on an authenticated route AND it's not a public endpoint
-      const isAuthRoute = (pathname.startsWith('/dashboard') || pathname.startsWith('/website')) && !isPreviewRoute
-      
-      if (isAuthRoute && !isPublicEndpoint) {
-        // Clear auth state and redirect to login
-        useAuthStore.getState().logout()
-        window.location.href = '/login'
-      }
+// ============================================
+// REQUEST INTERCEPTOR
+// ============================================
+axiosInstance.interceptors.request.use(
+  (config) => {
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`[AXIOS] ${config.method?.toUpperCase()} ${config.url}`)
     }
+    return config
+  },
+  (error) => {
+    console.error('[AXIOS] Request Error:', error)
     return Promise.reject(error)
-  }
+  },
 )
+
+// ============================================
+// RESPONSE INTERCEPTOR
+// ============================================
+axiosInstance.interceptors.response.use(
+  (response: AxiosResponse) => response,
+  (error: AxiosError) => {
+    // Log errors in development
+    if (process.env.NODE_ENV === 'development') {
+      console.error('[AXIOS] Response Error:', error.response?.data)
+    }
+
+    // Extract error message
+    const message =
+      (error.response?.data as any)?.message ||
+      error.message ||
+      'Something went wrong'
+
+    return Promise.reject(new Error(message))
+  },
+)
+
+// ============================================
+// TYPED API HELPER (for Server Functions)
+// ============================================
+export async function api<TResponse = any>(
+  url: string,
+  config: AxiosRequestConfig = {},
+): Promise<AxiosResponse<TResponse>> {
+  // Get session and add authorization token if available
+  const session = await useAppSession()
+
+  // Build headers
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    ...(config.headers as Record<string, string>),
+  }
+
+  // Add Authorization header only if token exists
+  if (session.data.token) {
+    headers['Authorization'] = `Bearer ${session.data.token}`
+  }
+
+  // Build request config
+  const requestConfig: AxiosRequestConfig = {
+    url,
+    ...config,
+    headers,
+  }
+
+  // Remove data from GET requests to avoid sending body
+  if (config.method?.toUpperCase() === 'GET') {
+    delete requestConfig.data
+  }
+
+  // Make request
+  return axiosInstance.request<TResponse>(requestConfig)
+}
 
 export default axiosInstance

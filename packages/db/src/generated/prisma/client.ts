@@ -48,10 +48,10 @@ export { Prisma };
  */
 export type User = Prisma.UserModel;
 /**
- * Model Website
+ * Model Tenant
  *
  */
-export type Website = Prisma.WebsiteModel;
+export type Tenant = Prisma.TenantModel;
 /**
  * Model Token
  *

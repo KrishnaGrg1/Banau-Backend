@@ -1,5 +1,5 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
-import { PublicWebsite } from '@/components/PublicWebsite'
+import { PublicTenant } from '@/components/PublicTenant'
 // import { useWebsiteStore } from '@/lib/stores/website.stores'
 import { getServerData } from '@/utils/middleware'
 
@@ -11,23 +11,21 @@ export const Route = createFileRoute('/')({
         to: '/login',
       })
     }
+
     return data
   },
   component: IndexPage,
 })
 
 function IndexPage() {
-  const { subdomain } = Route.useLoaderData()
-
+  const data = Route.useLoaderData()
+  console.log('aslkdjf;a', data)
   // useEffect(() => {
   //   if (subdomain && (!website || website.subdomain !== subdomain)) {
   //     fetchWebsite(subdomain)
   //   }
   // }, [subdomain, website, fetchWebsite])
+  if (!data?.subdomain) return null
 
-  if (subdomain) {
-    return <PublicWebsite />
-  }
-
-  return null
+  return <PublicTenant tenant={data.tenant} />
 }

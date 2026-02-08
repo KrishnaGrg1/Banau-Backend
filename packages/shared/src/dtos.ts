@@ -45,8 +45,8 @@ export interface RegisterResponse {
   timestamp: Date;
 }
 
-// Website DTOs
-export const CreateWebsiteDtoSchema = z.object({
+// Tenant DTOs
+export const CreateTenantDtoSchema = z.object({
   name: z.string().min(3),
   subdomain: z
     .string()
@@ -54,9 +54,9 @@ export const CreateWebsiteDtoSchema = z.object({
     .regex(/^[a-z0-9-]+$/),
 });
 
-export type CreateWebsiteDto = z.infer<typeof CreateWebsiteDtoSchema>;
+export type CreateTenantDto = z.infer<typeof CreateTenantDtoSchema>;
 
-export interface WebsiteResponse {
+export interface TenantResponse {
   success: boolean;
   message: string;
   data: {
@@ -70,3 +70,14 @@ export interface WebsiteResponse {
   };
   timestamp: Date;
 }
+
+export const getTenantDetailsBySubdomainSchema = z.object({
+  subdomain: z
+    .string()
+    .min(3)
+    .regex(/^[a-z0-9-]+$/),
+});
+
+export type getTenantDetailsBySubdomainDto = z.infer<
+  typeof getTenantDetailsBySubdomainSchema
+>;

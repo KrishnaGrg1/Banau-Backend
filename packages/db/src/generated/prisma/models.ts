@@ -8,6 +8,6 @@
  * 🟢 You can import this file directly.
  */
 export type * from "./models/User";
-export type * from "./models/Website";
+export type * from "./models/Tenant";
 export type * from "./models/Token";
 export type * from "./commonInputTypes";

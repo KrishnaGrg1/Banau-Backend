@@ -55,7 +55,7 @@ export const AnyNull = runtime.AnyNull;
 
 export const ModelName = {
   User: "User",
-  Website: "Website",
+  Tenant: "Tenant",
   Token: "Token",
 } as const;
 
@@ -87,7 +87,7 @@ export const UserScalarFieldEnum = {
 export type UserScalarFieldEnum =
   (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum];
 
-export const WebsiteScalarFieldEnum = {
+export const TenantScalarFieldEnum = {
   id: "id",
   name: "name",
   subdomain: "subdomain",
@@ -97,8 +97,8 @@ export const WebsiteScalarFieldEnum = {
   updatedAt: "updatedAt",
 } as const;
 
-export type WebsiteScalarFieldEnum =
-  (typeof WebsiteScalarFieldEnum)[keyof typeof WebsiteScalarFieldEnum];
+export type TenantScalarFieldEnum =
+  (typeof TenantScalarFieldEnum)[keyof typeof TenantScalarFieldEnum];
 
 export const TokenScalarFieldEnum = {
   id: "id",

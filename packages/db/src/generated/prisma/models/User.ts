@@ -193,9 +193,9 @@ export type UserWhereInput = {
   name?: Prisma.StringFilter<"User"> | string;
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string;
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string;
-  website?: Prisma.XOR<
-    Prisma.WebsiteNullableScalarRelationFilter,
-    Prisma.WebsiteWhereInput
+  tenant?: Prisma.XOR<
+    Prisma.TenantNullableScalarRelationFilter,
+    Prisma.TenantWhereInput
   > | null;
   tokens?: Prisma.TokenListRelationFilter;
 };
@@ -207,7 +207,7 @@ export type UserOrderByWithRelationInput = {
   name?: Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
   updatedAt?: Prisma.SortOrder;
-  website?: Prisma.WebsiteOrderByWithRelationInput;
+  tenant?: Prisma.TenantOrderByWithRelationInput;
   tokens?: Prisma.TokenOrderByRelationAggregateInput;
 };
 
@@ -222,9 +222,9 @@ export type UserWhereUniqueInput = Prisma.AtLeast<
     name?: Prisma.StringFilter<"User"> | string;
     createdAt?: Prisma.DateTimeFilter<"User"> | Date | string;
     updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string;
-    website?: Prisma.XOR<
-      Prisma.WebsiteNullableScalarRelationFilter,
-      Prisma.WebsiteWhereInput
+    tenant?: Prisma.XOR<
+      Prisma.TenantNullableScalarRelationFilter,
+      Prisma.TenantWhereInput
     > | null;
     tokens?: Prisma.TokenListRelationFilter;
   },
@@ -266,7 +266,7 @@ export type UserCreateInput = {
   name: string;
   createdAt?: Date | string;
   updatedAt?: Date | string;
-  website?: Prisma.WebsiteCreateNestedOneWithoutOwnerInput;
+  tenant?: Prisma.TenantCreateNestedOneWithoutOwnerInput;
   tokens?: Prisma.TokenCreateNestedManyWithoutUserInput;
 };
 
@@ -277,7 +277,7 @@ export type UserUncheckedCreateInput = {
   name: string;
   createdAt?: Date | string;
   updatedAt?: Date | string;
-  website?: Prisma.WebsiteUncheckedCreateNestedOneWithoutOwnerInput;
+  tenant?: Prisma.TenantUncheckedCreateNestedOneWithoutOwnerInput;
   tokens?: Prisma.TokenUncheckedCreateNestedManyWithoutUserInput;
 };
 
@@ -288,7 +288,7 @@ export type UserUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-  website?: Prisma.WebsiteUpdateOneWithoutOwnerNestedInput;
+  tenant?: Prisma.TenantUpdateOneWithoutOwnerNestedInput;
   tokens?: Prisma.TokenUpdateManyWithoutUserNestedInput;
 };
 
@@ -299,7 +299,7 @@ export type UserUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-  website?: Prisma.WebsiteUncheckedUpdateOneWithoutOwnerNestedInput;
+  tenant?: Prisma.TenantUncheckedUpdateOneWithoutOwnerNestedInput;
   tokens?: Prisma.TokenUncheckedUpdateManyWithoutUserNestedInput;
 };
 
@@ -370,29 +370,29 @@ export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string;
 };
 
-export type UserCreateNestedOneWithoutWebsiteInput = {
+export type UserCreateNestedOneWithoutTenantInput = {
   create?: Prisma.XOR<
-    Prisma.UserCreateWithoutWebsiteInput,
-    Prisma.UserUncheckedCreateWithoutWebsiteInput
+    Prisma.UserCreateWithoutTenantInput,
+    Prisma.UserUncheckedCreateWithoutTenantInput
   >;
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutWebsiteInput;
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTenantInput;
   connect?: Prisma.UserWhereUniqueInput;
 };
 
-export type UserUpdateOneRequiredWithoutWebsiteNestedInput = {
+export type UserUpdateOneRequiredWithoutTenantNestedInput = {
   create?: Prisma.XOR<
-    Prisma.UserCreateWithoutWebsiteInput,
-    Prisma.UserUncheckedCreateWithoutWebsiteInput
+    Prisma.UserCreateWithoutTenantInput,
+    Prisma.UserUncheckedCreateWithoutTenantInput
   >;
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutWebsiteInput;
-  upsert?: Prisma.UserUpsertWithoutWebsiteInput;
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTenantInput;
+  upsert?: Prisma.UserUpsertWithoutTenantInput;
   connect?: Prisma.UserWhereUniqueInput;
   update?: Prisma.XOR<
     Prisma.XOR<
-      Prisma.UserUpdateToOneWithWhereWithoutWebsiteInput,
-      Prisma.UserUpdateWithoutWebsiteInput
+      Prisma.UserUpdateToOneWithWhereWithoutTenantInput,
+      Prisma.UserUpdateWithoutTenantInput
     >,
-    Prisma.UserUncheckedUpdateWithoutWebsiteInput
+    Prisma.UserUncheckedUpdateWithoutTenantInput
   >;
 };
 
@@ -422,7 +422,7 @@ export type UserUpdateOneRequiredWithoutTokensNestedInput = {
   >;
 };
 
-export type UserCreateWithoutWebsiteInput = {
+export type UserCreateWithoutTenantInput = {
   id?: string;
   email: string;
   password: string;
@@ -432,7 +432,7 @@ export type UserCreateWithoutWebsiteInput = {
   tokens?: Prisma.TokenCreateNestedManyWithoutUserInput;
 };
 
-export type UserUncheckedCreateWithoutWebsiteInput = {
+export type UserUncheckedCreateWithoutTenantInput = {
   id?: string;
   email: string;
   password: string;
@@ -442,35 +442,35 @@ export type UserUncheckedCreateWithoutWebsiteInput = {
   tokens?: Prisma.TokenUncheckedCreateNestedManyWithoutUserInput;
 };
 
-export type UserCreateOrConnectWithoutWebsiteInput = {
+export type UserCreateOrConnectWithoutTenantInput = {
   where: Prisma.UserWhereUniqueInput;
   create: Prisma.XOR<
-    Prisma.UserCreateWithoutWebsiteInput,
-    Prisma.UserUncheckedCreateWithoutWebsiteInput
+    Prisma.UserCreateWithoutTenantInput,
+    Prisma.UserUncheckedCreateWithoutTenantInput
   >;
 };
 
-export type UserUpsertWithoutWebsiteInput = {
+export type UserUpsertWithoutTenantInput = {
   update: Prisma.XOR<
-    Prisma.UserUpdateWithoutWebsiteInput,
-    Prisma.UserUncheckedUpdateWithoutWebsiteInput
+    Prisma.UserUpdateWithoutTenantInput,
+    Prisma.UserUncheckedUpdateWithoutTenantInput
   >;
   create: Prisma.XOR<
-    Prisma.UserCreateWithoutWebsiteInput,
-    Prisma.UserUncheckedCreateWithoutWebsiteInput
+    Prisma.UserCreateWithoutTenantInput,
+    Prisma.UserUncheckedCreateWithoutTenantInput
   >;
   where?: Prisma.UserWhereInput;
 };
 
-export type UserUpdateToOneWithWhereWithoutWebsiteInput = {
+export type UserUpdateToOneWithWhereWithoutTenantInput = {
   where?: Prisma.UserWhereInput;
   data: Prisma.XOR<
-    Prisma.UserUpdateWithoutWebsiteInput,
-    Prisma.UserUncheckedUpdateWithoutWebsiteInput
+    Prisma.UserUpdateWithoutTenantInput,
+    Prisma.UserUncheckedUpdateWithoutTenantInput
   >;
 };
 
-export type UserUpdateWithoutWebsiteInput = {
+export type UserUpdateWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   email?: Prisma.StringFieldUpdateOperationsInput | string;
   password?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -480,7 +480,7 @@ export type UserUpdateWithoutWebsiteInput = {
   tokens?: Prisma.TokenUpdateManyWithoutUserNestedInput;
 };
 
-export type UserUncheckedUpdateWithoutWebsiteInput = {
+export type UserUncheckedUpdateWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   email?: Prisma.StringFieldUpdateOperationsInput | string;
   password?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -497,7 +497,7 @@ export type UserCreateWithoutTokensInput = {
   name: string;
   createdAt?: Date | string;
   updatedAt?: Date | string;
-  website?: Prisma.WebsiteCreateNestedOneWithoutOwnerInput;
+  tenant?: Prisma.TenantCreateNestedOneWithoutOwnerInput;
 };
 
 export type UserUncheckedCreateWithoutTokensInput = {
@@ -507,7 +507,7 @@ export type UserUncheckedCreateWithoutTokensInput = {
   name: string;
   createdAt?: Date | string;
   updatedAt?: Date | string;
-  website?: Prisma.WebsiteUncheckedCreateNestedOneWithoutOwnerInput;
+  tenant?: Prisma.TenantUncheckedCreateNestedOneWithoutOwnerInput;
 };
 
 export type UserCreateOrConnectWithoutTokensInput = {
@@ -545,7 +545,7 @@ export type UserUpdateWithoutTokensInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-  website?: Prisma.WebsiteUpdateOneWithoutOwnerNestedInput;
+  tenant?: Prisma.TenantUpdateOneWithoutOwnerNestedInput;
 };
 
 export type UserUncheckedUpdateWithoutTokensInput = {
@@ -555,7 +555,7 @@ export type UserUncheckedUpdateWithoutTokensInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-  website?: Prisma.WebsiteUncheckedUpdateOneWithoutOwnerNestedInput;
+  tenant?: Prisma.TenantUncheckedUpdateOneWithoutOwnerNestedInput;
 };
 
 /**
@@ -607,7 +607,7 @@ export type UserSelect<
     name?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
-    website?: boolean | Prisma.User$websiteArgs<ExtArgs>;
+    tenant?: boolean | Prisma.User$tenantArgs<ExtArgs>;
     tokens?: boolean | Prisma.User$tokensArgs<ExtArgs>;
     _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>;
   },
@@ -664,7 +664,7 @@ export type UserInclude<
   ExtArgs extends runtime.Types.Extensions.InternalArgs =
     runtime.Types.Extensions.DefaultArgs,
 > = {
-  website?: boolean | Prisma.User$websiteArgs<ExtArgs>;
+  tenant?: boolean | Prisma.User$tenantArgs<ExtArgs>;
   tokens?: boolean | Prisma.User$tokensArgs<ExtArgs>;
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>;
 };
@@ -683,7 +683,7 @@ export type $UserPayload<
 > = {
   name: "User";
   objects: {
-    website: Prisma.$WebsitePayload<ExtArgs> | null;
+    tenant: Prisma.$TenantPayload<ExtArgs> | null;
     tokens: Prisma.$TokenPayload<ExtArgs>[];
   };
   scalars: runtime.Types.Extensions.GetPayloadResult<
@@ -1244,11 +1244,11 @@ export interface Prisma__UserClient<
   GlobalOmitOptions = {},
 > extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise";
-  website<T extends Prisma.User$websiteArgs<ExtArgs> = {}>(
-    args?: Prisma.Subset<T, Prisma.User$websiteArgs<ExtArgs>>,
-  ): Prisma.Prisma__WebsiteClient<
+  tenant<T extends Prisma.User$tenantArgs<ExtArgs> = {}>(
+    args?: Prisma.Subset<T, Prisma.User$tenantArgs<ExtArgs>>,
+  ): Prisma.Prisma__TenantClient<
     runtime.Types.Result.GetResult<
-      Prisma.$WebsitePayload<ExtArgs>,
+      Prisma.$TenantPayload<ExtArgs>,
       T,
       "findUniqueOrThrow",
       GlobalOmitOptions
@@ -1757,25 +1757,25 @@ export type UserDeleteManyArgs<
 };
 
 /**
- * User.website
+ * User.tenant
  */
-export type User$websiteArgs<
+export type User$tenantArgs<
   ExtArgs extends runtime.Types.Extensions.InternalArgs =
     runtime.Types.Extensions.DefaultArgs,
 > = {
   /**
-   * Select specific fields to fetch from the Website
+   * Select specific fields to fetch from the Tenant
    */
-  select?: Prisma.WebsiteSelect<ExtArgs> | null;
+  select?: Prisma.TenantSelect<ExtArgs> | null;
   /**
-   * Omit specific fields from the Website
+   * Omit specific fields from the Tenant
    */
-  omit?: Prisma.WebsiteOmit<ExtArgs> | null;
+  omit?: Prisma.TenantOmit<ExtArgs> | null;
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.WebsiteInclude<ExtArgs> | null;
-  where?: Prisma.WebsiteWhereInput;
+  include?: Prisma.TenantInclude<ExtArgs> | null;
+  where?: Prisma.TenantWhereInput;
 };
 
 /**

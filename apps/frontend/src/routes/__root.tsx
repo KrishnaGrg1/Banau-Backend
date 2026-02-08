@@ -15,12 +15,12 @@ import appCss from '../styles.css?url'
 import type { QueryClient } from '@tanstack/react-query'
 import { Toaster } from 'sonner'
 import { subdomainMiddleware } from '@/utils/middleware'
-import { Website } from '@repo/shared'
+import { Tenant } from '@repo/shared'
 
 interface MyRouterContext {
   queryClient: QueryClient
   subdomain?: string | null
-  website?: Website | null
+  tenant?: Tenant | null
 }
 
 function NotFound() {

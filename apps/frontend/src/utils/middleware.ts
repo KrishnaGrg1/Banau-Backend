@@ -1,5 +1,6 @@
 import { createMiddleware, createServerFn } from '@tanstack/react-start'
 import { redirect } from '@tanstack/react-router'
+import { useAppSession } from '@/lib/session'
 // import { useWebsiteStore } from '@/lib/stores/website.stores'
 // import { getWebsiteDetailsBySubdomain } from '@/lib/services/website.service'
 
@@ -43,18 +44,31 @@ function extractSubdomain(request: Request): string | null {
 }
 
 export const subdomainMiddleware = createMiddleware().server(
- async ({ request, next }) => {
+  async ({ request, next }) => {
     const subdomain = extractSubdomain(request)
     // const {set}=useWebsiteStore()
     // console.log('subdomain from middleware', subdomain)
-    
+
     return next({
       context: {
-        subdomain
+        subdomain,
       },
     })
   },
 )
+
+export const AuthMiddleware = createMiddleware().server(async ({ next }) => {
+  const session = await useAppSession()
+
+  // Redirect to login if not authenticated
+  if (!session.data.token) {
+    throw redirect({
+      to: '/login',
+    })
+  }
+
+  return next()
+})
 
 export const adminProtectionMiddleware = createMiddleware().server(
   ({ request, next, context }) => {
@@ -73,25 +87,25 @@ export const adminProtectionMiddleware = createMiddleware().server(
   },
 )
 
-
-export const getServerData = createServerFn().middleware([subdomainMiddleware]).handler(
-  async ({ context }) => {
+export const getServerData = createServerFn()
+  .middleware([subdomainMiddleware])
+  .handler(async ({ context }) => {
     // Access the user data from the context
-    const { subdomain } = context;
-    let websiteData = null
+    const { subdomain } = context
+    let tenantData = null
     if (subdomain) {
       try {
-       const res = await fetch(`${import.meta.env.VITE_API_URL}/website/${subdomain}`)
+       const res = await fetch(`${import.meta.env.VITE_API_URL}/tenant/${subdomain}`)
         const data = await res.json()
-        websiteData=data.data
+        tenantData=data.data
       } catch (err) {
-        console.error('Failed to fetch website:', err)
+        console.error('Failed to fetch tenant:', err)
       }
     }
-    // console.log("website",websiteData)
+    console.log('tenant', tenantData)
     // Return the data to the client
     return {
-     website:websiteData,subdomain
-    };
-  },
-);
+      tenant: tenantData,
+      subdomain,
+    }
+  })

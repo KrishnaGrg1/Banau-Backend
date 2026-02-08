@@ -57,9 +57,9 @@
         ]
       }
     },
-    "/api/v1/website": {
+    "/api/v1/tenant": {
       "post": {
-        "operationId": "WebsiteController_create",
+        "operationId": "TenantController_create",
         "parameters": [],
         "responses": {
           "201": {
@@ -67,11 +67,11 @@
           }
         },
         "tags": [
-          "Website"
+          "Tenant"
         ]
       },
       "get": {
-        "operationId": "WebsiteController_getDetails",
+        "operationId": "TenantController_getDetails",
         "parameters": [],
         "responses": {
           "200": {
@@ -79,13 +79,13 @@
           }
         },
         "tags": [
-          "Website"
+          "Tenant"
         ]
       }
     },
-    "/api/v1/website/publish": {
+    "/api/v1/tenant/publish": {
       "put": {
-        "operationId": "WebsiteController_publish",
+        "operationId": "TenantController_publish",
         "parameters": [],
         "responses": {
           "200": {
@@ -93,13 +93,13 @@
           }
         },
         "tags": [
-          "Website"
+          "Tenant"
         ]
       }
     },
-    "/api/v1/website/{subdomain}": {
+    "/api/v1/tenant/{subdomain}": {
       "get": {
-        "operationId": "WebsiteController_getBySubdomain",
+        "operationId": "TenantController_getBySubdomain",
         "parameters": [
           {
             "name": "subdomain",
@@ -116,7 +116,7 @@
           }
         },
         "tags": [
-          "Website"
+          "Tenant"
         ]
       }
     }
