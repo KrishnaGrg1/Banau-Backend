@@ -10,13 +10,12 @@ import type { CreateTenantDto } from '@repo/shared';
 export class TenantService {
   constructor(private prisma: PrismaService) {}
 
-  async addDomain(userId: string, data: CreateTenantDto) {
-    const existingOwner = await this.prisma.tenant.findUnique({
-      where: { ownerId: userId },
+  async createTenant(req, data: CreateTenantDto) {
+    const existingOwner = await this.prisma.tenant.findFirst({
+      where: { ownerId: String(req.userId) },
     });
     if (existingOwner)
       throw new BadRequestException('User already has a tenant');
-
     const subdomainTaken = await this.prisma.tenant.findUnique({
       where: { subdomain: data.subdomain },
     });
@@ -25,8 +24,10 @@ export class TenantService {
     return this.prisma.tenant.create({
       data: {
         name: data.name,
+        email:data.email,
         subdomain: data.subdomain,
-        ownerId: userId,
+        status:data.status,
+        ownerId: String(req.userId),
       },
     });
   }
@@ -41,7 +42,7 @@ export class TenantService {
   }
 
   async getTenantDetails(userId: string) {
-    const tenant = await this.prisma.tenant.findUnique({
+    const tenant = await this.prisma.tenant.findFirst({
       where: { ownerId: userId },
     });
 
@@ -50,7 +51,7 @@ export class TenantService {
   }
 
   async getTenantDetailsBySubdomain(subdomain: string) {
-    const tenant = await this.prisma.tenant.findFirst({
+    const tenant = await this.prisma.tenant.findUnique({
       where: { subdomain },
     });
 

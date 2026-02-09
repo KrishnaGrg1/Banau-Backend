@@ -5,6 +5,7 @@ import {
   Param,
   Post,
   Put,
+  Request,
   UseGuards,
 } from '@nestjs/common';
 import { TenantService } from './tenant.service';
@@ -19,8 +20,8 @@ export class TenantController {
 
   @UseGuards(AuthGuard)
   @Post()
-  async create(@User('id') userId: string, @Body() dto: CreateTenantDto) {
-    const data = await this.tenantsService.addDomain(userId, dto);
+  async create(@Request() req, @Body() dto: CreateTenantDto) {
+    const data = await this.tenantsService.createTenant(req, dto);
     return ApiResponseDto.success(data, 'Domain added successfully');
   }
 

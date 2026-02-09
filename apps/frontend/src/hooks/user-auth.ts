@@ -1,4 +1,4 @@
-import { login, logout, register } from '@/lib/services/auth.services'
+import { login, logout, register, verify } from '@/lib/services/auth.services'
 // import { useAuthStore } from '@/lib/stores/auth.stores'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
@@ -19,7 +19,7 @@ export function useLogin() {
       toast.success('Login successfully ')
     },
     onError: (err: Error) => {
-      console.log('Login error', err)
+      toast.error(err.message) 
     },
   })
 }
@@ -29,11 +29,15 @@ export function useRegister() {
   return useMutation({
     mutationFn: register,
     onSuccess: () => {
-      navigate({ to: '/login' })
-      toast.success('Register successfully ')
+      toast.success('Registration successful! Please check your email. Redirecting to login in 10 seconds...')
+      
+      // Redirect to login after 10 seconds
+      setTimeout(() => {
+        navigate({ to: '/login' })
+      }, 10000)
     },
     onError: (err: Error) => {
-      console.log('Register Error', err.message)
+      toast.error(err.message)
     },
   })
 }
@@ -57,6 +61,24 @@ export function useLogOut() {
       queryClient.clear()
       toast.error(error.message || 'Logout failed')
       navigate({ to: '/login', replace: true })
+    },
+  })
+}
+
+
+export function useVerify() {
+  const navigate = useNavigate()
+  return useMutation({
+    mutationFn: verify,
+    onSuccess: () => {
+      navigate({ 
+        to: '/login',
+      })
+      toast.success('User verified successfully')
+    },
+    onError: (err: Error) => {
+      console.log("er",err)
+      toast.error(err.message)
     },
   })
 }

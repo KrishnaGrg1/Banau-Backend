@@ -73,20 +73,17 @@ model User {
   lastName  String
   role      UserRole @default(CUSTOMER)
 
-  // Email verification
   isVerified Boolean   @default(false)
   verifiedAt DateTime?
+  isActive   Boolean   @default(true)
 
-  // Account status
-  isActive Boolean @default(true)
-
-  // Timestamps
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   lastLoginAt DateTime?
 
-  // Relations
-  ownedTenants    Tenant[]      @relation("TenantOwner")
+  // ✅ ONE user → ONE owned tenant
+  ownedTenant Tenant?
+
   staffTenants    TenantStaff[]
   tokens          Token[]
   customerProfile Customer?
@@ -122,23 +119,19 @@ model Tenant {
   name      String
   email     String
 
-  // Status & Plan
   status TenantStatus @default(TRIAL)
   plan   Plan         @default(FREE)
 
-  // Publishing
   published   Boolean   @default(false)
   publishedAt DateTime?
 
-  // Ownership
-  ownerId String
-  owner   User   @relation("TenantOwner", fields: [ownerId], references: [id])
+  // ✅ Enforced one-to-one
+  ownerId String @unique
+  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
 
-  // Timestamps
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // Relations
   settings  Setting?
   staff     TenantStaff[]
   products  Product[]
@@ -147,7 +140,6 @@ model Tenant {
   orders    Order[]
 
   @@index([subdomain])
-  @@index([ownerId])
   @@index([status])
   @@map("tenants")
 }

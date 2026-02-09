@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VerifyRouteImport } from './routes/verify'
 import { Route as TenantRouteImport } from './routes/tenant'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as LoginRouteImport } from './routes/login'
@@ -16,6 +17,11 @@ import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PreviewSubdomainRouteImport } from './routes/preview.$subdomain'
 
+const VerifyRoute = VerifyRouteImport.update({
+  id: '/verify',
+  path: '/verify',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TenantRoute = TenantRouteImport.update({
   id: '/tenant',
   path: '/tenant',
@@ -53,6 +59,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/tenant': typeof TenantRoute
+  '/verify': typeof VerifyRoute
   '/preview/$subdomain': typeof PreviewSubdomainRoute
 }
 export interface FileRoutesByTo {
@@ -61,6 +68,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/tenant': typeof TenantRoute
+  '/verify': typeof VerifyRoute
   '/preview/$subdomain': typeof PreviewSubdomainRoute
 }
 export interface FileRoutesById {
@@ -70,6 +78,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/tenant': typeof TenantRoute
+  '/verify': typeof VerifyRoute
   '/preview/$subdomain': typeof PreviewSubdomainRoute
 }
 export interface FileRouteTypes {
@@ -80,6 +89,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/register'
     | '/tenant'
+    | '/verify'
     | '/preview/$subdomain'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -88,6 +98,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/register'
     | '/tenant'
+    | '/verify'
     | '/preview/$subdomain'
   id:
     | '__root__'
@@ -96,6 +107,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/register'
     | '/tenant'
+    | '/verify'
     | '/preview/$subdomain'
   fileRoutesById: FileRoutesById
 }
@@ -105,11 +117,19 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   RegisterRoute: typeof RegisterRoute
   TenantRoute: typeof TenantRoute
+  VerifyRoute: typeof VerifyRoute
   PreviewSubdomainRoute: typeof PreviewSubdomainRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/verify': {
+      id: '/verify'
+      path: '/verify'
+      fullPath: '/verify'
+      preLoaderRoute: typeof VerifyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/tenant': {
       id: '/tenant'
       path: '/tenant'
@@ -161,6 +181,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   RegisterRoute: RegisterRoute,
   TenantRoute: TenantRoute,
+  VerifyRoute: VerifyRoute,
   PreviewSubdomainRoute: PreviewSubdomainRoute,
 }
 export const routeTree = rootRouteImport

@@ -11,10 +11,12 @@ export class UserServices {
         id: userId,
       },
       select: {
-        tenant: {
+        ownedTenants: {
           select: {
             name: true,
             subdomain: true,
+            email:true,
+            published:true
           },
         },
       },

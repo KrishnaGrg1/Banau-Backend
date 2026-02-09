@@ -10,7 +10,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { useState } from 'react'
 import { LoginDtoSchema } from '@repo/shared'
 import { useLogin } from '@/hooks/user-auth'
 // import { getServerData } from '@/utils/middleware'
@@ -34,8 +33,7 @@ export const Route = createFileRoute('/login')({
 
 function LoginPage() {
   const navigate = useNavigate()
-  const [error, setError] = useState<string | null>(null)
-  const { mutate: login, isPending } = useLogin()
+  const { mutate: login, isPending, error: LoginError } = useLogin()
   const form = useForm({
     defaultValues: {
       email: '',
@@ -45,7 +43,6 @@ function LoginPage() {
       onSubmit: LoginDtoSchema,
     },
     onSubmit: async ({ value }) => {
-      setError(null)
       login({ data: value })
     },
   })
@@ -136,9 +133,9 @@ function LoginPage() {
               )}
             </form.Field>
 
-            {error && (
-              <div className="rounded-md bg-red-50 p-3">
-                <p className="text-sm text-red-800">{error}</p>
+            {LoginError && (
+              <div className="rounded-md  p-1">
+                <p className="text-sm text-red-800">{LoginError.message}</p>
               </div>
             )}
 

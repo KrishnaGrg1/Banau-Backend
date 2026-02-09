@@ -18,22 +18,23 @@ export class AuthGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<RequestWithUser>();
-    const token = this.extractTokenFromHeader(request);
+    const accessToken = this.extractTokenFromHeader(request);
 
-    if (!token) {
+    if (!accessToken) {
       throw new UnauthorizedException('No authentication token provided');
     }
 
     try {
       // Verify JWT token using the secret from environment
-      const payload = await this.jwtService.verifyAsync(token, {
+      const payload = await this.jwtService.verifyAsync(accessToken, {
         secret:
           this.configService.get<string>('JWT_SECRET') || 'your-secret-key',
       });
 
       // Attach user data to request for use in decorators and controllers
       request.user = { id: payload.sub };
-      request.token = token; // Store the token for logout operations
+      request.refreshToken = request.cookies.refreshToken;
+      request.accessToken = accessToken; // Store the token for logout operations
     } catch (error) {
       throw new UnauthorizedException('Invalid or expired token');
     }
@@ -42,8 +43,8 @@ export class AuthGuard implements CanActivate {
   }
 
   private extractTokenFromHeader(request: Request): string | undefined {
-    if (request.cookies && request.cookies.uid) {
-      return request.cookies.uid;
+    if (request.cookies && request.cookies.accessToken) {
+      return request.cookies.accessToken;
     }
     const [type, token] = request.headers.authorization?.split(' ') ?? [];
     return type === 'Bearer' ? token : undefined;

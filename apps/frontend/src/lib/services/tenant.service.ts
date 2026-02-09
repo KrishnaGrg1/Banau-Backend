@@ -4,7 +4,7 @@ import {
   Tenant,
   TenantResponse,
 } from '@repo/shared'
-import  { api } from '../axios'
+import { api } from '../axios'
 import { createServerFn } from '@tanstack/react-start'
 
 export const createTenant = createServerFn({ method: 'POST' })
@@ -12,8 +12,8 @@ export const createTenant = createServerFn({ method: 'POST' })
   .handler(async ({ data }) => {
     try {
       const response = await api<TenantResponse>('/tenant', {
-        data:data,
-        method:'POST'
+        data: data,
+        method: 'POST',
       })
       return response.data.data
     } catch (error: unknown) {
@@ -32,7 +32,7 @@ export const publishTenant = createServerFn({ method: 'POST' }).handler(
   async () => {
     try {
       const response = await api<TenantResponse>('/tenant/publish', {
-        method: 'PUT'
+        method: 'PUT',
       })
       return response.data
     } catch (error: unknown) {
@@ -51,9 +51,9 @@ export const publishTenant = createServerFn({ method: 'POST' }).handler(
 export const getTenant = createServerFn({ method: 'GET' }).handler(async () => {
   try {
     const response = await api<TenantResponse>('/tenant', {
-      method: 'GET'
+      method: 'GET',
     })
-    console.log("GEt tenatn",response.data.data)
+    console.log('GEt tenatn', response.data.data)
     return response.data.data
   } catch (error: unknown) {
     const err = error as {
@@ -71,10 +71,13 @@ export const getTenantDetailsBySubdomain = createServerFn({ method: 'GET' })
   .inputValidator((input) => getTenantDetailsBySubdomainSchema.parse(input))
   .handler(async ({ data }) => {
     try {
-      const response = await api<{ data:Tenant }>(`/tenant/${data.subdomain}`, {
-        method: 'GET'
-      })
-      console.log("subdomain",response.data.data)
+      const response = await api<{ data: Tenant }>(
+        `/tenant/${data.subdomain}`,
+        {
+          method: 'GET',
+        },
+      )
+      console.log('subdomain', response.data.data)
       return response.data.data
     } catch (err: unknown) {
       const error = err as any
@@ -85,6 +88,3 @@ export const getTenantDetailsBySubdomain = createServerFn({ method: 'GET' })
       throw new Error(message)
     }
   })
-
-
-  

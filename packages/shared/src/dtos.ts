@@ -5,8 +5,8 @@ export const CreateUserDtoSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8),
   firstName: z.string().min(2),
-  lastName:z.string().min(2),
-  role:z.enum(['SUPER_ADMIN','TENANT_OWNER','TENANT_STAFF','CUSTOMER'])
+  lastName: z.string().min(2),
+  // role:z.enum(['SUPER_ADMIN','TENANT_OWNER','TENANT_STAFF','CUSTOMER'])
 });
 
 export type CreateUserDto = z.infer<typeof CreateUserDtoSchema>;
@@ -54,6 +54,8 @@ export const CreateTenantDtoSchema = z.object({
     .string()
     .min(3)
     .regex(/^[a-z0-9-]+$/),
+  email: z.string().email(),
+  status: z.enum(["TRIAL", "ACTIVE", "SUSPENDED", "CANCELLED"]).optional(),
 });
 
 export type CreateTenantDto = z.infer<typeof CreateTenantDtoSchema>;
@@ -83,3 +85,10 @@ export const getTenantDetailsBySubdomainSchema = z.object({
 export type getTenantDetailsBySubdomainDto = z.infer<
   typeof getTenantDetailsBySubdomainSchema
 >;
+
+export const VerifyUserSchema = z.object({
+  token: z.string().min(4),
+  userId: z.string(),
+});
+
+export type verifyUserDto = z.infer<typeof VerifyUserSchema>;

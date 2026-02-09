@@ -51,7 +51,7 @@ axiosInstance.interceptors.response.use(
       (error.response?.data as any)?.message ||
       error.message ||
       'Something went wrong'
-
+    console.log("asd",message)
     return Promise.reject(new Error(message))
   },
 )

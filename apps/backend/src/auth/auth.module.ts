@@ -14,21 +14,10 @@ import { EmailModule } from 'src/email/email.module';
     ConfigModule,
     EmailModule,
     // Register the JwtModule so JwtService becomes available
-    JwtModule.registerAsync({
-      imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        secret: configService.get<string>('JWT_SECRET') || 'your-secret-key',
-        signOptions: {
-          // Cast the value to ensure TS recognizes it as a valid duration string
-          expiresIn: (configService.get<string>('JWT_EXPIRES_IN') ||
-            '7d') as any,
-        },
-      }),
-      inject: [ConfigService],
-    }),
+    JwtModule
   ],
   controllers: [AuthController],
-  providers: [AuthServices, PrismaService,EmailService],
-  exports: [JwtModule],
+  providers: [AuthServices, PrismaService, EmailService],
+  exports: [JwtModule,AuthServices],
 })
 export class AuthModule {}

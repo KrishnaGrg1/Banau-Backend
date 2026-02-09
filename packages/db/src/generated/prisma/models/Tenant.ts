@@ -263,6 +263,7 @@ export type TenantOrderByWithRelationInput = {
 export type TenantWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   subdomain?: string
+  ownerId?: string
   AND?: Prisma.TenantWhereInput | Prisma.TenantWhereInput[]
   OR?: Prisma.TenantWhereInput[]
   NOT?: Prisma.TenantWhereInput | Prisma.TenantWhereInput[]
@@ -272,7 +273,6 @@ export type TenantWhereUniqueInput = Prisma.AtLeast<{
   plan?: Prisma.EnumPlanFilter<"Tenant"> | $Enums.Plan
   published?: Prisma.BoolFilter<"Tenant"> | boolean
   publishedAt?: Prisma.DateTimeNullableFilter<"Tenant"> | Date | string | null
-  ownerId?: Prisma.StringFilter<"Tenant"> | string
   createdAt?: Prisma.DateTimeFilter<"Tenant"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Tenant"> | Date | string
   owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -282,7 +282,7 @@ export type TenantWhereUniqueInput = Prisma.AtLeast<{
   customers?: Prisma.CustomerListRelationFilter
   assets?: Prisma.AssetListRelationFilter
   orders?: Prisma.OrderListRelationFilter
-}, "id" | "subdomain">
+}, "id" | "subdomain" | "ownerId">
 
 export type TenantOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -329,7 +329,7 @@ export type TenantCreateInput = {
   publishedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  owner: Prisma.UserCreateNestedOneWithoutOwnedTenantsInput
+  owner: Prisma.UserCreateNestedOneWithoutOwnedTenantInput
   settings?: Prisma.SettingCreateNestedOneWithoutTenantInput
   staff?: Prisma.TenantStaffCreateNestedManyWithoutTenantInput
   products?: Prisma.ProductCreateNestedManyWithoutTenantInput
@@ -369,7 +369,7 @@ export type TenantUpdateInput = {
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  owner?: Prisma.UserUpdateOneRequiredWithoutOwnedTenantsNestedInput
+  owner?: Prisma.UserUpdateOneRequiredWithoutOwnedTenantNestedInput
   settings?: Prisma.SettingUpdateOneWithoutTenantNestedInput
   staff?: Prisma.TenantStaffUpdateManyWithoutTenantNestedInput
   products?: Prisma.ProductUpdateManyWithoutTenantNestedInput
@@ -439,14 +439,9 @@ export type TenantUncheckedUpdateManyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type TenantListRelationFilter = {
-  every?: Prisma.TenantWhereInput
-  some?: Prisma.TenantWhereInput
-  none?: Prisma.TenantWhereInput
-}
-
-export type TenantOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
+export type TenantNullableScalarRelationFilter = {
+  is?: Prisma.TenantWhereInput | null
+  isNot?: Prisma.TenantWhereInput | null
 }
 
 export type TenantCountOrderByAggregateInput = {
@@ -496,46 +491,36 @@ export type TenantScalarRelationFilter = {
   isNot?: Prisma.TenantWhereInput
 }
 
-export type TenantCreateNestedManyWithoutOwnerInput = {
-  create?: Prisma.XOR<Prisma.TenantCreateWithoutOwnerInput, Prisma.TenantUncheckedCreateWithoutOwnerInput> | Prisma.TenantCreateWithoutOwnerInput[] | Prisma.TenantUncheckedCreateWithoutOwnerInput[]
-  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutOwnerInput | Prisma.TenantCreateOrConnectWithoutOwnerInput[]
-  createMany?: Prisma.TenantCreateManyOwnerInputEnvelope
-  connect?: Prisma.TenantWhereUniqueInput | Prisma.TenantWhereUniqueInput[]
+export type TenantCreateNestedOneWithoutOwnerInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutOwnerInput, Prisma.TenantUncheckedCreateWithoutOwnerInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutOwnerInput
+  connect?: Prisma.TenantWhereUniqueInput
 }
 
-export type TenantUncheckedCreateNestedManyWithoutOwnerInput = {
-  create?: Prisma.XOR<Prisma.TenantCreateWithoutOwnerInput, Prisma.TenantUncheckedCreateWithoutOwnerInput> | Prisma.TenantCreateWithoutOwnerInput[] | Prisma.TenantUncheckedCreateWithoutOwnerInput[]
-  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutOwnerInput | Prisma.TenantCreateOrConnectWithoutOwnerInput[]
-  createMany?: Prisma.TenantCreateManyOwnerInputEnvelope
-  connect?: Prisma.TenantWhereUniqueInput | Prisma.TenantWhereUniqueInput[]
+export type TenantUncheckedCreateNestedOneWithoutOwnerInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutOwnerInput, Prisma.TenantUncheckedCreateWithoutOwnerInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutOwnerInput
+  connect?: Prisma.TenantWhereUniqueInput
 }
 
-export type TenantUpdateManyWithoutOwnerNestedInput = {
-  create?: Prisma.XOR<Prisma.TenantCreateWithoutOwnerInput, Prisma.TenantUncheckedCreateWithoutOwnerInput> | Prisma.TenantCreateWithoutOwnerInput[] | Prisma.TenantUncheckedCreateWithoutOwnerInput[]
-  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutOwnerInput | Prisma.TenantCreateOrConnectWithoutOwnerInput[]
-  upsert?: Prisma.TenantUpsertWithWhereUniqueWithoutOwnerInput | Prisma.TenantUpsertWithWhereUniqueWithoutOwnerInput[]
-  createMany?: Prisma.TenantCreateManyOwnerInputEnvelope
-  set?: Prisma.TenantWhereUniqueInput | Prisma.TenantWhereUniqueInput[]
-  disconnect?: Prisma.TenantWhereUniqueInput | Prisma.TenantWhereUniqueInput[]
-  delete?: Prisma.TenantWhereUniqueInput | Prisma.TenantWhereUniqueInput[]
-  connect?: Prisma.TenantWhereUniqueInput | Prisma.TenantWhereUniqueInput[]
-  update?: Prisma.TenantUpdateWithWhereUniqueWithoutOwnerInput | Prisma.TenantUpdateWithWhereUniqueWithoutOwnerInput[]
-  updateMany?: Prisma.TenantUpdateManyWithWhereWithoutOwnerInput | Prisma.TenantUpdateManyWithWhereWithoutOwnerInput[]
-  deleteMany?: Prisma.TenantScalarWhereInput | Prisma.TenantScalarWhereInput[]
+export type TenantUpdateOneWithoutOwnerNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutOwnerInput, Prisma.TenantUncheckedCreateWithoutOwnerInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutOwnerInput
+  upsert?: Prisma.TenantUpsertWithoutOwnerInput
+  disconnect?: Prisma.TenantWhereInput | boolean
+  delete?: Prisma.TenantWhereInput | boolean
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutOwnerInput, Prisma.TenantUpdateWithoutOwnerInput>, Prisma.TenantUncheckedUpdateWithoutOwnerInput>
 }
 
-export type TenantUncheckedUpdateManyWithoutOwnerNestedInput = {
-  create?: Prisma.XOR<Prisma.TenantCreateWithoutOwnerInput, Prisma.TenantUncheckedCreateWithoutOwnerInput> | Prisma.TenantCreateWithoutOwnerInput[] | Prisma.TenantUncheckedCreateWithoutOwnerInput[]
-  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutOwnerInput | Prisma.TenantCreateOrConnectWithoutOwnerInput[]
-  upsert?: Prisma.TenantUpsertWithWhereUniqueWithoutOwnerInput | Prisma.TenantUpsertWithWhereUniqueWithoutOwnerInput[]
-  createMany?: Prisma.TenantCreateManyOwnerInputEnvelope
-  set?: Prisma.TenantWhereUniqueInput | Prisma.TenantWhereUniqueInput[]
-  disconnect?: Prisma.TenantWhereUniqueInput | Prisma.TenantWhereUniqueInput[]
-  delete?: Prisma.TenantWhereUniqueInput | Prisma.TenantWhereUniqueInput[]
-  connect?: Prisma.TenantWhereUniqueInput | Prisma.TenantWhereUniqueInput[]
-  update?: Prisma.TenantUpdateWithWhereUniqueWithoutOwnerInput | Prisma.TenantUpdateWithWhereUniqueWithoutOwnerInput[]
-  updateMany?: Prisma.TenantUpdateManyWithWhereWithoutOwnerInput | Prisma.TenantUpdateManyWithWhereWithoutOwnerInput[]
-  deleteMany?: Prisma.TenantScalarWhereInput | Prisma.TenantScalarWhereInput[]
+export type TenantUncheckedUpdateOneWithoutOwnerNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutOwnerInput, Prisma.TenantUncheckedCreateWithoutOwnerInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutOwnerInput
+  upsert?: Prisma.TenantUpsertWithoutOwnerInput
+  disconnect?: Prisma.TenantWhereInput | boolean
+  delete?: Prisma.TenantWhereInput | boolean
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutOwnerInput, Prisma.TenantUpdateWithoutOwnerInput>, Prisma.TenantUncheckedUpdateWithoutOwnerInput>
 }
 
 export type EnumTenantStatusFieldUpdateOperationsInput = {
@@ -673,42 +658,53 @@ export type TenantCreateOrConnectWithoutOwnerInput = {
   create: Prisma.XOR<Prisma.TenantCreateWithoutOwnerInput, Prisma.TenantUncheckedCreateWithoutOwnerInput>
 }
 
-export type TenantCreateManyOwnerInputEnvelope = {
-  data: Prisma.TenantCreateManyOwnerInput | Prisma.TenantCreateManyOwnerInput[]
-  skipDuplicates?: boolean
-}
-
-export type TenantUpsertWithWhereUniqueWithoutOwnerInput = {
-  where: Prisma.TenantWhereUniqueInput
+export type TenantUpsertWithoutOwnerInput = {
   update: Prisma.XOR<Prisma.TenantUpdateWithoutOwnerInput, Prisma.TenantUncheckedUpdateWithoutOwnerInput>
   create: Prisma.XOR<Prisma.TenantCreateWithoutOwnerInput, Prisma.TenantUncheckedCreateWithoutOwnerInput>
+  where?: Prisma.TenantWhereInput
 }
 
-export type TenantUpdateWithWhereUniqueWithoutOwnerInput = {
-  where: Prisma.TenantWhereUniqueInput
+export type TenantUpdateToOneWithWhereWithoutOwnerInput = {
+  where?: Prisma.TenantWhereInput
   data: Prisma.XOR<Prisma.TenantUpdateWithoutOwnerInput, Prisma.TenantUncheckedUpdateWithoutOwnerInput>
 }
 
-export type TenantUpdateManyWithWhereWithoutOwnerInput = {
-  where: Prisma.TenantScalarWhereInput
-  data: Prisma.XOR<Prisma.TenantUpdateManyMutationInput, Prisma.TenantUncheckedUpdateManyWithoutOwnerInput>
+export type TenantUpdateWithoutOwnerInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  subdomain?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus
+  plan?: Prisma.EnumPlanFieldUpdateOperationsInput | $Enums.Plan
+  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  settings?: Prisma.SettingUpdateOneWithoutTenantNestedInput
+  staff?: Prisma.TenantStaffUpdateManyWithoutTenantNestedInput
+  products?: Prisma.ProductUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
+  assets?: Prisma.AssetUpdateManyWithoutTenantNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutTenantNestedInput
 }
 
-export type TenantScalarWhereInput = {
-  AND?: Prisma.TenantScalarWhereInput | Prisma.TenantScalarWhereInput[]
-  OR?: Prisma.TenantScalarWhereInput[]
-  NOT?: Prisma.TenantScalarWhereInput | Prisma.TenantScalarWhereInput[]
-  id?: Prisma.StringFilter<"Tenant"> | string
-  subdomain?: Prisma.StringFilter<"Tenant"> | string
-  name?: Prisma.StringFilter<"Tenant"> | string
-  email?: Prisma.StringFilter<"Tenant"> | string
-  status?: Prisma.EnumTenantStatusFilter<"Tenant"> | $Enums.TenantStatus
-  plan?: Prisma.EnumPlanFilter<"Tenant"> | $Enums.Plan
-  published?: Prisma.BoolFilter<"Tenant"> | boolean
-  publishedAt?: Prisma.DateTimeNullableFilter<"Tenant"> | Date | string | null
-  ownerId?: Prisma.StringFilter<"Tenant"> | string
-  createdAt?: Prisma.DateTimeFilter<"Tenant"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"Tenant"> | Date | string
+export type TenantUncheckedUpdateWithoutOwnerInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  subdomain?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus
+  plan?: Prisma.EnumPlanFieldUpdateOperationsInput | $Enums.Plan
+  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  settings?: Prisma.SettingUncheckedUpdateOneWithoutTenantNestedInput
+  staff?: Prisma.TenantStaffUncheckedUpdateManyWithoutTenantNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
+  assets?: Prisma.AssetUncheckedUpdateManyWithoutTenantNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutStaffInput = {
@@ -722,7 +718,7 @@ export type TenantCreateWithoutStaffInput = {
   publishedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  owner: Prisma.UserCreateNestedOneWithoutOwnedTenantsInput
+  owner: Prisma.UserCreateNestedOneWithoutOwnedTenantInput
   settings?: Prisma.SettingCreateNestedOneWithoutTenantInput
   products?: Prisma.ProductCreateNestedManyWithoutTenantInput
   customers?: Prisma.CustomerCreateNestedManyWithoutTenantInput
@@ -776,7 +772,7 @@ export type TenantUpdateWithoutStaffInput = {
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  owner?: Prisma.UserUpdateOneRequiredWithoutOwnedTenantsNestedInput
+  owner?: Prisma.UserUpdateOneRequiredWithoutOwnedTenantNestedInput
   settings?: Prisma.SettingUpdateOneWithoutTenantNestedInput
   products?: Prisma.ProductUpdateManyWithoutTenantNestedInput
   customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
@@ -814,7 +810,7 @@ export type TenantCreateWithoutSettingsInput = {
   publishedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  owner: Prisma.UserCreateNestedOneWithoutOwnedTenantsInput
+  owner: Prisma.UserCreateNestedOneWithoutOwnedTenantInput
   staff?: Prisma.TenantStaffCreateNestedManyWithoutTenantInput
   products?: Prisma.ProductCreateNestedManyWithoutTenantInput
   customers?: Prisma.CustomerCreateNestedManyWithoutTenantInput
@@ -868,7 +864,7 @@ export type TenantUpdateWithoutSettingsInput = {
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  owner?: Prisma.UserUpdateOneRequiredWithoutOwnedTenantsNestedInput
+  owner?: Prisma.UserUpdateOneRequiredWithoutOwnedTenantNestedInput
   staff?: Prisma.TenantStaffUpdateManyWithoutTenantNestedInput
   products?: Prisma.ProductUpdateManyWithoutTenantNestedInput
   customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
@@ -906,7 +902,7 @@ export type TenantCreateWithoutAssetsInput = {
   publishedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  owner: Prisma.UserCreateNestedOneWithoutOwnedTenantsInput
+  owner: Prisma.UserCreateNestedOneWithoutOwnedTenantInput
   settings?: Prisma.SettingCreateNestedOneWithoutTenantInput
   staff?: Prisma.TenantStaffCreateNestedManyWithoutTenantInput
   products?: Prisma.ProductCreateNestedManyWithoutTenantInput
@@ -960,7 +956,7 @@ export type TenantUpdateWithoutAssetsInput = {
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  owner?: Prisma.UserUpdateOneRequiredWithoutOwnedTenantsNestedInput
+  owner?: Prisma.UserUpdateOneRequiredWithoutOwnedTenantNestedInput
   settings?: Prisma.SettingUpdateOneWithoutTenantNestedInput
   staff?: Prisma.TenantStaffUpdateManyWithoutTenantNestedInput
   products?: Prisma.ProductUpdateManyWithoutTenantNestedInput
@@ -998,7 +994,7 @@ export type TenantCreateWithoutProductsInput = {
   publishedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  owner: Prisma.UserCreateNestedOneWithoutOwnedTenantsInput
+  owner: Prisma.UserCreateNestedOneWithoutOwnedTenantInput
   settings?: Prisma.SettingCreateNestedOneWithoutTenantInput
   staff?: Prisma.TenantStaffCreateNestedManyWithoutTenantInput
   customers?: Prisma.CustomerCreateNestedManyWithoutTenantInput
@@ -1052,7 +1048,7 @@ export type TenantUpdateWithoutProductsInput = {
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  owner?: Prisma.UserUpdateOneRequiredWithoutOwnedTenantsNestedInput
+  owner?: Prisma.UserUpdateOneRequiredWithoutOwnedTenantNestedInput
   settings?: Prisma.SettingUpdateOneWithoutTenantNestedInput
   staff?: Prisma.TenantStaffUpdateManyWithoutTenantNestedInput
   customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
@@ -1090,7 +1086,7 @@ export type TenantCreateWithoutCustomersInput = {
   publishedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  owner: Prisma.UserCreateNestedOneWithoutOwnedTenantsInput
+  owner: Prisma.UserCreateNestedOneWithoutOwnedTenantInput
   settings?: Prisma.SettingCreateNestedOneWithoutTenantInput
   staff?: Prisma.TenantStaffCreateNestedManyWithoutTenantInput
   products?: Prisma.ProductCreateNestedManyWithoutTenantInput
@@ -1144,7 +1140,7 @@ export type TenantUpdateWithoutCustomersInput = {
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  owner?: Prisma.UserUpdateOneRequiredWithoutOwnedTenantsNestedInput
+  owner?: Prisma.UserUpdateOneRequiredWithoutOwnedTenantNestedInput
   settings?: Prisma.SettingUpdateOneWithoutTenantNestedInput
   staff?: Prisma.TenantStaffUpdateManyWithoutTenantNestedInput
   products?: Prisma.ProductUpdateManyWithoutTenantNestedInput
@@ -1182,7 +1178,7 @@ export type TenantCreateWithoutOrdersInput = {
   publishedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  owner: Prisma.UserCreateNestedOneWithoutOwnedTenantsInput
+  owner: Prisma.UserCreateNestedOneWithoutOwnedTenantInput
   settings?: Prisma.SettingCreateNestedOneWithoutTenantInput
   staff?: Prisma.TenantStaffCreateNestedManyWithoutTenantInput
   products?: Prisma.ProductCreateNestedManyWithoutTenantInput
@@ -1236,7 +1232,7 @@ export type TenantUpdateWithoutOrdersInput = {
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  owner?: Prisma.UserUpdateOneRequiredWithoutOwnedTenantsNestedInput
+  owner?: Prisma.UserUpdateOneRequiredWithoutOwnedTenantNestedInput
   settings?: Prisma.SettingUpdateOneWithoutTenantNestedInput
   staff?: Prisma.TenantStaffUpdateManyWithoutTenantNestedInput
   products?: Prisma.ProductUpdateManyWithoutTenantNestedInput
@@ -1261,70 +1257,6 @@ export type TenantUncheckedUpdateWithoutOrdersInput = {
   products?: Prisma.ProductUncheckedUpdateManyWithoutTenantNestedInput
   customers?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutTenantNestedInput
-}
-
-export type TenantCreateManyOwnerInput = {
-  id?: string
-  subdomain: string
-  name: string
-  email: string
-  status?: $Enums.TenantStatus
-  plan?: $Enums.Plan
-  published?: boolean
-  publishedAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type TenantUpdateWithoutOwnerInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  subdomain?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus
-  plan?: Prisma.EnumPlanFieldUpdateOperationsInput | $Enums.Plan
-  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  settings?: Prisma.SettingUpdateOneWithoutTenantNestedInput
-  staff?: Prisma.TenantStaffUpdateManyWithoutTenantNestedInput
-  products?: Prisma.ProductUpdateManyWithoutTenantNestedInput
-  customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
-  assets?: Prisma.AssetUpdateManyWithoutTenantNestedInput
-  orders?: Prisma.OrderUpdateManyWithoutTenantNestedInput
-}
-
-export type TenantUncheckedUpdateWithoutOwnerInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  subdomain?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus
-  plan?: Prisma.EnumPlanFieldUpdateOperationsInput | $Enums.Plan
-  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  settings?: Prisma.SettingUncheckedUpdateOneWithoutTenantNestedInput
-  staff?: Prisma.TenantStaffUncheckedUpdateManyWithoutTenantNestedInput
-  products?: Prisma.ProductUncheckedUpdateManyWithoutTenantNestedInput
-  customers?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
-  assets?: Prisma.AssetUncheckedUpdateManyWithoutTenantNestedInput
-  orders?: Prisma.OrderUncheckedUpdateManyWithoutTenantNestedInput
-}
-
-export type TenantUncheckedUpdateManyWithoutOwnerInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  subdomain?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus
-  plan?: Prisma.EnumPlanFieldUpdateOperationsInput | $Enums.Plan
-  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 

@@ -8,7 +8,7 @@ import { SubdomainMiddleware } from './common/middleware/subdomain.middleware';
 import { EmailModule } from './email/email.module';
 @Module({
   imports: [
-    ConfigModule.forRoot({isGlobal:true}),
+    ConfigModule.forRoot({ isGlobal: true }),
     AuthModule,
     UserModule,
     TenantModule,

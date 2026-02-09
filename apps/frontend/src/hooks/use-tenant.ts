@@ -51,7 +51,7 @@ export function usePublishTenant() {
 export function useGetTenantBySubdomain(subdomain?: string) {
   return useQuery({
     queryKey: ['tenant', 'subdomain', subdomain],
-    queryFn: () => getTenantDetailsBySubdomain({data:subdomain}),
+    queryFn: () => getTenantDetailsBySubdomain({ data: subdomain }),
     enabled: !!subdomain,
     retry: false,
     staleTime: 5 * 60 * 1000,

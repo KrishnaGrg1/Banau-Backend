@@ -3,6 +3,7 @@ import {
   LoginDtoSchema,
   LoginResponse,
   RegisterResponse,
+  VerifyUserSchema,
 } from '@repo/shared'
 import { api } from '../axios'
 import { createServerFn } from '@tanstack/react-start'
@@ -16,17 +17,12 @@ export const register = createServerFn({ method: 'POST' })
         data: data,
         method: 'POST',
       })
-
+console.log(response.data)
       return response.data
     } catch (error: unknown) {
-      const err = error as {
-        response?: { data?: { body?: { message?: string }; message?: string } }
-      }
-      const errorMessage =
-        err.response?.data?.body?.message ||
-        err.response?.data?.message ||
-        'Failed to registered'
-      throw new Error(errorMessage)
+      // The axios interceptor already extracts and wraps the error message
+      const err = error as Error
+      throw new Error(err.message || 'Failed to register')
     }
   })
 
@@ -45,14 +41,9 @@ export const login = createServerFn({ method: 'POST' })
       return response.data
     } catch (error: unknown) {
       console.log(error)
-      const err = error as {
-        response?: { data?: { body?: { message?: string }; message?: string } }
-      }
-      const errorMessage =
-        err.response?.data?.body?.message ||
-        err.response?.data?.message ||
-        'Failed to login'
-      throw new Error(errorMessage)
+      // The axios interceptor already extracts and wraps the error message
+      const err = error as Error
+      throw new Error(err.message || 'Failed to login')
     }
   })
 
@@ -66,13 +57,27 @@ export const logout = createServerFn({ method: 'POST' }).handler(async () => {
 
     return response.data
   } catch (error: unknown) {
-    const err = error as {
-      response?: { data?: { body?: { message?: string }; message?: string } }
-    }
-    const errorMessage =
-      err.response?.data?.body?.message ||
-      err.response?.data?.message ||
-      'Failed to logout'
-    throw new Error(errorMessage)
+     console.log(error)
+      // The axios interceptor already extracts and wraps the error message
+      const err = error as Error
+      throw new Error(err.message || 'Failed to Logout')
   }
 })
+
+
+export const verify = createServerFn({ method: 'POST' })
+  .inputValidator((data) => VerifyUserSchema.parse(data))
+  .handler(async ({ data }) => {
+    try {
+      const response = await api<LoginResponse>('/auth/verify', {
+        data: data,
+        method: 'PUT',
+      })
+      return response.data
+    } catch (error: unknown) {
+      console.log(error)
+      // The axios interceptor already extracts and wraps the error message
+      const err = error as Error
+      throw new Error(err.message || 'Failed to login')
+    }
+  })

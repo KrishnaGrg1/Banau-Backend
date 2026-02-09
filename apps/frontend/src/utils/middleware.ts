@@ -95,9 +95,11 @@ export const getServerData = createServerFn()
     let tenantData = null
     if (subdomain) {
       try {
-       const res = await fetch(`${import.meta.env.VITE_API_URL}/tenant/${subdomain}`)
+        const res = await fetch(
+          `${import.meta.env.VITE_API_URL}/tenant/${subdomain}`,
+        )
         const data = await res.json()
-        tenantData=data.data
+        tenantData = data.data
       } catch (err) {
         console.error('Failed to fetch tenant:', err)
       }

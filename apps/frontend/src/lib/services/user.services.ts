@@ -1,12 +1,11 @@
 import { User } from '@repo/shared'
-import  { api } from '../axios'
+import { api } from '../axios'
 import { createServerFn } from '@tanstack/react-start'
 
-export const getMe = createServerFn({ method: 'GET' }).handler(
-async () => {
+export const getMe = createServerFn({ method: 'GET' }).handler(async () => {
   try {
     const response = await api<User>('/user/me', {
-      method:'GET'
+      method: 'GET',
     })
     return response.data
   } catch (error: unknown) {
@@ -19,5 +18,4 @@ async () => {
       'Failed to fetch communities'
     throw new Error(errorMessage)
   }
-}
-)
+})

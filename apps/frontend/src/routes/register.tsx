@@ -10,7 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRegister } from '@/hooks/user-auth'
 export const Route = createFileRoute('/register')({
   component: RegisterPage,
@@ -18,24 +18,48 @@ export const Route = createFileRoute('/register')({
 
 function RegisterPage() {
   const navigate = useNavigate()
-  const [error, setError] = useState<string | null>(null)
+  const [passwordError, setPasswordError] = useState<string | null>(null)
+  const [countdown, setCountdown] = useState<number | null>(null)
 
-  const { mutate: registerMutation, isPending } = useRegister()
+  const {
+    mutate: registerMutation,
+    isPending,
+    error: RegisterError,
+    isSuccess,
+  } = useRegister()
+
+  // Start countdown when registration is successful
+  useEffect(() => {
+    if (isSuccess) {
+      setCountdown(10)
+      const interval = setInterval(() => {
+        setCountdown((prev) => {
+          if (prev === null || prev <= 1) {
+            clearInterval(interval)
+            return null
+          }
+          return prev - 1
+        })
+      }, 1000)
+      return () => clearInterval(interval)
+    }
+  }, [isSuccess])
 
   const form = useForm({
     defaultValues: {
-      name: '',
+      firstName: '',
+      lastName: '',
       email: '',
       password: '',
       confirmPassword: '',
     },
     onSubmit: async ({ value }) => {
       if (value.password !== value.confirmPassword) {
-        setError('Passwords do not match')
+        setPasswordError('Passwords do not match')
         return
       }
 
-      setError(null)
+      setPasswordError(null)
       const { confirmPassword, ...registerData } = value
       registerMutation({ data: registerData })
     },
@@ -60,11 +84,11 @@ function RegisterPage() {
             className="space-y-4"
           >
             <form.Field
-              name="name"
+              name="firstName"
               validators={{
                 onChange: ({ value }) =>
                   !value
-                    ? 'Name is required'
+                    ? 'First Name is required'
                     : value.length < 2
                       ? 'Name must be at least 2 characters'
                       : undefined,
@@ -72,12 +96,12 @@ function RegisterPage() {
             >
               {(field) => (
                 <div className="space-y-2">
-                  <Label htmlFor={field.name}>Name</Label>
+                  <Label htmlFor={field.name}>First Name</Label>
                   <Input
                     id={field.name}
                     name={field.name}
                     type="text"
-                    placeholder="John Doe"
+                    placeholder="John"
                     value={field.state.value}
                     onChange={(e) => field.handleChange(e.target.value)}
                     onBlur={field.handleBlur}
@@ -90,7 +114,37 @@ function RegisterPage() {
                 </div>
               )}
             </form.Field>
-
+            <form.Field
+              name="lastName"
+              validators={{
+                onChange: ({ value }) =>
+                  !value
+                    ? 'Last Name is required'
+                    : value.length < 2
+                      ? 'Name must be at least 2 characters'
+                      : undefined,
+              }}
+            >
+              {(field) => (
+                <div className="space-y-2">
+                  <Label htmlFor={field.name}>Last Name</Label>
+                  <Input
+                    id={field.name}
+                    name={field.name}
+                    type="text"
+                    placeholder="John"
+                    value={field.state.value}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                    onBlur={field.handleBlur}
+                  />
+                  {field.state.meta.errors && (
+                    <p className="text-sm text-red-600">
+                      {field.state.meta.errors[0]}
+                    </p>
+                  )}
+                </div>
+              )}
+            </form.Field>
             <form.Field
               name="email"
               validators={{
@@ -183,9 +237,20 @@ function RegisterPage() {
               )}
             </form.Field>
 
-            {error && (
-              <div className="rounded-md bg-red-50 p-3">
-                <p className="text-sm text-red-800">{error}</p>
+            {isSuccess && countdown !== null && (
+              <div className="rounded-md bg-green-50 p-3">
+                <p className="text-sm text-green-800">
+                  Registration successful! Please check your email for verification.
+                  Redirecting to login in {countdown} seconds...
+                </p>
+              </div>
+            )}
+
+            {(passwordError || RegisterError) && (
+              <div className="rounded-md  p-1">
+                <p className="text-sm text-red-800">
+                  {passwordError || RegisterError?.message}
+                </p>
               </div>
             )}
 

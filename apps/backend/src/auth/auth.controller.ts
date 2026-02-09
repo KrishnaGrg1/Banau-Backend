@@ -5,8 +5,14 @@ import {
   UseGuards,
   Request,
   Response,
+  Put,
 } from '@nestjs/common';
-import type { CreateUserDto, LoginDto, RegisterResponse } from '@repo/shared';
+import type {
+  CreateUserDto,
+  LoginDto,
+  RegisterResponse,
+  verifyUserDto,
+} from '@repo/shared';
 import { AuthServices } from './auth.service';
 import { ApiResponseDto } from 'src/common/dto/response.dto';
 import { AuthGuard } from 'src/common/guard/auth.guard';
@@ -20,6 +26,11 @@ export class AuthController {
     return ApiResponseDto.success(data, 'Registered successful');
   }
 
+  @Put('verify')
+  async verifyUser(@Body() verifyUserDto: verifyUserDto) {
+     await this.userServies.verifyEmail(verifyUserDto);
+    return ApiResponseDto.success( 'Verify User successfully');
+  }
   @Post('login')
   async login(@Body() dto: LoginDto, @Response({ passthrough: true }) res) {
     const data = await this.userServies.login(dto, res);
@@ -29,7 +40,17 @@ export class AuthController {
   @UseGuards(AuthGuard)
   @Post('logout')
   async logout(@Request() req, @Response({ passthrough: true }) res) {
-    const data = await this.userServies.logout(req.token, res);
+    const data = await this.userServies.logout(req, res);
     return ApiResponseDto.success(data, 'Logout Successfully');
+  }
+
+  @UseGuards(AuthGuard)
+  @Post('refresh')
+  async refresh(@Request() req, @Response() res) {
+    const data = await this.userServies.refreshToken(req, res);
+    return ApiResponseDto.success(
+      data,
+      'Refresh the token both:accesstoken, refreshToken successfully',
+    );
   }
 }

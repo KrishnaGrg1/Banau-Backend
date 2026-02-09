@@ -13,6 +13,7 @@ export interface AuthenticatedUser {
  */
 export interface RequestWithUser extends Request {
   user: AuthenticatedUser;
-  token?: string;
+  accessToken?: string;
+  refreshToken?: string;
   subdomain?: string | null;
 }
