@@ -106,26 +106,26 @@ export interface refreshTokenResponse {
   timestamp: Date;
 }
 
-interface ownedTenants{
-  name:string,
-  subdomain:string,
-  email:string,
-  published:boolean
+interface ownedTenants {
+  name: string;
+  subdomain: string;
+  email: string;
+  published: boolean;
 }
 export interface getMeResponse {
   success: boolean;
   message: string;
   data: {
-    id:string,
-    firstName:string,
-    lastName:string,
-    email:string,
-    role:string,
-    isVerified:boolean,
-    createdAt:Date,
-    lastLoginAt:Date,
-    isActive:boolean
-    ownedTenant:ownedTenants[]
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    role: string;
+    isVerified: boolean;
+    createdAt: Date;
+    lastLoginAt: Date;
+    isActive: boolean;
+    ownedTenant: ownedTenants[];
   };
   timestamp: Date;
 }

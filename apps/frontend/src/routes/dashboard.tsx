@@ -28,7 +28,6 @@ import {
   CheckCircle2,
   XCircle,
 } from 'lucide-react'
-import { useEffect } from 'react'
 
 export const Route = createFileRoute('/dashboard')({
   loader: async () => {
@@ -43,17 +42,9 @@ export const Route = createFileRoute('/dashboard')({
 
 function DashboardPage() {
   const navigate = useNavigate()
-  const {
-    data: tenant,
-    isLoading,
-    error,
-    refetch: refecthingTenant,
-  } = useGetTenant()
-  const { user, refetch: refetchingUser } = useGetMe()
-  useEffect(() => {
-    refecthingTenant
-    refetchingUser
-  }, [])
+  const { data: tenant, isLoading, error } = useGetTenant()
+  const { user } = useGetMe()
+
   const { mutate: logoutMutation, isPending: isLoggingOut } = useLogOut()
 
   const handleLogout = () => {

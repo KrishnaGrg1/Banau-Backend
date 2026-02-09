@@ -1,96 +1,120 @@
-// apps/web/app/lib/axios.ts
-import axios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios'
+import axios, { type AxiosInstance, type AxiosError } from 'axios'
 import { useAppSession } from './session'
-import { refreshTokenResponse } from '@repo/shared'
 
-// Create Axios instance
+// Create axios instance with default config
 const axiosInstance: AxiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
-  timeout: 10000,
-  headers: { 'Content-Type': 'application/json' },
   withCredentials: true,
 })
 
-// Request logging
-axiosInstance.interceptors.request.use((config) => {
-  if (process.env.NODE_ENV === 'development') {
-    console.log(`[AXIOS] ${config.method?.toUpperCase()} ${config.url}`)
-  }
-  return config
-})
+// State for handling concurrent token refresh requests
+let isRefreshing = false
+let failedQueue: Array<{
+  resolve: (token: string) => void
+  reject: (error: any) => void
+}> = []
 
-// Response logging
-axiosInstance.interceptors.response.use(
-  (res) => res,
-  (err) => {
-    if (process.env.NODE_ENV === 'development') {
-      console.error('[AXIOS] Response Error:', err.response?.data)
-    }
-    return Promise.reject(err)
-  }
-)
+// Process all queued requests after token refresh
+const processQueue = (error: any = null, token: string = '') => {
+  failedQueue.forEach((promise) => {
+    error ? promise.reject(error) : promise.resolve(token)
+  })
+  failedQueue = []
+}
 
-// Typed API helper (server-side)
-export async function api<TResponse = any>(
-  url: string,
-  config: AxiosRequestConfig = {},
-): Promise<AxiosResponse<TResponse>> {
+// Redirect to login and clear session
+const handleAuthFailure = async () => {
+  const session = await useAppSession()
+  await session.clear?.()
+  if (typeof window !== 'undefined') {
+    window.location.href = '/login'
+  }
+}
+
+// Refresh access token using refresh token
+const refreshAccessToken = async () => {
   const session = await useAppSession()
 
-  const headers: Record<string, string> = {
+  if (!session.data.refreshToken) {
+    throw new Error('No refresh token available')
+  }
+
+  const response = await axios
+    .create()
+    .post(`${import.meta.env.VITE_API_URL}/auth/refresh`, null, {
+      headers: {
+        Cookie: `refreshToken=${session.data.refreshToken}`,
+      },
+    })
+
+  const { accessToken, refreshToken } = response.data.data
+  await session.update({ accessToken, refreshToken })
+
+  return accessToken
+}
+
+// Handle 401 errors and retry with refreshed token
+axiosInstance.interceptors.response.use(
+  (response) => response,
+  async (error: AxiosError) => {
+    const originalRequest: any = error.config
+
+    if (error.response?.status !== 401 || originalRequest._retry) {
+      return Promise.reject(error)
+    }
+
+    // Queue request if refresh is already in progress
+    if (isRefreshing) {
+      return new Promise((resolve, reject) => {
+        failedQueue.push({ resolve, reject })
+      })
+        .then((token) => {
+          originalRequest.headers['Authorization'] = `Bearer ${token}`
+          return axiosInstance(originalRequest)
+        })
+        .catch((err) => Promise.reject(err))
+    }
+
+    originalRequest._retry = true
+    isRefreshing = true
+
+    try {
+      const newAccessToken = await refreshAccessToken()
+
+      axiosInstance.defaults.headers.common['Authorization'] =
+        `Bearer ${newAccessToken}`
+      originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`
+
+      processQueue(null, newAccessToken)
+      return axiosInstance(originalRequest)
+    } catch (refreshError) {
+      processQueue(refreshError)
+      await handleAuthFailure()
+      return Promise.reject(refreshError)
+    } finally {
+      isRefreshing = false
+    }
+  },
+)
+
+// API helper with automatic auth headers
+export async function api<TResponse = any>(url: string, config: any = {}) {
+  const session = await useAppSession()
+
+  const headers = {
     'Content-Type': 'application/json',
-    ...(config.headers as Record<string, string>),
+    ...config.headers,
   }
 
   if (session.data.accessToken) {
     headers['Authorization'] = `Bearer ${session.data.accessToken}`
   }
 
-  const requestConfig: AxiosRequestConfig = {
+  return axiosInstance.request<TResponse>({
     url,
     ...config,
     headers,
-  }
-
-  if (config.method?.toUpperCase() === 'GET') {
-    delete requestConfig.data
-  }
-
-  try {
-    return await axiosInstance.request<TResponse>(requestConfig)
-  } catch (err: any) {
-    // Only attempt refresh if 401
-    if (err.response?.status === 401 && session.data.refreshToken) {
-      try {
-        // Use bare Axios for refresh call (no interceptors)
-        const refreshRes = await axios.post<refreshTokenResponse>(
-          `${import.meta.env.VITE_API_URL}/auth/refresh`,
-          null,
-          {
-            headers: { Authorization: `Bearer ${session.data.refreshToken}` },
-            withCredentials: true,
-          }
-        )
-
-        const { accessToken, refreshToken } = refreshRes.data.data
-        session.update({ accessToken, refreshToken })
-
-        // Retry original request with new access token
-        return await axiosInstance.request<TResponse>({
-          ...requestConfig,
-          headers: {
-            ...requestConfig.headers,
-            Authorization: `Bearer ${accessToken}`,
-          },
-        })
-      } catch (refreshErr: any) {
-        session.clear?.()
-        throw refreshErr
-      }
-    }
-
-    throw err
-  }
+  })
 }
 
 export default axiosInstance

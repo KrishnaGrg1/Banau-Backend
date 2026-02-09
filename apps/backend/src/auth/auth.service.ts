@@ -30,7 +30,7 @@ export class AuthServices {
 
     const accessToken = this.jwtService.sign(payload, {
       secret: this.configService.get('JWT_ACCESS_SECRET'),
-      expiresIn: '15m',
+      expiresIn: '1m',
     });
 
     const refreshToken = this.jwtService.sign(payload, {
@@ -44,6 +44,7 @@ export class AuthServices {
         token: hashedRefreshToken,
         type: 'REFRESH',
         expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+        // expiresAt:new Date(Date.now()+1 * 60 * 1000)
       },
     });
 
@@ -117,7 +118,7 @@ export class AuthServices {
       secure: true,
       sameSite:
         this.configService.get('NODE_ENV') === 'production' ? 'none' : 'lax',
-      maxAge: 15 * 60 * 1000, // Set to exactly 15 minutes in milliseconds
+      maxAge: 1 * 60 * 1000, // Set to exactly 15 minutes in milliseconds
     });
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
@@ -308,7 +309,7 @@ export class AuthServices {
       secure: true,
       sameSite:
         this.configService.get('NODE_ENV') === 'production' ? 'none' : 'lax',
-      maxAge: 15 * 60 * 1000, // Set to exactly 15 minutes in milliseconds
+      maxAge: 1 * 60 * 1000, // Set to exactly 15 minutes in milliseconds
     });
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
@@ -317,6 +318,7 @@ export class AuthServices {
         this.configService.get('NODE_ENV') === 'production' ? 'none' : 'lax',
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days in milliseconds
     });
+    Logger.log('Refreshed token created again');
     return { accessToken, refreshToken, existingUser };
   }
 }

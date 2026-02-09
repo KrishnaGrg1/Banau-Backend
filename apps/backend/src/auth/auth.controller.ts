@@ -8,11 +8,13 @@ import {
   Put,
   Get,
   Query,
+  Logger,
 } from '@nestjs/common';
 import type { CreateUserDto, LoginDto, verifyUserDto } from '@repo/shared';
 import { AuthServices } from './auth.service';
 import { ApiResponseDto } from 'src/common/dto/response.dto';
 import { AuthGuard } from 'src/common/guard/auth.guard';
+import { RefreshGuard } from 'src/common/guard/refresh.guard';
 @Controller('auth')
 export class AuthController {
   constructor(private readonly userServies: AuthServices) {}
@@ -50,9 +52,10 @@ export class AuthController {
     return ApiResponseDto.success(data, 'Logout Successfully');
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(RefreshGuard)
   @Post('refresh')
   async refresh(@Request() req, @Response({ passthrough: true }) res) {
+    Logger.log('refreshing getting hit');
     const data = await this.userServies.refreshToken(req, res);
     return ApiResponseDto.success(
       data,
