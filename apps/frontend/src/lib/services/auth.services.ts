@@ -2,6 +2,7 @@ import {
   CreateUserDtoSchema,
   LoginDtoSchema,
   LoginResponse,
+  refreshTokenResponse,
   RegisterResponse,
   VerifyUserSchema,
 } from '@repo/shared'
@@ -17,7 +18,7 @@ export const register = createServerFn({ method: 'POST' })
         data: data,
         method: 'POST',
       })
-console.log(response.data)
+      console.log(response.data)
       return response.data
     } catch (error: unknown) {
       // The axios interceptor already extracts and wraps the error message
@@ -36,7 +37,8 @@ export const login = createServerFn({ method: 'POST' })
       })
       const session = await useAppSession()
       await session.update({
-        token: response.data.data.token,
+        accessToken: response.data.data.accessToken,
+        refreshToken: response.data.data.refreshToken,
       })
       return response.data
     } catch (error: unknown) {
@@ -57,13 +59,12 @@ export const logout = createServerFn({ method: 'POST' }).handler(async () => {
 
     return response.data
   } catch (error: unknown) {
-     console.log(error)
-      // The axios interceptor already extracts and wraps the error message
-      const err = error as Error
-      throw new Error(err.message || 'Failed to Logout')
+    console.log(error)
+    // The axios interceptor already extracts and wraps the error message
+    const err = error as Error
+    throw new Error(err.message || 'Failed to Logout')
   }
 })
-
 
 export const verify = createServerFn({ method: 'POST' })
   .inputValidator((data) => VerifyUserSchema.parse(data))
@@ -81,3 +82,25 @@ export const verify = createServerFn({ method: 'POST' })
       throw new Error(err.message || 'Failed to login')
     }
   })
+
+export const refreshToken = createServerFn({ method: 'POST' }).handler(
+  async () => {
+    try {
+      const response = await api<refreshTokenResponse>('/auth/refresh', {
+        method: 'POST',
+      })
+      const session = await useAppSession()
+      await session.update({
+        accessToken: response.data.data.accessToken,
+        refreshToken: response.data.data.refreshToken,
+      })
+      return response.data
+    } catch (error: unknown) {
+      // If refresh fails, clear session
+      const session = await useAppSession()
+      await session.clear()
+      const err = error as Error
+      throw new Error(err.message || 'Failed to refresh token')
+    }
+  },
+)

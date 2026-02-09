@@ -6,13 +6,10 @@ import {
   Request,
   Response,
   Put,
+  Get,
+  Query,
 } from '@nestjs/common';
-import type {
-  CreateUserDto,
-  LoginDto,
-  RegisterResponse,
-  verifyUserDto,
-} from '@repo/shared';
+import type { CreateUserDto, LoginDto, verifyUserDto } from '@repo/shared';
 import { AuthServices } from './auth.service';
 import { ApiResponseDto } from 'src/common/dto/response.dto';
 import { AuthGuard } from 'src/common/guard/auth.guard';
@@ -28,13 +25,22 @@ export class AuthController {
 
   @Put('verify')
   async verifyUser(@Body() verifyUserDto: verifyUserDto) {
-     await this.userServies.verifyEmail(verifyUserDto);
-    return ApiResponseDto.success( 'Verify User successfully');
+    await this.userServies.verifyEmail(verifyUserDto);
+    return ApiResponseDto.success('Verify User successfully');
   }
   @Post('login')
   async login(@Body() dto: LoginDto, @Response({ passthrough: true }) res) {
     const data = await this.userServies.login(dto, res);
     return ApiResponseDto.success(data, 'Login successfully');
+  }
+
+  @Get('verify-email')
+  async verifyUserByQuery(
+    @Query('token') token: string,
+    @Query('id') userId: string,
+  ) {
+    await this.userServies.verifyEmailByQuery(token, userId);
+    return ApiResponseDto.success(null, 'User verified successfully');
   }
 
   @UseGuards(AuthGuard)
@@ -46,7 +52,7 @@ export class AuthController {
 
   @UseGuards(AuthGuard)
   @Post('refresh')
-  async refresh(@Request() req, @Response() res) {
+  async refresh(@Request() req, @Response({ passthrough: true }) res) {
     const data = await this.userServies.refreshToken(req, res);
     return ApiResponseDto.success(
       data,

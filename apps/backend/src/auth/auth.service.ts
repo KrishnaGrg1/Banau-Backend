@@ -1,12 +1,12 @@
 import {
   ConflictException,
   Injectable,
+  Logger,
   UnauthorizedException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import type { CreateUserDto, LoginDto, verifyUserDto } from '@repo/shared';
 import * as bcrypt from 'bcrypt';
-import { v4 as uuid } from 'uuid';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { User } from '@repo/db/src/generated/prisma/client';
@@ -136,6 +136,8 @@ export class AuthServices {
     });
     // Remove password from response
     const { password, ...userWithoutPassword } = existingUser;
+    Logger.log('accessToken', accessToken);
+    Logger.log('refreshToken', refreshToken);
     return { user: userWithoutPassword, accessToken, refreshToken };
   }
 
@@ -184,9 +186,52 @@ export class AuthServices {
     return null;
   }
 
+  async verifyEmailByQuery(otp: string, userId: string) {
+    const token = await this.prisma.token.findFirst({
+      where: {
+        userId,
+        type: 'EMAIL_VERIFICATION',
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+
+    if (!token) {
+      throw new UnauthorizedException('Invalid verification token');
+    }
+
+    if (token.expiresAt < new Date()) {
+      await this.prisma.token.delete({
+        where: { id: token.id },
+      });
+
+      throw new UnauthorizedException('Verification token expired');
+    }
+
+    const isMatch = await bcrypt.compare(otp, token.token);
+
+    if (!isMatch) {
+      throw new UnauthorizedException('Invalid verification code');
+    }
+
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: {
+        isVerified: true,
+        verifiedAt: new Date(),
+      },
+    });
+
+    await this.prisma.token.delete({
+      where: { id: token.id },
+    });
+
+    return null;
+  }
   async logout(req, res) {
     const refreshToken = req.refreshToken;
-    const userId = req.userId;
+    const userId = req.user.id;
 
     if (!refreshToken) {
       throw new UnauthorizedException('Missing refresh token');
@@ -229,7 +274,7 @@ export class AuthServices {
     const tokens = await this.prisma.token.findMany({
       where: {
         type: 'REFRESH',
-        userId: req.userId,
+        userId: req.user.id,
       },
     });
     let matchedTokenId: string | null = null;
@@ -250,7 +295,7 @@ export class AuthServices {
     res.clearCookie('accessToken');
     const existingUser = await this.prisma.user.findUnique({
       where: {
-        id: req.userId,
+        id: req.user.id,
       },
     });
     if (!existingUser) {

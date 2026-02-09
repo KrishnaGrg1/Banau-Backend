@@ -1,96 +1,96 @@
 // apps/web/app/lib/axios.ts
-import axios, {
-  type AxiosInstance,
-  type AxiosRequestConfig,
-  type AxiosResponse,
-  type AxiosError,
-} from 'axios'
+import axios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios'
 import { useAppSession } from './session'
+import { refreshTokenResponse } from '@repo/shared'
 
-// ============================================
-// CREATE AXIOS INSTANCE
-// ============================================
+// Create Axios instance
 const axiosInstance: AxiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   timeout: 10000,
-  headers: {
-    'Content-Type': 'application/json',
-  },
+  headers: { 'Content-Type': 'application/json' },
   withCredentials: true,
 })
 
-// ============================================
-// REQUEST INTERCEPTOR
-// ============================================
-axiosInstance.interceptors.request.use(
-  (config) => {
-    if (process.env.NODE_ENV === 'development') {
-      console.log(`[AXIOS] ${config.method?.toUpperCase()} ${config.url}`)
-    }
-    return config
-  },
-  (error) => {
-    console.error('[AXIOS] Request Error:', error)
-    return Promise.reject(error)
-  },
-)
+// Request logging
+axiosInstance.interceptors.request.use((config) => {
+  if (process.env.NODE_ENV === 'development') {
+    console.log(`[AXIOS] ${config.method?.toUpperCase()} ${config.url}`)
+  }
+  return config
+})
 
-// ============================================
-// RESPONSE INTERCEPTOR
-// ============================================
+// Response logging
 axiosInstance.interceptors.response.use(
-  (response: AxiosResponse) => response,
-  (error: AxiosError) => {
-    // Log errors in development
+  (res) => res,
+  (err) => {
     if (process.env.NODE_ENV === 'development') {
-      console.error('[AXIOS] Response Error:', error.response?.data)
+      console.error('[AXIOS] Response Error:', err.response?.data)
     }
-
-    // Extract error message
-    const message =
-      (error.response?.data as any)?.message ||
-      error.message ||
-      'Something went wrong'
-    console.log("asd",message)
-    return Promise.reject(new Error(message))
-  },
+    return Promise.reject(err)
+  }
 )
 
-// ============================================
-// TYPED API HELPER (for Server Functions)
-// ============================================
+// Typed API helper (server-side)
 export async function api<TResponse = any>(
   url: string,
   config: AxiosRequestConfig = {},
 ): Promise<AxiosResponse<TResponse>> {
-  // Get session and add authorization token if available
   const session = await useAppSession()
 
-  // Build headers
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
     ...(config.headers as Record<string, string>),
   }
 
-  // Add Authorization header only if token exists
-  if (session.data.token) {
-    headers['Authorization'] = `Bearer ${session.data.token}`
+  if (session.data.accessToken) {
+    headers['Authorization'] = `Bearer ${session.data.accessToken}`
   }
 
-  // Build request config
   const requestConfig: AxiosRequestConfig = {
     url,
     ...config,
     headers,
   }
 
-  // Remove data from GET requests to avoid sending body
   if (config.method?.toUpperCase() === 'GET') {
     delete requestConfig.data
   }
 
-  // Make request
-  return axiosInstance.request<TResponse>(requestConfig)
+  try {
+    return await axiosInstance.request<TResponse>(requestConfig)
+  } catch (err: any) {
+    // Only attempt refresh if 401
+    if (err.response?.status === 401 && session.data.refreshToken) {
+      try {
+        // Use bare Axios for refresh call (no interceptors)
+        const refreshRes = await axios.post<refreshTokenResponse>(
+          `${import.meta.env.VITE_API_URL}/auth/refresh`,
+          null,
+          {
+            headers: { Authorization: `Bearer ${session.data.refreshToken}` },
+            withCredentials: true,
+          }
+        )
+
+        const { accessToken, refreshToken } = refreshRes.data.data
+        session.update({ accessToken, refreshToken })
+
+        // Retry original request with new access token
+        return await axiosInstance.request<TResponse>({
+          ...requestConfig,
+          headers: {
+            ...requestConfig.headers,
+            Authorization: `Bearer ${accessToken}`,
+          },
+        })
+      } catch (refreshErr: any) {
+        session.clear?.()
+        throw refreshErr
+      }
+    }
+
+    throw err
+  }
 }
 
 export default axiosInstance

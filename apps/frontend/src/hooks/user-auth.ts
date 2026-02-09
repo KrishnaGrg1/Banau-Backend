@@ -19,7 +19,7 @@ export function useLogin() {
       toast.success('Login successfully ')
     },
     onError: (err: Error) => {
-      toast.error(err.message) 
+      toast.error(err.message)
     },
   })
 }
@@ -29,8 +29,10 @@ export function useRegister() {
   return useMutation({
     mutationFn: register,
     onSuccess: () => {
-      toast.success('Registration successful! Please check your email. Redirecting to login in 10 seconds...')
-      
+      toast.success(
+        'Registration successful! Please check your email. Redirecting to login in 10 seconds...',
+      )
+
       // Redirect to login after 10 seconds
       setTimeout(() => {
         navigate({ to: '/login' })
@@ -65,19 +67,18 @@ export function useLogOut() {
   })
 }
 
-
 export function useVerify() {
   const navigate = useNavigate()
   return useMutation({
     mutationFn: verify,
     onSuccess: () => {
-      navigate({ 
+      navigate({
         to: '/login',
       })
       toast.success('User verified successfully')
     },
     onError: (err: Error) => {
-      console.log("er",err)
+      console.log('er', err)
       toast.error(err.message)
     },
   })

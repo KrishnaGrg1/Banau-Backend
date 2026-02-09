@@ -1,8 +1,5 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { useForm } from '@tanstack/react-form'
 import { Button } from '@/components/ui/button'
-import { REGEXP_ONLY_DIGITS } from 'input-otp'
-import { Label } from '@/components/ui/label'
 import {
   Card,
   CardContent,
@@ -11,121 +8,77 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { useVerify } from '@/hooks/user-auth'
-import { VerifyUserSchema } from '@repo/shared'
-import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSlot,
-} from '@/components/ui/input-otp'
 import { z } from 'zod'
+import { useEffect } from 'react'
 
 const verifySearchSchema = z.object({
-  userId: z.string().optional(),
+  id: z.string(),
+  token: z.coerce.string(),
 })
 
 export const Route = createFileRoute('/verify')({
   validateSearch: verifySearchSchema,
-  component: RouteComponent,
+  component: VerifyPage,
 })
 
-function RouteComponent() {
+function VerifyPage() {
   const navigate = useNavigate()
-  const { userId } = Route.useSearch()
-  const { mutate: verify, isPending, error } = useVerify()
-  const form = useForm({
-    defaultValues: {
-      userId: userId || '',
-      token: '',
-    },
-    validators: {
-      onSubmit: VerifyUserSchema,
-    },
-    onSubmit: async ({ value }) => {
-      verify({ data: value })
-    },
-  })
+  const { id, token } = Route.useSearch()
+  const { mutate: verify, isPending, error, isSuccess } = useVerify()
+
+  // Auto-verify when page loads
+  useEffect(() => {
+    verify({
+      data: {
+        token,
+        userId: id,
+      },
+    })
+  }, [])
+
   return (
-    <div className="flex min-h-screen items-center justify-center ">
+    <div className="flex min-h-screen items-center justify-center">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>Veify Account</CardTitle>
+          <CardTitle>Email Verification</CardTitle>
           <CardDescription>
-            Create your account to start building websites
+            {isPending && 'Verifying your email...'}
+            {isSuccess && 'Email verified successfully!'}
+            {error && 'Verification failed'}
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault()
-              e.stopPropagation()
-              form.handleSubmit()
-            }}
-            className="space-y-4"
-          >
-            <form.Field
-              name="token"
-              validators={{
-                onChange: ({ value }) =>
-                  !value ? 'Token is required' : undefined,
-              }}
-            >
-              {(field) => (
-                <div className="space-y-2">
-                  <Label htmlFor={field.name}>Enter Otp</Label>
-                  <InputOTP
-                    id="digits-only"
-                    maxLength={6}
-                    pattern={REGEXP_ONLY_DIGITS}
-                    value={field.state.value}
-                    onChange={(value) => field.handleChange(value)}
-                  >
-                    <InputOTPGroup>
-                      <InputOTPSlot index={0} />
-                      <InputOTPSlot index={1} />
-                      <InputOTPSlot index={2} />
-                      <InputOTPSlot index={3} />
-                      <InputOTPSlot index={4} />
-                      <InputOTPSlot index={5} />
-                    </InputOTPGroup>
-                  </InputOTP>
-
-                  {field.state.meta.errors && (
-                    <p className="text-sm text-red-600">
-                      {typeof field.state.meta.errors[0] === 'string'
-                        ? field.state.meta.errors[0]
-                        : field.state.meta.errors[0]?.message ||
-                          'Validation error'}
-                    </p>
-                  )}
-                </div>
-              )}
-            </form.Field>
-
-            {error && (
-              <div className="rounded-md  p-1">
-                <p className="text-sm text-red-800">{error?.message}</p>
-              </div>
-            )}
-
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={isPending || form.state.values.token.length !== 6}
-            >
-              {isPending ? 'Verifying...' : 'Verify Account'}
-            </Button>
-
-            <div className="text-center text-sm">
-              Already have an account?{' '}
-              <button
-                type="button"
-                onClick={() => navigate({ to: '/login' })}
-                className="text-blue-600 hover:underline"
-              >
-                Login
-              </button>
+        <CardContent className="space-y-4">
+          {isPending && (
+            <div className="rounded-md bg-blue-50 p-3">
+              <p className="text-sm text-blue-800">
+                Please wait while we verify your email address...
+              </p>
             </div>
-          </form>
+          )}
+
+          {isSuccess && (
+            <div className="rounded-md bg-green-50 p-3">
+              <p className="text-sm text-green-800">
+                Your email has been verified successfully! You can now log in to
+                your account.
+              </p>
+            </div>
+          )}
+
+          {error && (
+            <div className="rounded-md bg-red-50 p-3">
+              <p className="text-sm text-red-800">{error.message}</p>
+            </div>
+          )}
+
+          {(isSuccess || error) && (
+            <Button
+              onClick={() => navigate({ to: '/login' })}
+              className="w-full"
+            >
+              Go to Login
+            </Button>
+          )}
         </CardContent>
       </Card>
     </div>

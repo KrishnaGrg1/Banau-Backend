@@ -18,6 +18,7 @@ import {
   useGetTenant,
   usePublishTenant,
 } from '@/hooks/use-tenant'
+import { CreateTenantDtoSchema } from '@repo/shared'
 // import { useAuthStore } from '@/lib/stores/auth.stores'
 
 export const Route = createFileRoute('/tenant')({
@@ -39,6 +40,10 @@ function TenantPage() {
     defaultValues: {
       name: '',
       subdomain: '',
+      email: '',
+    },
+    validators: {
+      onSubmit: CreateTenantDtoSchema,
     },
     onSubmit: async ({ value }) => {
       setError(null)
@@ -225,7 +230,9 @@ function TenantPage() {
                       />
                       {field.state.meta.errors && (
                         <p className="text-sm text-red-600">
-                          {field.state.meta.errors[0]}
+                          {typeof field.state.meta.errors[0] === 'string'
+                            ? field.state.meta.errors[0]
+                            : field.state.meta.errors[0]?.message}
                         </p>
                       )}
                     </div>
@@ -270,7 +277,9 @@ function TenantPage() {
                       </div>
                       {field.state.meta.errors && (
                         <p className="text-sm text-red-600">
-                          {field.state.meta.errors[0]}
+                          {typeof field.state.meta.errors[0] === 'string'
+                            ? field.state.meta.errors[0]
+                            : field.state.meta.errors[0]?.message}
                         </p>
                       )}
                       <p className="text-sm text-gray-500">
@@ -280,7 +289,39 @@ function TenantPage() {
                     </div>
                   )}
                 </form.Field>
-
+                <form.Field
+                  name="email"
+                  validators={{
+                    onChange: ({ value }) =>
+                      !value
+                        ? 'Email is required'
+                        : !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+                          ? 'Invalid email format'
+                          : undefined,
+                  }}
+                >
+                  {(field) => (
+                    <div className="space-y-2">
+                      <Label htmlFor={field.name}>Email</Label>
+                      <Input
+                        id={field.name}
+                        name={field.name}
+                        type="email"
+                        placeholder="you@example.com"
+                        value={field.state.value}
+                        onChange={(e) => field.handleChange(e.target.value)}
+                        onBlur={field.handleBlur}
+                      />
+                      {field.state.meta.errors && (
+                        <p className="text-sm text-red-600">
+                          {typeof field.state.meta.errors[0] === 'string'
+                            ? field.state.meta.errors[0]
+                            : field.state.meta.errors[0]?.message}
+                        </p>
+                      )}
+                    </div>
+                  )}
+                </form.Field>
                 {error && (
                   <div className="rounded-md bg-red-50 p-3">
                     <p className="text-sm text-red-800">{error}</p>

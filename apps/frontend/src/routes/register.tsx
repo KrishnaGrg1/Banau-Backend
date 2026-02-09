@@ -240,8 +240,8 @@ function RegisterPage() {
             {isSuccess && countdown !== null && (
               <div className="rounded-md bg-green-50 p-3">
                 <p className="text-sm text-green-800">
-                  Registration successful! Please check your email for verification.
-                  Redirecting to login in {countdown} seconds...
+                  Registration successful! Please check your email for
+                  verification. Redirecting to login in {countdown} seconds...
                 </p>
               </div>
             )}

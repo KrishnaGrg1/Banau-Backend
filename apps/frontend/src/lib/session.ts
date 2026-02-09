@@ -2,7 +2,8 @@
 import { useSession } from '@tanstack/react-start/server'
 
 type SessionData = {
-  token: string
+  accessToken: string
+  refreshToken: string
 }
 
 export function useAppSession() {

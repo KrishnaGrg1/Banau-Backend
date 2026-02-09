@@ -61,7 +61,7 @@ export const AuthMiddleware = createMiddleware().server(async ({ next }) => {
   const session = await useAppSession()
 
   // Redirect to login if not authenticated
-  if (!session.data.token) {
+  if (!session.data.accessToken) {
     throw redirect({
       to: '/login',
     })

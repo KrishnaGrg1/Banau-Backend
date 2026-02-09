@@ -28,7 +28,8 @@ export class AuthGuard implements CanActivate {
       // Verify JWT token using the secret from environment
       const payload = await this.jwtService.verifyAsync(accessToken, {
         secret:
-          this.configService.get<string>('JWT_SECRET') || 'your-secret-key',
+          this.configService.get<string>('JWT_ACCESS_SECRET') ||
+          'your-secret-key',
       });
 
       // Attach user data to request for use in decorators and controllers

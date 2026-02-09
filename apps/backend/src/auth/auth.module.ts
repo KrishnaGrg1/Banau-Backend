@@ -14,10 +14,10 @@ import { EmailModule } from 'src/email/email.module';
     ConfigModule,
     EmailModule,
     // Register the JwtModule so JwtService becomes available
-    JwtModule
+    JwtModule,
   ],
   controllers: [AuthController],
   providers: [AuthServices, PrismaService, EmailService],
-  exports: [JwtModule,AuthServices],
+  exports: [JwtModule, AuthServices],
 })
 export class AuthModule {}

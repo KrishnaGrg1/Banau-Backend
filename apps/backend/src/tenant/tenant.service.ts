@@ -2,6 +2,7 @@ import {
   BadRequestException,
   ConflictException,
   Injectable,
+  Logger,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import type { CreateTenantDto } from '@repo/shared';
@@ -12,7 +13,7 @@ export class TenantService {
 
   async createTenant(req, data: CreateTenantDto) {
     const existingOwner = await this.prisma.tenant.findFirst({
-      where: { ownerId: String(req.userId) },
+      where: { ownerId: String(req.user.id) },
     });
     if (existingOwner)
       throw new BadRequestException('User already has a tenant');
@@ -24,10 +25,10 @@ export class TenantService {
     return this.prisma.tenant.create({
       data: {
         name: data.name,
-        email:data.email,
+        email: data.email,
         subdomain: data.subdomain,
-        status:data.status,
-        ownerId: String(req.userId),
+        status: data.status,
+        ownerId: String(req.user.id),
       },
     });
   }

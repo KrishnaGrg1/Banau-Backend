@@ -15,6 +15,7 @@ export const createTenant = createServerFn({ method: 'POST' })
         data: data,
         method: 'POST',
       })
+      console.log('lsdjf', response.data)
       return response.data.data
     } catch (error: unknown) {
       const err = error as {

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { User } from "./types";
 
 // Auth DTOs
 export const CreateUserDtoSchema = z.object({
@@ -29,7 +30,8 @@ export interface LoginResponse {
       createdAt: Date;
       updatedAt: Date;
     };
-    token: string;
+    accessToken: string;
+    refreshToken: string;
   };
   timestamp: Date;
 }
@@ -92,3 +94,38 @@ export const VerifyUserSchema = z.object({
 });
 
 export type verifyUserDto = z.infer<typeof VerifyUserSchema>;
+
+export interface refreshTokenResponse {
+  success: boolean;
+  message: string;
+  data: {
+    existingUser: User;
+    accessToken: string;
+    refreshToken: string;
+  };
+  timestamp: Date;
+}
+
+interface ownedTenants{
+  name:string,
+  subdomain:string,
+  email:string,
+  published:boolean
+}
+export interface getMeResponse {
+  success: boolean;
+  message: string;
+  data: {
+    id:string,
+    firstName:string,
+    lastName:string,
+    email:string,
+    role:string,
+    isVerified:boolean,
+    createdAt:Date,
+    lastLoginAt:Date,
+    isActive:boolean
+    ownedTenant:ownedTenants[]
+  };
+  timestamp: Date;
+}

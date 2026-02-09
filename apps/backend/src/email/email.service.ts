@@ -6,12 +6,17 @@ import { Resend } from 'resend';
 export class EmailService {
   private readonly resend: Resend;
   private readonly fromEmail: string;
-
+  private readonly frontendUrl: string;
   constructor(private readonly configService: ConfigService) {
     // Initialize once to save resources
     const apiKey = this.configService.get<string>('RESEND_API_KEY');
     this.resend = new Resend(apiKey);
     this.fromEmail = this.configService.get<string>('RESEND_EMAIL_FROM') || '';
+    const isProd = this.configService.get<string>('NODE_ENV') === 'production';
+
+    this.frontendUrl = isProd
+      ? this.configService.get<string>('FRONTEND_URL_PROD')!
+      : this.configService.get<string>('FRONTEND_URL')!;
   }
 
   async sendEmail(to: string, subject: string, htmlMsg: string): Promise<any> {
@@ -41,11 +46,12 @@ export class EmailService {
     token: string,
     userId: string | number,
   ): Promise<any> {
-    const htmlMsg = html({
+    const htmlMsg = html.call(this, {
       token,
       username,
       topic: EmailTopic.VerifyEmail,
       userId,
+      baseUrl: this.frontendUrl,
     });
     return this.sendEmail(to, subject(EmailTopic.VerifyEmail), htmlMsg);
   }
@@ -56,11 +62,12 @@ export class EmailService {
     token: string,
     userId: string | number,
   ): Promise<any> {
-    const htmlMsg = html({
+    const htmlMsg = html.call(this, {
       token,
       username,
       topic: EmailTopic.ForgotPassword,
       userId,
+      baseUrl: this.frontendUrl,
     });
     return this.sendEmail(to, subject(EmailTopic.ForgotPassword), htmlMsg);
   }
@@ -76,6 +83,7 @@ interface HtmlProps {
   username: string;
   topic: EmailTopic;
   userId?: string | number;
+  baseUrl: string;
 }
 
 const message = (topic: EmailTopic): string => {
@@ -103,17 +111,13 @@ const subject = (topic: EmailTopic): string => {
 const actionButton = (
   topic: EmailTopic,
   token: string,
+  baseUrl: string,
   userId?: string | number,
 ): string => {
-  const baseUrl =
-    process.env.NODE_ENV === 'production'
-      ? 'https://melevelup.me/eng'
-      : 'http://localhost:3000';
-
   const href =
     topic === EmailTopic.ForgotPassword
       ? `${baseUrl}/reset-password?token=${token}&id=${userId}`
-      : `${baseUrl}/verify-email?token=${token}&id=${userId}`;
+      : `${baseUrl}/verify?token=${token}&id=${userId}`;
 
   const label =
     topic === EmailTopic.ForgotPassword ? 'Reset Password' : 'Verify Email';
@@ -138,7 +142,10 @@ const actionButton = (
   `;
 };
 
-const html = ({ token, topic, username, userId }: HtmlProps): string => {
+const html = function (
+  this: EmailService,
+  { token, topic, username, userId, baseUrl }: HtmlProps,
+): string {
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -168,7 +175,7 @@ const html = ({ token, topic, username, userId }: HtmlProps): string => {
 
               <!-- CTA -->
               <div style="margin:32px 0; text-align:center;">
-                ${actionButton(topic, token, userId)}
+                ${actionButton(topic, token, baseUrl, userId)}
               </div>
 
               <!-- Token Box -->

@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Logger,
   Param,
   Post,
   Put,
@@ -21,6 +22,7 @@ export class TenantController {
   @UseGuards(AuthGuard)
   @Post()
   async create(@Request() req, @Body() dto: CreateTenantDto) {
+    console.log('asdf', req);
     const data = await this.tenantsService.createTenant(req, dto);
     return ApiResponseDto.success(data, 'Domain added successfully');
   }
@@ -34,8 +36,8 @@ export class TenantController {
 
   @UseGuards(AuthGuard)
   @Get()
-  async getDetails(@User('id') userId: string) {
-    const data = await this.tenantsService.getTenantDetails(userId);
+  async getDetails(@Request() req) {
+    const data = await this.tenantsService.getTenantDetails(req.user.id);
     return ApiResponseDto.success(
       data,
       'Tenant details retrieved successfully',

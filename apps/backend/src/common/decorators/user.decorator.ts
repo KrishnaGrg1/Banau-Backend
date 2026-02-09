@@ -1,6 +1,7 @@
 import {
   createParamDecorator,
   ExecutionContext,
+  Logger,
   UnauthorizedException,
 } from '@nestjs/common';
 import {
@@ -27,7 +28,7 @@ export const User = createParamDecorator(
   ): AuthenticatedUser | string => {
     const request = ctx.switchToHttp().getRequest<RequestWithUser>();
     const user = request.user;
-
+    Logger.log('User', user);
     // Ensure user exists (should be populated by AuthGuard)
     if (!user) {
       throw new UnauthorizedException(
