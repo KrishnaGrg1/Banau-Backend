@@ -30,7 +30,7 @@ export class AuthServices {
 
     const accessToken = this.jwtService.sign(payload, {
       secret: this.configService.get('JWT_ACCESS_SECRET'),
-      expiresIn: '1m',
+      expiresIn: '7m',
     });
 
     const refreshToken = this.jwtService.sign(payload, {
@@ -118,7 +118,7 @@ export class AuthServices {
       secure: true,
       sameSite:
         this.configService.get('NODE_ENV') === 'production' ? 'none' : 'lax',
-      maxAge: 1 * 60 * 1000, // Set to exactly 15 minutes in milliseconds
+      maxAge: 15 * 60 * 1000, // Set to exactly 15 minutes in milliseconds
     });
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
