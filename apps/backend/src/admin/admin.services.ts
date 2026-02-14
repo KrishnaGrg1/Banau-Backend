@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { UserRole } from '@repo/db/dist/generated/prisma/enums';
 import { backendDtos } from '@repo/shared';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -38,6 +38,38 @@ export class AdminServices {
 
     return {
       users,
+      meta: {
+        total,
+        limit,
+        offset,
+        hasNextPage: offset + limit < total,
+        hasPreviousPage: offset > 0,
+      },
+    };
+  }
+
+  async getUserById(userId: string) {
+    const existingUser = await this.prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+    if (!existingUser) throw new ConflictException('User not found');
+    return existingUser;
+  }
+
+  async getAllTenants(paginationDto: backendDtos.PaginationDto) {
+    const { limit = 10, offset = 0 } = paginationDto;
+    const [tenants, total] = await Promise.all([
+      this.prisma.tenant.findMany({
+        take: limit,
+        skip: offset,
+        orderBy: { createdAt: 'desc' },
+      }),
+      this.prisma.tenant.count(),
+    ]);
+    return {
+      tenants: tenants,
       meta: {
         total,
         limit,

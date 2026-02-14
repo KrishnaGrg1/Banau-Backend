@@ -309,7 +309,7 @@ export class AuthServices {
       secure: true,
       sameSite:
         this.configService.get('NODE_ENV') === 'production' ? 'none' : 'lax',
-      maxAge: 1 * 60 * 1000, // Set to exactly 15 minutes in milliseconds
+      maxAge: 15 * 60 * 1000, // Set to exactly 15 minutes in milliseconds
     });
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,

@@ -1,9 +1,11 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Logger,
   Param,
+  Patch,
   Post,
   Put,
   Request,
@@ -12,7 +14,7 @@ import {
 import { TenantService } from './tenant.service';
 import { AuthGuard } from 'src/common/guard/auth.guard';
 import { ApiResponseDto } from 'src/common/dto/response.dto';
-import  { backendDtos } from '@repo/shared';
+import { backendDtos } from '@repo/shared';
 import { User } from 'src/common/decorators/user.decorator';
 
 @Controller('tenant')
@@ -52,4 +54,26 @@ export class TenantController {
       'Website details retrieved successfully',
     );
   }
+
+ @UseGuards(AuthGuard) 
+  @Patch()
+  async updateTenant(
+    @Request() req,
+    @Body() dto: backendDtos.UpdateTenantDto,
+  ) {
+    const tenant = await this.tenantsService.updateTenant(req,dto);
+    return ApiResponseDto.success(
+      tenant,
+      "Updated tenant successfully"
+    )
+  }
+ @UseGuards(AuthGuard) 
+ @Delete()
+ async deleteTenant(@Request() req){
+  const tenant=await this.tenantsService.deleteTenant(req)
+ return ApiResponseDto.success(
+      tenant,
+      "Deleted tenant successfully"
+    ) 
+ }
 }

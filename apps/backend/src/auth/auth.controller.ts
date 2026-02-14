@@ -10,7 +10,7 @@ import {
   Query,
   Logger,
 } from '@nestjs/common';
-import  {backendDtos } from '@repo/shared';
+import { backendDtos } from '@repo/shared';
 import { AuthServices } from './auth.service';
 import { ApiResponseDto } from 'src/common/dto/response.dto';
 import { AuthGuard } from 'src/common/guard/auth.guard';
@@ -31,7 +31,10 @@ export class AuthController {
     return ApiResponseDto.success('Verify User successfully');
   }
   @Post('login')
-  async login(@Body() dto: backendDtos.LoginDto, @Response({ passthrough: true }) res) {
+  async login(
+    @Body() dto: backendDtos.LoginDto,
+    @Response({ passthrough: true }) res,
+  ) {
     const data = await this.userServies.login(dto, res);
     return ApiResponseDto.success(data, 'Login successfully');
   }

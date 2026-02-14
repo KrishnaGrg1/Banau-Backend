@@ -134,3 +134,26 @@ export class PaginationDto {
   @IsEnum(UserRoleDto)
   role?: UserRoleDto;
 }
+
+
+
+export class UpdateTenantDto {
+  @IsString()
+  @MinLength(3)
+  name: string;
+
+  @IsString()
+  @MinLength(3)
+  @Matches(/^[a-z0-9-]+$/)
+  subdomain: string;
+
+  @IsEmail()
+  email: string;
+
+  @IsEnum(TenantStatusDto)
+  status?: TenantStatusDto;
+
+  @IsBoolean()
+  published:boolean
+
+}
