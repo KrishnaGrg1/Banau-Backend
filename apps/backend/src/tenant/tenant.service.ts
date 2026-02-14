@@ -5,13 +5,13 @@ import {
   Logger,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import type { CreateTenantDto } from '@repo/shared';
+import { backendDtos } from '@repo/shared';
 
 @Injectable()
 export class TenantService {
   constructor(private prisma: PrismaService) {}
 
-  async createTenant(req, data: CreateTenantDto) {
+  async createTenant(req, data: backendDtos.CreateTenantDto) {
     const existingOwner = await this.prisma.tenant.findFirst({
       where: { ownerId: String(req.user.id) },
     });

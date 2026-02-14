@@ -12,7 +12,7 @@ import {
 import { TenantService } from './tenant.service';
 import { AuthGuard } from 'src/common/guard/auth.guard';
 import { ApiResponseDto } from 'src/common/dto/response.dto';
-import type { CreateTenantDto } from '@repo/shared';
+import  { backendDtos } from '@repo/shared';
 import { User } from 'src/common/decorators/user.decorator';
 
 @Controller('tenant')
@@ -21,10 +21,9 @@ export class TenantController {
 
   @UseGuards(AuthGuard)
   @Post()
-  async create(@Request() req, @Body() dto: CreateTenantDto) {
-    console.log('asdf', req);
+  async create(@Request() req, @Body() dto: backendDtos.CreateTenantDto) {
     const data = await this.tenantsService.createTenant(req, dto);
-    return ApiResponseDto.success(data, 'Domain added successfully');
+    return ApiResponseDto.success(data, 'Tenant added successfully');
   }
 
   @UseGuards(AuthGuard)

@@ -428,6 +428,9 @@ importers:
 
   packages/shared:
     dependencies:
+      class-validator:
+        specifier: ^0.14.3
+        version: 0.14.3
       zod:
         specifier: ^3.23.8
         version: 3.25.76

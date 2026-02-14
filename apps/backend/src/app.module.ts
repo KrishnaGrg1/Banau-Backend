@@ -6,6 +6,7 @@ import { TenantModule } from './tenant/tenant.module';
 import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { SubdomainMiddleware } from './common/middleware/subdomain.middleware';
 import { EmailModule } from './email/email.module';
+import { AdminModule } from './admin/admin.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -13,6 +14,7 @@ import { EmailModule } from './email/email.module';
     UserModule,
     TenantModule,
     EmailModule,
+    AdminModule,
   ],
   providers: [PrismaService],
   exports: [PrismaService],

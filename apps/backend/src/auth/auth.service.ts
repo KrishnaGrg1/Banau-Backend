@@ -5,7 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import type { CreateUserDto, LoginDto, verifyUserDto } from '@repo/shared';
+import { backendDtos } from '@repo/shared';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
@@ -22,7 +22,7 @@ export class AuthServices {
   ) {}
 
   private async generateToken(user: Partial<User>) {
-    const payload = { sub: user.id };
+    const payload = { sub: user.id, role: user.role, isActive: user.isActive };
 
     await this.prisma.token.deleteMany({
       where: { expiresAt: { lt: new Date() } },
@@ -51,7 +51,7 @@ export class AuthServices {
     return { accessToken, refreshToken };
   }
 
-  async register(data: CreateUserDto) {
+  async register(data: backendDtos.CreateUserDto) {
     const existingUser = await this.prisma.user.findUnique({
       where: { email: data.email },
     });
@@ -90,7 +90,7 @@ export class AuthServices {
     return userWithoutPassword;
   }
 
-  async login(data: LoginDto, res) {
+  async login(data: backendDtos.LoginDto, res) {
     const existingUser = await this.prisma.user.findUnique({
       where: {
         email: data.email,
@@ -118,7 +118,7 @@ export class AuthServices {
       secure: true,
       sameSite:
         this.configService.get('NODE_ENV') === 'production' ? 'none' : 'lax',
-      maxAge: 15 * 60 * 1000, // Set to exactly 15 minutes in milliseconds
+      maxAge: 7 * 60 * 1000, // Set to exactly 15 minutes in milliseconds
     });
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
@@ -142,7 +142,7 @@ export class AuthServices {
     return { user: userWithoutPassword, accessToken, refreshToken };
   }
 
-  async verifyEmail(data: verifyUserDto) {
+  async verifyEmail(data: backendDtos.VerifyUserDto) {
     const { token: otp, userId } = data;
     const token = await this.prisma.token.findFirst({
       where: {
