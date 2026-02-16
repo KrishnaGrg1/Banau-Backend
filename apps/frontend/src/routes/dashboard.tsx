@@ -28,6 +28,7 @@ import {
   CheckCircle2,
   XCircle,
 } from 'lucide-react'
+import { ModeToggle } from '@/components/mode-toggle'
 
 export const Route = createFileRoute('/dashboard')({
   loader: async () => {
@@ -84,10 +85,13 @@ function DashboardPage() {
             <h1 className="text-2xl font-bold">Banau</h1>
             <Badge variant="secondary">Dashboard</Badge>
           </div>
-          <Button variant="outline" size="sm" onClick={handleLogout}>
-            <LogOut className="mr-2 h-4 w-4" />
-            Logout
-          </Button>
+          <div>
+            <ModeToggle />
+            <Button variant="outline" size="sm" onClick={handleLogout}>
+              <LogOut className="mr-2 h-4 w-4" />
+              Logout
+            </Button>
+          </div>
         </div>
       </header>
 
