@@ -55,25 +55,16 @@ export class TenantController {
     );
   }
 
- @UseGuards(AuthGuard) 
+  @UseGuards(AuthGuard)
   @Patch()
-  async updateTenant(
-    @Request() req,
-    @Body() dto: backendDtos.UpdateTenantDto,
-  ) {
-    const tenant = await this.tenantsService.updateTenant(req,dto);
-    return ApiResponseDto.success(
-      tenant,
-      "Updated tenant successfully"
-    )
+  async updateTenant(@Request() req, @Body() dto: backendDtos.UpdateTenantDto) {
+    const tenant = await this.tenantsService.updateTenant(req, dto);
+    return ApiResponseDto.success(tenant, 'Updated tenant successfully');
   }
- @UseGuards(AuthGuard) 
- @Delete()
- async deleteTenant(@Request() req){
-  const tenant=await this.tenantsService.deleteTenant(req)
- return ApiResponseDto.success(
-      tenant,
-      "Deleted tenant successfully"
-    ) 
- }
+  @UseGuards(AuthGuard)
+  @Delete()
+  async deleteTenant(@Request() req) {
+    const tenant = await this.tenantsService.deleteTenant(req);
+    return ApiResponseDto.success(tenant, 'Deleted tenant successfully');
+  }
 }

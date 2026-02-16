@@ -60,54 +60,53 @@ export class TenantService {
     return tenant;
   }
 
-async updateTenant(req, data: backendDtos.UpdateTenantDto) {
-  const existingTenant = await this.prisma.tenant.findFirst({
-    where: { ownerId: String(req.user.id) },
-  });
-
-  if (!existingTenant) {
-    throw new BadRequestException('User dont have a tenant to update');
-  }
-
-  if (data.subdomain && data.subdomain !== existingTenant.subdomain) {
-    const subdomainTaken = await this.prisma.tenant.findUnique({
-      where: { subdomain: data.subdomain },
+  async updateTenant(req, data: backendDtos.UpdateTenantDto) {
+    const existingTenant = await this.prisma.tenant.findFirst({
+      where: { ownerId: String(req.user.id) },
     });
 
-    if (subdomainTaken) {
-      throw new ConflictException('Subdomain already taken');
+    if (!existingTenant) {
+      throw new BadRequestException('User dont have a tenant to update');
     }
+
+    if (data.subdomain && data.subdomain !== existingTenant.subdomain) {
+      const subdomainTaken = await this.prisma.tenant.findUnique({
+        where: { subdomain: data.subdomain },
+      });
+
+      if (subdomainTaken) {
+        throw new ConflictException('Subdomain already taken');
+      }
+    }
+
+    const tenant = await this.prisma.tenant.update({
+      where: {
+        ownerId: String(req.user.id),
+      },
+      data: {
+        name: data.name,
+        email: data.email,
+        subdomain: data.subdomain,
+        status: data.status,
+        published: data.published,
+      },
+    });
+
+    return tenant;
   }
 
-  const tenant = await this.prisma.tenant.update({
-    where: {
-      ownerId: String(req.user.id),
-    },
-    data: {
-      name: data.name,
-      email: data.email,
-      subdomain: data.subdomain,
-      status:data.status,
-      published: data.published,
-    },
-  });
-
-  return tenant;
-}
-
-async deleteTenant(req){
-  const existingTenant=await this.prisma.tenant.findUnique({
-    where:{
-      ownerId:String(req.user.id)
-    }
-  })
-  if(!existingTenant) throw new ConflictException('User donot have tenants');
+  async deleteTenant(req) {
+    const existingTenant = await this.prisma.tenant.findUnique({
+      where: {
+        ownerId: String(req.user.id),
+      },
+    });
+    if (!existingTenant) throw new ConflictException('User donot have tenants');
 
     await this.prisma.tenant.delete({
-      where:{
-        ownerId:String(req.user.id)
-      }
-    })
-}
-
+      where: {
+        ownerId: String(req.user.id),
+      },
+    });
+  }
 }

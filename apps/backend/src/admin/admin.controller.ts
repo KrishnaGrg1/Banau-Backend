@@ -1,10 +1,4 @@
-import {
-  Controller,
-  Get,
-  Param,
-  Query,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 
 import { ApiResponseDto, AuthGuard } from 'src/common';
 import { AdminGuard } from 'src/common/guard/admin.guard';

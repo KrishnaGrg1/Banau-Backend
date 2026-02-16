@@ -9,8 +9,11 @@ import {
   IsEnum,
   IsNumber,
   IsBoolean,
+  IsHexColor,
+  IsNotEmpty,
 
 } from "class-validator";
+import type { Express } from "express";
 
 export enum UserRoleDto {
   TENANT_OWNER = 'TENANT_OWNER',
@@ -156,4 +159,41 @@ export class UpdateTenantDto {
   @IsBoolean()
   published:boolean
 
+}
+
+export class CreateTenantSettingDto {
+    // Color codes
+    @IsHexColor()
+    primaryColorCode: string;
+
+    @IsHexColor()
+    secondaryColorCode: string;
+
+    @IsHexColor()
+    primaryTextColorCode: string;
+
+    @IsHexColor()
+    secondaryTextColorCode: string;
+
+    @IsHexColor()
+    backgroundColorCode: string;
+
+    @IsHexColor()
+    backgroundTextColorCode: string;
+
+    // Landing page info
+    @IsString()
+    @IsNotEmpty()
+    landingPageTitle: string;
+
+    @IsString()
+    @IsNotEmpty()
+    landingPageDescription: string;
+
+    // Optional files (handled separately in controller)
+    @IsOptional()
+    logo?: Express.Multer.File;
+
+    @IsOptional()
+    favicon?: Express.Multer.File;
 }
