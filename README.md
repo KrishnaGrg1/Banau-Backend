@@ -1,135 +1,180 @@
-# Turborepo starter
-
-This Turborepo starter is maintained by the Turborepo core team.
-
-## Using this example
-
-Run the following command:
-
-```sh
-npx create-turbo@latest
-```
-
-## What's inside?
-
-This Turborepo includes the following packages/apps:
-
-### Apps and Packages
-
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build
-
-# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build
 yarn dlx turbo build
 pnpm exec turbo build
-```
-
-You can build a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
-
-```
-# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build --filter=docs
-
-# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build --filter=docs
 yarn exec turbo build --filter=docs
 pnpm exec turbo build --filter=docs
-```
-
-### Develop
-
-To develop all apps and packages, run the following command:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev
-
-# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev
 yarn exec turbo dev
 pnpm exec turbo dev
-```
-
-You can develop a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
-
-```
-# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev --filter=web
-
-# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev --filter=web
 yarn exec turbo dev --filter=web
 pnpm exec turbo dev --filter=web
-```
-
-### Remote Caching
-
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
-
-Turborepo can use a technique known as [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
-turbo login
-
-# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
-npx turbo login
 yarn exec turbo login
 pnpm exec turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
-turbo link
-
-# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
-npx turbo link
 yarn exec turbo link
 pnpm exec turbo link
+
+# Banau Monorepo
+
+Banau is a modern, multi-tenant SaaS starter built with Turborepo, NestJS, Vite, Prisma, and PostgreSQL. This monorepo contains everything you need for a scalable, production-ready SaaS platform.
+
+---
+
+## Table of Contents
+
+- [Project Structure](#project-structure)
+- [Getting Started](#getting-started)
+- [Development](#development)
+- [Building for Production](#building-for-production)
+- [Testing, Linting & Formatting](#testing-linting--formatting)
+- [Deployment](#deployment)
+	- [Vercel](#vercel)
+	- [Docker](#docker)
+- [Environment Variables](#environment-variables)
+- [Custom Domain & CORS](#custom-domain--cors)
+- [Packages](#packages)
+- [Useful Links](#useful-links)
+
+---
+
+## Project Structure
+
 ```
+apps/
+	backend/    # NestJS API (monolithic, multi-tenant)
+	frontend/   # Vite + React (multi-tenant, subdomain-aware)
+packages/
+	db/         # Prisma schema, migrations, and client
+	shared/     # Shared DTOs, types, and utilities
+```
+
+---
+
+## Getting Started
+
+1. **Clone the repository:**
+	 ```bash
+	 git clone <your-repo>
+	 cd banau
+	 ```
+
+2. **Install dependencies:**
+	 ```bash
+	 pnpm install
+	 ```
+
+3. **Set up your database:**
+	 - Create a PostgreSQL database (Neon, Supabase, etc.)
+	 - Copy your connection string.
+	 - Update `DATABASE_URL` in `packages/db/.env`.
+
+4. **Push the database schema:**
+	 ```bash
+	 pnpm --filter @repo/db db:push
+	 ```
+
+---
+
+## Development
+
+- **Start all apps:**
+	```bash
+	pnpm dev
+	```
+- **Start only backend:**
+	```bash
+	pnpm --filter backend dev
+	```
+- **Start only frontend:**
+	```bash
+	pnpm --filter frontend dev
+	```
+
+---
+
+## Building for Production
+
+```bash
+pnpm build
+```
+
+---
+
+## Testing, Linting & Formatting
+
+- **Test (frontend):**
+	```bash
+	pnpm --filter frontend test
+	```
+- **Lint:**
+	```bash
+	pnpm lint
+	```
+- **Format:**
+	```bash
+	pnpm format
+	```
+
+---
+
+## Deployment
+
+### Vercel
+
+See `DEPLOYMENT.md` for a full step-by-step guide for deploying both backend and frontend to Vercel, including environment variables, custom domains, and CORS.
+
+### Docker
+
+See `DEPLOYMENT-DOCKER.md` for local and production Docker Compose instructions.
+
+---
+
+## Environment Variables
+
+- **Backend:**  
+	- `DATABASE_URL`  
+	- `JWT_SECRET`  
+	- `JWT_EXPIRES_IN`
+- **Frontend:**  
+	- `VITE_API_URL`  
+	- `VITE_APP_TITLE`
+
+See `.env.example` files in each app/package for details.
+
+---
+
+## Image Storage (Cloudinary)
+
+Banau uses [Cloudinary](https://cloudinary.com/) for image upload and storage in the backend. To enable image features, set the following environment variables in your backend `.env` file:
+
+- `CLOUDINARY_CLOUD_NAME`
+- `CLOUDINARY_API_KEY`
+- `CLOUDINARY_API_SECRET`
+
+You can obtain these credentials from your Cloudinary dashboard. **Never commit your real secrets to version control.**
+
+These variables are required for features such as user avatars, tenant logos, and other media uploads.
+
+---
+
+## Custom Domain & CORS
+
+- Add your domain and wildcard subdomains in Vercel.
+- Update CORS origins in `apps/backend/src/main.ts` as shown in `DEPLOYMENT.md`.
+
+---
+
+## Packages
+
+- **@repo/db:** Prisma schema, migrations, and generated client.
+- **@repo/shared:** Shared DTOs and types for API and frontend.
+
+---
 
 ## Useful Links
 
-Learn more about the power of Turborepo:
+- [DEPLOYMENT.md](DEPLOYMENT.md) — Vercel deployment guide
+- [DEPLOYMENT-DOCKER.md](DEPLOYMENT-DOCKER.md) — Docker deployment guide
+- [Prisma](https://www.prisma.io/)
+- [NestJS](https://nestjs.com/)
+- [Vite](https://vitejs.dev/)
+- [Turborepo](https://turbo.build/)
 
-- [Tasks](https://turborepo.dev/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.dev/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.dev/docs/reference/configuration)
-- [CLI Usage](https://turborepo.dev/docs/reference/command-line-reference)
+---

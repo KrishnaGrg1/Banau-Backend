@@ -1,3 +1,120 @@
+<!-- Banau Frontend README -->
+
+# Banau Frontend
+
+> This is the frontend for the Banau SaaS starter, built with Vite, React, TanStack Router, and Tailwind CSS. It supports multi-tenant, subdomain-based SaaS out of the box.
+
+---
+
+## Getting Started
+
+1. **Install dependencies:**
+  ```bash
+  pnpm install
+  ```
+
+2. **Set environment variables:**
+  - Copy `.env.example` to `.env` and fill in required values (see below).
+
+3. **Run the development server:**
+  ```bash
+  pnpm dev
+  ```
+
+4. **Open your browser:**
+  - Visit [http://localhost:3000](http://localhost:3000)
+
+---
+
+## Project Structure
+
+- `src/` — Main source code
+  - `components/` — UI and layout components
+  - `routes/` — App routes (TanStack Router)
+  - `hooks/` — Custom React hooks
+  - `lib/` — Utilities and helpers
+  - `data/` — Demo/mock data
+  - `styles.css` — Tailwind CSS entry
+
+---
+
+## Environment Variables
+
+Create a `.env` file in this directory. Example:
+
+```
+VITE_API_URL=http://localhost:3001/api
+VITE_APP_TITLE=Banau
+```
+
+---
+
+## Scripts
+
+- `pnpm dev` — Start development server
+- `pnpm build` — Build for production
+- `pnpm preview` — Preview production build
+- `pnpm lint` — Lint code
+- `pnpm format` — Format code
+- `pnpm test` — Run tests (Vitest)
+
+---
+
+## Styling
+
+- Uses [Tailwind CSS](https://tailwindcss.com/)
+- Easily extendable with [shadcn/ui](https://ui.shadcn.com/)
+
+---
+
+## Routing
+
+- Powered by [TanStack Router](https://tanstack.com/router)
+- All routes are defined in `src/routes/`
+
+---
+
+## API Integration
+
+- All API calls use the `VITE_API_URL` environment variable
+- Example: `fetch(`${import.meta.env.VITE_API_URL}/endpoint`)`
+
+---
+
+## Deployment
+
+See the main [DEPLOYMENT.md](../../DEPLOYMENT.md) for full deployment instructions (Vercel, Docker, etc).
+
+---
+
+## Testing
+
+- Uses [Vitest](https://vitest.dev/) for unit and integration tests
+  ```bash
+  pnpm test
+  ```
+
+---
+
+## Linting & Formatting
+
+- [ESLint](https://eslint.org/) and [Prettier](https://prettier.io/) are preconfigured
+  ```bash
+  pnpm lint
+  pnpm format
+  ```
+
+---
+
+## Contributing
+
+Feel free to open issues or PRs to improve the frontend or add new features!
+
+---
+
+## License
+
+MIT
 Welcome to your new TanStack app!
 
 # Getting Started

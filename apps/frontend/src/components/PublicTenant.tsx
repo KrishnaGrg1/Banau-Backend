@@ -106,12 +106,13 @@ export function PublicTenant({ tenant, setting }: PublicTenantProps) {
       <header className="border-b ">
         <div className="container mx-auto px-4 py-12 text-center">
           <h1 className="text-4xl font-bold ">
-            {setting?.landingPageTitle}
+            {setting?.landingPageTitle || siteName}
             {/* {siteName} */}
           </h1>
           <p className="mt-3 ">
             {/* Welcome to the official tenant of {siteName} */}
-            {setting?.landingPageDescription}
+            {setting?.landingPageDescription ||
+              `Welcome to the official tenant of ${siteName}`}
           </p>
         </div>
       </header>
