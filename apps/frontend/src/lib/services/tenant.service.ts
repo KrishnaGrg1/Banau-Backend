@@ -6,6 +6,7 @@ import {
 import { api } from '../axios'
 import { createServerFn } from '@tanstack/react-start'
 import { Tenant } from '@repo/db/src/generated/prisma/client'
+import { Asset, Setting } from '@repo/db/dist/generated/prisma/client'
 
 export const createTenant = createServerFn({ method: 'POST' })
   .inputValidator((data) => CreateTenantDtoSchema.parse(data))
@@ -72,7 +73,12 @@ export const getTenantDetailsBySubdomain = createServerFn({ method: 'GET' })
   .inputValidator((input) => getTenantDetailsBySubdomainSchema.parse(input))
   .handler(async ({ data }) => {
     try {
-      const response = await api<{ data: Tenant }>(
+      const response = await api<{ data:{ 
+        "existingTenant":  Tenant,
+        "existingSetting":Setting,
+        "logo":Asset,
+        "favicon":Asset
+      } }>(
         `/tenant/${data.subdomain}`,
         {
           method: 'GET',

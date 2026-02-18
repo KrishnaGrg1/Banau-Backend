@@ -19,9 +19,8 @@ import {
   usePublishTenant,
 } from '@/hooks/use-tenant'
 import { CreateTenantDtoSchema } from '@repo/shared'
-// import { useAuthStore } from '@/lib/stores/auth.stores'
 
-export const Route = createFileRoute('/tenant')({
+export const Route = createFileRoute('/dashboard/tenants/')({
   component: TenantPage,
 })
 

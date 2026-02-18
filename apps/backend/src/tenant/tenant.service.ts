@@ -52,12 +52,39 @@ export class TenantService {
   }
 
   async getTenantDetailsBySubdomain(subdomain: string) {
-    const tenant = await this.prisma.tenant.findUnique({
+    const existingTenant = await this.prisma.tenant.findUnique({
       where: { subdomain },
     });
 
-    if (!tenant) throw new ConflictException('Tenant not found');
-    return tenant;
+    if (!existingTenant) throw new ConflictException('Tenant not found');
+     const existingSetting = await this.prisma.setting.findFirst({
+      where: {
+        tenantId: existingTenant.id.toString(),
+      },
+    });
+    if (!existingSetting)
+      throw new ConflictException('Tenant settings do not exist');
+
+    const [logo, favicon] = await Promise.all([
+      this.prisma.asset.findFirst({
+        where: {
+          type: 'LOGO',
+          tenantId: existingTenant.id,
+        },
+      }),
+      this.prisma.asset.findFirst({
+        where: {
+          type: 'FAVICON',
+          tenantId: existingTenant.id,
+        },
+      }),
+    ]);
+    return {
+      existingTenant,
+      existingSetting,
+      logo,
+      favicon
+    };
   }
 
   async updateTenant(req, data: backendDtos.UpdateTenantDto) {

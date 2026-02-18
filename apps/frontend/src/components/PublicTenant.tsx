@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 // import { usetenantStore } from '@/lib/stores/tenant.stores'
-import { Tenant } from '@repo/shared'
+import { Tenant } from '@repo/db/src/generated/prisma/client'
 import { Button } from './ui/button'
 import { Link } from '@tanstack/react-router'
 

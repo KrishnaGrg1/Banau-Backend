@@ -1,6 +1,7 @@
 import { createMiddleware, createServerFn } from '@tanstack/react-start'
 import { redirect } from '@tanstack/react-router'
 import { useAppSession } from '@/lib/session'
+import { Asset, Setting, Tenant } from '@repo/db/dist/generated/prisma/client'
 // import { useWebsiteStore } from '@/lib/stores/website.stores'
 // import { getWebsiteDetailsBySubdomain } from '@/lib/services/website.service'
 
@@ -98,8 +99,13 @@ export const getServerData = createServerFn()
         const res = await fetch(
           `${import.meta.env.VITE_API_URL}/tenant/${subdomain}`,
         )
-        const data = await res.json()
-        tenantData = data.data
+        const json = await res.json() as { data: {
+          "existingTenant":  Tenant,
+        "existingSetting":Setting,
+        "logo":Asset,
+        "favicon":Asset
+        } }
+         tenantData = json.data
       } catch (err) {
         console.error('Failed to fetch tenant:', err)
       }
