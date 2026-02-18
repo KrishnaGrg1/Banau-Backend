@@ -1,14 +1,15 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 // import { usetenantStore } from '@/lib/stores/tenant.stores'
-import { Tenant } from '@repo/db/dist/generated/prisma/client'
+import { Setting, Tenant } from '@repo/db/dist/generated/prisma/client'
 import { Button } from './ui/button'
 import { Link } from '@tanstack/react-router'
 
 interface PublicTenantProps {
   tenant?: Tenant | null
+  setting?: Setting | null
 }
 
-export function PublicTenant({ tenant }: PublicTenantProps) {
+export function PublicTenant({ tenant, setting }: PublicTenantProps) {
   // const { tenant } = usetenantStore()
   console.log('data ', tenant)
 
@@ -37,7 +38,7 @@ export function PublicTenant({ tenant }: PublicTenantProps) {
           <CardHeader>
             <CardTitle>Website Not Found</CardTitle>
           </CardHeader>
-          <CardContent className="text-gray-600">
+          <CardContent>
             This website does not exist or has not been published yet.
           </CardContent>
         </Card>
@@ -50,29 +51,23 @@ export function PublicTenant({ tenant }: PublicTenantProps) {
       <div className="flex min-h-screen items-center justify-center  p-4">
         <Card className="w-full max-w-lg text-center shadow-lg">
           <CardHeader className="space-y-4 pb-4">
-            <CardTitle className="text-2xl font-bold text-gray-900">
-              Coming Soon
-            </CardTitle>
+            <CardTitle className="text-2xl font-bold ">Coming Soon</CardTitle>
           </CardHeader>
           <CardContent className="space-y-6 pt-2">
-            <p className="text-gray-600 text-base">
+            <p className=" text-base">
               This website is currently under construction and hasn't been
               published yet by the owner.
             </p>
 
             <div className=" rounded-lg p-4 space-y-2">
-              <p className="text-sm font-medium text-gray-700">
-                Website Details
-              </p>
+              <p className="text-sm font-medium ">Website Details</p>
               <div className="grid grid-cols-2">
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-gray-500">Name:</span>
-                  <span className="font-medium text-gray-900">
-                    {tenant.name}
-                  </span>
+                  <span className="">Name:</span>
+                  <span className="font-medium ">{tenant.name}</span>
                 </div>
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-gray-500">Status:</span>
+                  <span className="">Status:</span>
                   <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium  text-amber-800">
                     Unpublished
                   </span>
@@ -81,7 +76,7 @@ export function PublicTenant({ tenant }: PublicTenantProps) {
             </div>
 
             <div className="pt-4 border-t">
-              <p className="text-sm text-gray-500 mb-3">
+              <p className="text-sm  mb-3">
                 Are you the owner of this website?
               </p>
               {isSubdomain ? (
@@ -95,7 +90,7 @@ export function PublicTenant({ tenant }: PublicTenantProps) {
               )}
             </div>
 
-            <p className="text-xs text-gray-400 pt-2">Powered by Banau</p>
+            <p className="text-xs  pt-2">Powered by Banau</p>
           </CardContent>
         </Card>
       </div>
@@ -110,9 +105,13 @@ export function PublicTenant({ tenant }: PublicTenantProps) {
       {/* HERO */}
       <header className="border-b ">
         <div className="container mx-auto px-4 py-12 text-center">
-          <h1 className="text-4xl font-bold text-gray-900">{siteName}</h1>
-          <p className="mt-3 text-gray-600">
-            Welcome to the official tenant of {siteName}
+          <h1 className="text-4xl font-bold ">
+            {setting?.landingPageTitle}
+            {/* {siteName} */}
+          </h1>
+          <p className="mt-3 ">
+            {/* Welcome to the official tenant of {siteName} */}
+            {setting?.landingPageDescription}
           </p>
         </div>
       </header>
@@ -124,7 +123,7 @@ export function PublicTenant({ tenant }: PublicTenantProps) {
             <CardHeader>
               <CardTitle>About This tenant</CardTitle>
             </CardHeader>
-            <CardContent className="text-gray-600">
+            <CardContent>
               {/* {data.description || */}
               This tenant is powered by Banau. You can manage and customize it
               from your admin dashboard.
@@ -139,12 +138,12 @@ export function PublicTenant({ tenant }: PublicTenantProps) {
               </CardHeader>
               <CardContent className="space-y-3 text-sm">
                 <div>
-                  <p className="font-medium text-gray-700">Subdomain</p>
-                  <p className="text-gray-600">{tenant.subdomain}</p>
+                  <p className="font-medium ">Subdomain</p>
+                  <p>{tenant.subdomain}</p>
                 </div>
 
                 <div>
-                  <p className="font-medium text-gray-700">Status</p>
+                  <p className="font-medium ">Status</p>
                   <p className="text-green-600 font-medium">
                     {tenant.published ? (
                       <div>Published</div>
@@ -160,7 +159,7 @@ export function PublicTenant({ tenant }: PublicTenantProps) {
               <CardHeader>
                 <CardTitle>Powered By</CardTitle>
               </CardHeader>
-              <CardContent className="text-sm text-gray-600">
+              <CardContent className="text-sm ">
                 <div>
                   Banau helps you build and manage modern subdomain-based
                   tenants with ease.
@@ -173,9 +172,9 @@ export function PublicTenant({ tenant }: PublicTenantProps) {
 
       {/* FOOTER */}
       <footer className="border-t  py-6">
-        <div className="container mx-auto px-4 text-center text-sm text-gray-600">
+        <div className="container mx-auto px-4 text-center text-sm ">
           © {new Date().getFullYear()} {siteName}. Powered by{' '}
-          <span className="font-semibold text-gray-900">Banau</span>
+          <span className="font-semibold ">Banau</span>
         </div>
       </footer>
     </div>

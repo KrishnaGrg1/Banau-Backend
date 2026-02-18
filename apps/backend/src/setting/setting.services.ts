@@ -1,5 +1,9 @@
 // apps/api/src/setting/setting.services.ts
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { AssetType } from '@repo/db/dist/generated/prisma/enums';
 import { backendDtos } from '@repo/shared';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
@@ -45,7 +49,9 @@ export class SettingServices {
       where: { tenantId: String(tenant.id) },
     });
     if (existingSetting)
-      throw new ConflictException('Tenant already has settings. Use PUT to update.');
+      throw new ConflictException(
+        'Tenant already has settings. Use PUT to update.',
+      );
 
     const logoFile = files.logo;
     const faviconFile = files.favicon;

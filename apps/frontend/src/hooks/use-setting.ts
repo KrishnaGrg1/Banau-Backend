@@ -75,8 +75,8 @@ export function useSaveTenantSetting() {
   return {
     mutateAsync: async (params: { data: any }) => {
       console.log('[SAVE] Existing settings?', !!existingSettings)
-      
-      // If settings exist, update. Otherwise, create.
+
+      // Use server functions with plain data; let the service handle FormData
       if (existingSettings) {
         console.log('[SAVE] Updating existing settings')
         return updateMutation.mutateAsync(params)

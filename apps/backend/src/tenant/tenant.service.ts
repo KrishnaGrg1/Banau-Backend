@@ -57,7 +57,7 @@ export class TenantService {
     });
 
     if (!existingTenant) throw new ConflictException('Tenant not found');
-     const existingSetting = await this.prisma.setting.findFirst({
+    const existingSetting = await this.prisma.setting.findFirst({
       where: {
         tenantId: existingTenant.id.toString(),
       },
@@ -83,7 +83,7 @@ export class TenantService {
       existingTenant,
       existingSetting,
       logo,
-      favicon
+      favicon,
     };
   }
 

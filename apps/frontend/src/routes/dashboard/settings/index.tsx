@@ -1,4 +1,3 @@
-// apps/web/app/routes/dashboard/settings/index.tsx
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useForm } from '@tanstack/react-form'
 import { Button } from '@/components/ui/button'
@@ -16,7 +15,7 @@ import { Loader2, Upload, X, CheckCircle2 } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import {
-  useSaveTenantSetting, // ✅ Use smart hook
+  useSaveTenantSetting,
   usegetTenantSettingAsset,
   useTenantSetting,
 } from '@/hooks/use-setting'
@@ -30,12 +29,10 @@ export default function SettingsPage() {
   const [logoPreview, setLogoPreview] = useState<string | null>(null)
   const [faviconPreview, setFaviconPreview] = useState<string | null>(null)
 
-  // Fetch existing settings and assets
   const { data: settingsData, isLoading: isLoadingSettings } =
     useTenantSetting()
   const { data: assetsData } = usegetTenantSettingAsset()
 
-  // ✅ Use smart save hook (auto-detects create vs update)
   const { mutateAsync, isSuccess, isError, error, isPending } =
     useSaveTenantSetting()
 
@@ -49,8 +46,10 @@ export default function SettingsPage() {
       backgroundTextColorCode: '#111827',
       landingPageTitle: '',
       landingPageDescription: '',
-      logo: null as File | null,
-      favicon: null as File | null,
+      logo: null as string | null, // ✅ base64 string
+      logoName: '' as string, // ✅ original filename
+      favicon: null as string | null, // ✅ base64 string
+      faviconName: '' as string, // ✅ original filename
     },
     onSubmit: async ({ value }) => {
       console.log('[FORM] Submitting:', value)
@@ -58,10 +57,8 @@ export default function SettingsPage() {
     },
   })
 
-  // ✅ Update form values when settings load
   useEffect(() => {
     if (settingsData) {
-      console.log('[FORM] Pre-filling with existing data:', settingsData)
       form.setFieldValue('primaryColorCode', settingsData.primaryColorCode)
       form.setFieldValue('secondaryColorCode', settingsData.secondaryColorCode)
       form.setFieldValue(
@@ -87,32 +84,6 @@ export default function SettingsPage() {
       )
     }
   }, [settingsData])
-
-  const handleLogoChange = (file: File | null) => {
-    if (file) {
-      console.log('[LOGO] Selected:', file.name)
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        setLogoPreview(reader.result as string)
-      }
-      reader.readAsDataURL(file)
-    } else {
-      setLogoPreview(null)
-    }
-  }
-
-  const handleFaviconChange = (file: File | null) => {
-    if (file) {
-      console.log('[FAVICON] Selected:', file.name)
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        setFaviconPreview(reader.result as string)
-      }
-      reader.readAsDataURL(file)
-    } else {
-      setFaviconPreview(null)
-    }
-  }
 
   if (isLoadingSettings) {
     return (
@@ -160,10 +131,10 @@ export default function SettingsPage() {
       )}
 
       <form
-        onSubmit={(e) => {
+        onSubmit={async (e) => {
           e.preventDefault()
           e.stopPropagation()
-          form.handleSubmit()
+          await mutateAsync({ data: form.state.values })
         }}
         className="space-y-6"
       >
@@ -180,7 +151,6 @@ export default function SettingsPage() {
                 <div className="space-y-2">
                   <Label htmlFor="logo">Logo</Label>
                   <div className="flex items-center gap-4">
-                    {/* Preview */}
                     {logoPreview || assetsData?.logo?.url ? (
                       <div className="relative">
                         <img
@@ -193,6 +163,7 @@ export default function SettingsPage() {
                             type="button"
                             onClick={() => {
                               field.handleChange(null)
+                              form.setFieldValue('logoName', '')
                               setLogoPreview(null)
                             }}
                             className="absolute -top-2 -right-2 h-5 w-5 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600"
@@ -206,8 +177,6 @@ export default function SettingsPage() {
                         <Upload className="h-6 w-6 text-gray-400" />
                       </div>
                     )}
-
-                    {/* Upload Button */}
                     <div className="flex-1">
                       <Input
                         id="logo"
@@ -215,8 +184,19 @@ export default function SettingsPage() {
                         accept="image/*"
                         onChange={(e) => {
                           const file = e.target.files?.[0] || null
-                          field.handleChange(file)
-                          handleLogoChange(file)
+                          if (file) {
+                            const reader = new FileReader()
+                            reader.onloadend = () => {
+                              field.handleChange(reader.result as string) // ✅ base64
+                              form.setFieldValue('logoName', file.name) // ✅ filename
+                              setLogoPreview(reader.result as string)
+                            }
+                            reader.readAsDataURL(file)
+                          } else {
+                            field.handleChange(null)
+                            form.setFieldValue('logoName', '')
+                            setLogoPreview(null)
+                          }
                         }}
                         className="cursor-pointer"
                       />
@@ -236,7 +216,6 @@ export default function SettingsPage() {
                 <div className="space-y-2">
                   <Label htmlFor="favicon">Favicon</Label>
                   <div className="flex items-center gap-4">
-                    {/* Preview */}
                     {faviconPreview || assetsData?.favicon?.url ? (
                       <div className="relative">
                         <img
@@ -249,6 +228,7 @@ export default function SettingsPage() {
                             type="button"
                             onClick={() => {
                               field.handleChange(null)
+                              form.setFieldValue('faviconName', '')
                               setFaviconPreview(null)
                             }}
                             className="absolute -top-2 -right-2 h-5 w-5 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600"
@@ -262,8 +242,6 @@ export default function SettingsPage() {
                         <Upload className="h-4 w-4 text-gray-400" />
                       </div>
                     )}
-
-                    {/* Upload Button */}
                     <div className="flex-1">
                       <Input
                         id="favicon"
@@ -271,8 +249,19 @@ export default function SettingsPage() {
                         accept="image/*"
                         onChange={(e) => {
                           const file = e.target.files?.[0] || null
-                          field.handleChange(file)
-                          handleFaviconChange(file)
+                          if (file) {
+                            const reader = new FileReader()
+                            reader.onloadend = () => {
+                              field.handleChange(reader.result as string) // ✅ base64
+                              form.setFieldValue('faviconName', file.name) // ✅ filename
+                              setFaviconPreview(reader.result as string)
+                            }
+                            reader.readAsDataURL(file)
+                          } else {
+                            field.handleChange(null)
+                            form.setFieldValue('faviconName', '')
+                            setFaviconPreview(null)
+                          }
                         }}
                         className="cursor-pointer"
                       />
@@ -298,7 +287,6 @@ export default function SettingsPage() {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 gap-4">
-              {/* Primary Color */}
               <form.Field name="primaryColorCode">
                 {(field) => (
                   <div className="space-y-2">
@@ -322,7 +310,6 @@ export default function SettingsPage() {
                 )}
               </form.Field>
 
-              {/* Secondary Color */}
               <form.Field name="secondaryColorCode">
                 {(field) => (
                   <div className="space-y-2">
@@ -346,7 +333,6 @@ export default function SettingsPage() {
                 )}
               </form.Field>
 
-              {/* Primary Text Color */}
               <form.Field name="primaryTextColorCode">
                 {(field) => (
                   <div className="space-y-2">
@@ -372,7 +358,6 @@ export default function SettingsPage() {
                 )}
               </form.Field>
 
-              {/* Secondary Text Color */}
               <form.Field name="secondaryTextColorCode">
                 {(field) => (
                   <div className="space-y-2">
@@ -398,7 +383,6 @@ export default function SettingsPage() {
                 )}
               </form.Field>
 
-              {/* Background Color */}
               <form.Field name="backgroundColorCode">
                 {(field) => (
                   <div className="space-y-2">
@@ -424,7 +408,6 @@ export default function SettingsPage() {
                 )}
               </form.Field>
 
-              {/* Background Text Color */}
               <form.Field name="backgroundTextColorCode">
                 {(field) => (
                   <div className="space-y-2">
@@ -450,11 +433,10 @@ export default function SettingsPage() {
                 )}
               </form.Field>
 
-              <div className="mt-8">
+              <div className="mt-8 col-span-2">
                 <h3 className="text-base sm:text-lg md:text-xl font-medium mb-4">
                   Setting Preview
                 </h3>
-
                 <div
                   className="rounded-lg p-8 border shadow-sm"
                   style={{
@@ -468,26 +450,23 @@ export default function SettingsPage() {
                         color: form.state.values.backgroundTextColorCode,
                       }}
                     >
-                      Setting Preview Descrption
+                      Setting Preview Description
                     </p>
                   </div>
-
                   <div className="flex flex-col items-center justify-center space-y-4">
                     <button
                       type="button"
-                      className="text-sm sm:text-base font-medium rounded-md px-6 py-3 shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                      className="text-sm sm:text-base font-medium rounded-md px-6 py-3 shadow-sm transition-colors"
                       style={{
                         backgroundColor: form.state.values.primaryColorCode,
                         color: form.state.values.primaryTextColorCode,
                       }}
                     >
-                      Setting primary button
+                      Primary Button Preview
                     </button>
-
-                    {/* <!-- Secondary Button --> */}
                     <button
                       type="button"
-                      className="text-sm sm:text-base font-medium rounded-md px-6 py-3 shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                      className="text-sm sm:text-base font-medium rounded-md px-6 py-3 shadow-sm transition-colors"
                       style={{
                         backgroundColor: form.state.values.secondaryColorCode,
                         color: form.state.values.secondaryTextColorCode,
@@ -511,7 +490,6 @@ export default function SettingsPage() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            {/* Landing Page Title */}
             <form.Field name="landingPageTitle">
               {(field) => (
                 <div className="space-y-2">
@@ -525,8 +503,6 @@ export default function SettingsPage() {
                 </div>
               )}
             </form.Field>
-
-            {/* Landing Page Description */}
             <form.Field name="landingPageDescription">
               {(field) => (
                 <div className="space-y-2">

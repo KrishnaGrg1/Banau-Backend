@@ -34,5 +34,10 @@ function IndexPage() {
   }
   if (!data?.subdomain) return null
 
-  return <PublicTenant tenant={data.tenant?.existingTenant} />
+  return (
+    <PublicTenant
+      tenant={data.tenant?.existingTenant}
+      setting={data.tenant?.existingSetting}
+    />
+  )
 }

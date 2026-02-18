@@ -99,13 +99,15 @@ export const getServerData = createServerFn()
         const res = await fetch(
           `${import.meta.env.VITE_API_URL}/tenant/${subdomain}`,
         )
-        const json = await res.json() as { data: {
-          "existingTenant":  Tenant,
-        "existingSetting":Setting,
-        "logo":Asset,
-        "favicon":Asset
-        } }
-         tenantData = json.data
+        const json = (await res.json()) as {
+          data: {
+            existingTenant: Tenant
+            existingSetting: Setting
+            logo: Asset
+            favicon: Asset
+          }
+        }
+        tenantData = json.data
       } catch (err) {
         console.error('Failed to fetch tenant:', err)
       }

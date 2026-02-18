@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { User } from '@repo/db/dist/generated/prisma/client';
+import { User } from "@repo/db/dist/generated/prisma/client";
 import { Setting } from "@repo/db/dist/generated/prisma/client";
 import { Asset } from "@repo/db/dist/generated/prisma/client";
 // Auth DTOs
@@ -140,68 +140,66 @@ export const paginationDtoSchema = z.object({
 
 export type paginationDto = z.infer<typeof paginationDtoSchema>;
 
-
 // Regex for hex color validation
-const hexColor = /^#([0-9A-F]{3}){1,2}$/i
-const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10 MB
+const hexColor = /^#([0-9A-F]{3}){1,2}$/i;
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
 
 export const CreateTenantSettingDtoSchema = z.object({
-  primaryColorCode: z.string().regex(hexColor, 'Invalid hex color'),
-  secondaryColorCode: z.string().regex(hexColor, 'Invalid hex color'),
-  primaryTextColorCode: z.string().regex(hexColor, 'Invalid hex color'),
-  secondaryTextColorCode: z.string().regex(hexColor, 'Invalid hex color'),
-  backgroundColorCode: z.string().regex(hexColor, 'Invalid hex color'),
-  backgroundTextColorCode: z.string().regex(hexColor, 'Invalid hex color'),
+  primaryColorCode: z.string().regex(hexColor, "Invalid hex color"),
+  secondaryColorCode: z.string().regex(hexColor, "Invalid hex color"),
+  primaryTextColorCode: z.string().regex(hexColor, "Invalid hex color"),
+  secondaryTextColorCode: z.string().regex(hexColor, "Invalid hex color"),
+  backgroundColorCode: z.string().regex(hexColor, "Invalid hex color"),
+  backgroundTextColorCode: z.string().regex(hexColor, "Invalid hex color"),
 
-  landingPageTitle: z.string().nonempty('Landing page title is required'),
+  landingPageTitle: z.string().nonempty("Landing page title is required"),
   landingPageDescription: z
     .string()
-    .nonempty('Landing page description is required'),
+    .nonempty("Landing page description is required"),
 
   // Optional files (logo and favicon)
   logo: z
     .unknown()
     .optional()
     .refine(
-      (file: any) => !file || file.mimetype?.startsWith('image/'),
-      'Logo must be an image file'
+      (file: any) => !file || file.mimetype?.startsWith("image/"),
+      "Logo must be an image file",
     )
     .refine(
       (file: any) => !file || file.size <= MAX_FILE_SIZE,
-      'Logo must be smaller than 10MB'
+      "Logo must be smaller than 10MB",
     ),
 
   favicon: z
     .unknown()
     .optional()
     .refine(
-      (file: any) => !file || file.mimetype?.startsWith('image/'),
-      'Favicon must be an image file'
+      (file: any) => !file || file.mimetype?.startsWith("image/"),
+      "Favicon must be an image file",
     )
     .refine(
       (file: any) => !file || file.size <= MAX_FILE_SIZE,
-      'Favicon must be smaller than 10MB'
+      "Favicon must be smaller than 10MB",
     ),
-})
+});
 
-export type CreateTenantSettingDto = z.infer<typeof CreateTenantSettingDtoSchema>
-
-
+export type CreateTenantSettingDto = z.infer<
+  typeof CreateTenantSettingDtoSchema
+>;
 
 export interface TenantSettingResponse {
   success: boolean;
   message: string;
-  data:Setting
+  data: Setting;
   timestamp: Date;
 }
-
 
 export interface TenantSettingAssetsResponse {
   success: boolean;
   message: string;
-  data:{
-    logo:Asset,
-    favicon:Asset
-  }
+  data: {
+    logo: Asset;
+    favicon: Asset;
+  };
   timestamp: Date;
 }

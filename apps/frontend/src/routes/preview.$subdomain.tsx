@@ -34,5 +34,10 @@ function PreviewPage() {
   if (setting && tenant?.subdomain && logo && favicon) {
     useBrandTheme(setting, logo, favicon, tenant.subdomain)
   }
-  return <PublicTenant tenant={data?.existingTenant} />
+  return (
+    <PublicTenant
+      tenant={data?.existingTenant}
+      setting={data?.existingSetting}
+    />
+  )
 }

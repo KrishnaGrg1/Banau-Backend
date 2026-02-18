@@ -1,6 +1,5 @@
 // apps/web/app/lib/services/setting.services.ts
 import {
-  CreateTenantSettingDtoSchema,
   TenantSettingAssetsResponse,
   TenantSettingResponse,
 } from '@repo/shared'
@@ -8,8 +7,8 @@ import { api } from '../axios'
 import { createServerFn } from '@tanstack/react-start'
 
 // ✅ Create tenant setting (accepts raw data, not validated yet)
-export const createTenantSetting = createServerFn({ method: 'POST' })
-  .handler(async ({ data }: { data: any }) => {
+export const createTenantSetting = createServerFn({ method: 'POST' }).handler(
+  async ({ data }: { data: any }) => {
     try {
       // ✅ Build FormData
       const formData = new FormData()
@@ -52,11 +51,12 @@ export const createTenantSetting = createServerFn({ method: 'POST' })
         'Failed to create tenant settings'
       throw new Error(errorMessage)
     }
-  })
+  },
+)
 
 // ✅ Update tenant setting
-export const updateTenantSetting = createServerFn({ method: 'POST' })
-  .handler(async ({ data }: { data: any }) => {
+export const updateTenantSetting = createServerFn({ method: 'POST' }).handler(
+  async ({ data }: { data: any }) => {
     try {
       // ✅ Build FormData
       const formData = new FormData()
@@ -71,14 +71,16 @@ export const updateTenantSetting = createServerFn({ method: 'POST' })
       formData.append('landingPageTitle', data.landingPageTitle)
       formData.append('landingPageDescription', data.landingPageDescription)
 
-      // Append files if present
-      if (data.logo instanceof File) {
-        formData.append('logo', data.logo)
-      }
-      if (data.favicon instanceof File) {
-        formData.append('favicon', data.favicon)
-      }
-
+     if (data.logo) {
+  const { buffer, mimeType } = base64ToBuffer(data.logo)
+  const blob = new Blob([buffer], { type: mimeType })
+  formData.append('logo', blob, data.logoName || 'logo')
+}
+if (data.favicon) {
+  const { buffer, mimeType } = base64ToBuffer(data.favicon)
+  const blob = new Blob([buffer], { type: mimeType })
+  formData.append('favicon', blob, data.faviconName || 'favicon')
+}
       console.log('[UPDATE] Sending FormData to /tenant/setting')
 
       const response = await api<TenantSettingResponse>('/tenant/setting', {
@@ -99,7 +101,8 @@ export const updateTenantSetting = createServerFn({ method: 'POST' })
         'Failed to update tenant settings'
       throw new Error(errorMessage)
     }
-  })
+  },
+)
 
 // Get tenant settings
 export const getTenantSetting = createServerFn({ method: 'GET' }).handler(
@@ -119,7 +122,7 @@ export const getTenantSetting = createServerFn({ method: 'GET' }).handler(
       console.error('[GET] Error:', error.response?.data || error.message)
       throw error
     }
-  }
+  },
 )
 
 // Get tenant assets (logo/favicon)
@@ -130,7 +133,7 @@ export const getTenantSettingAssets = createServerFn({ method: 'GET' }).handler(
         '/tenant/setting/asset',
         {
           method: 'GET',
-        }
+        },
       )
       console.log('[GET ASSETS] Tenant assets:', response.data.data)
       return response.data.data
@@ -140,8 +143,25 @@ export const getTenantSettingAssets = createServerFn({ method: 'GET' }).handler(
         console.log('[GET ASSETS] No assets found')
         return { logo: null, favicon: null }
       }
-      console.error('[GET ASSETS] Error:', error.response?.data || error.message)
+      console.error(
+        '[GET ASSETS] Error:',
+        error.response?.data || error.message,
+      )
       return { logo: null, favicon: null }
     }
-  }
+  },
 )
+function base64ToBuffer(dataUrl: string): { buffer: ArrayBuffer; mimeType: string } {
+  const matches = dataUrl.match(/^data:([^;]+);base64,(.+)$/)
+  if (!matches) throw new Error('Invalid base64 data URL')
+  const nodeBuffer = Buffer.from(matches[2], 'base64')
+  // Copy into a plain ArrayBuffer to satisfy TypeScript's BlobPart constraint
+  const arrayBuffer = nodeBuffer.buffer.slice(
+    nodeBuffer.byteOffset,
+    nodeBuffer.byteOffset + nodeBuffer.byteLength,
+  ) as ArrayBuffer
+  return {
+    mimeType: matches[1],
+    buffer: arrayBuffer,
+  }
+}
