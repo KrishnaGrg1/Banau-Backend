@@ -9,20 +9,24 @@
 ## Getting Started
 
 1. **Install dependencies:**
-  ```bash
-  pnpm install
-  ```
+
+```bash
+pnpm install
+```
 
 2. **Set environment variables:**
-  - Copy `.env.example` to `.env` and fill in required values (see below).
+
+- Copy `.env.example` to `.env` and fill in required values (see below).
 
 3. **Run the development server:**
-  ```bash
-  pnpm dev
-  ```
+
+```bash
+pnpm dev
+```
 
 4. **Open your browser:**
-  - Visit [http://localhost:3000](http://localhost:3000)
+
+- Visit [http://localhost:3000](http://localhost:3000)
 
 ---
 

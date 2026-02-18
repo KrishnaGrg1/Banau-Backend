@@ -49,7 +49,7 @@ pnpm --filter @repo/db db:push
 2. **Configure Build Settings**
    - Framework Preset: **Other**
    - Root Directory: `apps/backend`
-   - Build Command: `cd ../.. && pnpm --filter @repo/shared build && pnpm --filter @repo/db build && pnpm turbo run build --filter=banau`
+   - Build Command: `cd ../.. && pnpm install --prod=false && pnpm --filter @repo/db build && pnpm --filter @repo/shared build && pnpm turbo run build --filter=banau`
    - Output Directory: `dist`
    - Install Command: `pnpm install`
 
@@ -57,8 +57,15 @@ pnpm --filter @repo/db db:push
 
    ```
    DATABASE_URL=postgresql://...your-neon-url...
-   JWT_SECRET=your-super-secret-key-min-32-chars
-   JWT_EXPIRES_IN=7d
+   JWT_ACCESS_SECRET="jwt access secret key"
+   JWT_REFRESH_SECRET="refresh key"
+   JWT_EXPIRES_IN=1d
+   FRONTEND_URL="http://localhost:3000"
+   PORT='8000'
+   RESEND_API_KEY='resend api key'
+   RESEND_EMAIL_FROM="resend email "
+   RESEND_API_KEY='resend api key'
+   RESEND_EMAIL_FROM="resend email "
    NODE_ENV=production
    ```
 
@@ -106,6 +113,7 @@ vercel env add JWT_EXPIRES_IN
    ```
    VITE_API_URL=https://your-backend.vercel.app/api
    VITE_APP_TITLE=Banau
+   SESSION_SECRET=your-secret-key-at-least-32-characters-long-for-encryption
    ```
 
 4. **Deploy**

@@ -36,10 +36,7 @@ export function useBrandTheme(
       style.setProperty('--primary', setting.primaryColorCode)
 
     if (setting.primaryTextColorCode)
-      style.setProperty(
-        '--primary-foreground',
-        setting.primaryTextColorCode,
-      )
+      style.setProperty('--primary-foreground', setting.primaryTextColorCode)
 
     if (setting.secondaryColorCode)
       style.setProperty('--secondary', setting.secondaryColorCode)
@@ -54,14 +51,10 @@ export function useBrandTheme(
       style.setProperty('--background', setting.backgroundColorCode)
 
     if (setting.backgroundTextColorCode)
-      style.setProperty(
-        '--foreground',
-        setting.backgroundTextColorCode,
-      )
+      style.setProperty('--foreground', setting.backgroundTextColorCode)
 
     // ---------- FAVICON ----------
-    let link =
-      document.querySelector<HTMLLinkElement>("link[rel*='icon']")
+    let link = document.querySelector<HTMLLinkElement>("link[rel*='icon']")
 
     const prevFavicon = link?.href ?? null
 
@@ -71,10 +64,7 @@ export function useBrandTheme(
       document.head.appendChild(link)
     }
 
-    link.href =
-      logo?.url ||
-      favicon?.url ||
-      '/favicon.ico'
+    link.href = logo?.url || favicon?.url || '/favicon.ico'
 
     // ---------- TITLE ----------
     const prevTitle = document.title
