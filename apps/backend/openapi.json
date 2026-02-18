@@ -146,6 +146,107 @@
         ]
       }
     },
+    "/api/v1/admin/users": {
+      "get": {
+        "operationId": "AdminController_getAllUser",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/api/v1/admin/user/{id}": {
+      "get": {
+        "operationId": "AdminController_getUserById",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/api/v1/admin/tenants": {
+      "get": {
+        "operationId": "AdminController_getAllTenants",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/api/v1/tenant/setting": {
+      "get": {
+        "operationId": "TenantSettingController_getTenantSetting",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "TenantSetting"
+        ]
+      },
+      "post": {
+        "operationId": "TenantSettingController_createTenantSetting",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTenantSettingDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "TenantSetting"
+        ]
+      }
+    },
+    "/api/v1/tenant/setting/asset": {
+      "get": {
+        "operationId": "TenantSettingController_getTenantAssets",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "TenantSetting"
+        ]
+      }
+    },
     "/api/v1/tenant": {
       "post": {
         "operationId": "TenantController_create",
@@ -252,57 +353,6 @@
           "Tenant"
         ]
       }
-    },
-    "/api/v1/admin/users": {
-      "get": {
-        "operationId": "AdminController_getAllUser",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "Admin"
-        ]
-      }
-    },
-    "/api/v1/admin/user/{id}": {
-      "get": {
-        "operationId": "AdminController_getUserById",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "Admin"
-        ]
-      }
-    },
-    "/api/v1/admin/tenants": {
-      "get": {
-        "operationId": "AdminController_getAllTenants",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "Admin"
-        ]
-      }
     }
   },
   "info": {
@@ -336,6 +386,10 @@
         "properties": {}
       },
       "LoginDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "CreateTenantSettingDto": {
         "type": "object",
         "properties": {}
       },

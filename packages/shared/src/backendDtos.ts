@@ -11,21 +11,20 @@ import {
   IsBoolean,
   IsHexColor,
   IsNotEmpty,
-
 } from "class-validator";
 import type { Express } from "express";
 
 export enum UserRoleDto {
-  TENANT_OWNER = 'TENANT_OWNER',
-  TENANT_STAFF = 'TENANT_STAFF',
-  CUSTOMER = 'CUSTOMER',
+  TENANT_OWNER = "TENANT_OWNER",
+  TENANT_STAFF = "TENANT_STAFF",
+  CUSTOMER = "CUSTOMER",
 }
 
 export enum TenantStatusDto {
-  TRIAL = 'TRIAL',
-  ACTIVE = 'ACTIVE',
-  SUSPENDED = 'SUSPENDED',
-  CANCELLED = 'CANCELLED',
+  TRIAL = "TRIAL",
+  ACTIVE = "ACTIVE",
+  SUSPENDED = "SUSPENDED",
+  CANCELLED = "CANCELLED",
 }
 
 // =========================
@@ -67,10 +66,7 @@ export class VerifyUserDto {
   userId: string;
 }
 
-
-
 // Tenant DTOs
-
 
 export class CreateTenantDto {
   @IsString()
@@ -97,8 +93,6 @@ export class GetTenantDetailsBySubdomainDto {
   subdomain: string;
 }
 
-
-
 // =========================
 // getMe DTO
 // =========================
@@ -116,7 +110,6 @@ export class OwnedTenantDto {
   @IsBoolean()
   published: boolean;
 }
-
 
 // =========================
 // Pagination DTO
@@ -138,8 +131,6 @@ export class PaginationDto {
   role?: UserRoleDto;
 }
 
-
-
 export class UpdateTenantDto {
   @IsString()
   @MinLength(3)
@@ -157,43 +148,42 @@ export class UpdateTenantDto {
   status?: TenantStatusDto;
 
   @IsBoolean()
-  published:boolean
-
+  published: boolean;
 }
 
 export class CreateTenantSettingDto {
-    // Color codes
-    @IsHexColor()
-    primaryColorCode: string;
+  // Color codes
+  @IsHexColor()
+  primaryColorCode: string;
 
-    @IsHexColor()
-    secondaryColorCode: string;
+  @IsHexColor()
+  secondaryColorCode: string;
 
-    @IsHexColor()
-    primaryTextColorCode: string;
+  @IsHexColor()
+  primaryTextColorCode: string;
 
-    @IsHexColor()
-    secondaryTextColorCode: string;
+  @IsHexColor()
+  secondaryTextColorCode: string;
 
-    @IsHexColor()
-    backgroundColorCode: string;
+  @IsHexColor()
+  backgroundColorCode: string;
 
-    @IsHexColor()
-    backgroundTextColorCode: string;
+  @IsHexColor()
+  backgroundTextColorCode: string;
 
-    // Landing page info
-    @IsString()
-    @IsNotEmpty()
-    landingPageTitle: string;
+  // Landing page info
+  @IsString()
+  @IsNotEmpty()
+  landingPageTitle: string;
 
-    @IsString()
-    @IsNotEmpty()
-    landingPageDescription: string;
+  @IsString()
+  @IsNotEmpty()
+  landingPageDescription: string;
 
-    // Optional files (handled separately in controller)
-    @IsOptional()
-    logo?: Express.Multer.File;
+  // Optional files (handled separately in controller)
+  @IsOptional()
+  logo?: Express.Multer.File;
 
-    @IsOptional()
-    favicon?: Express.Multer.File;
+  @IsOptional()
+  favicon?: Express.Multer.File;
 }

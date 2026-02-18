@@ -130,14 +130,11 @@ export interface getMeResponse {
   timestamp: Date;
 }
 
-
-
-
 // Auth DTOs
 export const paginationDtoSchema = z.object({
-limit:z.number().positive().optional(),
-offset:z.number().min(0).optional(),
-role:z.enum(['TENANT_OWNER','TENANT_STAFF','CUSTOMER']).optional()
+  limit: z.number().positive().optional(),
+  offset: z.number().min(0).optional(),
+  role: z.enum(["TENANT_OWNER", "TENANT_STAFF", "CUSTOMER"]).optional(),
 });
 
 export type paginationDto = z.infer<typeof paginationDtoSchema>;

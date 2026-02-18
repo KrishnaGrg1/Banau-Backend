@@ -8,15 +8,17 @@ import { SubdomainMiddleware } from './common/middleware/subdomain.middleware';
 import { EmailModule } from './email/email.module';
 import { AdminModule } from './admin/admin.module';
 import { SettingModule } from './setting/setting.module';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     AuthModule,
     UserModule,
-    TenantModule,
     EmailModule,
     AdminModule,
+    CloudinaryModule,
     SettingModule,
+    TenantModule,
   ],
   providers: [PrismaService],
   exports: [PrismaService],
