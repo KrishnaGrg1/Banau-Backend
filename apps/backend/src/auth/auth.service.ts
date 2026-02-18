@@ -9,7 +9,7 @@ import { backendDtos } from '@repo/shared';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { User } from '@repo/db/src/generated/prisma/client';
+import { User } from '@repo/db/dist/generated/prisma/client';
 import { EmailService } from 'src/email/email.service';
 
 @Injectable()

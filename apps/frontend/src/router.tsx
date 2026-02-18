@@ -4,7 +4,7 @@ import * as TanstackQuery from './integrations/tanstack-query/root-provider'
 
 // Import the generated route tree
 import { routeTree } from './routeTree.gen'
-import { Tenant } from '@repo/db/src/generated/prisma/client'
+import { Tenant } from '@repo/db/dist/generated/prisma/client'
 
 // Create a new router instance
 export const getRouter = () => {
