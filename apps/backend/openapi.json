@@ -231,6 +231,28 @@
         "tags": [
           "TenantSetting"
         ]
+      },
+      "put": {
+        "operationId": "TenantSettingController_updateTenantSetting",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTenantSettingDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "TenantSetting"
+        ]
       }
     },
     "/api/v1/tenant/setting/asset": {

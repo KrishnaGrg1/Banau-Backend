@@ -14,9 +14,12 @@ import { Route as TenantRouteImport } from './routes/tenant'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as HomeRouteImport } from './routes/home'
-import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
 import { Route as PreviewSubdomainRouteImport } from './routes/preview.$subdomain'
+import { Route as DashboardSettingsIndexRouteImport } from './routes/dashboard/settings/index'
+import { Route as DashboardProductsIndexRouteImport } from './routes/dashboard/products/index'
+import { Route as DashboardProductsIdRouteImport } from './routes/dashboard/products/$id'
 
 const VerifyRoute = VerifyRouteImport.update({
   id: '/verify',
@@ -43,14 +46,14 @@ const HomeRoute = HomeRouteImport.update({
   path: '/home',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DashboardRoute = DashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardIndexRoute = DashboardIndexRouteImport.update({
+  id: '/dashboard/',
+  path: '/dashboard/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PreviewSubdomainRoute = PreviewSubdomainRouteImport.update({
@@ -58,80 +61,116 @@ const PreviewSubdomainRoute = PreviewSubdomainRouteImport.update({
   path: '/preview/$subdomain',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardSettingsIndexRoute = DashboardSettingsIndexRouteImport.update({
+  id: '/dashboard/settings/',
+  path: '/dashboard/settings/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardProductsIndexRoute = DashboardProductsIndexRouteImport.update({
+  id: '/dashboard/products/',
+  path: '/dashboard/products/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardProductsIdRoute = DashboardProductsIdRouteImport.update({
+  id: '/dashboard/products/$id',
+  path: '/dashboard/products/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRoute
   '/home': typeof HomeRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/tenant': typeof TenantRoute
   '/verify': typeof VerifyRoute
   '/preview/$subdomain': typeof PreviewSubdomainRoute
+  '/dashboard/': typeof DashboardIndexRoute
+  '/dashboard/products/$id': typeof DashboardProductsIdRoute
+  '/dashboard/products/': typeof DashboardProductsIndexRoute
+  '/dashboard/settings/': typeof DashboardSettingsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRoute
   '/home': typeof HomeRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/tenant': typeof TenantRoute
   '/verify': typeof VerifyRoute
   '/preview/$subdomain': typeof PreviewSubdomainRoute
+  '/dashboard': typeof DashboardIndexRoute
+  '/dashboard/products/$id': typeof DashboardProductsIdRoute
+  '/dashboard/products': typeof DashboardProductsIndexRoute
+  '/dashboard/settings': typeof DashboardSettingsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRoute
   '/home': typeof HomeRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/tenant': typeof TenantRoute
   '/verify': typeof VerifyRoute
   '/preview/$subdomain': typeof PreviewSubdomainRoute
+  '/dashboard/': typeof DashboardIndexRoute
+  '/dashboard/products/$id': typeof DashboardProductsIdRoute
+  '/dashboard/products/': typeof DashboardProductsIndexRoute
+  '/dashboard/settings/': typeof DashboardSettingsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/dashboard'
     | '/home'
     | '/login'
     | '/register'
     | '/tenant'
     | '/verify'
     | '/preview/$subdomain'
+    | '/dashboard/'
+    | '/dashboard/products/$id'
+    | '/dashboard/products/'
+    | '/dashboard/settings/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/dashboard'
     | '/home'
     | '/login'
     | '/register'
     | '/tenant'
     | '/verify'
     | '/preview/$subdomain'
+    | '/dashboard'
+    | '/dashboard/products/$id'
+    | '/dashboard/products'
+    | '/dashboard/settings'
   id:
     | '__root__'
     | '/'
-    | '/dashboard'
     | '/home'
     | '/login'
     | '/register'
     | '/tenant'
     | '/verify'
     | '/preview/$subdomain'
+    | '/dashboard/'
+    | '/dashboard/products/$id'
+    | '/dashboard/products/'
+    | '/dashboard/settings/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  DashboardRoute: typeof DashboardRoute
   HomeRoute: typeof HomeRoute
   LoginRoute: typeof LoginRoute
   RegisterRoute: typeof RegisterRoute
   TenantRoute: typeof TenantRoute
   VerifyRoute: typeof VerifyRoute
   PreviewSubdomainRoute: typeof PreviewSubdomainRoute
+  DashboardIndexRoute: typeof DashboardIndexRoute
+  DashboardProductsIdRoute: typeof DashboardProductsIdRoute
+  DashboardProductsIndexRoute: typeof DashboardProductsIndexRoute
+  DashboardSettingsIndexRoute: typeof DashboardSettingsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -171,18 +210,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HomeRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/dashboard': {
-      id: '/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/': {
+      id: '/dashboard/'
+      path: '/dashboard'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof DashboardIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/preview/$subdomain': {
@@ -192,18 +231,42 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PreviewSubdomainRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/settings/': {
+      id: '/dashboard/settings/'
+      path: '/dashboard/settings'
+      fullPath: '/dashboard/settings/'
+      preLoaderRoute: typeof DashboardSettingsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/products/': {
+      id: '/dashboard/products/'
+      path: '/dashboard/products'
+      fullPath: '/dashboard/products/'
+      preLoaderRoute: typeof DashboardProductsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/products/$id': {
+      id: '/dashboard/products/$id'
+      path: '/dashboard/products/$id'
+      fullPath: '/dashboard/products/$id'
+      preLoaderRoute: typeof DashboardProductsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  DashboardRoute: DashboardRoute,
   HomeRoute: HomeRoute,
   LoginRoute: LoginRoute,
   RegisterRoute: RegisterRoute,
   TenantRoute: TenantRoute,
   VerifyRoute: VerifyRoute,
   PreviewSubdomainRoute: PreviewSubdomainRoute,
+  DashboardIndexRoute: DashboardIndexRoute,
+  DashboardProductsIdRoute: DashboardProductsIdRoute,
+  DashboardProductsIndexRoute: DashboardProductsIndexRoute,
+  DashboardSettingsIndexRoute: DashboardSettingsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

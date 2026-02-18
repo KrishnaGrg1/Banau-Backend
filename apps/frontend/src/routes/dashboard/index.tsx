@@ -30,7 +30,7 @@ import {
 } from 'lucide-react'
 import { ModeToggle } from '@/components/mode-toggle'
 
-export const Route = createFileRoute('/dashboard')({
+export const Route = createFileRoute('/dashboard/')({
   loader: async () => {
     const data = await getServerData()
     return data

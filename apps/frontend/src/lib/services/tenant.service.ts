@@ -1,11 +1,11 @@
 import {
   CreateTenantDtoSchema,
   getTenantDetailsBySubdomainSchema,
-  Tenant,
   TenantResponse,
 } from '@repo/shared'
 import { api } from '../axios'
 import { createServerFn } from '@tanstack/react-start'
+import { Tenant } from '@repo/db/src/generated/prisma/client'
 
 export const createTenant = createServerFn({ method: 'POST' })
   .inputValidator((data) => CreateTenantDtoSchema.parse(data))
