@@ -71,16 +71,16 @@ export const updateTenantSetting = createServerFn({ method: 'POST' }).handler(
       formData.append('landingPageTitle', data.landingPageTitle)
       formData.append('landingPageDescription', data.landingPageDescription)
 
-     if (data.logo) {
-  const { buffer, mimeType } = base64ToBuffer(data.logo)
-  const blob = new Blob([buffer], { type: mimeType })
-  formData.append('logo', blob, data.logoName || 'logo')
-}
-if (data.favicon) {
-  const { buffer, mimeType } = base64ToBuffer(data.favicon)
-  const blob = new Blob([buffer], { type: mimeType })
-  formData.append('favicon', blob, data.faviconName || 'favicon')
-}
+      if (data.logo) {
+        const { buffer, mimeType } = base64ToBuffer(data.logo)
+        const blob = new Blob([buffer], { type: mimeType })
+        formData.append('logo', blob, data.logoName || 'logo')
+      }
+      if (data.favicon) {
+        const { buffer, mimeType } = base64ToBuffer(data.favicon)
+        const blob = new Blob([buffer], { type: mimeType })
+        formData.append('favicon', blob, data.faviconName || 'favicon')
+      }
       console.log('[UPDATE] Sending FormData to /tenant/setting')
 
       const response = await api<TenantSettingResponse>('/tenant/setting', {
@@ -151,7 +151,10 @@ export const getTenantSettingAssets = createServerFn({ method: 'GET' }).handler(
     }
   },
 )
-function base64ToBuffer(dataUrl: string): { buffer: ArrayBuffer; mimeType: string } {
+function base64ToBuffer(dataUrl: string): {
+  buffer: ArrayBuffer
+  mimeType: string
+} {
   const matches = dataUrl.match(/^data:([^;]+);base64,(.+)$/)
   if (!matches) throw new Error('Invalid base64 data URL')
   const nodeBuffer = Buffer.from(matches[2], 'base64')

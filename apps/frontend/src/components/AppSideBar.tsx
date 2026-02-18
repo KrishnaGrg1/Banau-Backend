@@ -58,7 +58,7 @@ const navMain = [
     to: '/dashboard/tenants',
   },
   {
-    title: 'Settings',
+    title: 'Appearance Settings',
     icon: Settings,
     to: '/dashboard/settings',
   },

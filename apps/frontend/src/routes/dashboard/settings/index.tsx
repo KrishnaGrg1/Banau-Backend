@@ -309,14 +309,15 @@ export default function SettingsPage() {
                   </div>
                 )}
               </form.Field>
-
-              <form.Field name="secondaryColorCode">
+              <form.Field name="primaryTextColorCode">
                 {(field) => (
                   <div className="space-y-2">
-                    <Label htmlFor="secondaryColorCode">Secondary Color</Label>
+                    <Label htmlFor="primaryTextColorCode">
+                      Primary Text Color
+                    </Label>
                     <div className="flex gap-2">
                       <Input
-                        id="secondaryColorCode"
+                        id="primaryTextColorCode"
                         type="color"
                         value={field.state.value}
                         onChange={(e) => field.handleChange(e.target.value)}
@@ -332,16 +333,13 @@ export default function SettingsPage() {
                   </div>
                 )}
               </form.Field>
-
-              <form.Field name="primaryTextColorCode">
+              <form.Field name="secondaryColorCode">
                 {(field) => (
                   <div className="space-y-2">
-                    <Label htmlFor="primaryTextColorCode">
-                      Primary Text Color
-                    </Label>
+                    <Label htmlFor="secondaryColorCode">Secondary Color</Label>
                     <div className="flex gap-2">
                       <Input
-                        id="primaryTextColorCode"
+                        id="secondaryColorCode"
                         type="color"
                         value={field.state.value}
                         onChange={(e) => field.handleChange(e.target.value)}

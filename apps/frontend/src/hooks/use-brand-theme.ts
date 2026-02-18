@@ -1,64 +1,103 @@
-import { Asset, Setting } from '@repo/db/dist/generated/prisma/client'
 import { useEffect } from 'react'
+import { Asset, Setting } from '@repo/db/dist/generated/prisma/client'
+import { useTheme } from '@/components/theme-provider'
 
 export function useBrandTheme(
-  setting: Setting,
-  logo: Asset,
-  favicon: Asset,
-  domain: string,
+  setting?: Setting | null,
+  logo?: Asset | null,
+  favicon?: Asset | null,
+  domain?: string | null,
 ) {
+  const { theme } = useTheme()
+
   useEffect(() => {
+    if (typeof document === 'undefined') return
     if (!setting) return
 
-    // Store previous CSS variable values
-    const root = document.documentElement.style
-    const prevVars: Record<string, string> = {
-      '--primary': root.getPropertyValue('--primary'),
-      '--primary-foreground': root.getPropertyValue('--primary-foreground'),
-      '--secondary': root.getPropertyValue('--secondary'),
-      '--secondary-foreground': root.getPropertyValue('--secondary-foreground'),
-      '--background': root.getPropertyValue('--background'),
-      '--foreground': root.getPropertyValue('--foreground'),
-    }
+    const root = document.documentElement
+    const style = root.style
 
-    // Apply new theme variables
-    root.setProperty('--primary', setting.primaryColorCode)
-    root.setProperty('--primary-foreground', setting.primaryTextColorCode)
-    root.setProperty('--secondary', setting.secondaryColorCode)
-    root.setProperty('--secondary-foreground', setting.secondaryTextColorCode)
-    root.setProperty('--background', setting.backgroundColorCode)
-    root.setProperty('--foreground', setting.backgroundTextColorCode)
+    const vars = [
+      '--primary',
+      '--primary-foreground',
+      '--secondary',
+      '--secondary-foreground',
+      '--background',
+      '--foreground',
+    ]
 
-    // Store previous favicon
-    let link = document.querySelector("link[rel*='icon']") as HTMLLinkElement
-    let prevFaviconHref = link ? link.href : ''
+    const prevVars: Record<string, string> = {}
+
+    vars.forEach((v) => {
+      prevVars[v] = style.getPropertyValue(v)
+    })
+
+    if (setting.primaryColorCode)
+      style.setProperty('--primary', setting.primaryColorCode)
+
+    if (setting.primaryTextColorCode)
+      style.setProperty(
+        '--primary-foreground',
+        setting.primaryTextColorCode,
+      )
+
+    if (setting.secondaryColorCode)
+      style.setProperty('--secondary', setting.secondaryColorCode)
+
+    if (setting.secondaryTextColorCode)
+      style.setProperty(
+        '--secondary-foreground',
+        setting.secondaryTextColorCode,
+      )
+
+    if (setting.backgroundColorCode)
+      style.setProperty('--background', setting.backgroundColorCode)
+
+    if (setting.backgroundTextColorCode)
+      style.setProperty(
+        '--foreground',
+        setting.backgroundTextColorCode,
+      )
+
+    // ---------- FAVICON ----------
+    let link =
+      document.querySelector<HTMLLinkElement>("link[rel*='icon']")
+
+    const prevFavicon = link?.href ?? null
+
     if (!link) {
       link = document.createElement('link')
-      link.rel = 'shortcut icon'
+      link.rel = 'icon'
       document.head.appendChild(link)
     }
-    // Set new favicon (use logo for preview)
-    if (logo?.url) {
-      link.href = logo.url
-    } else if (favicon?.url) {
-      link.href = favicon.url
-    } else {
-      link.href = '/favicon.ico'
+
+    link.href =
+      logo?.url ||
+      favicon?.url ||
+      '/favicon.ico'
+
+    // ---------- TITLE ----------
+    const prevTitle = document.title
+
+    if (domain) {
+      document.title = `Banau x ${domain}`
     }
-    link.type = 'image/x-icon'
 
-    // Store previous title
-    const title = document.querySelector('title') as HTMLTitleElement
-    const prevTitle = title ? title.innerHTML : ''
-    if (title && domain) title.innerHTML = 'Banau x ' + domain
-
-    // Cleanup: restore previous values on unmount
     return () => {
-      Object.entries(prevVars).forEach(([key, value]) => {
-        root.setProperty(key, value)
+      Object.entries(prevVars).forEach(([k, v]) => {
+        if (v) style.setProperty(k, v)
+        else style.removeProperty(k)
       })
-      if (link && prevFaviconHref) link.href = prevFaviconHref
-      if (title && prevTitle) title.innerHTML = prevTitle
+
+      if (link && prevFavicon) link.href = prevFavicon
+
+      document.title = prevTitle
     }
-  }, [setting, logo, favicon, domain])
+  }, [
+    setting,
+    logo?.url,
+    favicon?.url,
+    domain,
+    theme, // 🔥 critical: reapply after theme changes
+  ])
 }

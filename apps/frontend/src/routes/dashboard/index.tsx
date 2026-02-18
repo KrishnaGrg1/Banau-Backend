@@ -138,7 +138,14 @@ function DashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold capitalize">
-              {user?.data.role?.toLowerCase() || '—'}
+              {user?.data.role
+                ?.toLowerCase()
+                .split('_')
+                .map(
+                  (word) =>
+                    word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
+                )
+                .join(' ') || '—'}
             </div>
             <p className="text-xs text-muted-foreground mt-1">Account type</p>
           </CardContent>

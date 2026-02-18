@@ -3,6 +3,7 @@ import { PublicTenant } from '@/components/PublicTenant'
 // import { useGetTenantBySubdomain } from '@/hooks/use-tenant'
 import { getTenantDetailsBySubdomain } from '@/lib/services/tenant.service'
 import { useBrandTheme } from '@/hooks/use-brand-theme'
+import { useForceLightMode } from '@/hooks/use-light-mode'
 
 export const Route = createFileRoute('/preview/$subdomain')({
   loader: async ({ params }) => {
@@ -34,6 +35,7 @@ function PreviewPage() {
   if (setting && tenant?.subdomain && logo && favicon) {
     useBrandTheme(setting, logo, favicon, tenant.subdomain)
   }
+  useForceLightMode(true)
   return (
     <PublicTenant
       tenant={data?.existingTenant}
