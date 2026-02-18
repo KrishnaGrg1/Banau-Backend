@@ -1,15 +1,3 @@
-yarn dlx turbo build
-pnpm exec turbo build
-yarn exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
-yarn exec turbo dev
-pnpm exec turbo dev
-yarn exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
-yarn exec turbo login
-pnpm exec turbo login
-yarn exec turbo link
-pnpm exec turbo link
 
 # Banau Monorepo
 
@@ -26,7 +14,7 @@ Banau is a modern, multi-tenant SaaS starter built with Turborepo, NestJS, Vite,
 - [Testing, Linting & Formatting](#testing-linting--formatting)
 - [Deployment](#deployment)
 	- [Vercel](#vercel)
-	- [Docker](#docker)
+	- [Render](#render)
 - [Environment Variables](#environment-variables)
 - [Custom Domain & CORS](#custom-domain--cors)
 - [Packages](#packages)
@@ -116,13 +104,16 @@ pnpm build
 
 ## Deployment
 
+
 ### Vercel
 
 See `DEPLOYMENT.md` for a full step-by-step guide for deploying both backend and frontend to Vercel, including environment variables, custom domains, and CORS.
 
-### Docker
+### Render (Backend)
 
-See `DEPLOYMENT-DOCKER.md` for local and production Docker Compose instructions.
+You can also deploy the backend API to [Render](https://render.com/). Render provides a simple way to host Node.js servers with environment variable management and automatic deploys from GitHub. See [Render docs](https://render.com/docs/deploy-node-express-app) for details.
+
+
 
 ---
 
@@ -171,7 +162,6 @@ These variables are required for features such as user avatars, tenant logos, an
 ## Useful Links
 
 - [DEPLOYMENT.md](DEPLOYMENT.md) — Vercel deployment guide
-- [DEPLOYMENT-DOCKER.md](DEPLOYMENT-DOCKER.md) — Docker deployment guide
 - [Prisma](https://www.prisma.io/)
 - [NestJS](https://nestjs.com/)
 - [Vite](https://vitejs.dev/)
