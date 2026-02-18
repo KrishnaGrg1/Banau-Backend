@@ -70,9 +70,17 @@ packages/
 	```bash
 	pnpm --filter backend dev
 	```
+    OR
+    ```bash
+     cd apps/backend && pnpm dev
+ 	```
 - **Start only frontend:**
 	```bash
 	pnpm --filter frontend dev
+    ```
+    OR 
+    ```bash
+	cd apps/frontend  && pnpm dev
 	```
 
 ---
@@ -111,7 +119,9 @@ See `DEPLOYMENT.md` for a full step-by-step guide for deploying both backend and
 
 ### Render (Backend)
 
-You can also deploy the backend API to [Render](https://render.com/). Render provides a simple way to host Node.js servers with environment variable management and automatic deploys from GitHub. See [Render docs](https://render.com/docs/deploy-node-express-app) for details.
+You can also deploy the backend API to [Render](https://render.com/). Render provides a simple way to host Node.js servers with environment variable management and automatic deploys from GitHub. See [Render banau on  main via  v24.2.0 took 44m43s 
+❯ pnpm --filter backend dev
+No projects matched the filters in "/Users/developer/Projects/banau"s](https://render.com/docs/deploy-node-express-app) for details.
 
 
 
