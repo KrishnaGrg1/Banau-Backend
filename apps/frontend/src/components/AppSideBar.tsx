@@ -275,8 +275,9 @@ export function AppSidebar() {
                       onClick={() => navigate({ to: item.to })}
                       isActive={active}
                       tooltip={item.title}
+                      className="cursor-pointer"
                     >
-                      <item.icon className="h-4 w-4" />
+                      <item.icon className="h-4 w-4 cursor-pointer" />
                       <span>{item.title}</span>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -296,11 +297,11 @@ export function AppSidebar() {
                       <SidebarMenuButton
                         isActive={active && !isOpen}
                         tooltip={item.title}
-                        className="group/collapsible"
+                        className="group/collapsible cursor-pointer"
                       >
-                        <item.icon className="h-4 w-4" />
+                        <item.icon className="h-4 w-4 cursor-pointer" />
                         <span>{item.title}</span>
-                        <ChevronRight className="ml-auto h-4 w-4 shrink-0 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                        <ChevronRight className="ml-auto h-4 w-4 shrink-0 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90 cursor-pointer" />
                       </SidebarMenuButton>
                     </CollapsibleTrigger>
 
@@ -313,9 +314,9 @@ export function AppSidebar() {
                               <SidebarMenuSubButton
                                 onClick={() => navigate({ to: child.to })}
                                 isActive={childActive}
-                                className="flex items-center gap-2"
+                                className="flex items-center gap-2 cursor-pointer"
                               >
-                                <child.icon className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+                                <child.icon className="h-3.5 w-3.5 shrink-0 text-muted-foreground cursor-pointer" />
                                 <span className="flex-1">{child.title}</span>
                                 {child.badge === 'alert' && (
                                   <Badge
@@ -347,8 +348,9 @@ export function AppSidebar() {
                 <SidebarMenuButton
                   onClick={() => navigate({ to: `/s/${tenant.subdomain}` })}
                   tooltip="Preview"
+                  className="cursor-pointer"
                 >
-                  <Eye className="h-4 w-4" />
+                  <Eye className="h-4 w-4 cursor-pointer" />
                   <span>Preview</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -362,8 +364,9 @@ export function AppSidebar() {
                       )
                     }
                     tooltip="View Live Site"
+                    className="cursor-pointer"
                   >
-                    <ExternalLink className="h-4 w-4" />
+                    <ExternalLink className="h-4 w-4 cursor-pointer" />
                     <span>View Live</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -381,7 +384,7 @@ export function AppSidebar() {
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton
                   size="lg"
-                  className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+                  className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground cursor-pointer"
                 >
                   <Avatar className="h-8 w-8 rounded-lg">
                     <AvatarFallback className="rounded-lg text-xs">
@@ -427,17 +430,19 @@ export function AppSidebar() {
                 <DropdownMenuSeparator />
 
                 <DropdownMenuItem
+                  className="cursor-pointer"
                   onClick={() => navigate({ to: '/dashboard/account/profile' })}
                 >
-                  <UserCircle className="mr-2 h-4 w-4" />
+                  <UserCircle className="mr-2 h-4 w-4 cursor-pointer" />
                   Profile
                 </DropdownMenuItem>
                 <DropdownMenuItem
+                  className="cursor-pointer"
                   onClick={() =>
                     navigate({ to: '/dashboard/settings/general' })
                   }
                 >
-                  <Settings className="mr-2 h-4 w-4" />
+                  <Settings className="mr-2 h-4 w-4 cursor-pointer" />
                   Settings
                 </DropdownMenuItem>
 
@@ -445,9 +450,9 @@ export function AppSidebar() {
 
                 <DropdownMenuItem
                   onClick={handleLogout}
-                  className="text-destructive focus:text-destructive"
+                  className="text-destructive cursor-pointer focus:text-destructive"
                 >
-                  <LogOut className="mr-2 h-4 w-4" />
+                  <LogOut className="mr-2 h-4 w-4 cursor-pointer" />
                   Log out
                 </DropdownMenuItem>
               </DropdownMenuContent>
