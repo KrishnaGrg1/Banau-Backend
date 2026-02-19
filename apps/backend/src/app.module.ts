@@ -9,6 +9,8 @@ import { EmailModule } from './email/email.module';
 import { AdminModule } from './admin/admin.module';
 import { SettingModule } from './setting/setting.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import { ProductsModule } from './products/products.module';
+import { PublicProductsModule } from './public-products/public-products.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -19,6 +21,8 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
     CloudinaryModule,
     SettingModule,
     TenantModule,
+    ProductsModule,
+    PublicProductsModule,
   ],
   providers: [PrismaService],
   exports: [PrismaService],

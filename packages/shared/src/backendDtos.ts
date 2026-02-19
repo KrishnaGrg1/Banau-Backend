@@ -13,6 +13,7 @@ import {
   IsNotEmpty,
 } from "class-validator";
 import type { Express } from "express";
+import { Decimal } from "decimal.js";
 
 export enum UserRoleDto {
   TENANT_OWNER = "TENANT_OWNER",
@@ -25,6 +26,12 @@ export enum TenantStatusDto {
   ACTIVE = "ACTIVE",
   SUSPENDED = "SUSPENDED",
   CANCELLED = "CANCELLED",
+}
+
+export enum ProductStatusDto {
+  DRAFT = "DRAFT",
+  ACTIVE = "ACTIVE",
+  ARCHIVED = "ARCHIVED",
 }
 
 // =========================
@@ -186,4 +193,281 @@ export class CreateTenantSettingDto {
 
   @IsOptional()
   favicon?: Express.Multer.File;
+}
+
+export class CreateProductDto {
+  @IsString()
+  @MinLength(2)
+  name: string;
+
+  @IsOptional()
+  @IsString()
+  description?: string;
+
+  @IsString()
+  @MinLength(2)
+  slug: string;
+
+  // Pricing
+  @IsNotEmpty()
+  price: number | string;
+
+  @IsOptional()
+  compareAtPrice?: number | string;
+
+  // Inventory
+  @IsOptional()
+  @IsNumber()
+  quantity?: number = 0;
+
+  @IsOptional()
+  @IsBoolean()
+  trackInventory?: boolean = true;
+
+  // Featured image
+  @IsOptional()
+  @IsString()
+  featuredImageId?: string;
+
+  // Status
+  @IsOptional()
+  @IsEnum(ProductStatusDto)
+  status?: ProductStatusDto = ProductStatusDto.DRAFT;
+
+  @IsOptional()
+  @IsBoolean()
+  featured?: boolean = false;
+
+  // SKU & Barcode
+  @IsOptional()
+  @IsString()
+  sku?: string;
+
+  @IsOptional()
+  @IsString()
+  barcode?: string;
+
+  // SEO
+  @IsOptional()
+  @IsString()
+  metaTitle?: string;
+
+  @IsOptional()
+  @IsString()
+  metaDescription?: string;
+
+  // Shipping
+  @IsOptional()
+  @IsNumber()
+  weight?: number;
+
+  @IsOptional()
+  @IsString()
+  weightUnit?: string;
+
+  // Tax
+  @IsOptional()
+  @IsBoolean()
+  taxable?: boolean = true;
+
+  // publishedAt is set by backend, not client
+}
+
+export class UpdateProductDto {
+  @IsOptional()
+  @IsString()
+  @MinLength(2)
+  name?: string;
+
+  @IsOptional()
+  @IsString()
+  description?: string;
+
+  @IsOptional()
+  @IsString()
+  @MinLength(2)
+  slug?: string;
+
+  @IsOptional()
+  price?: number | string;
+
+  @IsOptional()
+  compareAtPrice?: number | string;
+
+  @IsOptional()
+  @IsNumber()
+  quantity?: number;
+
+  @IsOptional()
+  @IsBoolean()
+  trackInventory?: boolean;
+
+  @IsOptional()
+  @IsString()
+  featuredImageId?: string;
+
+  @IsOptional()
+  @IsEnum(ProductStatusDto)
+  status?: ProductStatusDto;
+
+  @IsOptional()
+  @IsBoolean()
+  featured?: boolean;
+
+  // SKU & Barcode
+  @IsOptional()
+  @IsString()
+  sku?: string;
+
+  @IsOptional()
+  @IsString()
+  barcode?: string;
+
+  // SEO
+  @IsOptional()
+  @IsString()
+  metaTitle?: string;
+
+  @IsOptional()
+  @IsString()
+  metaDescription?: string;
+
+  // Shipping
+  @IsOptional()
+  @IsNumber()
+  weight?: number;
+
+  @IsOptional()
+  @IsString()
+  weightUnit?: string;
+
+  // Tax
+  @IsOptional()
+  @IsBoolean()
+  taxable?: boolean;
+
+  // publishedAt is set by backend, not client
+}
+
+// =========================
+// Variant DTOs
+// =========================
+export class CreateVariantDto {
+  @IsString()
+  @MinLength(1)
+  name: string;
+
+  @IsOptional()
+  @IsString()
+  sku?: string;
+
+  @IsOptional()
+  @IsString()
+  barcode?: string;
+
+  @IsOptional()
+  @IsNumber()
+  price?: number;
+
+  @IsOptional()
+  @IsNumber()
+  compareAtPrice?: number;
+
+  @IsOptional()
+  @IsNumber()
+  quantity?: number = 0;
+
+  @IsOptional()
+  @IsString()
+  option1Name?: string;
+
+  @IsOptional()
+  @IsString()
+  option1Value?: string;
+
+  @IsOptional()
+  @IsString()
+  option2Name?: string;
+
+  @IsOptional()
+  @IsString()
+  option2Value?: string;
+
+  @IsOptional()
+  @IsString()
+  option3Name?: string;
+
+  @IsOptional()
+  @IsString()
+  option3Value?: string;
+}
+
+export class UpdateVariantDto {
+  @IsOptional()
+  @IsString()
+  @MinLength(1)
+  name?: string;
+
+  @IsOptional()
+  @IsString()
+  sku?: string;
+
+  @IsOptional()
+  @IsString()
+  barcode?: string;
+
+  @IsOptional()
+  @IsNumber()
+  price?: number;
+
+  @IsOptional()
+  @IsNumber()
+  compareAtPrice?: number;
+
+  @IsOptional()
+  @IsNumber()
+  quantity?: number;
+
+  @IsOptional()
+  @IsString()
+  option1Name?: string;
+
+  @IsOptional()
+  @IsString()
+  option1Value?: string;
+
+  @IsOptional()
+  @IsString()
+  option2Name?: string;
+
+  @IsOptional()
+  @IsString()
+  option2Value?: string;
+
+  @IsOptional()
+  @IsString()
+  option3Name?: string;
+
+  @IsOptional()
+  @IsString()
+  option3Value?: string;
+}
+
+// =========================
+// Stock DTO
+// =========================
+export class UpdateStockDto {
+  @IsNumber()
+  quantity: number;
+
+  @IsEnum(['set', 'add', 'subtract'])
+  action: 'set' | 'add' | 'subtract';
+
+  @IsOptional()
+  @IsString()
+  variantId?: string;
+
+  @IsOptional()
+  @IsString()
+  reason?: string;
 }

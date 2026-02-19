@@ -244,52 +244,6 @@ model Asset {
 }
 
 // ============================================
-// PRODUCTS
-// ============================================
-
-model Product {
-  id       String @id @default(uuid())
-  tenantId String
-
-  name        String
-  description String? @db.Text
-  slug        String
-
-  // Pricing
-  price          Decimal  @db.Decimal(10, 2)
-  compareAtPrice Decimal? @db.Decimal(10, 2)
-
-  // Inventory
-  quantity       Int     @default(0)
-  trackInventory Boolean @default(true)
-
-  // Featured image
-  featuredImageId String?
-  featuredImage   Asset?  @relation(fields: [featuredImageId], references: [id])
-
-  // Status
-  status   ProductStatus @default(DRAFT)
-  featured Boolean       @default(false)
-
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  publishedAt DateTime?
-
-  tenant     Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  orderItems OrderItem[]
-
-  @@unique([tenantId, slug])
-  @@index([tenantId, status])
-  @@map("products")
-}
-
-enum ProductStatus {
-  DRAFT
-  ACTIVE
-  ARCHIVED
-}
-
-// ============================================
 // CUSTOMERS
 // ============================================
 
@@ -336,16 +290,142 @@ model Order {
   @@index([customerId])
 }
 
+// ============================================
+// PRODUCTS (Updated)
+// ============================================
+
+model Product {
+  id       String @id @default(uuid())
+  tenantId String
+
+  name        String
+  description String? @db.Text
+  slug        String
+
+  // Base pricing (can be overridden by variants)
+  price          Decimal  @db.Decimal(10, 2)
+  compareAtPrice Decimal? @db.Decimal(10, 2)
+
+  // Base inventory (used if no variants)
+  quantity       Int     @default(0)
+  trackInventory Boolean @default(true)
+
+  // SKU & Barcode (base level)
+  sku     String?
+  barcode String?
+
+  // Featured image
+  featuredImageId String?
+  featuredImage   Asset?  @relation(fields: [featuredImageId], references: [id])
+
+  // Status
+  status   ProductStatus @default(DRAFT)
+  featured Boolean       @default(false)
+
+  // SEO
+  metaTitle       String?
+  metaDescription String?
+
+  // Shipping
+  weight     Decimal? @db.Decimal(10, 2)
+  weightUnit String?  @default("kg") // kg, lb, oz, g
+
+  // Tax
+  taxable Boolean @default(true)
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  publishedAt DateTime?
+
+  tenant     Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  variants   ProductVariant[]
+  orderItems OrderItem[]
+
+  @@unique([tenantId, slug])
+  @@index([tenantId, status])
+  @@index([slug])
+  @@map("products")
+}
+
+// ============================================
+// PRODUCT VARIANTS (NEW!)
+// ============================================
+
+model ProductVariant {
+  id        String @id @default(uuid())
+  productId String
+
+  // Variant display name (e.g., "Small / Red")
+  name String
+
+  // SKU & Barcode (variant-specific)
+  sku     String?
+  barcode String?
+
+  // Pricing (overrides product price if set)
+  price          Decimal? @db.Decimal(10, 2)
+  compareAtPrice Decimal? @db.Decimal(10, 2)
+
+  // Inventory (variant-specific)
+  quantity Int @default(0)
+
+  // Variant options (up to 3 levels)
+  option1Name  String? // e.g., "Size"
+  option1Value String? // e.g., "Small"
+  option2Name  String? // e.g., "Color"
+  option2Value String? // e.g., "Red"
+  option3Name  String? // e.g., "Material"
+  option3Value String? // e.g., "Cotton"
+
+  // Image (variant-specific, optional)
+  imageUrl String?
+
+  // Position/order
+  position Int @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  product    Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
+  orderItems OrderItem[]
+
+  @@unique([productId, sku])
+  @@index([productId])
+  @@index([sku])
+  @@map("product_variants")
+}
+
+enum ProductStatus {
+  DRAFT
+  ACTIVE
+  ARCHIVED
+}
+
+// ============================================
+// ORDER ITEMS (Updated to support variants)
+// ============================================
+
 model OrderItem {
-  id        String  @id @default(uuid())
+  id        String @id @default(uuid())
   orderId   String
   productId String
-  quantity  Int
-  price     Decimal @db.Decimal(10, 2)
 
-  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  product Product @relation(fields: [productId], references: [id])
+  // ✅ NEW: Optional variant
+  variantId String?
+
+  quantity Int
+  price    Decimal @db.Decimal(10, 2)
+
+  // Store snapshot of product/variant name at time of purchase
+  productName String
+  variantName String?
+
+  order   Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product         @relation(fields: [productId], references: [id])
+  variant ProductVariant? @relation(fields: [variantId], references: [id])
 
   @@index([orderId])
   @@index([productId])
+  @@index([variantId])
+  @@map("order_items")
 }

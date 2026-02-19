@@ -203,3 +203,10 @@ export interface TenantSettingAssetsResponse {
   };
   timestamp: Date;
 }
+
+
+export interface BulkImportResult {
+  success: number;
+  failed: number;
+  errors: Array<{ row: number; error: string; data: any }>;
+}
