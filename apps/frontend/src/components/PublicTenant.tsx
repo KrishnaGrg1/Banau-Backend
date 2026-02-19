@@ -3,13 +3,17 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Setting, Tenant } from '@repo/db/dist/generated/prisma/client'
 import { Button } from './ui/button'
 import { Link } from '@tanstack/react-router'
+import Header from './ClientComponents/Headers'
+import StoreHero from './ClientComponents/StoreHero'
+import StoreFooter from './ClientComponents/StoreFooter'
 
 interface PublicTenantProps {
   tenant?: Tenant | null
   setting?: Setting | null
+  logo?: string | null
 }
 
-export function PublicTenant({ tenant, setting }: PublicTenantProps) {
+export function PublicTenant({ tenant, setting, logo }: PublicTenantProps) {
   // const { tenant } = usetenantStore()
   console.log('data ', tenant)
 
@@ -101,24 +105,11 @@ export function PublicTenant({ tenant, setting }: PublicTenantProps) {
     tenant.name ||
     tenant.subdomain.charAt(0).toUpperCase() + tenant.subdomain.slice(1)
   return (
-    <div className="min-h-screen ">
-      {/* HERO */}
-      <header className="border-b ">
-        <div className="container mx-auto px-4 py-12 text-center">
-          <h1 className="text-4xl font-bold ">
-            {setting?.landingPageTitle || siteName}
-            {/* {siteName} */}
-          </h1>
-          <p className="mt-3 ">
-            {/* Welcome to the official tenant of {siteName} */}
-            {setting?.landingPageDescription ||
-              `Welcome to the official tenant of ${siteName}`}
-          </p>
-        </div>
-      </header>
-
+    <div className="min-h-screen flex flex-col">
+      <Header tenant={tenant} logo={logo ? { url: logo } : undefined} />
+      {setting && <StoreHero setting={setting} />}
       {/* CONTENT */}
-      <main className="container mx-auto px-4 py-16">
+      <main className="flex-1 mb-5">
         <div className="mx-auto max-w-5xl space-y-10">
           <Card>
             <CardHeader>
@@ -171,13 +162,7 @@ export function PublicTenant({ tenant, setting }: PublicTenantProps) {
         </div>
       </main>
 
-      {/* FOOTER */}
-      <footer className="border-t  py-6">
-        <div className="container mx-auto px-4 text-center text-sm ">
-          © {new Date().getFullYear()} {siteName}. Powered by{' '}
-          <span className="font-semibold ">Banau</span>
-        </div>
-      </footer>
+      <StoreFooter tenant={tenant} />
     </div>
   )
 }

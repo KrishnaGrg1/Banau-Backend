@@ -40,6 +40,7 @@ function PreviewPage() {
     <PublicTenant
       tenant={data?.existingTenant}
       setting={data?.existingSetting}
+      logo={logo?.url}
     />
   )
 }

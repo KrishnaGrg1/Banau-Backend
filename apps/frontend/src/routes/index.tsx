@@ -12,7 +12,6 @@ export const Route = createFileRoute('/')({
         to: '/login',
       })
     }
-
     return data
   },
   component: IndexPage,
