@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useNavigate, useRouterState } from '@tanstack/react-router'
 import {
   Sidebar,
@@ -9,6 +10,9 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
 } from '@/components/ui/sidebar'
 import {
   DropdownMenu,
@@ -18,7 +22,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { Badge } from '@/components/ui/badge'
 import { useLogOut } from '@/hooks/user-auth'
 import { useGetMe } from '@/hooks/use-user'
 import { useGetTenant } from '@/hooks/use-tenant'
@@ -33,39 +43,169 @@ import {
   ExternalLink,
   LogOut,
   ChevronUp,
+  ChevronRight,
+  User,
+  Users,
+  BarChart3,
+  Tag,
+  Boxes,
+  UserCog,
+  Plus,
+  FileUp,
+  Download,
+  AlertTriangle,
+  Sliders,
+  TrendingUp,
+  Activity,
+  Globe,
+  CreditCard,
+  Truck,
+  Receipt,
+  Bell,
+  Banknote,
+  Palette,
+  Lock,
+  UserCircle,
 } from 'lucide-react'
+
+// ─── Nav config ──────────────────────────────────────────────────────────────
 
 const navMain = [
   {
     title: 'Overview',
     icon: LayoutDashboard,
     to: '/dashboard',
+    exact: true,
   },
   {
     title: 'Products',
     icon: ShoppingBag,
     to: '/dashboard/products',
+    children: [
+      { title: 'All Products', icon: ShoppingBag, to: '/dashboard/products' },
+      { title: 'Add Product', icon: Plus, to: '/dashboard/products/new' },
+    ],
   },
   {
     title: 'Orders',
     icon: ClipboardList,
     to: '/dashboard/orders',
+    children: [
+      { title: 'All Orders', icon: ClipboardList, to: '/dashboard/orders' },
+    ],
   },
   {
-    title: 'Tenant',
-    icon: Building2,
-    to: '/dashboard/tenants',
+    title: 'Customers',
+    icon: Users,
+    to: '/dashboard/customers',
+    children: [
+      { title: 'All Customers', icon: Users, to: '/dashboard/customers' },
+    ],
   },
   {
-    title: 'Appearance Settings',
+    title: 'Categories',
+    icon: Tag,
+    to: '/dashboard/categories',
+    children: [
+      { title: 'All Categories', icon: Tag, to: '/dashboard/categories' },
+      { title: 'New Category', icon: Plus, to: '/dashboard/categories/new' },
+    ],
+  },
+  {
+    title: 'Inventory',
+    icon: Boxes,
+    to: '/dashboard/inventory',
+    children: [
+      { title: 'Overview', icon: Boxes, to: '/dashboard/inventory' },
+      {
+        title: 'Low Stock',
+        icon: AlertTriangle,
+        to: '/dashboard/inventory/low-stock',
+        badge: 'alert',
+      },
+      {
+        title: 'Adjustments',
+        icon: Sliders,
+        to: '/dashboard/inventory/adjustments',
+      },
+    ],
+  },
+  {
+    title: 'Analytics',
+    icon: BarChart3,
+    to: '/dashboard/analytics',
+    children: [
+      { title: 'Overview', icon: BarChart3, to: '/dashboard/analytics' },
+      { title: 'Sales', icon: TrendingUp, to: '/dashboard/analytics/sales' },
+      { title: 'Customers', icon: Users, to: '/dashboard/analytics/customers' },
+      {
+        title: 'Products',
+        icon: ShoppingBag,
+        to: '/dashboard/analytics/products',
+      },
+      { title: 'Traffic', icon: Activity, to: '/dashboard/analytics/traffic' },
+    ],
+  },
+  {
+    title: 'Staff',
+    icon: UserCog,
+    to: '/dashboard/staff',
+    children: [
+      { title: 'All Staff', icon: UserCog, to: '/dashboard/staff' },
+      { title: 'Add Member', icon: Plus, to: '/dashboard/staff/new' },
+    ],
+  },
+  {
+    title: 'Settings',
     icon: Settings,
     to: '/dashboard/settings',
+    children: [
+      { title: 'General', icon: Settings, to: '/dashboard/settings/general' },
+      { title: 'Branding', icon: Palette, to: '/dashboard/settings/branding' },
+      { title: 'Domain', icon: Globe, to: '/dashboard/settings/domain' },
+      {
+        title: 'Payments',
+        icon: CreditCard,
+        to: '/dashboard/settings/payments',
+      },
+      { title: 'Shipping', icon: Truck, to: '/dashboard/settings/shipping' },
+      { title: 'Taxes', icon: Receipt, to: '/dashboard/settings/taxes' },
+      {
+        title: 'Notifications',
+        icon: Bell,
+        to: '/dashboard/settings/notifications',
+      },
+      { title: 'Billing', icon: Banknote, to: '/dashboard/settings/billing' },
+    ],
+  },
+  {
+    title: 'Account',
+    icon: User,
+    to: '/dashboard/account',
+    children: [
+      { title: 'Profile', icon: UserCircle, to: '/dashboard/account/profile' },
+      { title: 'Password', icon: Lock, to: '/dashboard/account/password' },
+      {
+        title: 'Notifications',
+        icon: Bell,
+        to: '/dashboard/account/notifications',
+      },
+    ],
   },
 ]
+
+// ─── Helpers ─────────────────────────────────────────────────────────────────
 
 function getInitials(firstName?: string, lastName?: string) {
   return `${firstName?.[0] || ''}${lastName?.[0] || ''}`.toUpperCase()
 }
+
+function isParentActive(item: (typeof navMain)[0], currentPath: string) {
+  if (item.exact) return currentPath === item.to
+  return currentPath.startsWith(item.to)
+}
+
+// ─── Component ───────────────────────────────────────────────────────────────
 
 export function AppSidebar() {
   const navigate = useNavigate()
@@ -76,11 +216,27 @@ export function AppSidebar() {
   const { data: tenant } = useGetTenant()
   const { mutate: logoutMutation } = useLogOut()
 
+  // Track which parent items are open
+  const [openItems, setOpenItems] = useState<Record<string, boolean>>(() => {
+    // Auto-open the active section on mount
+    const initial: Record<string, boolean> = {}
+    navMain.forEach((item) => {
+      if (item.children && isParentActive(item, currentPath)) {
+        initial[item.title] = true
+      }
+    })
+    return initial
+  })
+
+  const toggleItem = (title: string) => {
+    setOpenItems((prev) => ({ ...prev, [title]: !prev[title] }))
+  }
+
   const handleLogout = () => logoutMutation(undefined)
 
   return (
     <Sidebar variant="inset">
-      {/* Header / Brand */}
+      {/* ── Header ── */}
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
@@ -101,37 +257,95 @@ export function AppSidebar() {
         </SidebarMenu>
       </SidebarHeader>
 
-      {/* Content */}
+      {/* ── Content ── */}
       <SidebarContent>
         {/* Main Nav */}
         <SidebarGroup>
           <SidebarGroupLabel>Navigation</SidebarGroupLabel>
           <SidebarMenu>
-            {navMain.map((item) => (
-              <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton
-                  onClick={() => navigate({ to: item.to })}
-                  isActive={currentPath === item.to}
-                  tooltip={item.title}
+            {navMain.map((item) => {
+              const active = isParentActive(item, currentPath)
+              const isOpen = openItems[item.title] ?? false
+
+              if (!item.children) {
+                // Simple item – no sub-menu
+                return (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton
+                      onClick={() => navigate({ to: item.to })}
+                      isActive={active}
+                      tooltip={item.title}
+                    >
+                      <item.icon className="h-4 w-4" />
+                      <span>{item.title}</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                )
+              }
+
+              // Collapsible item with children
+              return (
+                <Collapsible
+                  key={item.title}
+                  open={isOpen}
+                  onOpenChange={() => toggleItem(item.title)}
+                  asChild
                 >
-                  <item.icon className="h-4 w-4" />
-                  <span>{item.title}</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            ))}
+                  <SidebarMenuItem>
+                    <CollapsibleTrigger asChild>
+                      <SidebarMenuButton
+                        isActive={active && !isOpen}
+                        tooltip={item.title}
+                        className="group/collapsible"
+                      >
+                        <item.icon className="h-4 w-4" />
+                        <span>{item.title}</span>
+                        <ChevronRight className="ml-auto h-4 w-4 shrink-0 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                      </SidebarMenuButton>
+                    </CollapsibleTrigger>
+
+                    <CollapsibleContent>
+                      <SidebarMenuSub>
+                        {item.children.map((child) => {
+                          const childActive = currentPath === child.to
+                          return (
+                            <SidebarMenuSubItem key={child.to}>
+                              <SidebarMenuSubButton
+                                onClick={() => navigate({ to: child.to })}
+                                isActive={childActive}
+                                className="flex items-center gap-2"
+                              >
+                                <child.icon className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+                                <span className="flex-1">{child.title}</span>
+                                {child.badge === 'alert' && (
+                                  <Badge
+                                    variant="destructive"
+                                    className="h-4 px-1 text-[10px] font-semibold"
+                                  >
+                                    !
+                                  </Badge>
+                                )}
+                              </SidebarMenuSubButton>
+                            </SidebarMenuSubItem>
+                          )
+                        })}
+                      </SidebarMenuSub>
+                    </CollapsibleContent>
+                  </SidebarMenuItem>
+                </Collapsible>
+              )
+            })}
           </SidebarMenu>
         </SidebarGroup>
 
-        {/* Site quick links — only shown when tenant exists */}
+        {/* Site Quick Links */}
         {tenant && (
           <SidebarGroup>
             <SidebarGroupLabel>Your Site</SidebarGroupLabel>
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton
-                  onClick={() =>
-                    navigate({ to: `/preview/${tenant.subdomain}` })
-                  }
+                  onClick={() => navigate({ to: `/s/${tenant.subdomain}` })}
                   tooltip="Preview"
                 >
                   <Eye className="h-4 w-4" />
@@ -159,7 +373,7 @@ export function AppSidebar() {
         )}
       </SidebarContent>
 
-      {/* Footer / User */}
+      {/* ── Footer / User ── */}
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
@@ -185,6 +399,7 @@ export function AppSidebar() {
                   <ChevronUp className="ml-auto h-4 w-4" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
+
               <DropdownMenuContent
                 className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
                 side="top"
@@ -208,14 +423,26 @@ export function AppSidebar() {
                     </div>
                   </div>
                 </DropdownMenuLabel>
+
                 <DropdownMenuSeparator />
+
                 <DropdownMenuItem
-                  onClick={() => navigate({ to: '/dashboard/settings' })}
+                  onClick={() => navigate({ to: '/dashboard/account/profile' })}
+                >
+                  <UserCircle className="mr-2 h-4 w-4" />
+                  Profile
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() =>
+                    navigate({ to: '/dashboard/settings/general' })
+                  }
                 >
                   <Settings className="mr-2 h-4 w-4" />
                   Settings
                 </DropdownMenuItem>
+
                 <DropdownMenuSeparator />
+
                 <DropdownMenuItem
                   onClick={handleLogout}
                   className="text-destructive focus:text-destructive"

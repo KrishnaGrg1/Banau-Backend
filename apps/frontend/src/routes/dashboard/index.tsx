@@ -246,9 +246,7 @@ function DashboardPage() {
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() =>
-                      navigate({ to: `/preview/${tenant.subdomain}` })
-                    }
+                    onClick={() => navigate({ to: `/s/${tenant.subdomain}` })}
                   >
                     <Eye className="mr-2 h-4 w-4" />
                     Preview

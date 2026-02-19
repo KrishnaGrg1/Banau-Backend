@@ -30,4 +30,13 @@ export class AdminController {
     const data = await this.adminServices.getAllTenants(paginationDto);
     return ApiResponseDto.success(data, 'Retrieved all tenants successfully');
   }
+
+  @Get('tenants/:id')
+  async getTenantById(@Param('id') tenantId: string) {
+    const data = await this.adminServices.getTenantById(tenantId);
+    return ApiResponseDto.success(
+      data,
+      'Retrieved tenant by tenantId successfully',
+    );
+  }
 }

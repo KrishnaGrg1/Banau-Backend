@@ -161,9 +161,7 @@ function TenantPage() {
 
                 <div className="space-y-2">
                   <Button
-                    onClick={() =>
-                      navigate({ to: `/preview/${tenant.subdomain}` })
-                    }
+                    onClick={() => navigate({ to: `/s/tenant.subdomain}` })}
                     variant="outline"
                     className="w-full"
                   >

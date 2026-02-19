@@ -79,4 +79,14 @@ export class AdminServices {
       },
     };
   }
+
+  async getTenantById(tenantId: string) {
+    const existingTenant = await this.prisma.tenant.findUnique({
+      where: {
+        id: tenantId,
+      },
+    });
+    if (!existingTenant) throw new ConflictException('Tenant not found');
+    return existingTenant;
+  }
 }

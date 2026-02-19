@@ -14,7 +14,6 @@ import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
-import { Route as PreviewSubdomainRouteImport } from './routes/preview.$subdomain'
 import { Route as authVerifyRouteImport } from './routes/(auth)/verify'
 import { Route as authRegisterRouteImport } from './routes/(auth)/register'
 import { Route as authLoginRouteImport } from './routes/(auth)/login'
@@ -39,21 +38,23 @@ import { Route as SSubdomainAboutRouteImport } from './routes/s/$subdomain/about
 import { Route as DashboardStaffNewRouteImport } from './routes/dashboard/staff/new'
 import { Route as DashboardSettingsTaxesRouteImport } from './routes/dashboard/settings/taxes'
 import { Route as DashboardSettingsShippingRouteImport } from './routes/dashboard/settings/shipping'
-import { Route as DashboardSettingsPaymentRouteImport } from './routes/dashboard/settings/payment'
-import { Route as DashboardSettingsNotificationRouteImport } from './routes/dashboard/settings/notification'
+import { Route as DashboardSettingsPaymentsRouteImport } from './routes/dashboard/settings/payments'
+import { Route as DashboardSettingsNotificationsRouteImport } from './routes/dashboard/settings/notifications'
 import { Route as DashboardSettingsGeneralRouteImport } from './routes/dashboard/settings/general'
 import { Route as DashboardSettingsDomainRouteImport } from './routes/dashboard/settings/domain'
 import { Route as DashboardSettingsBrandingRouteImport } from './routes/dashboard/settings/branding'
 import { Route as DashboardSettingsBillingRouteImport } from './routes/dashboard/settings/billing'
 import { Route as DashboardProductsNewRouteImport } from './routes/dashboard/products/new'
-import { Route as DashboardInventoryAdjustmentRouteImport } from './routes/dashboard/inventory/adjustment'
+import { Route as DashboardInventoryLowStockRouteImport } from './routes/dashboard/inventory/low-stock'
+import { Route as DashboardInventoryAdjustmentsRouteImport } from './routes/dashboard/inventory/adjustments'
 import { Route as DashboardCategoriesNewRouteImport } from './routes/dashboard/categories/new'
 import { Route as DashboardAnalyticsTrafficRouteImport } from './routes/dashboard/analytics/traffic'
 import { Route as DashboardAnalyticsSalesRouteImport } from './routes/dashboard/analytics/sales'
 import { Route as DashboardAnalyticsProductsRouteImport } from './routes/dashboard/analytics/products'
-import { Route as DashboardAnalyticsCustomerRouteImport } from './routes/dashboard/analytics/customer'
+import { Route as DashboardAnalyticsCustomersRouteImport } from './routes/dashboard/analytics/customers'
 import { Route as DashboardAccountProfileRouteImport } from './routes/dashboard/account/profile'
 import { Route as DashboardAccountPasswordRouteImport } from './routes/dashboard/account/password'
+import { Route as DashboardAccountNotificationsRouteImport } from './routes/dashboard/account/notifications'
 import { Route as AdminUsersRolesRouteImport } from './routes/admin/users/roles'
 import { Route as AdminSettingSysyemRouteImport } from './routes/admin/setting/sysyem'
 import { Route as AdminSettingPlansRouteImport } from './routes/admin/setting/plans'
@@ -112,11 +113,6 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AdminRouteRoute,
-} as any)
-const PreviewSubdomainRoute = PreviewSubdomainRouteImport.update({
-  id: '/preview/$subdomain',
-  path: '/preview/$subdomain',
-  getParentRoute: () => rootRouteImport,
 } as any)
 const authVerifyRoute = authVerifyRouteImport.update({
   id: '/(auth)/verify',
@@ -240,16 +236,16 @@ const DashboardSettingsShippingRoute =
     path: '/settings/shipping',
     getParentRoute: () => DashboardRouteRoute,
   } as any)
-const DashboardSettingsPaymentRoute =
-  DashboardSettingsPaymentRouteImport.update({
-    id: '/settings/payment',
-    path: '/settings/payment',
+const DashboardSettingsPaymentsRoute =
+  DashboardSettingsPaymentsRouteImport.update({
+    id: '/settings/payments',
+    path: '/settings/payments',
     getParentRoute: () => DashboardRouteRoute,
   } as any)
-const DashboardSettingsNotificationRoute =
-  DashboardSettingsNotificationRouteImport.update({
-    id: '/settings/notification',
-    path: '/settings/notification',
+const DashboardSettingsNotificationsRoute =
+  DashboardSettingsNotificationsRouteImport.update({
+    id: '/settings/notifications',
+    path: '/settings/notifications',
     getParentRoute: () => DashboardRouteRoute,
   } as any)
 const DashboardSettingsGeneralRoute =
@@ -280,10 +276,16 @@ const DashboardProductsNewRoute = DashboardProductsNewRouteImport.update({
   path: '/products/new',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
-const DashboardInventoryAdjustmentRoute =
-  DashboardInventoryAdjustmentRouteImport.update({
-    id: '/inventory/adjustment',
-    path: '/inventory/adjustment',
+const DashboardInventoryLowStockRoute =
+  DashboardInventoryLowStockRouteImport.update({
+    id: '/inventory/low-stock',
+    path: '/inventory/low-stock',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
+const DashboardInventoryAdjustmentsRoute =
+  DashboardInventoryAdjustmentsRouteImport.update({
+    id: '/inventory/adjustments',
+    path: '/inventory/adjustments',
     getParentRoute: () => DashboardRouteRoute,
   } as any)
 const DashboardCategoriesNewRoute = DashboardCategoriesNewRouteImport.update({
@@ -308,10 +310,10 @@ const DashboardAnalyticsProductsRoute =
     path: '/analytics/products',
     getParentRoute: () => DashboardRouteRoute,
   } as any)
-const DashboardAnalyticsCustomerRoute =
-  DashboardAnalyticsCustomerRouteImport.update({
-    id: '/analytics/customer',
-    path: '/analytics/customer',
+const DashboardAnalyticsCustomersRoute =
+  DashboardAnalyticsCustomersRouteImport.update({
+    id: '/analytics/customers',
+    path: '/analytics/customers',
     getParentRoute: () => DashboardRouteRoute,
   } as any)
 const DashboardAccountProfileRoute = DashboardAccountProfileRouteImport.update({
@@ -323,6 +325,12 @@ const DashboardAccountPasswordRoute =
   DashboardAccountPasswordRouteImport.update({
     id: '/account/password',
     path: '/account/password',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
+const DashboardAccountNotificationsRoute =
+  DashboardAccountNotificationsRouteImport.update({
+    id: '/account/notifications',
+    path: '/account/notifications',
     getParentRoute: () => DashboardRouteRoute,
   } as any)
 const AdminUsersRolesRoute = AdminUsersRolesRouteImport.update({
@@ -513,7 +521,6 @@ export interface FileRoutesByFullPath {
   '/login': typeof authLoginRoute
   '/register': typeof authRegisterRoute
   '/verify': typeof authVerifyRoute
-  '/preview/$subdomain': typeof PreviewSubdomainRoute
   '/admin/': typeof AdminIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/admin/analytics/growth': typeof AdminAnalyticsGrowthRoute
@@ -522,21 +529,23 @@ export interface FileRoutesByFullPath {
   '/admin/setting/plans': typeof AdminSettingPlansRoute
   '/admin/setting/sysyem': typeof AdminSettingSysyemRoute
   '/admin/users/roles': typeof AdminUsersRolesRoute
+  '/dashboard/account/notifications': typeof DashboardAccountNotificationsRoute
   '/dashboard/account/password': typeof DashboardAccountPasswordRoute
   '/dashboard/account/profile': typeof DashboardAccountProfileRoute
-  '/dashboard/analytics/customer': typeof DashboardAnalyticsCustomerRoute
+  '/dashboard/analytics/customers': typeof DashboardAnalyticsCustomersRoute
   '/dashboard/analytics/products': typeof DashboardAnalyticsProductsRoute
   '/dashboard/analytics/sales': typeof DashboardAnalyticsSalesRoute
   '/dashboard/analytics/traffic': typeof DashboardAnalyticsTrafficRoute
   '/dashboard/categories/new': typeof DashboardCategoriesNewRoute
-  '/dashboard/inventory/adjustment': typeof DashboardInventoryAdjustmentRoute
+  '/dashboard/inventory/adjustments': typeof DashboardInventoryAdjustmentsRoute
+  '/dashboard/inventory/low-stock': typeof DashboardInventoryLowStockRoute
   '/dashboard/products/new': typeof DashboardProductsNewRoute
   '/dashboard/settings/billing': typeof DashboardSettingsBillingRoute
   '/dashboard/settings/branding': typeof DashboardSettingsBrandingRoute
   '/dashboard/settings/domain': typeof DashboardSettingsDomainRoute
   '/dashboard/settings/general': typeof DashboardSettingsGeneralRoute
-  '/dashboard/settings/notification': typeof DashboardSettingsNotificationRoute
-  '/dashboard/settings/payment': typeof DashboardSettingsPaymentRoute
+  '/dashboard/settings/notifications': typeof DashboardSettingsNotificationsRoute
+  '/dashboard/settings/payments': typeof DashboardSettingsPaymentsRoute
   '/dashboard/settings/shipping': typeof DashboardSettingsShippingRoute
   '/dashboard/settings/taxes': typeof DashboardSettingsTaxesRoute
   '/dashboard/staff/new': typeof DashboardStaffNewRoute
@@ -590,7 +599,6 @@ export interface FileRoutesByTo {
   '/login': typeof authLoginRoute
   '/register': typeof authRegisterRoute
   '/verify': typeof authVerifyRoute
-  '/preview/$subdomain': typeof PreviewSubdomainRoute
   '/admin': typeof AdminIndexRoute
   '/dashboard': typeof DashboardIndexRoute
   '/admin/analytics/growth': typeof AdminAnalyticsGrowthRoute
@@ -599,21 +607,23 @@ export interface FileRoutesByTo {
   '/admin/setting/plans': typeof AdminSettingPlansRoute
   '/admin/setting/sysyem': typeof AdminSettingSysyemRoute
   '/admin/users/roles': typeof AdminUsersRolesRoute
+  '/dashboard/account/notifications': typeof DashboardAccountNotificationsRoute
   '/dashboard/account/password': typeof DashboardAccountPasswordRoute
   '/dashboard/account/profile': typeof DashboardAccountProfileRoute
-  '/dashboard/analytics/customer': typeof DashboardAnalyticsCustomerRoute
+  '/dashboard/analytics/customers': typeof DashboardAnalyticsCustomersRoute
   '/dashboard/analytics/products': typeof DashboardAnalyticsProductsRoute
   '/dashboard/analytics/sales': typeof DashboardAnalyticsSalesRoute
   '/dashboard/analytics/traffic': typeof DashboardAnalyticsTrafficRoute
   '/dashboard/categories/new': typeof DashboardCategoriesNewRoute
-  '/dashboard/inventory/adjustment': typeof DashboardInventoryAdjustmentRoute
+  '/dashboard/inventory/adjustments': typeof DashboardInventoryAdjustmentsRoute
+  '/dashboard/inventory/low-stock': typeof DashboardInventoryLowStockRoute
   '/dashboard/products/new': typeof DashboardProductsNewRoute
   '/dashboard/settings/billing': typeof DashboardSettingsBillingRoute
   '/dashboard/settings/branding': typeof DashboardSettingsBrandingRoute
   '/dashboard/settings/domain': typeof DashboardSettingsDomainRoute
   '/dashboard/settings/general': typeof DashboardSettingsGeneralRoute
-  '/dashboard/settings/notification': typeof DashboardSettingsNotificationRoute
-  '/dashboard/settings/payment': typeof DashboardSettingsPaymentRoute
+  '/dashboard/settings/notifications': typeof DashboardSettingsNotificationsRoute
+  '/dashboard/settings/payments': typeof DashboardSettingsPaymentsRoute
   '/dashboard/settings/shipping': typeof DashboardSettingsShippingRoute
   '/dashboard/settings/taxes': typeof DashboardSettingsTaxesRoute
   '/dashboard/staff/new': typeof DashboardStaffNewRoute
@@ -671,7 +681,6 @@ export interface FileRoutesById {
   '/(auth)/login': typeof authLoginRoute
   '/(auth)/register': typeof authRegisterRoute
   '/(auth)/verify': typeof authVerifyRoute
-  '/preview/$subdomain': typeof PreviewSubdomainRoute
   '/admin/': typeof AdminIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/admin/analytics/growth': typeof AdminAnalyticsGrowthRoute
@@ -680,21 +689,23 @@ export interface FileRoutesById {
   '/admin/setting/plans': typeof AdminSettingPlansRoute
   '/admin/setting/sysyem': typeof AdminSettingSysyemRoute
   '/admin/users/roles': typeof AdminUsersRolesRoute
+  '/dashboard/account/notifications': typeof DashboardAccountNotificationsRoute
   '/dashboard/account/password': typeof DashboardAccountPasswordRoute
   '/dashboard/account/profile': typeof DashboardAccountProfileRoute
-  '/dashboard/analytics/customer': typeof DashboardAnalyticsCustomerRoute
+  '/dashboard/analytics/customers': typeof DashboardAnalyticsCustomersRoute
   '/dashboard/analytics/products': typeof DashboardAnalyticsProductsRoute
   '/dashboard/analytics/sales': typeof DashboardAnalyticsSalesRoute
   '/dashboard/analytics/traffic': typeof DashboardAnalyticsTrafficRoute
   '/dashboard/categories/new': typeof DashboardCategoriesNewRoute
-  '/dashboard/inventory/adjustment': typeof DashboardInventoryAdjustmentRoute
+  '/dashboard/inventory/adjustments': typeof DashboardInventoryAdjustmentsRoute
+  '/dashboard/inventory/low-stock': typeof DashboardInventoryLowStockRoute
   '/dashboard/products/new': typeof DashboardProductsNewRoute
   '/dashboard/settings/billing': typeof DashboardSettingsBillingRoute
   '/dashboard/settings/branding': typeof DashboardSettingsBrandingRoute
   '/dashboard/settings/domain': typeof DashboardSettingsDomainRoute
   '/dashboard/settings/general': typeof DashboardSettingsGeneralRoute
-  '/dashboard/settings/notification': typeof DashboardSettingsNotificationRoute
-  '/dashboard/settings/payment': typeof DashboardSettingsPaymentRoute
+  '/dashboard/settings/notifications': typeof DashboardSettingsNotificationsRoute
+  '/dashboard/settings/payments': typeof DashboardSettingsPaymentsRoute
   '/dashboard/settings/shipping': typeof DashboardSettingsShippingRoute
   '/dashboard/settings/taxes': typeof DashboardSettingsTaxesRoute
   '/dashboard/staff/new': typeof DashboardStaffNewRoute
@@ -753,7 +764,6 @@ export interface FileRouteTypes {
     | '/login'
     | '/register'
     | '/verify'
-    | '/preview/$subdomain'
     | '/admin/'
     | '/dashboard/'
     | '/admin/analytics/growth'
@@ -762,21 +772,23 @@ export interface FileRouteTypes {
     | '/admin/setting/plans'
     | '/admin/setting/sysyem'
     | '/admin/users/roles'
+    | '/dashboard/account/notifications'
     | '/dashboard/account/password'
     | '/dashboard/account/profile'
-    | '/dashboard/analytics/customer'
+    | '/dashboard/analytics/customers'
     | '/dashboard/analytics/products'
     | '/dashboard/analytics/sales'
     | '/dashboard/analytics/traffic'
     | '/dashboard/categories/new'
-    | '/dashboard/inventory/adjustment'
+    | '/dashboard/inventory/adjustments'
+    | '/dashboard/inventory/low-stock'
     | '/dashboard/products/new'
     | '/dashboard/settings/billing'
     | '/dashboard/settings/branding'
     | '/dashboard/settings/domain'
     | '/dashboard/settings/general'
-    | '/dashboard/settings/notification'
-    | '/dashboard/settings/payment'
+    | '/dashboard/settings/notifications'
+    | '/dashboard/settings/payments'
     | '/dashboard/settings/shipping'
     | '/dashboard/settings/taxes'
     | '/dashboard/staff/new'
@@ -830,7 +842,6 @@ export interface FileRouteTypes {
     | '/login'
     | '/register'
     | '/verify'
-    | '/preview/$subdomain'
     | '/admin'
     | '/dashboard'
     | '/admin/analytics/growth'
@@ -839,21 +850,23 @@ export interface FileRouteTypes {
     | '/admin/setting/plans'
     | '/admin/setting/sysyem'
     | '/admin/users/roles'
+    | '/dashboard/account/notifications'
     | '/dashboard/account/password'
     | '/dashboard/account/profile'
-    | '/dashboard/analytics/customer'
+    | '/dashboard/analytics/customers'
     | '/dashboard/analytics/products'
     | '/dashboard/analytics/sales'
     | '/dashboard/analytics/traffic'
     | '/dashboard/categories/new'
-    | '/dashboard/inventory/adjustment'
+    | '/dashboard/inventory/adjustments'
+    | '/dashboard/inventory/low-stock'
     | '/dashboard/products/new'
     | '/dashboard/settings/billing'
     | '/dashboard/settings/branding'
     | '/dashboard/settings/domain'
     | '/dashboard/settings/general'
-    | '/dashboard/settings/notification'
-    | '/dashboard/settings/payment'
+    | '/dashboard/settings/notifications'
+    | '/dashboard/settings/payments'
     | '/dashboard/settings/shipping'
     | '/dashboard/settings/taxes'
     | '/dashboard/staff/new'
@@ -910,7 +923,6 @@ export interface FileRouteTypes {
     | '/(auth)/login'
     | '/(auth)/register'
     | '/(auth)/verify'
-    | '/preview/$subdomain'
     | '/admin/'
     | '/dashboard/'
     | '/admin/analytics/growth'
@@ -919,21 +931,23 @@ export interface FileRouteTypes {
     | '/admin/setting/plans'
     | '/admin/setting/sysyem'
     | '/admin/users/roles'
+    | '/dashboard/account/notifications'
     | '/dashboard/account/password'
     | '/dashboard/account/profile'
-    | '/dashboard/analytics/customer'
+    | '/dashboard/analytics/customers'
     | '/dashboard/analytics/products'
     | '/dashboard/analytics/sales'
     | '/dashboard/analytics/traffic'
     | '/dashboard/categories/new'
-    | '/dashboard/inventory/adjustment'
+    | '/dashboard/inventory/adjustments'
+    | '/dashboard/inventory/low-stock'
     | '/dashboard/products/new'
     | '/dashboard/settings/billing'
     | '/dashboard/settings/branding'
     | '/dashboard/settings/domain'
     | '/dashboard/settings/general'
-    | '/dashboard/settings/notification'
-    | '/dashboard/settings/payment'
+    | '/dashboard/settings/notifications'
+    | '/dashboard/settings/payments'
     | '/dashboard/settings/shipping'
     | '/dashboard/settings/taxes'
     | '/dashboard/staff/new'
@@ -991,7 +1005,6 @@ export interface RootRouteChildren {
   authLoginRoute: typeof authLoginRoute
   authRegisterRoute: typeof authRegisterRoute
   authVerifyRoute: typeof authVerifyRoute
-  PreviewSubdomainRoute: typeof PreviewSubdomainRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1030,13 +1043,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRouteRoute
-    }
-    '/preview/$subdomain': {
-      id: '/preview/$subdomain'
-      path: '/preview/$subdomain'
-      fullPath: '/preview/$subdomain'
-      preLoaderRoute: typeof PreviewSubdomainRouteImport
-      parentRoute: typeof rootRouteImport
     }
     '/(auth)/verify': {
       id: '/(auth)/verify'
@@ -1206,18 +1212,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardSettingsShippingRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
-    '/dashboard/settings/payment': {
-      id: '/dashboard/settings/payment'
-      path: '/settings/payment'
-      fullPath: '/dashboard/settings/payment'
-      preLoaderRoute: typeof DashboardSettingsPaymentRouteImport
+    '/dashboard/settings/payments': {
+      id: '/dashboard/settings/payments'
+      path: '/settings/payments'
+      fullPath: '/dashboard/settings/payments'
+      preLoaderRoute: typeof DashboardSettingsPaymentsRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
-    '/dashboard/settings/notification': {
-      id: '/dashboard/settings/notification'
-      path: '/settings/notification'
-      fullPath: '/dashboard/settings/notification'
-      preLoaderRoute: typeof DashboardSettingsNotificationRouteImport
+    '/dashboard/settings/notifications': {
+      id: '/dashboard/settings/notifications'
+      path: '/settings/notifications'
+      fullPath: '/dashboard/settings/notifications'
+      preLoaderRoute: typeof DashboardSettingsNotificationsRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
     '/dashboard/settings/general': {
@@ -1255,11 +1261,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardProductsNewRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
-    '/dashboard/inventory/adjustment': {
-      id: '/dashboard/inventory/adjustment'
-      path: '/inventory/adjustment'
-      fullPath: '/dashboard/inventory/adjustment'
-      preLoaderRoute: typeof DashboardInventoryAdjustmentRouteImport
+    '/dashboard/inventory/low-stock': {
+      id: '/dashboard/inventory/low-stock'
+      path: '/inventory/low-stock'
+      fullPath: '/dashboard/inventory/low-stock'
+      preLoaderRoute: typeof DashboardInventoryLowStockRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/inventory/adjustments': {
+      id: '/dashboard/inventory/adjustments'
+      path: '/inventory/adjustments'
+      fullPath: '/dashboard/inventory/adjustments'
+      preLoaderRoute: typeof DashboardInventoryAdjustmentsRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
     '/dashboard/categories/new': {
@@ -1290,11 +1303,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardAnalyticsProductsRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
-    '/dashboard/analytics/customer': {
-      id: '/dashboard/analytics/customer'
-      path: '/analytics/customer'
-      fullPath: '/dashboard/analytics/customer'
-      preLoaderRoute: typeof DashboardAnalyticsCustomerRouteImport
+    '/dashboard/analytics/customers': {
+      id: '/dashboard/analytics/customers'
+      path: '/analytics/customers'
+      fullPath: '/dashboard/analytics/customers'
+      preLoaderRoute: typeof DashboardAnalyticsCustomersRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
     '/dashboard/account/profile': {
@@ -1309,6 +1322,13 @@ declare module '@tanstack/react-router' {
       path: '/account/password'
       fullPath: '/dashboard/account/password'
       preLoaderRoute: typeof DashboardAccountPasswordRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/account/notifications': {
+      id: '/dashboard/account/notifications'
+      path: '/account/notifications'
+      fullPath: '/dashboard/account/notifications'
+      preLoaderRoute: typeof DashboardAccountNotificationsRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
     '/admin/users/roles': {
@@ -1585,21 +1605,23 @@ const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
 
 interface DashboardRouteRouteChildren {
   DashboardIndexRoute: typeof DashboardIndexRoute
+  DashboardAccountNotificationsRoute: typeof DashboardAccountNotificationsRoute
   DashboardAccountPasswordRoute: typeof DashboardAccountPasswordRoute
   DashboardAccountProfileRoute: typeof DashboardAccountProfileRoute
-  DashboardAnalyticsCustomerRoute: typeof DashboardAnalyticsCustomerRoute
+  DashboardAnalyticsCustomersRoute: typeof DashboardAnalyticsCustomersRoute
   DashboardAnalyticsProductsRoute: typeof DashboardAnalyticsProductsRoute
   DashboardAnalyticsSalesRoute: typeof DashboardAnalyticsSalesRoute
   DashboardAnalyticsTrafficRoute: typeof DashboardAnalyticsTrafficRoute
   DashboardCategoriesNewRoute: typeof DashboardCategoriesNewRoute
-  DashboardInventoryAdjustmentRoute: typeof DashboardInventoryAdjustmentRoute
+  DashboardInventoryAdjustmentsRoute: typeof DashboardInventoryAdjustmentsRoute
+  DashboardInventoryLowStockRoute: typeof DashboardInventoryLowStockRoute
   DashboardProductsNewRoute: typeof DashboardProductsNewRoute
   DashboardSettingsBillingRoute: typeof DashboardSettingsBillingRoute
   DashboardSettingsBrandingRoute: typeof DashboardSettingsBrandingRoute
   DashboardSettingsDomainRoute: typeof DashboardSettingsDomainRoute
   DashboardSettingsGeneralRoute: typeof DashboardSettingsGeneralRoute
-  DashboardSettingsNotificationRoute: typeof DashboardSettingsNotificationRoute
-  DashboardSettingsPaymentRoute: typeof DashboardSettingsPaymentRoute
+  DashboardSettingsNotificationsRoute: typeof DashboardSettingsNotificationsRoute
+  DashboardSettingsPaymentsRoute: typeof DashboardSettingsPaymentsRoute
   DashboardSettingsShippingRoute: typeof DashboardSettingsShippingRoute
   DashboardSettingsTaxesRoute: typeof DashboardSettingsTaxesRoute
   DashboardStaffNewRoute: typeof DashboardStaffNewRoute
@@ -1624,21 +1646,23 @@ interface DashboardRouteRouteChildren {
 
 const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardIndexRoute: DashboardIndexRoute,
+  DashboardAccountNotificationsRoute: DashboardAccountNotificationsRoute,
   DashboardAccountPasswordRoute: DashboardAccountPasswordRoute,
   DashboardAccountProfileRoute: DashboardAccountProfileRoute,
-  DashboardAnalyticsCustomerRoute: DashboardAnalyticsCustomerRoute,
+  DashboardAnalyticsCustomersRoute: DashboardAnalyticsCustomersRoute,
   DashboardAnalyticsProductsRoute: DashboardAnalyticsProductsRoute,
   DashboardAnalyticsSalesRoute: DashboardAnalyticsSalesRoute,
   DashboardAnalyticsTrafficRoute: DashboardAnalyticsTrafficRoute,
   DashboardCategoriesNewRoute: DashboardCategoriesNewRoute,
-  DashboardInventoryAdjustmentRoute: DashboardInventoryAdjustmentRoute,
+  DashboardInventoryAdjustmentsRoute: DashboardInventoryAdjustmentsRoute,
+  DashboardInventoryLowStockRoute: DashboardInventoryLowStockRoute,
   DashboardProductsNewRoute: DashboardProductsNewRoute,
   DashboardSettingsBillingRoute: DashboardSettingsBillingRoute,
   DashboardSettingsBrandingRoute: DashboardSettingsBrandingRoute,
   DashboardSettingsDomainRoute: DashboardSettingsDomainRoute,
   DashboardSettingsGeneralRoute: DashboardSettingsGeneralRoute,
-  DashboardSettingsNotificationRoute: DashboardSettingsNotificationRoute,
-  DashboardSettingsPaymentRoute: DashboardSettingsPaymentRoute,
+  DashboardSettingsNotificationsRoute: DashboardSettingsNotificationsRoute,
+  DashboardSettingsPaymentsRoute: DashboardSettingsPaymentsRoute,
   DashboardSettingsShippingRoute: DashboardSettingsShippingRoute,
   DashboardSettingsTaxesRoute: DashboardSettingsTaxesRoute,
   DashboardStaffNewRoute: DashboardStaffNewRoute,
@@ -1723,7 +1747,6 @@ const rootRouteChildren: RootRouteChildren = {
   authLoginRoute: authLoginRoute,
   authRegisterRoute: authRegisterRoute,
   authVerifyRoute: authVerifyRoute,
-  PreviewSubdomainRoute: PreviewSubdomainRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
