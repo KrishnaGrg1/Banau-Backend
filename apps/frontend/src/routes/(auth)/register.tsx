@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/card'
 import { useState, useEffect } from 'react'
 import { useRegister } from '@/hooks/user-auth'
-export const Route = createFileRoute('/register')({
+export const Route = createFileRoute('/(auth)/register')({
   component: RegisterPage,
 })
 

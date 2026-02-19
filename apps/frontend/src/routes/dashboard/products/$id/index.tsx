@@ -1,7 +1,7 @@
 // Product Detail/Edit Page
 import { createFileRoute } from '@tanstack/react-router'
 
-export const Route = createFileRoute('/dashboard/products/$id')({
+export const Route = createFileRoute('/dashboard/products/$id/')({
   loader: async ({ params }) => {
     const { id } = params
 

@@ -15,7 +15,7 @@ import { useLogin } from '@/hooks/user-auth'
 // import { getServerData } from '@/utils/middleware'
 // import { useAppSession } from '@/lib/session'
 
-export const Route = createFileRoute('/login')({
+export const Route = createFileRoute('/(auth)/login')({
   // loader: async () => {
   //   const session = await useAppSession()
 
