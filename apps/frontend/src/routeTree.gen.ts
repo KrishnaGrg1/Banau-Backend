@@ -9,44 +9,93 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as VerifyRouteImport } from './routes/verify'
-import { Route as RegisterRouteImport } from './routes/register'
-import { Route as LoginRouteImport } from './routes/login'
-import { Route as HomeRouteImport } from './routes/home'
 import { Route as DashboardRouteRouteImport } from './routes/dashboard/route'
+import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
+import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as PreviewSubdomainRouteImport } from './routes/preview.$subdomain'
+import { Route as authVerifyRouteImport } from './routes/(auth)/verify'
+import { Route as authRegisterRouteImport } from './routes/(auth)/register'
+import { Route as authLoginRouteImport } from './routes/(auth)/login'
+import { Route as SSubdomainRouteRouteImport } from './routes/s/$subdomain/route'
+import { Route as SSubdomainIndexRouteImport } from './routes/s/$subdomain/index'
 import { Route as DashboardTenantsIndexRouteImport } from './routes/dashboard/tenants/index'
+import { Route as DashboardStaffIndexRouteImport } from './routes/dashboard/staff/index'
 import { Route as DashboardSettingsIndexRouteImport } from './routes/dashboard/settings/index'
 import { Route as DashboardProductsIndexRouteImport } from './routes/dashboard/products/index'
 import { Route as DashboardOrdersIndexRouteImport } from './routes/dashboard/orders/index'
-import { Route as DashboardProductsIdRouteImport } from './routes/dashboard/products/$id'
-import { Route as DashboardOrdersIdRouteImport } from './routes/dashboard/orders/$id'
+import { Route as DashboardInventoryIndexRouteImport } from './routes/dashboard/inventory/index'
+import { Route as DashboardCustomersIndexRouteImport } from './routes/dashboard/customers/index'
+import { Route as DashboardCategoriesIndexRouteImport } from './routes/dashboard/categories/index'
+import { Route as DashboardAnalyticsIndexRouteImport } from './routes/dashboard/analytics/index'
+import { Route as AdminUsersIndexRouteImport } from './routes/admin/users/index'
+import { Route as AdminTenantsIndexRouteImport } from './routes/admin/tenants/index'
+import { Route as AdminAnalyticsIndexRouteImport } from './routes/admin/analytics/index'
+import { Route as SSubdomainSearchRouteImport } from './routes/s/$subdomain/search'
+import { Route as SSubdomainContactRouteImport } from './routes/s/$subdomain/contact'
+import { Route as SSubdomainCartRouteImport } from './routes/s/$subdomain/cart'
+import { Route as SSubdomainAboutRouteImport } from './routes/s/$subdomain/about'
+import { Route as DashboardStaffNewRouteImport } from './routes/dashboard/staff/new'
+import { Route as DashboardSettingsTaxesRouteImport } from './routes/dashboard/settings/taxes'
+import { Route as DashboardSettingsShippingRouteImport } from './routes/dashboard/settings/shipping'
+import { Route as DashboardSettingsPaymentRouteImport } from './routes/dashboard/settings/payment'
+import { Route as DashboardSettingsNotificationRouteImport } from './routes/dashboard/settings/notification'
+import { Route as DashboardSettingsGeneralRouteImport } from './routes/dashboard/settings/general'
+import { Route as DashboardSettingsDomainRouteImport } from './routes/dashboard/settings/domain'
+import { Route as DashboardSettingsBrandingRouteImport } from './routes/dashboard/settings/branding'
+import { Route as DashboardSettingsBillingRouteImport } from './routes/dashboard/settings/billing'
+import { Route as DashboardProductsNewRouteImport } from './routes/dashboard/products/new'
+import { Route as DashboardInventoryAdjustmentRouteImport } from './routes/dashboard/inventory/adjustment'
+import { Route as DashboardCategoriesNewRouteImport } from './routes/dashboard/categories/new'
+import { Route as DashboardAnalyticsTrafficRouteImport } from './routes/dashboard/analytics/traffic'
+import { Route as DashboardAnalyticsSalesRouteImport } from './routes/dashboard/analytics/sales'
+import { Route as DashboardAnalyticsProductsRouteImport } from './routes/dashboard/analytics/products'
+import { Route as DashboardAnalyticsCustomerRouteImport } from './routes/dashboard/analytics/customer'
+import { Route as DashboardAccountProfileRouteImport } from './routes/dashboard/account/profile'
+import { Route as DashboardAccountPasswordRouteImport } from './routes/dashboard/account/password'
+import { Route as AdminUsersRolesRouteImport } from './routes/admin/users/roles'
+import { Route as AdminSettingSysyemRouteImport } from './routes/admin/setting/sysyem'
+import { Route as AdminSettingPlansRouteImport } from './routes/admin/setting/plans'
+import { Route as AdminSettingFeaturesRouteImport } from './routes/admin/setting/features'
+import { Route as AdminAnalyticsRevenueRouteImport } from './routes/admin/analytics/revenue'
+import { Route as AdminAnalyticsGrowthRouteImport } from './routes/admin/analytics/growth'
+import { Route as SSubdomainShopIndexRouteImport } from './routes/s/$subdomain/shop/index'
+import { Route as SSubdomainCheckoutIndexRouteImport } from './routes/s/$subdomain/checkout/index'
+import { Route as SSubdomainAccountIndexRouteImport } from './routes/s/$subdomain/account/index'
+import { Route as DashboardProductsIdIndexRouteImport } from './routes/dashboard/products/$id/index'
+import { Route as DashboardOrdersIdIndexRouteImport } from './routes/dashboard/orders/$id/index'
+import { Route as DashboardCustomersIdIndexRouteImport } from './routes/dashboard/customers/$id/index'
+import { Route as AdminUsersIdIndexRouteImport } from './routes/admin/users/$id/index'
+import { Route as AdminTenantsIdIndexRouteImport } from './routes/admin/tenants/$id/index'
+import { Route as SSubdomainShopSlugRouteImport } from './routes/s/$subdomain/shop/$slug'
+import { Route as SSubdomainCheckoutSuccessRouteImport } from './routes/s/$subdomain/checkout/success'
+import { Route as SSubdomainCheckoutFailedRouteImport } from './routes/s/$subdomain/checkout/failed'
+import { Route as SSubdomainCategoriesSlugRouteImport } from './routes/s/$subdomain/categories/$slug'
+import { Route as SSubdomainAccountRegisterRouteImport } from './routes/s/$subdomain/account/register'
+import { Route as SSubdomainAccountProfileRouteImport } from './routes/s/$subdomain/account/profile'
+import { Route as SSubdomainAccountLoginRouteImport } from './routes/s/$subdomain/account/login'
+import { Route as DashboardStaffIdEditRouteImport } from './routes/dashboard/staff/$id.edit'
+import { Route as DashboardProductsIdEditRouteImport } from './routes/dashboard/products/$id/edit'
+import { Route as DashboardOrdersIdEditRouteImport } from './routes/dashboard/orders/$id/edit'
+import { Route as DashboardCustomersIdEditRouteImport } from './routes/dashboard/customers/$id/edit'
+import { Route as DashboardCategoriesIdEditRouteImport } from './routes/dashboard/categories/$id/edit'
+import { Route as AdminUsersIdEditRouteImport } from './routes/admin/users/$id/edit'
+import { Route as AdminTenantsIdEditRouteImport } from './routes/admin/tenants/$id/edit'
+import { Route as SSubdomainAccountOrdersIndexRouteImport } from './routes/s/$subdomain/account/orders/index'
+import { Route as SSubdomainAccountAddressesIndexRouteImport } from './routes/s/$subdomain/account/addresses/index'
+import { Route as SSubdomainAccountOrdersIdRouteImport } from './routes/s/$subdomain/account/orders/$id'
+import { Route as SSubdomainAccountAddressesNewRouteImport } from './routes/s/$subdomain/account/addresses/new'
+import { Route as SSubdomainAccountAddressesIdEditRouteImport } from './routes/s/$subdomain/account/addresses/$id.edit'
 
-const VerifyRoute = VerifyRouteImport.update({
-  id: '/verify',
-  path: '/verify',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RegisterRoute = RegisterRouteImport.update({
-  id: '/register',
-  path: '/register',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const HomeRoute = HomeRouteImport.update({
-  id: '/home',
-  path: '/home',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const DashboardRouteRoute = DashboardRouteRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRouteRoute = AdminRouteRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -59,14 +108,49 @@ const DashboardIndexRoute = DashboardIndexRouteImport.update({
   path: '/',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const PreviewSubdomainRoute = PreviewSubdomainRouteImport.update({
   id: '/preview/$subdomain',
   path: '/preview/$subdomain',
   getParentRoute: () => rootRouteImport,
 } as any)
+const authVerifyRoute = authVerifyRouteImport.update({
+  id: '/(auth)/verify',
+  path: '/verify',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const authRegisterRoute = authRegisterRouteImport.update({
+  id: '/(auth)/register',
+  path: '/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const authLoginRoute = authLoginRouteImport.update({
+  id: '/(auth)/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SSubdomainRouteRoute = SSubdomainRouteRouteImport.update({
+  id: '/s/$subdomain',
+  path: '/s/$subdomain',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SSubdomainIndexRoute = SSubdomainIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => SSubdomainRouteRoute,
+} as any)
 const DashboardTenantsIndexRoute = DashboardTenantsIndexRouteImport.update({
   id: '/tenants/',
   path: '/tenants/',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardStaffIndexRoute = DashboardStaffIndexRouteImport.update({
+  id: '/staff/',
+  path: '/staff/',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardSettingsIndexRoute = DashboardSettingsIndexRouteImport.update({
@@ -84,160 +168,846 @@ const DashboardOrdersIndexRoute = DashboardOrdersIndexRouteImport.update({
   path: '/orders/',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
-const DashboardProductsIdRoute = DashboardProductsIdRouteImport.update({
-  id: '/products/$id',
-  path: '/products/$id',
+const DashboardInventoryIndexRoute = DashboardInventoryIndexRouteImport.update({
+  id: '/inventory/',
+  path: '/inventory/',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
-const DashboardOrdersIdRoute = DashboardOrdersIdRouteImport.update({
-  id: '/orders/$id',
-  path: '/orders/$id',
+const DashboardCustomersIndexRoute = DashboardCustomersIndexRouteImport.update({
+  id: '/customers/',
+  path: '/customers/',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
+const DashboardCategoriesIndexRoute =
+  DashboardCategoriesIndexRouteImport.update({
+    id: '/categories/',
+    path: '/categories/',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
+const DashboardAnalyticsIndexRoute = DashboardAnalyticsIndexRouteImport.update({
+  id: '/analytics/',
+  path: '/analytics/',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const AdminUsersIndexRoute = AdminUsersIndexRouteImport.update({
+  id: '/users/',
+  path: '/users/',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminTenantsIndexRoute = AdminTenantsIndexRouteImport.update({
+  id: '/tenants/',
+  path: '/tenants/',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminAnalyticsIndexRoute = AdminAnalyticsIndexRouteImport.update({
+  id: '/analytics/',
+  path: '/analytics/',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const SSubdomainSearchRoute = SSubdomainSearchRouteImport.update({
+  id: '/search',
+  path: '/search',
+  getParentRoute: () => SSubdomainRouteRoute,
+} as any)
+const SSubdomainContactRoute = SSubdomainContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => SSubdomainRouteRoute,
+} as any)
+const SSubdomainCartRoute = SSubdomainCartRouteImport.update({
+  id: '/cart',
+  path: '/cart',
+  getParentRoute: () => SSubdomainRouteRoute,
+} as any)
+const SSubdomainAboutRoute = SSubdomainAboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => SSubdomainRouteRoute,
+} as any)
+const DashboardStaffNewRoute = DashboardStaffNewRouteImport.update({
+  id: '/staff/new',
+  path: '/staff/new',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardSettingsTaxesRoute = DashboardSettingsTaxesRouteImport.update({
+  id: '/settings/taxes',
+  path: '/settings/taxes',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardSettingsShippingRoute =
+  DashboardSettingsShippingRouteImport.update({
+    id: '/settings/shipping',
+    path: '/settings/shipping',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
+const DashboardSettingsPaymentRoute =
+  DashboardSettingsPaymentRouteImport.update({
+    id: '/settings/payment',
+    path: '/settings/payment',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
+const DashboardSettingsNotificationRoute =
+  DashboardSettingsNotificationRouteImport.update({
+    id: '/settings/notification',
+    path: '/settings/notification',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
+const DashboardSettingsGeneralRoute =
+  DashboardSettingsGeneralRouteImport.update({
+    id: '/settings/general',
+    path: '/settings/general',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
+const DashboardSettingsDomainRoute = DashboardSettingsDomainRouteImport.update({
+  id: '/settings/domain',
+  path: '/settings/domain',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardSettingsBrandingRoute =
+  DashboardSettingsBrandingRouteImport.update({
+    id: '/settings/branding',
+    path: '/settings/branding',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
+const DashboardSettingsBillingRoute =
+  DashboardSettingsBillingRouteImport.update({
+    id: '/settings/billing',
+    path: '/settings/billing',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
+const DashboardProductsNewRoute = DashboardProductsNewRouteImport.update({
+  id: '/products/new',
+  path: '/products/new',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardInventoryAdjustmentRoute =
+  DashboardInventoryAdjustmentRouteImport.update({
+    id: '/inventory/adjustment',
+    path: '/inventory/adjustment',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
+const DashboardCategoriesNewRoute = DashboardCategoriesNewRouteImport.update({
+  id: '/categories/new',
+  path: '/categories/new',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardAnalyticsTrafficRoute =
+  DashboardAnalyticsTrafficRouteImport.update({
+    id: '/analytics/traffic',
+    path: '/analytics/traffic',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
+const DashboardAnalyticsSalesRoute = DashboardAnalyticsSalesRouteImport.update({
+  id: '/analytics/sales',
+  path: '/analytics/sales',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardAnalyticsProductsRoute =
+  DashboardAnalyticsProductsRouteImport.update({
+    id: '/analytics/products',
+    path: '/analytics/products',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
+const DashboardAnalyticsCustomerRoute =
+  DashboardAnalyticsCustomerRouteImport.update({
+    id: '/analytics/customer',
+    path: '/analytics/customer',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
+const DashboardAccountProfileRoute = DashboardAccountProfileRouteImport.update({
+  id: '/account/profile',
+  path: '/account/profile',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardAccountPasswordRoute =
+  DashboardAccountPasswordRouteImport.update({
+    id: '/account/password',
+    path: '/account/password',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
+const AdminUsersRolesRoute = AdminUsersRolesRouteImport.update({
+  id: '/users/roles',
+  path: '/users/roles',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminSettingSysyemRoute = AdminSettingSysyemRouteImport.update({
+  id: '/setting/sysyem',
+  path: '/setting/sysyem',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminSettingPlansRoute = AdminSettingPlansRouteImport.update({
+  id: '/setting/plans',
+  path: '/setting/plans',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminSettingFeaturesRoute = AdminSettingFeaturesRouteImport.update({
+  id: '/setting/features',
+  path: '/setting/features',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminAnalyticsRevenueRoute = AdminAnalyticsRevenueRouteImport.update({
+  id: '/analytics/revenue',
+  path: '/analytics/revenue',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminAnalyticsGrowthRoute = AdminAnalyticsGrowthRouteImport.update({
+  id: '/analytics/growth',
+  path: '/analytics/growth',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const SSubdomainShopIndexRoute = SSubdomainShopIndexRouteImport.update({
+  id: '/shop/',
+  path: '/shop/',
+  getParentRoute: () => SSubdomainRouteRoute,
+} as any)
+const SSubdomainCheckoutIndexRoute = SSubdomainCheckoutIndexRouteImport.update({
+  id: '/checkout/',
+  path: '/checkout/',
+  getParentRoute: () => SSubdomainRouteRoute,
+} as any)
+const SSubdomainAccountIndexRoute = SSubdomainAccountIndexRouteImport.update({
+  id: '/account/',
+  path: '/account/',
+  getParentRoute: () => SSubdomainRouteRoute,
+} as any)
+const DashboardProductsIdIndexRoute =
+  DashboardProductsIdIndexRouteImport.update({
+    id: '/products/$id/',
+    path: '/products/$id/',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
+const DashboardOrdersIdIndexRoute = DashboardOrdersIdIndexRouteImport.update({
+  id: '/orders/$id/',
+  path: '/orders/$id/',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardCustomersIdIndexRoute =
+  DashboardCustomersIdIndexRouteImport.update({
+    id: '/customers/$id/',
+    path: '/customers/$id/',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
+const AdminUsersIdIndexRoute = AdminUsersIdIndexRouteImport.update({
+  id: '/users/$id/',
+  path: '/users/$id/',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminTenantsIdIndexRoute = AdminTenantsIdIndexRouteImport.update({
+  id: '/tenants/$id/',
+  path: '/tenants/$id/',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const SSubdomainShopSlugRoute = SSubdomainShopSlugRouteImport.update({
+  id: '/shop/$slug',
+  path: '/shop/$slug',
+  getParentRoute: () => SSubdomainRouteRoute,
+} as any)
+const SSubdomainCheckoutSuccessRoute =
+  SSubdomainCheckoutSuccessRouteImport.update({
+    id: '/checkout/success',
+    path: '/checkout/success',
+    getParentRoute: () => SSubdomainRouteRoute,
+  } as any)
+const SSubdomainCheckoutFailedRoute =
+  SSubdomainCheckoutFailedRouteImport.update({
+    id: '/checkout/failed',
+    path: '/checkout/failed',
+    getParentRoute: () => SSubdomainRouteRoute,
+  } as any)
+const SSubdomainCategoriesSlugRoute =
+  SSubdomainCategoriesSlugRouteImport.update({
+    id: '/categories/$slug',
+    path: '/categories/$slug',
+    getParentRoute: () => SSubdomainRouteRoute,
+  } as any)
+const SSubdomainAccountRegisterRoute =
+  SSubdomainAccountRegisterRouteImport.update({
+    id: '/account/register',
+    path: '/account/register',
+    getParentRoute: () => SSubdomainRouteRoute,
+  } as any)
+const SSubdomainAccountProfileRoute =
+  SSubdomainAccountProfileRouteImport.update({
+    id: '/account/profile',
+    path: '/account/profile',
+    getParentRoute: () => SSubdomainRouteRoute,
+  } as any)
+const SSubdomainAccountLoginRoute = SSubdomainAccountLoginRouteImport.update({
+  id: '/account/login',
+  path: '/account/login',
+  getParentRoute: () => SSubdomainRouteRoute,
+} as any)
+const DashboardStaffIdEditRoute = DashboardStaffIdEditRouteImport.update({
+  id: '/staff/$id/edit',
+  path: '/staff/$id/edit',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardProductsIdEditRoute = DashboardProductsIdEditRouteImport.update({
+  id: '/products/$id/edit',
+  path: '/products/$id/edit',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardOrdersIdEditRoute = DashboardOrdersIdEditRouteImport.update({
+  id: '/orders/$id/edit',
+  path: '/orders/$id/edit',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardCustomersIdEditRoute =
+  DashboardCustomersIdEditRouteImport.update({
+    id: '/customers/$id/edit',
+    path: '/customers/$id/edit',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
+const DashboardCategoriesIdEditRoute =
+  DashboardCategoriesIdEditRouteImport.update({
+    id: '/categories/$id/edit',
+    path: '/categories/$id/edit',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
+const AdminUsersIdEditRoute = AdminUsersIdEditRouteImport.update({
+  id: '/users/$id/edit',
+  path: '/users/$id/edit',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminTenantsIdEditRoute = AdminTenantsIdEditRouteImport.update({
+  id: '/tenants/$id/edit',
+  path: '/tenants/$id/edit',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const SSubdomainAccountOrdersIndexRoute =
+  SSubdomainAccountOrdersIndexRouteImport.update({
+    id: '/account/orders/',
+    path: '/account/orders/',
+    getParentRoute: () => SSubdomainRouteRoute,
+  } as any)
+const SSubdomainAccountAddressesIndexRoute =
+  SSubdomainAccountAddressesIndexRouteImport.update({
+    id: '/account/addresses/',
+    path: '/account/addresses/',
+    getParentRoute: () => SSubdomainRouteRoute,
+  } as any)
+const SSubdomainAccountOrdersIdRoute =
+  SSubdomainAccountOrdersIdRouteImport.update({
+    id: '/account/orders/$id',
+    path: '/account/orders/$id',
+    getParentRoute: () => SSubdomainRouteRoute,
+  } as any)
+const SSubdomainAccountAddressesNewRoute =
+  SSubdomainAccountAddressesNewRouteImport.update({
+    id: '/account/addresses/new',
+    path: '/account/addresses/new',
+    getParentRoute: () => SSubdomainRouteRoute,
+  } as any)
+const SSubdomainAccountAddressesIdEditRoute =
+  SSubdomainAccountAddressesIdEditRouteImport.update({
+    id: '/account/addresses/$id/edit',
+    path: '/account/addresses/$id/edit',
+    getParentRoute: () => SSubdomainRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteRouteWithChildren
   '/dashboard': typeof DashboardRouteRouteWithChildren
-  '/home': typeof HomeRoute
-  '/login': typeof LoginRoute
-  '/register': typeof RegisterRoute
-  '/verify': typeof VerifyRoute
+  '/s/$subdomain': typeof SSubdomainRouteRouteWithChildren
+  '/login': typeof authLoginRoute
+  '/register': typeof authRegisterRoute
+  '/verify': typeof authVerifyRoute
   '/preview/$subdomain': typeof PreviewSubdomainRoute
+  '/admin/': typeof AdminIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
-  '/dashboard/orders/$id': typeof DashboardOrdersIdRoute
-  '/dashboard/products/$id': typeof DashboardProductsIdRoute
+  '/admin/analytics/growth': typeof AdminAnalyticsGrowthRoute
+  '/admin/analytics/revenue': typeof AdminAnalyticsRevenueRoute
+  '/admin/setting/features': typeof AdminSettingFeaturesRoute
+  '/admin/setting/plans': typeof AdminSettingPlansRoute
+  '/admin/setting/sysyem': typeof AdminSettingSysyemRoute
+  '/admin/users/roles': typeof AdminUsersRolesRoute
+  '/dashboard/account/password': typeof DashboardAccountPasswordRoute
+  '/dashboard/account/profile': typeof DashboardAccountProfileRoute
+  '/dashboard/analytics/customer': typeof DashboardAnalyticsCustomerRoute
+  '/dashboard/analytics/products': typeof DashboardAnalyticsProductsRoute
+  '/dashboard/analytics/sales': typeof DashboardAnalyticsSalesRoute
+  '/dashboard/analytics/traffic': typeof DashboardAnalyticsTrafficRoute
+  '/dashboard/categories/new': typeof DashboardCategoriesNewRoute
+  '/dashboard/inventory/adjustment': typeof DashboardInventoryAdjustmentRoute
+  '/dashboard/products/new': typeof DashboardProductsNewRoute
+  '/dashboard/settings/billing': typeof DashboardSettingsBillingRoute
+  '/dashboard/settings/branding': typeof DashboardSettingsBrandingRoute
+  '/dashboard/settings/domain': typeof DashboardSettingsDomainRoute
+  '/dashboard/settings/general': typeof DashboardSettingsGeneralRoute
+  '/dashboard/settings/notification': typeof DashboardSettingsNotificationRoute
+  '/dashboard/settings/payment': typeof DashboardSettingsPaymentRoute
+  '/dashboard/settings/shipping': typeof DashboardSettingsShippingRoute
+  '/dashboard/settings/taxes': typeof DashboardSettingsTaxesRoute
+  '/dashboard/staff/new': typeof DashboardStaffNewRoute
+  '/s/$subdomain/about': typeof SSubdomainAboutRoute
+  '/s/$subdomain/cart': typeof SSubdomainCartRoute
+  '/s/$subdomain/contact': typeof SSubdomainContactRoute
+  '/s/$subdomain/search': typeof SSubdomainSearchRoute
+  '/admin/analytics/': typeof AdminAnalyticsIndexRoute
+  '/admin/tenants/': typeof AdminTenantsIndexRoute
+  '/admin/users/': typeof AdminUsersIndexRoute
+  '/dashboard/analytics/': typeof DashboardAnalyticsIndexRoute
+  '/dashboard/categories/': typeof DashboardCategoriesIndexRoute
+  '/dashboard/customers/': typeof DashboardCustomersIndexRoute
+  '/dashboard/inventory/': typeof DashboardInventoryIndexRoute
   '/dashboard/orders/': typeof DashboardOrdersIndexRoute
   '/dashboard/products/': typeof DashboardProductsIndexRoute
   '/dashboard/settings/': typeof DashboardSettingsIndexRoute
+  '/dashboard/staff/': typeof DashboardStaffIndexRoute
   '/dashboard/tenants/': typeof DashboardTenantsIndexRoute
+  '/s/$subdomain/': typeof SSubdomainIndexRoute
+  '/admin/tenants/$id/edit': typeof AdminTenantsIdEditRoute
+  '/admin/users/$id/edit': typeof AdminUsersIdEditRoute
+  '/dashboard/categories/$id/edit': typeof DashboardCategoriesIdEditRoute
+  '/dashboard/customers/$id/edit': typeof DashboardCustomersIdEditRoute
+  '/dashboard/orders/$id/edit': typeof DashboardOrdersIdEditRoute
+  '/dashboard/products/$id/edit': typeof DashboardProductsIdEditRoute
+  '/dashboard/staff/$id/edit': typeof DashboardStaffIdEditRoute
+  '/s/$subdomain/account/login': typeof SSubdomainAccountLoginRoute
+  '/s/$subdomain/account/profile': typeof SSubdomainAccountProfileRoute
+  '/s/$subdomain/account/register': typeof SSubdomainAccountRegisterRoute
+  '/s/$subdomain/categories/$slug': typeof SSubdomainCategoriesSlugRoute
+  '/s/$subdomain/checkout/failed': typeof SSubdomainCheckoutFailedRoute
+  '/s/$subdomain/checkout/success': typeof SSubdomainCheckoutSuccessRoute
+  '/s/$subdomain/shop/$slug': typeof SSubdomainShopSlugRoute
+  '/admin/tenants/$id/': typeof AdminTenantsIdIndexRoute
+  '/admin/users/$id/': typeof AdminUsersIdIndexRoute
+  '/dashboard/customers/$id/': typeof DashboardCustomersIdIndexRoute
+  '/dashboard/orders/$id/': typeof DashboardOrdersIdIndexRoute
+  '/dashboard/products/$id/': typeof DashboardProductsIdIndexRoute
+  '/s/$subdomain/account/': typeof SSubdomainAccountIndexRoute
+  '/s/$subdomain/checkout/': typeof SSubdomainCheckoutIndexRoute
+  '/s/$subdomain/shop/': typeof SSubdomainShopIndexRoute
+  '/s/$subdomain/account/addresses/new': typeof SSubdomainAccountAddressesNewRoute
+  '/s/$subdomain/account/orders/$id': typeof SSubdomainAccountOrdersIdRoute
+  '/s/$subdomain/account/addresses/': typeof SSubdomainAccountAddressesIndexRoute
+  '/s/$subdomain/account/orders/': typeof SSubdomainAccountOrdersIndexRoute
+  '/s/$subdomain/account/addresses/$id/edit': typeof SSubdomainAccountAddressesIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/home': typeof HomeRoute
-  '/login': typeof LoginRoute
-  '/register': typeof RegisterRoute
-  '/verify': typeof VerifyRoute
+  '/login': typeof authLoginRoute
+  '/register': typeof authRegisterRoute
+  '/verify': typeof authVerifyRoute
   '/preview/$subdomain': typeof PreviewSubdomainRoute
+  '/admin': typeof AdminIndexRoute
   '/dashboard': typeof DashboardIndexRoute
-  '/dashboard/orders/$id': typeof DashboardOrdersIdRoute
-  '/dashboard/products/$id': typeof DashboardProductsIdRoute
+  '/admin/analytics/growth': typeof AdminAnalyticsGrowthRoute
+  '/admin/analytics/revenue': typeof AdminAnalyticsRevenueRoute
+  '/admin/setting/features': typeof AdminSettingFeaturesRoute
+  '/admin/setting/plans': typeof AdminSettingPlansRoute
+  '/admin/setting/sysyem': typeof AdminSettingSysyemRoute
+  '/admin/users/roles': typeof AdminUsersRolesRoute
+  '/dashboard/account/password': typeof DashboardAccountPasswordRoute
+  '/dashboard/account/profile': typeof DashboardAccountProfileRoute
+  '/dashboard/analytics/customer': typeof DashboardAnalyticsCustomerRoute
+  '/dashboard/analytics/products': typeof DashboardAnalyticsProductsRoute
+  '/dashboard/analytics/sales': typeof DashboardAnalyticsSalesRoute
+  '/dashboard/analytics/traffic': typeof DashboardAnalyticsTrafficRoute
+  '/dashboard/categories/new': typeof DashboardCategoriesNewRoute
+  '/dashboard/inventory/adjustment': typeof DashboardInventoryAdjustmentRoute
+  '/dashboard/products/new': typeof DashboardProductsNewRoute
+  '/dashboard/settings/billing': typeof DashboardSettingsBillingRoute
+  '/dashboard/settings/branding': typeof DashboardSettingsBrandingRoute
+  '/dashboard/settings/domain': typeof DashboardSettingsDomainRoute
+  '/dashboard/settings/general': typeof DashboardSettingsGeneralRoute
+  '/dashboard/settings/notification': typeof DashboardSettingsNotificationRoute
+  '/dashboard/settings/payment': typeof DashboardSettingsPaymentRoute
+  '/dashboard/settings/shipping': typeof DashboardSettingsShippingRoute
+  '/dashboard/settings/taxes': typeof DashboardSettingsTaxesRoute
+  '/dashboard/staff/new': typeof DashboardStaffNewRoute
+  '/s/$subdomain/about': typeof SSubdomainAboutRoute
+  '/s/$subdomain/cart': typeof SSubdomainCartRoute
+  '/s/$subdomain/contact': typeof SSubdomainContactRoute
+  '/s/$subdomain/search': typeof SSubdomainSearchRoute
+  '/admin/analytics': typeof AdminAnalyticsIndexRoute
+  '/admin/tenants': typeof AdminTenantsIndexRoute
+  '/admin/users': typeof AdminUsersIndexRoute
+  '/dashboard/analytics': typeof DashboardAnalyticsIndexRoute
+  '/dashboard/categories': typeof DashboardCategoriesIndexRoute
+  '/dashboard/customers': typeof DashboardCustomersIndexRoute
+  '/dashboard/inventory': typeof DashboardInventoryIndexRoute
   '/dashboard/orders': typeof DashboardOrdersIndexRoute
   '/dashboard/products': typeof DashboardProductsIndexRoute
   '/dashboard/settings': typeof DashboardSettingsIndexRoute
+  '/dashboard/staff': typeof DashboardStaffIndexRoute
   '/dashboard/tenants': typeof DashboardTenantsIndexRoute
+  '/s/$subdomain': typeof SSubdomainIndexRoute
+  '/admin/tenants/$id/edit': typeof AdminTenantsIdEditRoute
+  '/admin/users/$id/edit': typeof AdminUsersIdEditRoute
+  '/dashboard/categories/$id/edit': typeof DashboardCategoriesIdEditRoute
+  '/dashboard/customers/$id/edit': typeof DashboardCustomersIdEditRoute
+  '/dashboard/orders/$id/edit': typeof DashboardOrdersIdEditRoute
+  '/dashboard/products/$id/edit': typeof DashboardProductsIdEditRoute
+  '/dashboard/staff/$id/edit': typeof DashboardStaffIdEditRoute
+  '/s/$subdomain/account/login': typeof SSubdomainAccountLoginRoute
+  '/s/$subdomain/account/profile': typeof SSubdomainAccountProfileRoute
+  '/s/$subdomain/account/register': typeof SSubdomainAccountRegisterRoute
+  '/s/$subdomain/categories/$slug': typeof SSubdomainCategoriesSlugRoute
+  '/s/$subdomain/checkout/failed': typeof SSubdomainCheckoutFailedRoute
+  '/s/$subdomain/checkout/success': typeof SSubdomainCheckoutSuccessRoute
+  '/s/$subdomain/shop/$slug': typeof SSubdomainShopSlugRoute
+  '/admin/tenants/$id': typeof AdminTenantsIdIndexRoute
+  '/admin/users/$id': typeof AdminUsersIdIndexRoute
+  '/dashboard/customers/$id': typeof DashboardCustomersIdIndexRoute
+  '/dashboard/orders/$id': typeof DashboardOrdersIdIndexRoute
+  '/dashboard/products/$id': typeof DashboardProductsIdIndexRoute
+  '/s/$subdomain/account': typeof SSubdomainAccountIndexRoute
+  '/s/$subdomain/checkout': typeof SSubdomainCheckoutIndexRoute
+  '/s/$subdomain/shop': typeof SSubdomainShopIndexRoute
+  '/s/$subdomain/account/addresses/new': typeof SSubdomainAccountAddressesNewRoute
+  '/s/$subdomain/account/orders/$id': typeof SSubdomainAccountOrdersIdRoute
+  '/s/$subdomain/account/addresses': typeof SSubdomainAccountAddressesIndexRoute
+  '/s/$subdomain/account/orders': typeof SSubdomainAccountOrdersIndexRoute
+  '/s/$subdomain/account/addresses/$id/edit': typeof SSubdomainAccountAddressesIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteRouteWithChildren
   '/dashboard': typeof DashboardRouteRouteWithChildren
-  '/home': typeof HomeRoute
-  '/login': typeof LoginRoute
-  '/register': typeof RegisterRoute
-  '/verify': typeof VerifyRoute
+  '/s/$subdomain': typeof SSubdomainRouteRouteWithChildren
+  '/(auth)/login': typeof authLoginRoute
+  '/(auth)/register': typeof authRegisterRoute
+  '/(auth)/verify': typeof authVerifyRoute
   '/preview/$subdomain': typeof PreviewSubdomainRoute
+  '/admin/': typeof AdminIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
-  '/dashboard/orders/$id': typeof DashboardOrdersIdRoute
-  '/dashboard/products/$id': typeof DashboardProductsIdRoute
+  '/admin/analytics/growth': typeof AdminAnalyticsGrowthRoute
+  '/admin/analytics/revenue': typeof AdminAnalyticsRevenueRoute
+  '/admin/setting/features': typeof AdminSettingFeaturesRoute
+  '/admin/setting/plans': typeof AdminSettingPlansRoute
+  '/admin/setting/sysyem': typeof AdminSettingSysyemRoute
+  '/admin/users/roles': typeof AdminUsersRolesRoute
+  '/dashboard/account/password': typeof DashboardAccountPasswordRoute
+  '/dashboard/account/profile': typeof DashboardAccountProfileRoute
+  '/dashboard/analytics/customer': typeof DashboardAnalyticsCustomerRoute
+  '/dashboard/analytics/products': typeof DashboardAnalyticsProductsRoute
+  '/dashboard/analytics/sales': typeof DashboardAnalyticsSalesRoute
+  '/dashboard/analytics/traffic': typeof DashboardAnalyticsTrafficRoute
+  '/dashboard/categories/new': typeof DashboardCategoriesNewRoute
+  '/dashboard/inventory/adjustment': typeof DashboardInventoryAdjustmentRoute
+  '/dashboard/products/new': typeof DashboardProductsNewRoute
+  '/dashboard/settings/billing': typeof DashboardSettingsBillingRoute
+  '/dashboard/settings/branding': typeof DashboardSettingsBrandingRoute
+  '/dashboard/settings/domain': typeof DashboardSettingsDomainRoute
+  '/dashboard/settings/general': typeof DashboardSettingsGeneralRoute
+  '/dashboard/settings/notification': typeof DashboardSettingsNotificationRoute
+  '/dashboard/settings/payment': typeof DashboardSettingsPaymentRoute
+  '/dashboard/settings/shipping': typeof DashboardSettingsShippingRoute
+  '/dashboard/settings/taxes': typeof DashboardSettingsTaxesRoute
+  '/dashboard/staff/new': typeof DashboardStaffNewRoute
+  '/s/$subdomain/about': typeof SSubdomainAboutRoute
+  '/s/$subdomain/cart': typeof SSubdomainCartRoute
+  '/s/$subdomain/contact': typeof SSubdomainContactRoute
+  '/s/$subdomain/search': typeof SSubdomainSearchRoute
+  '/admin/analytics/': typeof AdminAnalyticsIndexRoute
+  '/admin/tenants/': typeof AdminTenantsIndexRoute
+  '/admin/users/': typeof AdminUsersIndexRoute
+  '/dashboard/analytics/': typeof DashboardAnalyticsIndexRoute
+  '/dashboard/categories/': typeof DashboardCategoriesIndexRoute
+  '/dashboard/customers/': typeof DashboardCustomersIndexRoute
+  '/dashboard/inventory/': typeof DashboardInventoryIndexRoute
   '/dashboard/orders/': typeof DashboardOrdersIndexRoute
   '/dashboard/products/': typeof DashboardProductsIndexRoute
   '/dashboard/settings/': typeof DashboardSettingsIndexRoute
+  '/dashboard/staff/': typeof DashboardStaffIndexRoute
   '/dashboard/tenants/': typeof DashboardTenantsIndexRoute
+  '/s/$subdomain/': typeof SSubdomainIndexRoute
+  '/admin/tenants/$id/edit': typeof AdminTenantsIdEditRoute
+  '/admin/users/$id/edit': typeof AdminUsersIdEditRoute
+  '/dashboard/categories/$id/edit': typeof DashboardCategoriesIdEditRoute
+  '/dashboard/customers/$id/edit': typeof DashboardCustomersIdEditRoute
+  '/dashboard/orders/$id/edit': typeof DashboardOrdersIdEditRoute
+  '/dashboard/products/$id/edit': typeof DashboardProductsIdEditRoute
+  '/dashboard/staff/$id/edit': typeof DashboardStaffIdEditRoute
+  '/s/$subdomain/account/login': typeof SSubdomainAccountLoginRoute
+  '/s/$subdomain/account/profile': typeof SSubdomainAccountProfileRoute
+  '/s/$subdomain/account/register': typeof SSubdomainAccountRegisterRoute
+  '/s/$subdomain/categories/$slug': typeof SSubdomainCategoriesSlugRoute
+  '/s/$subdomain/checkout/failed': typeof SSubdomainCheckoutFailedRoute
+  '/s/$subdomain/checkout/success': typeof SSubdomainCheckoutSuccessRoute
+  '/s/$subdomain/shop/$slug': typeof SSubdomainShopSlugRoute
+  '/admin/tenants/$id/': typeof AdminTenantsIdIndexRoute
+  '/admin/users/$id/': typeof AdminUsersIdIndexRoute
+  '/dashboard/customers/$id/': typeof DashboardCustomersIdIndexRoute
+  '/dashboard/orders/$id/': typeof DashboardOrdersIdIndexRoute
+  '/dashboard/products/$id/': typeof DashboardProductsIdIndexRoute
+  '/s/$subdomain/account/': typeof SSubdomainAccountIndexRoute
+  '/s/$subdomain/checkout/': typeof SSubdomainCheckoutIndexRoute
+  '/s/$subdomain/shop/': typeof SSubdomainShopIndexRoute
+  '/s/$subdomain/account/addresses/new': typeof SSubdomainAccountAddressesNewRoute
+  '/s/$subdomain/account/orders/$id': typeof SSubdomainAccountOrdersIdRoute
+  '/s/$subdomain/account/addresses/': typeof SSubdomainAccountAddressesIndexRoute
+  '/s/$subdomain/account/orders/': typeof SSubdomainAccountOrdersIndexRoute
+  '/s/$subdomain/account/addresses/$id/edit': typeof SSubdomainAccountAddressesIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/dashboard'
-    | '/home'
+    | '/s/$subdomain'
     | '/login'
     | '/register'
     | '/verify'
     | '/preview/$subdomain'
+    | '/admin/'
     | '/dashboard/'
-    | '/dashboard/orders/$id'
-    | '/dashboard/products/$id'
+    | '/admin/analytics/growth'
+    | '/admin/analytics/revenue'
+    | '/admin/setting/features'
+    | '/admin/setting/plans'
+    | '/admin/setting/sysyem'
+    | '/admin/users/roles'
+    | '/dashboard/account/password'
+    | '/dashboard/account/profile'
+    | '/dashboard/analytics/customer'
+    | '/dashboard/analytics/products'
+    | '/dashboard/analytics/sales'
+    | '/dashboard/analytics/traffic'
+    | '/dashboard/categories/new'
+    | '/dashboard/inventory/adjustment'
+    | '/dashboard/products/new'
+    | '/dashboard/settings/billing'
+    | '/dashboard/settings/branding'
+    | '/dashboard/settings/domain'
+    | '/dashboard/settings/general'
+    | '/dashboard/settings/notification'
+    | '/dashboard/settings/payment'
+    | '/dashboard/settings/shipping'
+    | '/dashboard/settings/taxes'
+    | '/dashboard/staff/new'
+    | '/s/$subdomain/about'
+    | '/s/$subdomain/cart'
+    | '/s/$subdomain/contact'
+    | '/s/$subdomain/search'
+    | '/admin/analytics/'
+    | '/admin/tenants/'
+    | '/admin/users/'
+    | '/dashboard/analytics/'
+    | '/dashboard/categories/'
+    | '/dashboard/customers/'
+    | '/dashboard/inventory/'
     | '/dashboard/orders/'
     | '/dashboard/products/'
     | '/dashboard/settings/'
+    | '/dashboard/staff/'
     | '/dashboard/tenants/'
+    | '/s/$subdomain/'
+    | '/admin/tenants/$id/edit'
+    | '/admin/users/$id/edit'
+    | '/dashboard/categories/$id/edit'
+    | '/dashboard/customers/$id/edit'
+    | '/dashboard/orders/$id/edit'
+    | '/dashboard/products/$id/edit'
+    | '/dashboard/staff/$id/edit'
+    | '/s/$subdomain/account/login'
+    | '/s/$subdomain/account/profile'
+    | '/s/$subdomain/account/register'
+    | '/s/$subdomain/categories/$slug'
+    | '/s/$subdomain/checkout/failed'
+    | '/s/$subdomain/checkout/success'
+    | '/s/$subdomain/shop/$slug'
+    | '/admin/tenants/$id/'
+    | '/admin/users/$id/'
+    | '/dashboard/customers/$id/'
+    | '/dashboard/orders/$id/'
+    | '/dashboard/products/$id/'
+    | '/s/$subdomain/account/'
+    | '/s/$subdomain/checkout/'
+    | '/s/$subdomain/shop/'
+    | '/s/$subdomain/account/addresses/new'
+    | '/s/$subdomain/account/orders/$id'
+    | '/s/$subdomain/account/addresses/'
+    | '/s/$subdomain/account/orders/'
+    | '/s/$subdomain/account/addresses/$id/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/home'
     | '/login'
     | '/register'
     | '/verify'
     | '/preview/$subdomain'
+    | '/admin'
     | '/dashboard'
-    | '/dashboard/orders/$id'
-    | '/dashboard/products/$id'
+    | '/admin/analytics/growth'
+    | '/admin/analytics/revenue'
+    | '/admin/setting/features'
+    | '/admin/setting/plans'
+    | '/admin/setting/sysyem'
+    | '/admin/users/roles'
+    | '/dashboard/account/password'
+    | '/dashboard/account/profile'
+    | '/dashboard/analytics/customer'
+    | '/dashboard/analytics/products'
+    | '/dashboard/analytics/sales'
+    | '/dashboard/analytics/traffic'
+    | '/dashboard/categories/new'
+    | '/dashboard/inventory/adjustment'
+    | '/dashboard/products/new'
+    | '/dashboard/settings/billing'
+    | '/dashboard/settings/branding'
+    | '/dashboard/settings/domain'
+    | '/dashboard/settings/general'
+    | '/dashboard/settings/notification'
+    | '/dashboard/settings/payment'
+    | '/dashboard/settings/shipping'
+    | '/dashboard/settings/taxes'
+    | '/dashboard/staff/new'
+    | '/s/$subdomain/about'
+    | '/s/$subdomain/cart'
+    | '/s/$subdomain/contact'
+    | '/s/$subdomain/search'
+    | '/admin/analytics'
+    | '/admin/tenants'
+    | '/admin/users'
+    | '/dashboard/analytics'
+    | '/dashboard/categories'
+    | '/dashboard/customers'
+    | '/dashboard/inventory'
     | '/dashboard/orders'
     | '/dashboard/products'
     | '/dashboard/settings'
+    | '/dashboard/staff'
     | '/dashboard/tenants'
+    | '/s/$subdomain'
+    | '/admin/tenants/$id/edit'
+    | '/admin/users/$id/edit'
+    | '/dashboard/categories/$id/edit'
+    | '/dashboard/customers/$id/edit'
+    | '/dashboard/orders/$id/edit'
+    | '/dashboard/products/$id/edit'
+    | '/dashboard/staff/$id/edit'
+    | '/s/$subdomain/account/login'
+    | '/s/$subdomain/account/profile'
+    | '/s/$subdomain/account/register'
+    | '/s/$subdomain/categories/$slug'
+    | '/s/$subdomain/checkout/failed'
+    | '/s/$subdomain/checkout/success'
+    | '/s/$subdomain/shop/$slug'
+    | '/admin/tenants/$id'
+    | '/admin/users/$id'
+    | '/dashboard/customers/$id'
+    | '/dashboard/orders/$id'
+    | '/dashboard/products/$id'
+    | '/s/$subdomain/account'
+    | '/s/$subdomain/checkout'
+    | '/s/$subdomain/shop'
+    | '/s/$subdomain/account/addresses/new'
+    | '/s/$subdomain/account/orders/$id'
+    | '/s/$subdomain/account/addresses'
+    | '/s/$subdomain/account/orders'
+    | '/s/$subdomain/account/addresses/$id/edit'
   id:
     | '__root__'
     | '/'
+    | '/admin'
     | '/dashboard'
-    | '/home'
-    | '/login'
-    | '/register'
-    | '/verify'
+    | '/s/$subdomain'
+    | '/(auth)/login'
+    | '/(auth)/register'
+    | '/(auth)/verify'
     | '/preview/$subdomain'
+    | '/admin/'
     | '/dashboard/'
-    | '/dashboard/orders/$id'
-    | '/dashboard/products/$id'
+    | '/admin/analytics/growth'
+    | '/admin/analytics/revenue'
+    | '/admin/setting/features'
+    | '/admin/setting/plans'
+    | '/admin/setting/sysyem'
+    | '/admin/users/roles'
+    | '/dashboard/account/password'
+    | '/dashboard/account/profile'
+    | '/dashboard/analytics/customer'
+    | '/dashboard/analytics/products'
+    | '/dashboard/analytics/sales'
+    | '/dashboard/analytics/traffic'
+    | '/dashboard/categories/new'
+    | '/dashboard/inventory/adjustment'
+    | '/dashboard/products/new'
+    | '/dashboard/settings/billing'
+    | '/dashboard/settings/branding'
+    | '/dashboard/settings/domain'
+    | '/dashboard/settings/general'
+    | '/dashboard/settings/notification'
+    | '/dashboard/settings/payment'
+    | '/dashboard/settings/shipping'
+    | '/dashboard/settings/taxes'
+    | '/dashboard/staff/new'
+    | '/s/$subdomain/about'
+    | '/s/$subdomain/cart'
+    | '/s/$subdomain/contact'
+    | '/s/$subdomain/search'
+    | '/admin/analytics/'
+    | '/admin/tenants/'
+    | '/admin/users/'
+    | '/dashboard/analytics/'
+    | '/dashboard/categories/'
+    | '/dashboard/customers/'
+    | '/dashboard/inventory/'
     | '/dashboard/orders/'
     | '/dashboard/products/'
     | '/dashboard/settings/'
+    | '/dashboard/staff/'
     | '/dashboard/tenants/'
+    | '/s/$subdomain/'
+    | '/admin/tenants/$id/edit'
+    | '/admin/users/$id/edit'
+    | '/dashboard/categories/$id/edit'
+    | '/dashboard/customers/$id/edit'
+    | '/dashboard/orders/$id/edit'
+    | '/dashboard/products/$id/edit'
+    | '/dashboard/staff/$id/edit'
+    | '/s/$subdomain/account/login'
+    | '/s/$subdomain/account/profile'
+    | '/s/$subdomain/account/register'
+    | '/s/$subdomain/categories/$slug'
+    | '/s/$subdomain/checkout/failed'
+    | '/s/$subdomain/checkout/success'
+    | '/s/$subdomain/shop/$slug'
+    | '/admin/tenants/$id/'
+    | '/admin/users/$id/'
+    | '/dashboard/customers/$id/'
+    | '/dashboard/orders/$id/'
+    | '/dashboard/products/$id/'
+    | '/s/$subdomain/account/'
+    | '/s/$subdomain/checkout/'
+    | '/s/$subdomain/shop/'
+    | '/s/$subdomain/account/addresses/new'
+    | '/s/$subdomain/account/orders/$id'
+    | '/s/$subdomain/account/addresses/'
+    | '/s/$subdomain/account/orders/'
+    | '/s/$subdomain/account/addresses/$id/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRouteRoute: typeof AdminRouteRouteWithChildren
   DashboardRouteRoute: typeof DashboardRouteRouteWithChildren
-  HomeRoute: typeof HomeRoute
-  LoginRoute: typeof LoginRoute
-  RegisterRoute: typeof RegisterRoute
-  VerifyRoute: typeof VerifyRoute
+  SSubdomainRouteRoute: typeof SSubdomainRouteRouteWithChildren
+  authLoginRoute: typeof authLoginRoute
+  authRegisterRoute: typeof authRegisterRoute
+  authVerifyRoute: typeof authVerifyRoute
   PreviewSubdomainRoute: typeof PreviewSubdomainRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/verify': {
-      id: '/verify'
-      path: '/verify'
-      fullPath: '/verify'
-      preLoaderRoute: typeof VerifyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/register': {
-      id: '/register'
-      path: '/register'
-      fullPath: '/register'
-      preLoaderRoute: typeof RegisterRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/home': {
-      id: '/home'
-      path: '/home'
-      fullPath: '/home'
-      preLoaderRoute: typeof HomeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/dashboard': {
       id: '/dashboard'
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof DashboardRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -254,6 +1024,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardIndexRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/preview/$subdomain': {
       id: '/preview/$subdomain'
       path: '/preview/$subdomain'
@@ -261,11 +1038,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PreviewSubdomainRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/(auth)/verify': {
+      id: '/(auth)/verify'
+      path: '/verify'
+      fullPath: '/verify'
+      preLoaderRoute: typeof authVerifyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(auth)/register': {
+      id: '/(auth)/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof authRegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(auth)/login': {
+      id: '/(auth)/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof authLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/s/$subdomain': {
+      id: '/s/$subdomain'
+      path: '/s/$subdomain'
+      fullPath: '/s/$subdomain'
+      preLoaderRoute: typeof SSubdomainRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/s/$subdomain/': {
+      id: '/s/$subdomain/'
+      path: '/'
+      fullPath: '/s/$subdomain/'
+      preLoaderRoute: typeof SSubdomainIndexRouteImport
+      parentRoute: typeof SSubdomainRouteRoute
+    }
     '/dashboard/tenants/': {
       id: '/dashboard/tenants/'
       path: '/tenants'
       fullPath: '/dashboard/tenants/'
       preLoaderRoute: typeof DashboardTenantsIndexRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/staff/': {
+      id: '/dashboard/staff/'
+      path: '/staff'
+      fullPath: '/dashboard/staff/'
+      preLoaderRoute: typeof DashboardStaffIndexRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
     '/dashboard/settings/': {
@@ -289,54 +1108,621 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardOrdersIndexRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
-    '/dashboard/products/$id': {
-      id: '/dashboard/products/$id'
-      path: '/products/$id'
-      fullPath: '/dashboard/products/$id'
-      preLoaderRoute: typeof DashboardProductsIdRouteImport
+    '/dashboard/inventory/': {
+      id: '/dashboard/inventory/'
+      path: '/inventory'
+      fullPath: '/dashboard/inventory/'
+      preLoaderRoute: typeof DashboardInventoryIndexRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
-    '/dashboard/orders/$id': {
-      id: '/dashboard/orders/$id'
-      path: '/orders/$id'
-      fullPath: '/dashboard/orders/$id'
-      preLoaderRoute: typeof DashboardOrdersIdRouteImport
+    '/dashboard/customers/': {
+      id: '/dashboard/customers/'
+      path: '/customers'
+      fullPath: '/dashboard/customers/'
+      preLoaderRoute: typeof DashboardCustomersIndexRouteImport
       parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/categories/': {
+      id: '/dashboard/categories/'
+      path: '/categories'
+      fullPath: '/dashboard/categories/'
+      preLoaderRoute: typeof DashboardCategoriesIndexRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/analytics/': {
+      id: '/dashboard/analytics/'
+      path: '/analytics'
+      fullPath: '/dashboard/analytics/'
+      preLoaderRoute: typeof DashboardAnalyticsIndexRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/admin/users/': {
+      id: '/admin/users/'
+      path: '/users'
+      fullPath: '/admin/users/'
+      preLoaderRoute: typeof AdminUsersIndexRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/tenants/': {
+      id: '/admin/tenants/'
+      path: '/tenants'
+      fullPath: '/admin/tenants/'
+      preLoaderRoute: typeof AdminTenantsIndexRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/analytics/': {
+      id: '/admin/analytics/'
+      path: '/analytics'
+      fullPath: '/admin/analytics/'
+      preLoaderRoute: typeof AdminAnalyticsIndexRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/s/$subdomain/search': {
+      id: '/s/$subdomain/search'
+      path: '/search'
+      fullPath: '/s/$subdomain/search'
+      preLoaderRoute: typeof SSubdomainSearchRouteImport
+      parentRoute: typeof SSubdomainRouteRoute
+    }
+    '/s/$subdomain/contact': {
+      id: '/s/$subdomain/contact'
+      path: '/contact'
+      fullPath: '/s/$subdomain/contact'
+      preLoaderRoute: typeof SSubdomainContactRouteImport
+      parentRoute: typeof SSubdomainRouteRoute
+    }
+    '/s/$subdomain/cart': {
+      id: '/s/$subdomain/cart'
+      path: '/cart'
+      fullPath: '/s/$subdomain/cart'
+      preLoaderRoute: typeof SSubdomainCartRouteImport
+      parentRoute: typeof SSubdomainRouteRoute
+    }
+    '/s/$subdomain/about': {
+      id: '/s/$subdomain/about'
+      path: '/about'
+      fullPath: '/s/$subdomain/about'
+      preLoaderRoute: typeof SSubdomainAboutRouteImport
+      parentRoute: typeof SSubdomainRouteRoute
+    }
+    '/dashboard/staff/new': {
+      id: '/dashboard/staff/new'
+      path: '/staff/new'
+      fullPath: '/dashboard/staff/new'
+      preLoaderRoute: typeof DashboardStaffNewRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/settings/taxes': {
+      id: '/dashboard/settings/taxes'
+      path: '/settings/taxes'
+      fullPath: '/dashboard/settings/taxes'
+      preLoaderRoute: typeof DashboardSettingsTaxesRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/settings/shipping': {
+      id: '/dashboard/settings/shipping'
+      path: '/settings/shipping'
+      fullPath: '/dashboard/settings/shipping'
+      preLoaderRoute: typeof DashboardSettingsShippingRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/settings/payment': {
+      id: '/dashboard/settings/payment'
+      path: '/settings/payment'
+      fullPath: '/dashboard/settings/payment'
+      preLoaderRoute: typeof DashboardSettingsPaymentRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/settings/notification': {
+      id: '/dashboard/settings/notification'
+      path: '/settings/notification'
+      fullPath: '/dashboard/settings/notification'
+      preLoaderRoute: typeof DashboardSettingsNotificationRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/settings/general': {
+      id: '/dashboard/settings/general'
+      path: '/settings/general'
+      fullPath: '/dashboard/settings/general'
+      preLoaderRoute: typeof DashboardSettingsGeneralRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/settings/domain': {
+      id: '/dashboard/settings/domain'
+      path: '/settings/domain'
+      fullPath: '/dashboard/settings/domain'
+      preLoaderRoute: typeof DashboardSettingsDomainRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/settings/branding': {
+      id: '/dashboard/settings/branding'
+      path: '/settings/branding'
+      fullPath: '/dashboard/settings/branding'
+      preLoaderRoute: typeof DashboardSettingsBrandingRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/settings/billing': {
+      id: '/dashboard/settings/billing'
+      path: '/settings/billing'
+      fullPath: '/dashboard/settings/billing'
+      preLoaderRoute: typeof DashboardSettingsBillingRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/products/new': {
+      id: '/dashboard/products/new'
+      path: '/products/new'
+      fullPath: '/dashboard/products/new'
+      preLoaderRoute: typeof DashboardProductsNewRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/inventory/adjustment': {
+      id: '/dashboard/inventory/adjustment'
+      path: '/inventory/adjustment'
+      fullPath: '/dashboard/inventory/adjustment'
+      preLoaderRoute: typeof DashboardInventoryAdjustmentRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/categories/new': {
+      id: '/dashboard/categories/new'
+      path: '/categories/new'
+      fullPath: '/dashboard/categories/new'
+      preLoaderRoute: typeof DashboardCategoriesNewRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/analytics/traffic': {
+      id: '/dashboard/analytics/traffic'
+      path: '/analytics/traffic'
+      fullPath: '/dashboard/analytics/traffic'
+      preLoaderRoute: typeof DashboardAnalyticsTrafficRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/analytics/sales': {
+      id: '/dashboard/analytics/sales'
+      path: '/analytics/sales'
+      fullPath: '/dashboard/analytics/sales'
+      preLoaderRoute: typeof DashboardAnalyticsSalesRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/analytics/products': {
+      id: '/dashboard/analytics/products'
+      path: '/analytics/products'
+      fullPath: '/dashboard/analytics/products'
+      preLoaderRoute: typeof DashboardAnalyticsProductsRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/analytics/customer': {
+      id: '/dashboard/analytics/customer'
+      path: '/analytics/customer'
+      fullPath: '/dashboard/analytics/customer'
+      preLoaderRoute: typeof DashboardAnalyticsCustomerRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/account/profile': {
+      id: '/dashboard/account/profile'
+      path: '/account/profile'
+      fullPath: '/dashboard/account/profile'
+      preLoaderRoute: typeof DashboardAccountProfileRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/account/password': {
+      id: '/dashboard/account/password'
+      path: '/account/password'
+      fullPath: '/dashboard/account/password'
+      preLoaderRoute: typeof DashboardAccountPasswordRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/admin/users/roles': {
+      id: '/admin/users/roles'
+      path: '/users/roles'
+      fullPath: '/admin/users/roles'
+      preLoaderRoute: typeof AdminUsersRolesRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/setting/sysyem': {
+      id: '/admin/setting/sysyem'
+      path: '/setting/sysyem'
+      fullPath: '/admin/setting/sysyem'
+      preLoaderRoute: typeof AdminSettingSysyemRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/setting/plans': {
+      id: '/admin/setting/plans'
+      path: '/setting/plans'
+      fullPath: '/admin/setting/plans'
+      preLoaderRoute: typeof AdminSettingPlansRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/setting/features': {
+      id: '/admin/setting/features'
+      path: '/setting/features'
+      fullPath: '/admin/setting/features'
+      preLoaderRoute: typeof AdminSettingFeaturesRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/analytics/revenue': {
+      id: '/admin/analytics/revenue'
+      path: '/analytics/revenue'
+      fullPath: '/admin/analytics/revenue'
+      preLoaderRoute: typeof AdminAnalyticsRevenueRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/analytics/growth': {
+      id: '/admin/analytics/growth'
+      path: '/analytics/growth'
+      fullPath: '/admin/analytics/growth'
+      preLoaderRoute: typeof AdminAnalyticsGrowthRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/s/$subdomain/shop/': {
+      id: '/s/$subdomain/shop/'
+      path: '/shop'
+      fullPath: '/s/$subdomain/shop/'
+      preLoaderRoute: typeof SSubdomainShopIndexRouteImport
+      parentRoute: typeof SSubdomainRouteRoute
+    }
+    '/s/$subdomain/checkout/': {
+      id: '/s/$subdomain/checkout/'
+      path: '/checkout'
+      fullPath: '/s/$subdomain/checkout/'
+      preLoaderRoute: typeof SSubdomainCheckoutIndexRouteImport
+      parentRoute: typeof SSubdomainRouteRoute
+    }
+    '/s/$subdomain/account/': {
+      id: '/s/$subdomain/account/'
+      path: '/account'
+      fullPath: '/s/$subdomain/account/'
+      preLoaderRoute: typeof SSubdomainAccountIndexRouteImport
+      parentRoute: typeof SSubdomainRouteRoute
+    }
+    '/dashboard/products/$id/': {
+      id: '/dashboard/products/$id/'
+      path: '/products/$id'
+      fullPath: '/dashboard/products/$id/'
+      preLoaderRoute: typeof DashboardProductsIdIndexRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/orders/$id/': {
+      id: '/dashboard/orders/$id/'
+      path: '/orders/$id'
+      fullPath: '/dashboard/orders/$id/'
+      preLoaderRoute: typeof DashboardOrdersIdIndexRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/customers/$id/': {
+      id: '/dashboard/customers/$id/'
+      path: '/customers/$id'
+      fullPath: '/dashboard/customers/$id/'
+      preLoaderRoute: typeof DashboardCustomersIdIndexRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/admin/users/$id/': {
+      id: '/admin/users/$id/'
+      path: '/users/$id'
+      fullPath: '/admin/users/$id/'
+      preLoaderRoute: typeof AdminUsersIdIndexRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/tenants/$id/': {
+      id: '/admin/tenants/$id/'
+      path: '/tenants/$id'
+      fullPath: '/admin/tenants/$id/'
+      preLoaderRoute: typeof AdminTenantsIdIndexRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/s/$subdomain/shop/$slug': {
+      id: '/s/$subdomain/shop/$slug'
+      path: '/shop/$slug'
+      fullPath: '/s/$subdomain/shop/$slug'
+      preLoaderRoute: typeof SSubdomainShopSlugRouteImport
+      parentRoute: typeof SSubdomainRouteRoute
+    }
+    '/s/$subdomain/checkout/success': {
+      id: '/s/$subdomain/checkout/success'
+      path: '/checkout/success'
+      fullPath: '/s/$subdomain/checkout/success'
+      preLoaderRoute: typeof SSubdomainCheckoutSuccessRouteImport
+      parentRoute: typeof SSubdomainRouteRoute
+    }
+    '/s/$subdomain/checkout/failed': {
+      id: '/s/$subdomain/checkout/failed'
+      path: '/checkout/failed'
+      fullPath: '/s/$subdomain/checkout/failed'
+      preLoaderRoute: typeof SSubdomainCheckoutFailedRouteImport
+      parentRoute: typeof SSubdomainRouteRoute
+    }
+    '/s/$subdomain/categories/$slug': {
+      id: '/s/$subdomain/categories/$slug'
+      path: '/categories/$slug'
+      fullPath: '/s/$subdomain/categories/$slug'
+      preLoaderRoute: typeof SSubdomainCategoriesSlugRouteImport
+      parentRoute: typeof SSubdomainRouteRoute
+    }
+    '/s/$subdomain/account/register': {
+      id: '/s/$subdomain/account/register'
+      path: '/account/register'
+      fullPath: '/s/$subdomain/account/register'
+      preLoaderRoute: typeof SSubdomainAccountRegisterRouteImport
+      parentRoute: typeof SSubdomainRouteRoute
+    }
+    '/s/$subdomain/account/profile': {
+      id: '/s/$subdomain/account/profile'
+      path: '/account/profile'
+      fullPath: '/s/$subdomain/account/profile'
+      preLoaderRoute: typeof SSubdomainAccountProfileRouteImport
+      parentRoute: typeof SSubdomainRouteRoute
+    }
+    '/s/$subdomain/account/login': {
+      id: '/s/$subdomain/account/login'
+      path: '/account/login'
+      fullPath: '/s/$subdomain/account/login'
+      preLoaderRoute: typeof SSubdomainAccountLoginRouteImport
+      parentRoute: typeof SSubdomainRouteRoute
+    }
+    '/dashboard/staff/$id/edit': {
+      id: '/dashboard/staff/$id/edit'
+      path: '/staff/$id/edit'
+      fullPath: '/dashboard/staff/$id/edit'
+      preLoaderRoute: typeof DashboardStaffIdEditRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/products/$id/edit': {
+      id: '/dashboard/products/$id/edit'
+      path: '/products/$id/edit'
+      fullPath: '/dashboard/products/$id/edit'
+      preLoaderRoute: typeof DashboardProductsIdEditRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/orders/$id/edit': {
+      id: '/dashboard/orders/$id/edit'
+      path: '/orders/$id/edit'
+      fullPath: '/dashboard/orders/$id/edit'
+      preLoaderRoute: typeof DashboardOrdersIdEditRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/customers/$id/edit': {
+      id: '/dashboard/customers/$id/edit'
+      path: '/customers/$id/edit'
+      fullPath: '/dashboard/customers/$id/edit'
+      preLoaderRoute: typeof DashboardCustomersIdEditRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/categories/$id/edit': {
+      id: '/dashboard/categories/$id/edit'
+      path: '/categories/$id/edit'
+      fullPath: '/dashboard/categories/$id/edit'
+      preLoaderRoute: typeof DashboardCategoriesIdEditRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/admin/users/$id/edit': {
+      id: '/admin/users/$id/edit'
+      path: '/users/$id/edit'
+      fullPath: '/admin/users/$id/edit'
+      preLoaderRoute: typeof AdminUsersIdEditRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/tenants/$id/edit': {
+      id: '/admin/tenants/$id/edit'
+      path: '/tenants/$id/edit'
+      fullPath: '/admin/tenants/$id/edit'
+      preLoaderRoute: typeof AdminTenantsIdEditRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/s/$subdomain/account/orders/': {
+      id: '/s/$subdomain/account/orders/'
+      path: '/account/orders'
+      fullPath: '/s/$subdomain/account/orders/'
+      preLoaderRoute: typeof SSubdomainAccountOrdersIndexRouteImport
+      parentRoute: typeof SSubdomainRouteRoute
+    }
+    '/s/$subdomain/account/addresses/': {
+      id: '/s/$subdomain/account/addresses/'
+      path: '/account/addresses'
+      fullPath: '/s/$subdomain/account/addresses/'
+      preLoaderRoute: typeof SSubdomainAccountAddressesIndexRouteImport
+      parentRoute: typeof SSubdomainRouteRoute
+    }
+    '/s/$subdomain/account/orders/$id': {
+      id: '/s/$subdomain/account/orders/$id'
+      path: '/account/orders/$id'
+      fullPath: '/s/$subdomain/account/orders/$id'
+      preLoaderRoute: typeof SSubdomainAccountOrdersIdRouteImport
+      parentRoute: typeof SSubdomainRouteRoute
+    }
+    '/s/$subdomain/account/addresses/new': {
+      id: '/s/$subdomain/account/addresses/new'
+      path: '/account/addresses/new'
+      fullPath: '/s/$subdomain/account/addresses/new'
+      preLoaderRoute: typeof SSubdomainAccountAddressesNewRouteImport
+      parentRoute: typeof SSubdomainRouteRoute
+    }
+    '/s/$subdomain/account/addresses/$id/edit': {
+      id: '/s/$subdomain/account/addresses/$id/edit'
+      path: '/account/addresses/$id/edit'
+      fullPath: '/s/$subdomain/account/addresses/$id/edit'
+      preLoaderRoute: typeof SSubdomainAccountAddressesIdEditRouteImport
+      parentRoute: typeof SSubdomainRouteRoute
     }
   }
 }
 
+interface AdminRouteRouteChildren {
+  AdminIndexRoute: typeof AdminIndexRoute
+  AdminAnalyticsGrowthRoute: typeof AdminAnalyticsGrowthRoute
+  AdminAnalyticsRevenueRoute: typeof AdminAnalyticsRevenueRoute
+  AdminSettingFeaturesRoute: typeof AdminSettingFeaturesRoute
+  AdminSettingPlansRoute: typeof AdminSettingPlansRoute
+  AdminSettingSysyemRoute: typeof AdminSettingSysyemRoute
+  AdminUsersRolesRoute: typeof AdminUsersRolesRoute
+  AdminAnalyticsIndexRoute: typeof AdminAnalyticsIndexRoute
+  AdminTenantsIndexRoute: typeof AdminTenantsIndexRoute
+  AdminUsersIndexRoute: typeof AdminUsersIndexRoute
+  AdminTenantsIdEditRoute: typeof AdminTenantsIdEditRoute
+  AdminUsersIdEditRoute: typeof AdminUsersIdEditRoute
+  AdminTenantsIdIndexRoute: typeof AdminTenantsIdIndexRoute
+  AdminUsersIdIndexRoute: typeof AdminUsersIdIndexRoute
+}
+
+const AdminRouteRouteChildren: AdminRouteRouteChildren = {
+  AdminIndexRoute: AdminIndexRoute,
+  AdminAnalyticsGrowthRoute: AdminAnalyticsGrowthRoute,
+  AdminAnalyticsRevenueRoute: AdminAnalyticsRevenueRoute,
+  AdminSettingFeaturesRoute: AdminSettingFeaturesRoute,
+  AdminSettingPlansRoute: AdminSettingPlansRoute,
+  AdminSettingSysyemRoute: AdminSettingSysyemRoute,
+  AdminUsersRolesRoute: AdminUsersRolesRoute,
+  AdminAnalyticsIndexRoute: AdminAnalyticsIndexRoute,
+  AdminTenantsIndexRoute: AdminTenantsIndexRoute,
+  AdminUsersIndexRoute: AdminUsersIndexRoute,
+  AdminTenantsIdEditRoute: AdminTenantsIdEditRoute,
+  AdminUsersIdEditRoute: AdminUsersIdEditRoute,
+  AdminTenantsIdIndexRoute: AdminTenantsIdIndexRoute,
+  AdminUsersIdIndexRoute: AdminUsersIdIndexRoute,
+}
+
+const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
+  AdminRouteRouteChildren,
+)
+
 interface DashboardRouteRouteChildren {
   DashboardIndexRoute: typeof DashboardIndexRoute
-  DashboardOrdersIdRoute: typeof DashboardOrdersIdRoute
-  DashboardProductsIdRoute: typeof DashboardProductsIdRoute
+  DashboardAccountPasswordRoute: typeof DashboardAccountPasswordRoute
+  DashboardAccountProfileRoute: typeof DashboardAccountProfileRoute
+  DashboardAnalyticsCustomerRoute: typeof DashboardAnalyticsCustomerRoute
+  DashboardAnalyticsProductsRoute: typeof DashboardAnalyticsProductsRoute
+  DashboardAnalyticsSalesRoute: typeof DashboardAnalyticsSalesRoute
+  DashboardAnalyticsTrafficRoute: typeof DashboardAnalyticsTrafficRoute
+  DashboardCategoriesNewRoute: typeof DashboardCategoriesNewRoute
+  DashboardInventoryAdjustmentRoute: typeof DashboardInventoryAdjustmentRoute
+  DashboardProductsNewRoute: typeof DashboardProductsNewRoute
+  DashboardSettingsBillingRoute: typeof DashboardSettingsBillingRoute
+  DashboardSettingsBrandingRoute: typeof DashboardSettingsBrandingRoute
+  DashboardSettingsDomainRoute: typeof DashboardSettingsDomainRoute
+  DashboardSettingsGeneralRoute: typeof DashboardSettingsGeneralRoute
+  DashboardSettingsNotificationRoute: typeof DashboardSettingsNotificationRoute
+  DashboardSettingsPaymentRoute: typeof DashboardSettingsPaymentRoute
+  DashboardSettingsShippingRoute: typeof DashboardSettingsShippingRoute
+  DashboardSettingsTaxesRoute: typeof DashboardSettingsTaxesRoute
+  DashboardStaffNewRoute: typeof DashboardStaffNewRoute
+  DashboardAnalyticsIndexRoute: typeof DashboardAnalyticsIndexRoute
+  DashboardCategoriesIndexRoute: typeof DashboardCategoriesIndexRoute
+  DashboardCustomersIndexRoute: typeof DashboardCustomersIndexRoute
+  DashboardInventoryIndexRoute: typeof DashboardInventoryIndexRoute
   DashboardOrdersIndexRoute: typeof DashboardOrdersIndexRoute
   DashboardProductsIndexRoute: typeof DashboardProductsIndexRoute
   DashboardSettingsIndexRoute: typeof DashboardSettingsIndexRoute
+  DashboardStaffIndexRoute: typeof DashboardStaffIndexRoute
   DashboardTenantsIndexRoute: typeof DashboardTenantsIndexRoute
+  DashboardCategoriesIdEditRoute: typeof DashboardCategoriesIdEditRoute
+  DashboardCustomersIdEditRoute: typeof DashboardCustomersIdEditRoute
+  DashboardOrdersIdEditRoute: typeof DashboardOrdersIdEditRoute
+  DashboardProductsIdEditRoute: typeof DashboardProductsIdEditRoute
+  DashboardStaffIdEditRoute: typeof DashboardStaffIdEditRoute
+  DashboardCustomersIdIndexRoute: typeof DashboardCustomersIdIndexRoute
+  DashboardOrdersIdIndexRoute: typeof DashboardOrdersIdIndexRoute
+  DashboardProductsIdIndexRoute: typeof DashboardProductsIdIndexRoute
 }
 
 const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardIndexRoute: DashboardIndexRoute,
-  DashboardOrdersIdRoute: DashboardOrdersIdRoute,
-  DashboardProductsIdRoute: DashboardProductsIdRoute,
+  DashboardAccountPasswordRoute: DashboardAccountPasswordRoute,
+  DashboardAccountProfileRoute: DashboardAccountProfileRoute,
+  DashboardAnalyticsCustomerRoute: DashboardAnalyticsCustomerRoute,
+  DashboardAnalyticsProductsRoute: DashboardAnalyticsProductsRoute,
+  DashboardAnalyticsSalesRoute: DashboardAnalyticsSalesRoute,
+  DashboardAnalyticsTrafficRoute: DashboardAnalyticsTrafficRoute,
+  DashboardCategoriesNewRoute: DashboardCategoriesNewRoute,
+  DashboardInventoryAdjustmentRoute: DashboardInventoryAdjustmentRoute,
+  DashboardProductsNewRoute: DashboardProductsNewRoute,
+  DashboardSettingsBillingRoute: DashboardSettingsBillingRoute,
+  DashboardSettingsBrandingRoute: DashboardSettingsBrandingRoute,
+  DashboardSettingsDomainRoute: DashboardSettingsDomainRoute,
+  DashboardSettingsGeneralRoute: DashboardSettingsGeneralRoute,
+  DashboardSettingsNotificationRoute: DashboardSettingsNotificationRoute,
+  DashboardSettingsPaymentRoute: DashboardSettingsPaymentRoute,
+  DashboardSettingsShippingRoute: DashboardSettingsShippingRoute,
+  DashboardSettingsTaxesRoute: DashboardSettingsTaxesRoute,
+  DashboardStaffNewRoute: DashboardStaffNewRoute,
+  DashboardAnalyticsIndexRoute: DashboardAnalyticsIndexRoute,
+  DashboardCategoriesIndexRoute: DashboardCategoriesIndexRoute,
+  DashboardCustomersIndexRoute: DashboardCustomersIndexRoute,
+  DashboardInventoryIndexRoute: DashboardInventoryIndexRoute,
   DashboardOrdersIndexRoute: DashboardOrdersIndexRoute,
   DashboardProductsIndexRoute: DashboardProductsIndexRoute,
   DashboardSettingsIndexRoute: DashboardSettingsIndexRoute,
+  DashboardStaffIndexRoute: DashboardStaffIndexRoute,
   DashboardTenantsIndexRoute: DashboardTenantsIndexRoute,
+  DashboardCategoriesIdEditRoute: DashboardCategoriesIdEditRoute,
+  DashboardCustomersIdEditRoute: DashboardCustomersIdEditRoute,
+  DashboardOrdersIdEditRoute: DashboardOrdersIdEditRoute,
+  DashboardProductsIdEditRoute: DashboardProductsIdEditRoute,
+  DashboardStaffIdEditRoute: DashboardStaffIdEditRoute,
+  DashboardCustomersIdIndexRoute: DashboardCustomersIdIndexRoute,
+  DashboardOrdersIdIndexRoute: DashboardOrdersIdIndexRoute,
+  DashboardProductsIdIndexRoute: DashboardProductsIdIndexRoute,
 }
 
 const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(
   DashboardRouteRouteChildren,
 )
 
+interface SSubdomainRouteRouteChildren {
+  SSubdomainAboutRoute: typeof SSubdomainAboutRoute
+  SSubdomainCartRoute: typeof SSubdomainCartRoute
+  SSubdomainContactRoute: typeof SSubdomainContactRoute
+  SSubdomainSearchRoute: typeof SSubdomainSearchRoute
+  SSubdomainIndexRoute: typeof SSubdomainIndexRoute
+  SSubdomainAccountLoginRoute: typeof SSubdomainAccountLoginRoute
+  SSubdomainAccountProfileRoute: typeof SSubdomainAccountProfileRoute
+  SSubdomainAccountRegisterRoute: typeof SSubdomainAccountRegisterRoute
+  SSubdomainCategoriesSlugRoute: typeof SSubdomainCategoriesSlugRoute
+  SSubdomainCheckoutFailedRoute: typeof SSubdomainCheckoutFailedRoute
+  SSubdomainCheckoutSuccessRoute: typeof SSubdomainCheckoutSuccessRoute
+  SSubdomainShopSlugRoute: typeof SSubdomainShopSlugRoute
+  SSubdomainAccountIndexRoute: typeof SSubdomainAccountIndexRoute
+  SSubdomainCheckoutIndexRoute: typeof SSubdomainCheckoutIndexRoute
+  SSubdomainShopIndexRoute: typeof SSubdomainShopIndexRoute
+  SSubdomainAccountAddressesNewRoute: typeof SSubdomainAccountAddressesNewRoute
+  SSubdomainAccountOrdersIdRoute: typeof SSubdomainAccountOrdersIdRoute
+  SSubdomainAccountAddressesIndexRoute: typeof SSubdomainAccountAddressesIndexRoute
+  SSubdomainAccountOrdersIndexRoute: typeof SSubdomainAccountOrdersIndexRoute
+  SSubdomainAccountAddressesIdEditRoute: typeof SSubdomainAccountAddressesIdEditRoute
+}
+
+const SSubdomainRouteRouteChildren: SSubdomainRouteRouteChildren = {
+  SSubdomainAboutRoute: SSubdomainAboutRoute,
+  SSubdomainCartRoute: SSubdomainCartRoute,
+  SSubdomainContactRoute: SSubdomainContactRoute,
+  SSubdomainSearchRoute: SSubdomainSearchRoute,
+  SSubdomainIndexRoute: SSubdomainIndexRoute,
+  SSubdomainAccountLoginRoute: SSubdomainAccountLoginRoute,
+  SSubdomainAccountProfileRoute: SSubdomainAccountProfileRoute,
+  SSubdomainAccountRegisterRoute: SSubdomainAccountRegisterRoute,
+  SSubdomainCategoriesSlugRoute: SSubdomainCategoriesSlugRoute,
+  SSubdomainCheckoutFailedRoute: SSubdomainCheckoutFailedRoute,
+  SSubdomainCheckoutSuccessRoute: SSubdomainCheckoutSuccessRoute,
+  SSubdomainShopSlugRoute: SSubdomainShopSlugRoute,
+  SSubdomainAccountIndexRoute: SSubdomainAccountIndexRoute,
+  SSubdomainCheckoutIndexRoute: SSubdomainCheckoutIndexRoute,
+  SSubdomainShopIndexRoute: SSubdomainShopIndexRoute,
+  SSubdomainAccountAddressesNewRoute: SSubdomainAccountAddressesNewRoute,
+  SSubdomainAccountOrdersIdRoute: SSubdomainAccountOrdersIdRoute,
+  SSubdomainAccountAddressesIndexRoute: SSubdomainAccountAddressesIndexRoute,
+  SSubdomainAccountOrdersIndexRoute: SSubdomainAccountOrdersIndexRoute,
+  SSubdomainAccountAddressesIdEditRoute: SSubdomainAccountAddressesIdEditRoute,
+}
+
+const SSubdomainRouteRouteWithChildren = SSubdomainRouteRoute._addFileChildren(
+  SSubdomainRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRouteRoute: AdminRouteRouteWithChildren,
   DashboardRouteRoute: DashboardRouteRouteWithChildren,
-  HomeRoute: HomeRoute,
-  LoginRoute: LoginRoute,
-  RegisterRoute: RegisterRoute,
-  VerifyRoute: VerifyRoute,
+  SSubdomainRouteRoute: SSubdomainRouteRouteWithChildren,
+  authLoginRoute: authLoginRoute,
+  authRegisterRoute: authRegisterRoute,
+  authVerifyRoute: authVerifyRoute,
   PreviewSubdomainRoute: PreviewSubdomainRoute,
 }
 export const routeTree = rootRouteImport

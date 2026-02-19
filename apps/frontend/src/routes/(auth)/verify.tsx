@@ -16,7 +16,7 @@ const verifySearchSchema = z.object({
   token: z.coerce.string(),
 })
 
-export const Route = createFileRoute('/verify')({
+export const Route = createFileRoute('/(auth)/verify')({
   validateSearch: verifySearchSchema,
   component: VerifyPage,
 })
