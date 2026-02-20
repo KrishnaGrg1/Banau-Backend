@@ -343,6 +343,10 @@ export const UpdateProductDtoSchema = z.object({
   weightUnit: z.string().optional(),
   taxable: z.boolean().optional(),
 });
+ export const UpdateProductInputSchema=z.object({
+  id:z.string(),
+  product:UpdateProductDtoSchema,
+ })
 
 export type UpdateProductDto = z.infer<typeof UpdateProductDtoSchema>;
 

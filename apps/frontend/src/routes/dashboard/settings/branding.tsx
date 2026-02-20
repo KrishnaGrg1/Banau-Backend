@@ -482,7 +482,7 @@ export default function BrandingPage() {
 
 // ── Sub-components ────────────────────────────────────────────────────────────
 
-function SectionHeader({
+export function SectionHeader({
   icon,
   title,
   desc,
@@ -504,7 +504,7 @@ function SectionHeader({
   )
 }
 
-interface AssetUploadProps {
+export interface AssetUploadProps {
   id: string
   label: string
   hint: string
@@ -516,7 +516,7 @@ interface AssetUploadProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
-function AssetUpload({
+export function AssetUpload({
   id,
   label,
   hint,

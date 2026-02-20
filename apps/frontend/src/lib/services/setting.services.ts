@@ -151,7 +151,7 @@ export const getTenantSettingAssets = createServerFn({ method: 'GET' }).handler(
     }
   },
 )
-function base64ToBuffer(dataUrl: string): {
+export function base64ToBuffer(dataUrl: string): {
   buffer: ArrayBuffer
   mimeType: string
 } {
