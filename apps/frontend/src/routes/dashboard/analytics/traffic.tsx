@@ -4,6 +4,14 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { useState } from 'react'
 import {
+  Table,
+  TableHeader,
+  TableRow,
+  TableHead,
+  TableBody,
+  TableCell,
+} from '@/components/ui/table'
+import {
   AreaChart,
   Area,
   BarChart,
@@ -332,35 +340,35 @@ function RouteComponent() {
             Most visited paths on your storefront — /s/$subdomain/…
           </p>
         </div>
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="bg-muted border-b">
+        <Table className="w-full text-sm">
+          <TableHeader>
+            <TableRow className="bg-muted border-b">
               {['Page Path', 'Views', 'Bounce Rate', 'Avg. Time on Page'].map(
                 (h) => (
-                  <th
+                  <TableHead
                     key={h}
                     className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground"
                   >
                     {h}
-                  </th>
+                  </TableHead>
                 ),
               )}
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-muted">
+            </TableRow>
+          </TableHeader>
+          <TableBody className="divide-y divide-muted">
             {TOP_PAGES.map((page) => {
               const maxViews = TOP_PAGES[0].views
               return (
-                <tr
+                <TableRow
                   key={page.path}
                   className="hover:bg-muted/60 transition-colors group"
                 >
-                  <td className="px-6 py-3">
+                  <TableCell className="px-6 py-3">
                     <span className="font-mono text-xs text-muted-foreground group-hover:text-foreground transition-colors">
                       {page.path}
                     </span>
-                  </td>
-                  <td className="px-6 py-3">
+                  </TableCell>
+                  <TableCell className="px-6 py-3">
                     <div className="flex items-center gap-2">
                       <div className="h-1.5 w-20 rounded-full bg-muted">
                         <div
@@ -372,22 +380,22 @@ function RouteComponent() {
                         {page.views.toLocaleString()}
                       </span>
                     </div>
-                  </td>
-                  <td className="px-6 py-3">
+                  </TableCell>
+                  <TableCell className="px-6 py-3">
                     <span
                       className={`text-sm font-semibold ${page.bounceRate > 50 ? 'text-destructive' : page.bounceRate > 30 ? 'text-warning-foreground' : 'text-success-foreground'}`}
                     >
                       {page.bounceRate}%
                     </span>
-                  </td>
-                  <td className="px-6 py-3 text-sm text-muted-foreground">
+                  </TableCell>
+                  <TableCell className="px-6 py-3 text-sm text-muted-foreground">
                     {page.avgTimeOnPage}
-                  </td>
-                </tr>
+                  </TableCell>
+                </TableRow>
               )
             })}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
     </div>
   )

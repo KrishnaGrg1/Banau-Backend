@@ -17,6 +17,7 @@ import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as authVerifyRouteImport } from './routes/(auth)/verify'
 import { Route as authRegisterRouteImport } from './routes/(auth)/register'
 import { Route as authLoginRouteImport } from './routes/(auth)/login'
+import { Route as authForgetPasswordRouteImport } from './routes/(auth)/forget-password'
 import { Route as SSubdomainRouteRouteImport } from './routes/s/$subdomain/route'
 import { Route as SSubdomainIndexRouteImport } from './routes/s/$subdomain/index'
 import { Route as DashboardTenantsIndexRouteImport } from './routes/dashboard/tenants/index'
@@ -61,6 +62,7 @@ import { Route as AdminSettingPlansRouteImport } from './routes/admin/setting/pl
 import { Route as AdminSettingFeaturesRouteImport } from './routes/admin/setting/features'
 import { Route as AdminAnalyticsRevenueRouteImport } from './routes/admin/analytics/revenue'
 import { Route as AdminAnalyticsGrowthRouteImport } from './routes/admin/analytics/growth'
+import { Route as authResetPasswordTokenRouteImport } from './routes/(auth)/reset-password.$token'
 import { Route as SSubdomainShopIndexRouteImport } from './routes/s/$subdomain/shop/index'
 import { Route as SSubdomainCheckoutIndexRouteImport } from './routes/s/$subdomain/checkout/index'
 import { Route as SSubdomainAccountIndexRouteImport } from './routes/s/$subdomain/account/index'
@@ -127,6 +129,11 @@ const authRegisterRoute = authRegisterRouteImport.update({
 const authLoginRoute = authLoginRouteImport.update({
   id: '/(auth)/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const authForgetPasswordRoute = authForgetPasswordRouteImport.update({
+  id: '/(auth)/forget-password',
+  path: '/forget-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SSubdomainRouteRoute = SSubdomainRouteRouteImport.update({
@@ -363,6 +370,11 @@ const AdminAnalyticsGrowthRoute = AdminAnalyticsGrowthRouteImport.update({
   path: '/analytics/growth',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const authResetPasswordTokenRoute = authResetPasswordTokenRouteImport.update({
+  id: '/(auth)/reset-password/$token',
+  path: '/reset-password/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SSubdomainShopIndexRoute = SSubdomainShopIndexRouteImport.update({
   id: '/shop/',
   path: '/shop/',
@@ -518,11 +530,13 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteRouteWithChildren
   '/dashboard': typeof DashboardRouteRouteWithChildren
   '/s/$subdomain': typeof SSubdomainRouteRouteWithChildren
+  '/forget-password': typeof authForgetPasswordRoute
   '/login': typeof authLoginRoute
   '/register': typeof authRegisterRoute
   '/verify': typeof authVerifyRoute
   '/admin/': typeof AdminIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/reset-password/$token': typeof authResetPasswordTokenRoute
   '/admin/analytics/growth': typeof AdminAnalyticsGrowthRoute
   '/admin/analytics/revenue': typeof AdminAnalyticsRevenueRoute
   '/admin/setting/features': typeof AdminSettingFeaturesRoute
@@ -596,11 +610,13 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/forget-password': typeof authForgetPasswordRoute
   '/login': typeof authLoginRoute
   '/register': typeof authRegisterRoute
   '/verify': typeof authVerifyRoute
   '/admin': typeof AdminIndexRoute
   '/dashboard': typeof DashboardIndexRoute
+  '/reset-password/$token': typeof authResetPasswordTokenRoute
   '/admin/analytics/growth': typeof AdminAnalyticsGrowthRoute
   '/admin/analytics/revenue': typeof AdminAnalyticsRevenueRoute
   '/admin/setting/features': typeof AdminSettingFeaturesRoute
@@ -678,11 +694,13 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteRouteWithChildren
   '/dashboard': typeof DashboardRouteRouteWithChildren
   '/s/$subdomain': typeof SSubdomainRouteRouteWithChildren
+  '/(auth)/forget-password': typeof authForgetPasswordRoute
   '/(auth)/login': typeof authLoginRoute
   '/(auth)/register': typeof authRegisterRoute
   '/(auth)/verify': typeof authVerifyRoute
   '/admin/': typeof AdminIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/(auth)/reset-password/$token': typeof authResetPasswordTokenRoute
   '/admin/analytics/growth': typeof AdminAnalyticsGrowthRoute
   '/admin/analytics/revenue': typeof AdminAnalyticsRevenueRoute
   '/admin/setting/features': typeof AdminSettingFeaturesRoute
@@ -761,11 +779,13 @@ export interface FileRouteTypes {
     | '/admin'
     | '/dashboard'
     | '/s/$subdomain'
+    | '/forget-password'
     | '/login'
     | '/register'
     | '/verify'
     | '/admin/'
     | '/dashboard/'
+    | '/reset-password/$token'
     | '/admin/analytics/growth'
     | '/admin/analytics/revenue'
     | '/admin/setting/features'
@@ -839,11 +859,13 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/forget-password'
     | '/login'
     | '/register'
     | '/verify'
     | '/admin'
     | '/dashboard'
+    | '/reset-password/$token'
     | '/admin/analytics/growth'
     | '/admin/analytics/revenue'
     | '/admin/setting/features'
@@ -920,11 +942,13 @@ export interface FileRouteTypes {
     | '/admin'
     | '/dashboard'
     | '/s/$subdomain'
+    | '/(auth)/forget-password'
     | '/(auth)/login'
     | '/(auth)/register'
     | '/(auth)/verify'
     | '/admin/'
     | '/dashboard/'
+    | '/(auth)/reset-password/$token'
     | '/admin/analytics/growth'
     | '/admin/analytics/revenue'
     | '/admin/setting/features'
@@ -1002,9 +1026,11 @@ export interface RootRouteChildren {
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
   DashboardRouteRoute: typeof DashboardRouteRouteWithChildren
   SSubdomainRouteRoute: typeof SSubdomainRouteRouteWithChildren
+  authForgetPasswordRoute: typeof authForgetPasswordRoute
   authLoginRoute: typeof authLoginRoute
   authRegisterRoute: typeof authRegisterRoute
   authVerifyRoute: typeof authVerifyRoute
+  authResetPasswordTokenRoute: typeof authResetPasswordTokenRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1063,6 +1089,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof authLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(auth)/forget-password': {
+      id: '/(auth)/forget-password'
+      path: '/forget-password'
+      fullPath: '/forget-password'
+      preLoaderRoute: typeof authForgetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/s/$subdomain': {
@@ -1372,6 +1405,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/analytics/growth'
       preLoaderRoute: typeof AdminAnalyticsGrowthRouteImport
       parentRoute: typeof AdminRouteRoute
+    }
+    '/(auth)/reset-password/$token': {
+      id: '/(auth)/reset-password/$token'
+      path: '/reset-password/$token'
+      fullPath: '/reset-password/$token'
+      preLoaderRoute: typeof authResetPasswordTokenRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/s/$subdomain/shop/': {
       id: '/s/$subdomain/shop/'
@@ -1744,9 +1784,11 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRouteRoute: AdminRouteRouteWithChildren,
   DashboardRouteRoute: DashboardRouteRouteWithChildren,
   SSubdomainRouteRoute: SSubdomainRouteRouteWithChildren,
+  authForgetPasswordRoute: authForgetPasswordRoute,
   authLoginRoute: authLoginRoute,
   authRegisterRoute: authRegisterRoute,
   authVerifyRoute: authVerifyRoute,
+  authResetPasswordTokenRoute: authResetPasswordTokenRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

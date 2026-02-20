@@ -14,6 +14,14 @@ import {
   TOP_CUSTOMERS,
 } from '@/components/Analytics/mockup'
 import { Legend, PageHeader, SectionCard } from '@/components/Analytics/shared'
+import {
+  Table,
+  TableHeader,
+  TableRow,
+  TableHead,
+  TableBody,
+  TableCell,
+} from '@/components/ui/table'
 import { createFileRoute } from '@tanstack/react-router'
 // /dashboard/analytics/customers.tsx  →  Customer Analytics
 
@@ -267,25 +275,28 @@ export default function AnalyticsCustomers() {
             Ranked by Customer.totalSpent — from your Customer model
           </p>
         </div>
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="bg-muted border-b">
+        <Table className="w-full text-sm">
+          <TableHeader>
+            <TableRow className="bg-muted border-b">
               {['Customer', 'Email', 'Orders', 'Total Spent', 'Last Order'].map(
                 (h) => (
-                  <th
+                  <TableHead
                     key={h}
                     className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground"
                   >
                     {h}
-                  </th>
+                  </TableHead>
                 ),
               )}
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-muted">
+            </TableRow>
+          </TableHeader>
+          <TableBody className="divide-y divide-muted">
             {TOP_CUSTOMERS.map((c, i) => (
-              <tr key={c.id} className="hover:bg-muted/60 transition-colors">
-                <td className="px-6 py-3">
+              <TableRow
+                key={c.id}
+                className="hover:bg-muted/60 transition-colors"
+              >
+                <TableCell className="px-6 py-3">
                   <div className="flex items-center gap-2.5">
                     <div
                       className="h-8 w-8 rounded-full flex items-center justify-center text-xs font-bold text-background shrink-0"
@@ -306,25 +317,25 @@ export default function AnalyticsCustomers() {
                     </div>
                     <span className="font-medium">{c.name}</span>
                   </div>
-                </td>
-                <td className="px-6 py-3 text-muted-foreground text-xs">
+                </TableCell>
+                <TableCell className="px-6 py-3 text-muted-foreground text-xs">
                   {c.email}
-                </td>
-                <td className="px-6 py-3">
+                </TableCell>
+                <TableCell className="px-6 py-3">
                   <span className="inline-flex items-center rounded-full bg-muted px-2.5 py-0.5 text-xs font-semibold text-muted-foreground">
                     {c.orders}
                   </span>
-                </td>
-                <td className="px-6 py-3 font-semibold">
+                </TableCell>
+                <TableCell className="px-6 py-3 font-semibold">
                   ${c.totalSpent.toLocaleString()}
-                </td>
-                <td className="px-6 py-3 text-xs text-muted-foreground">
+                </TableCell>
+                <TableCell className="px-6 py-3 text-xs text-muted-foreground">
                   {c.lastOrder}
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
 
       {/* Locations */}

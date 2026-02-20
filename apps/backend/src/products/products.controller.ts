@@ -10,7 +10,7 @@ import {
   Query,
   Request,
   Response,
-  UploadedFile,
+
   UploadedFiles,
   UseGuards,
   UseInterceptors,

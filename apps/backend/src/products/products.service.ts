@@ -57,6 +57,9 @@ export class ProductServices {
         orderBy: {
           createdAt: 'desc',
         },
+        include: {
+          featuredImage: true,
+        },
       }),
       this.prisma.product.count({
         where: {
@@ -65,7 +68,16 @@ export class ProductServices {
       }),
     ]);
     return {
-      existingProducts,
+      existingProducts: await Promise.all(existingProducts.map(async (product) => {
+        let imageUrl: string | null = null;
+        if (product.featuredImageId) {
+          const asset = await this.prisma.asset.findUnique({
+            where: { id: product.featuredImageId },
+          });
+          imageUrl = asset?.url || null;
+        }
+        return productToDto({ ...product, imageUrl });
+      })),
       meta: {
         total,
         limit,
@@ -77,7 +89,7 @@ export class ProductServices {
   }
   async getProductbyProductId(req, productId: string) {
     const product = await this.verifyProductOwnership(req, productId);
-    return product;
+    return productToDto(product);
   }
 
   async createProduct(
@@ -110,7 +122,7 @@ export class ProductServices {
       );
       Logger.log('upload image', uploadImage);
     }
-    return await this.prisma.$transaction(async (tx) => {
+    return productToDto(await this.prisma.$transaction(async (tx) => {
       let imageId: string | null = null;
       if (uploadImage) {
         const asset = await tx.asset.create({
@@ -133,7 +145,7 @@ export class ProductServices {
           tenantId: String(tenant.id),
         },
       });
-    });
+    }));
   }
 
   async updateProduct(
@@ -175,7 +187,7 @@ export class ProductServices {
         `tenants/${tenant.id}/products/`,
       );
     }
-    return await this.prisma.$transaction(async (tx) => {
+    return productToDto(await this.prisma.$transaction(async (tx) => {
       // If new image uploaded, update or create asset
       if (uploadImage) {
         if (imageId) {
@@ -217,7 +229,7 @@ export class ProductServices {
           tenantId: String(tenant.id),
         },
       });
-    });
+    }));
   }
   async deleteProductByid(req, productId: string) {
     const product = await this.verifyProductOwnership(req, productId);
@@ -560,4 +572,15 @@ export class ProductServices {
       totalLowStock: products.length + productsWithLowVariants.length,
     };
   }
+}
+
+function productToDto(product: any) {
+  if (!product) return product;
+  return {
+    ...product,
+    price: product.price?.toString(),
+    compareAtPrice: product.compareAtPrice?.toString(),
+    weight: product.weight?.toString(),
+    imageUrl: product.imageUrl || null,
+  };
 }

@@ -1,4 +1,12 @@
 import type { RecentOrder, OrderStatus } from './types'
+import {
+  Table,
+  TableHeader,
+  TableRow,
+  TableHead,
+  TableBody,
+  TableCell,
+} from '@/components/ui/table'
 
 interface RecentOrdersTableProps {
   data: RecentOrder[]
@@ -44,64 +52,64 @@ export function RecentOrdersTable({ data, onViewAll }: RecentOrdersTableProps) {
       </div>
 
       {/* Table */}
-      <table className="w-full text-sm">
-        <thead>
-          <tr className="bg-muted border-b">
+      <Table className="w-full text-sm">
+        <TableHeader>
+          <TableRow className="bg-muted border-b">
             {['Order ID', 'Customer', 'Total', 'Status', 'Time'].map((h) => (
-              <th
+              <TableHead
                 key={h}
                 className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground"
               >
                 {h}
-              </th>
+              </TableHead>
             ))}
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-muted">
+          </TableRow>
+        </TableHeader>
+        <TableBody className="divide-y divide-muted">
           {data.map((order) => (
-            <tr
+            <TableRow
               key={order.id}
               className="hover:bg-muted/60 transition-colors group"
             >
               {/* Order ID */}
-              <td className="px-6 py-4">
+              <TableCell className="px-6 py-4">
                 <span className="font-mono text-xs font-semibold text-muted-foreground group-hover:text-foreground transition-colors">
                   {order.id}
                 </span>
-              </td>
+              </TableCell>
 
               {/* Customer */}
-              <td className="px-6 py-4">
+              <TableCell className="px-6 py-4">
                 <div className="flex items-center gap-2.5">
                   <div className="h-7 w-7 rounded-full bg-muted flex items-center justify-center text-xs font-bold text-muted-foreground shrink-0">
                     {getInitials(order.customer)}
                   </div>
                   <span className="font-medium">{order.customer}</span>
                 </div>
-              </td>
+              </TableCell>
 
               {/* Total */}
-              <td className="px-6 py-4 font-semibold">
+              <TableCell className="px-6 py-4 font-semibold">
                 ${order.total.toFixed(2)}
-              </td>
+              </TableCell>
 
               {/* Status badge */}
-              <td className="px-6 py-4">
+              <TableCell className="px-6 py-4">
                 <span
                   className={`inline-flex rounded-full px-2.5 py-0.5 text-[11px] font-semibold ${STATUS_STYLES[order.status]}`}
                 >
                   {order.status}
                 </span>
-              </td>
+              </TableCell>
 
               {/* Time */}
-              <td className="px-6 py-4 text-xs text-muted-foreground">
+              <TableCell className="px-6 py-4 text-xs text-muted-foreground">
                 {order.date}
-              </td>
-            </tr>
+              </TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   )
 }

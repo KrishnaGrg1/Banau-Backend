@@ -1,4 +1,11 @@
-import { login, logout, register, verify } from '@/lib/services/auth.services'
+import {
+  forgotPassword,
+  login,
+  logout,
+  register,
+  resetPassword,
+  verify,
+} from '@/lib/services/auth.services'
 // import { useAuthStore } from '@/lib/stores/auth.stores'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
@@ -79,6 +86,50 @@ export function useVerify() {
     },
     onError: (err: Error) => {
       console.log('er', err)
+      toast.error(err.message)
+    },
+  })
+}
+
+export function forgetPassword() {
+  const navigate = useNavigate()
+  return useMutation({
+    mutationFn: verify,
+    onSuccess: () => {
+      navigate({
+        to: '/login',
+      })
+      toast.success('User verified successfully')
+    },
+    onError: (err: Error) => {
+      console.log('er', err)
+      toast.error(err.message)
+    },
+  })
+}
+
+export function useForgotPassword() {
+  return useMutation({
+    mutationFn: forgotPassword,
+    onSuccess: () => {
+      toast.success('Reset link sent — check your inbox')
+    },
+    onError: (err: Error) => {
+      toast.error(err.message)
+    },
+  })
+}
+
+export function useResetPassword() {
+  const navigate = useNavigate()
+  return useMutation({
+    mutationFn: resetPassword,
+    onSuccess: () => {
+      toast.success('Password updated successfully')
+      // Uncomment if you prefer auto-redirect instead of the success card:
+      // navigate({ to: '/login' })
+    },
+    onError: (err: Error) => {
       toast.error(err.message)
     },
   })

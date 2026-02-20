@@ -1,5 +1,5 @@
-import { z } from "zod";
-import { User } from "@repo/db/dist/generated/prisma/client";
+import { boolean, z } from "zod";
+import { Product, User } from "@repo/db/dist/generated/prisma/client";
 import { Setting } from "@repo/db/dist/generated/prisma/client";
 import { Asset } from "@repo/db/dist/generated/prisma/client";
 // Auth DTOs
@@ -10,6 +10,8 @@ export const CreateUserDtoSchema = z.object({
   lastName: z.string().min(2),
   // role:z.enum(['SUPER_ADMIN','TENANT_OWNER','TENANT_STAFF','CUSTOMER'])
 });
+
+
 
 export type CreateUserDto = z.infer<typeof CreateUserDtoSchema>;
 
@@ -209,4 +211,203 @@ export interface BulkImportResult {
   success: number;
   failed: number;
   errors: Array<{ row: number; error: string; data: any }>;
+}
+
+export const ForgotPasswordDtoSchema = z.object({
+  email: z.string().email('Invalid email address'),
+})
+
+export const ResetPasswordDtoSchema = z.object({
+  token:    z.string().min(1, 'Token is required'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
+})
+
+
+export interface ForgotPasswordResponse {
+  message: string
+}
+
+export interface ResetPasswordResponse {
+  message: string
+}
+export const ProductStatusDto = z.enum(["DRAFT", "ACTIVE", "ARCHIVED"], {
+  required_error: "Status is required",
+  invalid_type_error: "Status must be DRAFT, ACTIVE, or ARCHIVED",
+});
+
+// CreateProductDto
+export const CreateProductDtoSchema = z.object({
+  name: z.string({ required_error: "Name is required" }).min(2, "Name must be at least 2 characters"),
+  description: z.string().optional(),
+  slug: z.string({ required_error: "Slug is required" }).min(2, "Slug must be at least 2 characters"),
+  price: z.union([z.number(), z.string()], { required_error: "Price is required" }),
+  compareAtPrice: z.union([z.number(), z.string()]).optional(),
+  quantity: z.number().optional().default(0),
+  trackInventory: z.boolean().optional().default(true),
+  featuredImageId: z.string().optional(),
+  status: ProductStatusDto.optional().default("DRAFT"),
+  featured: z.boolean().optional().default(false),
+  sku: z.string().optional(),
+  barcode: z.string().optional(),
+  metaTitle: z.string().optional(),
+  metaDescription: z.string().optional(),
+  weight: z.number().optional(),
+  weightUnit: z.string().optional(),
+  taxable: z.boolean().optional().default(true),
+});
+
+export type CreateProductDto = z.infer<typeof CreateProductDtoSchema>;
+
+export interface ProductDto {
+  id: string;
+  tenantId: string;
+  name: string;
+  description: string | null;
+  slug: string;
+  
+  // ✅ String, not Decimal
+  price: string;
+  compareAtPrice: string | null;
+  
+  quantity: number;
+  trackInventory: boolean;
+  sku: string | null;
+  barcode: string | null;
+  featuredImageId: string | null;
+  status: 'DRAFT' | 'ACTIVE' | 'ARCHIVED';
+  featured: boolean;
+  metaTitle: string | null;
+  metaDescription: string | null;
+  
+  // ✅ String, not Decimal
+  weight: string | null;
+  weightUnit: string | null;
+  
+  taxable: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  publishedAt: Date | null;
+  
+  variants?: ProductVariantDto[];
+  imageUrl?:string
+}
+
+export interface ProductVariantDto {
+  id: string;
+  productId: string;
+  name: string;
+  sku: string | null;
+  barcode: string | null;
+  
+  // ✅ String, not Decimal
+  price: string | null;
+  compareAtPrice: string | null;
+  
+  quantity: number;
+  option1Name: string | null;
+  option1Value: string | null;
+  option2Name: string | null;
+  option2Value: string | null;
+  option3Name: string | null;
+  option3Value: string | null;
+  imageUrl: string | null;
+  position: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface CreateProductResponse {
+  success: boolean;
+  message: string;
+  data: ProductDto;  // ✅ Use ProductDto
+  timestamp: Date;
+}
+
+// UpdateProductDto
+export const UpdateProductDtoSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters").optional(),
+  description: z.string().optional(),
+  slug: z.string().min(2, "Slug must be at least 2 characters").optional(),
+  price: z.union([z.number(), z.string()]).optional(),
+  compareAtPrice: z.union([z.number(), z.string()]).optional(),
+  quantity: z.number().optional(),
+  trackInventory: z.boolean().optional(),
+  featuredImageId: z.string().optional(),
+  status: ProductStatusDto.optional(),
+  featured: z.boolean().optional(),
+  sku: z.string().optional(),
+  barcode: z.string().optional(),
+  metaTitle: z.string().optional(),
+  metaDescription: z.string().optional(),
+  weight: z.number().optional(),
+  weightUnit: z.string().optional(),
+  taxable: z.boolean().optional(),
+});
+
+export type UpdateProductDto = z.infer<typeof UpdateProductDtoSchema>;
+
+// CreateVariantDto
+export const CreateVariantDtoSchema = z.object({
+  name: z.string({ required_error: "Variant name is required" }).min(1, "Variant name must be at least 1 character"),
+  sku: z.string().optional(),
+  barcode: z.string().optional(),
+  price: z.number().optional(),
+  compareAtPrice: z.number().optional(),
+  quantity: z.number().optional().default(0),
+  option1Name: z.string().optional(),
+  option1Value: z.string().optional(),
+  option2Name: z.string().optional(),
+  option2Value: z.string().optional(),
+  option3Name: z.string().optional(),
+  option3Value: z.string().optional(),
+});
+
+export type CreateVariantDto = z.infer<typeof CreateVariantDtoSchema>;
+
+
+// UpdateVariantDto
+export const UpdateVariantDtoSchema = z.object({
+  name: z.string().min(1, "Variant name must be at least 1 character").optional(),
+  sku: z.string().optional(),
+  barcode: z.string().optional(),
+  price: z.number().optional(),
+  compareAtPrice: z.number().optional(),
+  quantity: z.number().optional(),
+  option1Name: z.string().optional(),
+  option1Value: z.string().optional(),
+  option2Name: z.string().optional(),
+  option2Value: z.string().optional(),
+  option3Name: z.string().optional(),
+  option3Value: z.string().optional(),
+});
+
+export type UpdateVariantDto = z.infer<typeof UpdateVariantDtoSchema>;
+
+// UpdateStockDto
+export const UpdateStockDtoSchema = z.object({
+  quantity: z.number({ required_error: "Quantity is required" }),
+  action: z.enum(["set", "add", "subtract"], {
+    required_error: "Action is required",
+    invalid_type_error: "Action must be set, add, or subtract",
+  }),
+  variantId: z.string().optional(),
+  reason: z.string().optional(),
+});
+
+export type UpdateStockDto = z.infer<typeof UpdateStockDtoSchema>;
+
+export interface getAllProductsResponse{
+  success:boolean,
+  message:string,
+  data: {
+    existingProducts:ProductDto,
+    meta:{
+      total: number,
+            limit: number,
+            offset: number,
+            hasNextPage: boolean,
+            hasPreviousPage: boolean
+    }
+  }
+  timeStamp:Date
 }

@@ -1,9 +1,13 @@
 import {
   CreateUserDtoSchema,
+  ForgotPasswordDtoSchema,
+  ForgotPasswordResponse,
   LoginDtoSchema,
   LoginResponse,
   refreshTokenResponse,
   RegisterResponse,
+  ResetPasswordDtoSchema,
+  ResetPasswordResponse,
   VerifyUserSchema,
 } from '@repo/shared'
 import { api } from '../axios'
@@ -104,3 +108,39 @@ export const refreshToken = createServerFn({ method: 'POST' }).handler(
     }
   },
 )
+
+export const forgotPassword = createServerFn({ method: 'POST' })
+  .inputValidator((data) => ForgotPasswordDtoSchema.parse(data))
+  .handler(async ({ data }) => {
+    try {
+      const response = await api<ForgotPasswordResponse>(
+        '/auth/forgot-password',
+        {
+          data,
+          method: 'POST',
+        },
+      )
+      return response.data
+    } catch (error: unknown) {
+      const err = error as Error
+      throw new Error(err.message || 'Failed to send reset email')
+    }
+  })
+
+export const resetPassword = createServerFn({ method: 'POST' })
+  .inputValidator((data) => ResetPasswordDtoSchema.parse(data))
+  .handler(async ({ data }) => {
+    try {
+      const response = await api<ResetPasswordResponse>(
+        '/auth/reset-password',
+        {
+          data,
+          method: 'POST',
+        },
+      )
+      return response.data
+    } catch (error: unknown) {
+      const err = error as Error
+      throw new Error(err.message || 'Failed to reset password')
+    }
+  })

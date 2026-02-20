@@ -37,6 +37,14 @@ import {
 
 const AVG_LINE_DATA = SALES_DATA.map((d) => ({ ...d, avg: 158.4 }))
 import { createFileRoute } from '@tanstack/react-router'
+import {
+  Table,
+  TableHeader,
+  TableRow,
+  TableHead,
+  TableBody,
+  TableCell,
+} from '@/components/ui/table'
 
 export const Route = createFileRoute('/dashboard/analytics/sales')({
   component: AnalyticsSales,
@@ -252,20 +260,20 @@ export default function AnalyticsSales() {
         subtitle="Breakdown of Order.total grouped by OrderStatus enum"
       >
         <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-gray-100">
+          <Table className="w-full text-sm">
+            <TableHeader>
+              <TableRow className="border-b border-gray-100">
                 {['Status', 'Orders', 'Revenue', '% of Total'].map((h) => (
-                  <th
+                  <TableHead
                     key={h}
                     className="pb-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-400"
                   >
                     {h}
-                  </th>
+                  </TableHead>
                 ))}
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-50">
+              </TableRow>
+            </TableHeader>
+            <TableBody className="divide-y divide-gray-50">
               {STATUS_DATA.map((row) => {
                 const totalRev = STATUS_DATA.reduce(
                   (a, r) => a + Math.max(r.revenue, 0),
@@ -276,17 +284,17 @@ export default function AnalyticsSales() {
                     ? ((Math.max(row.revenue, 0) / totalRev) * 100).toFixed(1)
                     : '0'
                 return (
-                  <tr
+                  <TableRow
                     key={row.status}
-                    className="hover:bg-gray-50/50 transition-colors"
+                    className="hover:bg-gray-50/50 TableRowansition-colors"
                   >
-                    <td className="py-3">
+                    <TableCell className="py-3">
                       <Badge label={row.status} />
-                    </td>
-                    <td className="py-3 text-gray-700 font-medium">
+                    </TableCell>
+                    <TableCell className="py-3 text-gray-700 font-medium">
                       {row.count}
-                    </td>
-                    <td className="py-3">
+                    </TableCell>
+                    <TableCell className="py-3">
                       <span
                         className={`font-semibold ${row.revenue < 0 ? 'text-red-500' : 'text-gray-800'}`}
                       >
@@ -294,8 +302,8 @@ export default function AnalyticsSales() {
                           ? `-$${Math.abs(row.revenue).toLocaleString()}`
                           : `$${row.revenue.toLocaleString()}`}
                       </span>
-                    </td>
-                    <td className="py-3">
+                    </TableCell>
+                    <TableCell className="py-3">
                       <div className="flex items-center gap-2">
                         <div className="h-1.5 w-24 rounded-full bg-gray-100">
                           <div
@@ -305,12 +313,12 @@ export default function AnalyticsSales() {
                         </div>
                         <span className="text-xs text-gray-500">{pct}%</span>
                       </div>
-                    </td>
-                  </tr>
+                    </TableCell>
+                  </TableRow>
                 )
               })}
-            </tbody>
-          </table>
+            </TableBody>
+          </Table>
         </div>
       </SectionCard>
     </div>

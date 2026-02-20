@@ -28,6 +28,14 @@ import {
 } from 'recharts'
 import { DateRange } from '@/components/Analytics'
 import {
+  Table,
+  TableHeader,
+  TableRow,
+  TableHead,
+  TableBody,
+  TableCell,
+} from '@/components/ui/table'
+import {
   PRODUCTS,
   STATUS_BREAKDOWN,
   STOCK_COLORS,
@@ -212,9 +220,9 @@ export default function AnalyticsProducts() {
             ))}
           </div>
         </div>
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="bg-muted border-b">
+        <Table className="w-full text-sm">
+          <TableHeader>
+            <TableRow className="bg-muted border-b">
               {[
                 'Product',
                 'Status',
@@ -224,27 +232,29 @@ export default function AnalyticsProducts() {
                 'Revenue',
                 'Featured',
               ].map((h) => (
-                <th
+                <TableHead
                   key={h}
                   className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground"
                 >
                   {h}
-                </th>
+                </TableHead>
               ))}
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-muted">
+            </TableRow>
+          </TableHeader>
+          <TableBody className="divide-y divide-muted">
             {sorted.map((p) => (
-              <tr
+              <TableRow
                 key={p.id}
                 className="hover:bg-muted/60 transition-colors group"
               >
-                <td className="px-6 py-3 font-medium">{p.name}</td>
-                <td className="px-6 py-3">
+                <TableCell className="px-6 py-3 font-medium">
+                  {p.name}
+                </TableCell>
+                <TableCell className="px-6 py-3">
                   <Badge label={p.status} />
-                </td>
-                <td className="px-6 py-3">${p.price}</td>
-                <td className="px-6 py-3">
+                </TableCell>
+                <TableCell className="px-6 py-3">${p.price}</TableCell>
+                <TableCell className="px-6 py-3">
                   <span
                     className={`font-semibold ${p.stock === 0 ? 'text-destructive' : p.stock <= 10 ? 'text-warning-foreground' : ''}`}
                   >
@@ -253,8 +263,8 @@ export default function AnalyticsProducts() {
                       <span className="ml-1 text-[10px]">⚠️</span>
                     )}
                   </span>
-                </td>
-                <td className="px-6 py-3">
+                </TableCell>
+                <TableCell className="px-6 py-3">
                   <div className="flex items-center gap-2">
                     <div className="h-1.5 w-16 rounded-full bg-muted">
                       <div
@@ -266,11 +276,11 @@ export default function AnalyticsProducts() {
                     </div>
                     <span className="font-medium">{p.unitsSold}</span>
                   </div>
-                </td>
-                <td className="px-6 py-3 font-semibold">
+                </TableCell>
+                <TableCell className="px-6 py-3 font-semibold">
                   ${p.revenue.toLocaleString()}
-                </td>
-                <td className="px-6 py-3">
+                </TableCell>
+                <TableCell className="px-6 py-3">
                   {p.featured ? (
                     <span className="inline-flex items-center gap-1 text-xs text-warning-foreground font-semibold">
                       ⭐ Yes
@@ -278,11 +288,11 @@ export default function AnalyticsProducts() {
                   ) : (
                     <span className="text-xs text-muted-foreground">—</span>
                   )}
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
     </div>
   )
