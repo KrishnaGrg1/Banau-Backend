@@ -42,26 +42,27 @@ export function BulkImportDialog() {
 
   const form = useForm({
     defaultValues: {
-      file: undefined as string | undefined,
-      filename: '' as string,
+      file: undefined as File | undefined,
     },
     onSubmit: async ({ value }) => {
       if (!value.file) return
-      await mutateAsync({
-        data: { file: value.file, filename: value.filename },
-      })
+      //use client fn
+      await mutateAsync({ file: value.file })
+      //use of server function
+      //  await mutateAsync({
+      //   data: { file: value.file, filename: value.filename },
+      // })
       setOpen(false)
     },
   })
 
-  // ✅ Same makeFileHandler pattern as your settings page
-  function makeFileHandler(fieldChange: (v: string | undefined) => void) {
+  function makeFileHandler(fieldChange: (v: File | undefined) => void) {
     return (e: React.ChangeEvent<HTMLInputElement>) => {
-      const file = e.target.files?.[0] ?? null
+      const file = e.target.files?.[0]
+
       if (!file) {
         fieldChange(undefined)
         setFilePreview(null)
-        form.setFieldValue('filename', '')
         return
       }
 
@@ -72,14 +73,8 @@ export function BulkImportDialog() {
         return
       }
 
-      form.setFieldValue('filename', file.name)
+      fieldChange(file) // ✅ store raw File
       setFilePreview({ name: file.name, size: file.size })
-
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        fieldChange(reader.result as string) // ✅ full data URL — same as your image handler
-      }
-      reader.readAsDataURL(file)
     }
   }
 
@@ -101,7 +96,7 @@ export function BulkImportDialog() {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-lg">
+      <DialogContent className="sm:max-w-lg" showCloseButton={false}>
         <DialogHeader>
           <DialogTitle>Bulk Import Products</DialogTitle>
           <DialogDescription>
@@ -143,7 +138,7 @@ export function BulkImportDialog() {
                             onClick={() => {
                               field.handleChange(undefined)
                               setFilePreview(null)
-                              form.setFieldValue('filename', '')
+                              // form.setFieldValue('filename', '')
                             }}
                             className="absolute -top-2 -right-2 h-5 w-5 rounded-full bg-destructive text-destructive-foreground flex items-center justify-center hover:opacity-80 transition-opacity"
                           >

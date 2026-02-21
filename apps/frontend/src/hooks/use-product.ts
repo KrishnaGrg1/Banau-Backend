@@ -1,10 +1,10 @@
 import {
-  bulkImportProducts,
   createProduct,
   deleteProduct,
   exportProducts,
   getAllProducts,
 } from '@/lib/services/product-services'
+import { bulkImportProducts } from '@/lib/services/product-services.client'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
@@ -60,9 +60,13 @@ export function useExportAllProducts() {
 export function useBulkImportProducts() {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async ({ data }: { data: any }) => {
-      return await bulkImportProducts({ data })
-    },
+    //use client
+    mutationFn: bulkImportProducts,
+
+    //use of server
+    // mutationFn: async ({ data }: { data: any }) => {
+    //   return await bulkImportProducts({ data })
+    // },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['products'] })
       toast.success('Imported Product successfully ')
@@ -89,3 +93,4 @@ export function useDeleteProduct() {
     },
   })
 }
+
