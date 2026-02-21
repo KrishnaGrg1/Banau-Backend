@@ -13,7 +13,8 @@
         "JWT_EXPIRES_IN",
         "PORT",
         "VITE_API_URL",
-        "VITE_APP_TITLE"
+        "VITE_APP_TITLE",
+        "SESSION_SECRET"
       ]
     },
     "dev": {

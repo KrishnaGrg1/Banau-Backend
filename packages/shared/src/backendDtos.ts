@@ -13,7 +13,6 @@ import {
   IsNotEmpty,
 } from "class-validator";
 import type { Express } from "express";
-import { Decimal } from "decimal.js";
 
 export enum UserRoleDto {
   TENANT_OWNER = "TENANT_OWNER",

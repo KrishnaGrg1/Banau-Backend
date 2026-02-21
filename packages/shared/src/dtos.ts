@@ -1,5 +1,5 @@
-import { boolean, z } from "zod";
-import { Product, User } from "@repo/db/dist/generated/prisma/client";
+import {  z } from "zod";
+import {  User } from "@repo/db/dist/generated/prisma/client";
 import { Setting } from "@repo/db/dist/generated/prisma/client";
 import { Asset } from "@repo/db/dist/generated/prisma/client";
 // Auth DTOs
