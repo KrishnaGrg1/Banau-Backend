@@ -1,6 +1,5 @@
 // apps/web/app/routes/dashboard/products/index.tsx
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { useState } from 'react'
 import { useGetAllProducts } from '@/hooks/use-product'
 import { Button } from '@/components/ui/button'
 import {

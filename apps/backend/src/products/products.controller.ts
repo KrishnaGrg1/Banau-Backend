@@ -10,7 +10,6 @@ import {
   Query,
   Request,
   Response,
-
   UploadedFiles,
   UseGuards,
   UseInterceptors,
@@ -203,5 +202,4 @@ export class ProductController {
     );
     return ApiResponseDto.success(product, 'Stock updated successfully');
   }
-  
 }

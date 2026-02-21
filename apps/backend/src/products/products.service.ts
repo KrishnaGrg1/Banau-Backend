@@ -68,16 +68,18 @@ export class ProductServices {
       }),
     ]);
     return {
-      existingProducts: await Promise.all(existingProducts.map(async (product) => {
-        let imageUrl: string | null = null;
-        if (product.featuredImageId) {
-          const asset = await this.prisma.asset.findUnique({
-            where: { id: product.featuredImageId },
-          });
-          imageUrl = asset?.url || null;
-        }
-        return productToDto({ ...product, imageUrl });
-      })),
+      existingProducts: await Promise.all(
+        existingProducts.map(async (product) => {
+          let imageUrl: string | null = null;
+          if (product.featuredImageId) {
+            const asset = await this.prisma.asset.findUnique({
+              where: { id: product.featuredImageId },
+            });
+            imageUrl = asset?.url || null;
+          }
+          return productToDto({ ...product, imageUrl });
+        }),
+      ),
       meta: {
         total,
         limit,
@@ -122,30 +124,32 @@ export class ProductServices {
       );
       Logger.log('upload image', uploadImage);
     }
-    return productToDto(await this.prisma.$transaction(async (tx) => {
-      let imageId: string | null = null;
-      if (uploadImage) {
-        const asset = await tx.asset.create({
+    return productToDto(
+      await this.prisma.$transaction(async (tx) => {
+        let imageId: string | null = null;
+        if (uploadImage) {
+          const asset = await tx.asset.create({
+            data: {
+              fileName: product_image!.originalname,
+              url: uploadImage.secure_url,
+              type: AssetType.PRODUCT_IMAGE,
+              tenantId: String(tenant.id),
+              fileSize: product_image!.size,
+              mimeType: product_image!.mimetype,
+            },
+          });
+          Logger.log('working', asset);
+          imageId = asset.id;
+        }
+        return tx.product.create({
           data: {
-            fileName: product_image!.originalname,
-            url: uploadImage.secure_url,
-            type: AssetType.PRODUCT_IMAGE,
+            ...data,
+            featuredImageId: imageId,
             tenantId: String(tenant.id),
-            fileSize: product_image!.size,
-            mimeType: product_image!.mimetype,
           },
         });
-        Logger.log('working', asset);
-        imageId = asset.id;
-      }
-      return tx.product.create({
-        data: {
-          ...data,
-          featuredImageId: imageId,
-          tenantId: String(tenant.id),
-        },
-      });
-    }));
+      }),
+    );
   }
 
   async updateProduct(
@@ -187,49 +191,51 @@ export class ProductServices {
         `tenants/${tenant.id}/products/`,
       );
     }
-    return productToDto(await this.prisma.$transaction(async (tx) => {
-      // If new image uploaded, update or create asset
-      if (uploadImage) {
-        if (imageId) {
-          // Update existing asset
-          const asset = await tx.asset.update({
-            where: { id: imageId },
-            data: {
-              fileName: product_image.originalname,
-              url: uploadImage.secure_url,
-              type: AssetType.PRODUCT_IMAGE,
-              tenantId: String(tenant.id),
-              fileSize: product_image.size,
-              mimeType: product_image.mimetype,
-            },
-          });
-          imageId = asset.id;
-        } else {
-          // Create new asset
-          const asset = await tx.asset.create({
-            data: {
-              fileName: product_image.originalname,
-              url: uploadImage.secure_url,
-              type: AssetType.PRODUCT_IMAGE,
-              tenantId: String(tenant.id),
-              fileSize: product_image.size,
-              mimeType: product_image.mimetype,
-            },
-          });
-          imageId = asset.id;
+    return productToDto(
+      await this.prisma.$transaction(async (tx) => {
+        // If new image uploaded, update or create asset
+        if (uploadImage) {
+          if (imageId) {
+            // Update existing asset
+            const asset = await tx.asset.update({
+              where: { id: imageId },
+              data: {
+                fileName: product_image.originalname,
+                url: uploadImage.secure_url,
+                type: AssetType.PRODUCT_IMAGE,
+                tenantId: String(tenant.id),
+                fileSize: product_image.size,
+                mimeType: product_image.mimetype,
+              },
+            });
+            imageId = asset.id;
+          } else {
+            // Create new asset
+            const asset = await tx.asset.create({
+              data: {
+                fileName: product_image.originalname,
+                url: uploadImage.secure_url,
+                type: AssetType.PRODUCT_IMAGE,
+                tenantId: String(tenant.id),
+                fileSize: product_image.size,
+                mimeType: product_image.mimetype,
+              },
+            });
+            imageId = asset.id;
+          }
         }
-      }
-      return tx.product.update({
-        where: {
-          id: String(product.id),
-        },
-        data: {
-          ...data,
-          featuredImageId: imageId,
-          tenantId: String(tenant.id),
-        },
-      });
-    }));
+        return tx.product.update({
+          where: {
+            id: String(product.id),
+          },
+          data: {
+            ...data,
+            featuredImageId: imageId,
+            tenantId: String(tenant.id),
+          },
+        });
+      }),
+    );
   }
   async deleteProductByid(req, productId: string) {
     const product = await this.verifyProductOwnership(req, productId);
@@ -296,23 +302,36 @@ export class ProductServices {
               row.name?.toString().toLowerCase().replace(/\s+/g, '-'),
             description: row.description || '',
             price: parseFloat(row.price),
-            compareAtPrice: row.compareAtPrice ? parseFloat(row.compareAtPrice) : null,
+            compareAtPrice: row.compareAtPrice
+              ? parseFloat(row.compareAtPrice)
+              : null,
             sku: row.sku || null,
             barcode: row.barcode || null,
             quantity: row.quantity ? parseInt(row.quantity) : 0,
-            trackInventory: typeof row.trackInventory === 'boolean' ? row.trackInventory : String(row.trackInventory).toLowerCase() === 'true',
+            trackInventory:
+              typeof row.trackInventory === 'boolean'
+                ? row.trackInventory
+                : String(row.trackInventory).toLowerCase() === 'true',
             status: row.status || 'ACTIVE',
             tenantId: tenant.id,
             weight: row.weight ? parseFloat(row.weight) : null,
             weightUnit: row.weightUnit || 'kg',
-            taxable: typeof row.taxable === 'boolean' ? row.taxable : String(row.taxable).toLowerCase() === 'true',
+            taxable:
+              typeof row.taxable === 'boolean'
+                ? row.taxable
+                : String(row.taxable).toLowerCase() === 'true',
             metaTitle: row.metaTitle || null,
             metaDescription: row.metaDescription || null,
-            featured: typeof row.featured === 'boolean' ? row.featured : String(row.featured).toLowerCase() === 'true',
+            featured:
+              typeof row.featured === 'boolean'
+                ? row.featured
+                : String(row.featured).toLowerCase() === 'true',
             featuredImageId: row.featuredImageId || null,
             createdAt: row.createdAt ? new Date(row.createdAt) : undefined,
             updatedAt: row.updatedAt ? new Date(row.updatedAt) : undefined,
-            publishedAt: row.publishedAt ? new Date(row.publishedAt) : undefined,
+            publishedAt: row.publishedAt
+              ? new Date(row.publishedAt)
+              : undefined,
           },
         });
         result.success++;

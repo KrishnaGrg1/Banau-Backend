@@ -1,5 +1,4 @@
 import {
-  CreateProductDtoSchema,
   CreateProductResponse,
   getAllProductsResponse,
   paginationDtoSchema,
@@ -8,12 +7,12 @@ import {
 import { createServerFn } from '@tanstack/react-start'
 import { api } from '../axios'
 import { base64ToBuffer } from './setting.services'
-export const createProduct = createServerFn({ method: 'POST' })
-  .inputValidator((data) => CreateProductDtoSchema.parse(data))
-  .handler(async ({ data }: { data: any }) => {
+import { isAxiosError } from 'axios'
+export const createProduct = createServerFn({ method: 'POST' }).handler(
+  async ({ data }: { data: any }) => {
     try {
       const formData = new FormData()
-
+      console.log('images ', data.product_image)
       // ✅ Append all text fields
       const textFields = [
         'name',
@@ -39,10 +38,25 @@ export const createProduct = createServerFn({ method: 'POST' })
           formData.append(field, String(value))
         }
       })
+      // Handle product_image as File or base64 string
       if (data.product_image instanceof File) {
+        formData.append(
+          'product_image',
+          data.product_image,
+          data.productImageName || data.product_image.name,
+        )
+      } else if (
+        data.product_image &&
+        typeof data.product_image === 'string' &&
+        data.product_image !== ''
+      ) {
         const { buffer, mimeType } = base64ToBuffer(data.product_image)
         const blob = new Blob([buffer], { type: mimeType })
-        formData.append('product_image', blob, data.productImageName)
+        formData.append(
+          'product_image',
+          blob,
+          data.productImageName || 'product_image',
+        )
       }
       const response = await api<CreateProductResponse>('/product', {
         method: 'POST',
@@ -54,10 +68,18 @@ export const createProduct = createServerFn({ method: 'POST' })
       console.log(response.data)
       return response.data
     } catch (error: unknown) {
+      // ⬇ This logs the exact NestJS validation error array — check your server console
+      if (isAxiosError(error)) {
+        console.error(
+          '[createProduct] validation errors:',
+          JSON.stringify(error.response?.data, null, 2),
+        )
+      }
       const err = error as Error
       throw new Error(err.message || 'Failed to create product')
     }
-  })
+  },
+)
 
 export const getAllProducts = createServerFn({ method: 'GET' })
   .inputValidator((data) => paginationDtoSchema.parse(data))

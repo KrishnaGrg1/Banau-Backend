@@ -33,7 +33,7 @@ function LoginPage() {
             <Sparkles className="h-4 w-4 text-primary-foreground" />
           </div>
           <span className="text-lg font-bold tracking-tight text-foreground">
-            banau
+            Banau
           </span>
         </a>
 
@@ -82,7 +82,7 @@ function LoginPage() {
             <Sparkles className="h-3.5 w-3.5 text-primary-foreground" />
           </div>
           <span className="text-base font-bold tracking-tight text-foreground">
-            banau
+            Banau
           </span>
         </a>
 

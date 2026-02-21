@@ -460,8 +460,8 @@ export class UpdateStockDto {
   @IsNumber()
   quantity: number;
 
-  @IsEnum(['set', 'add', 'subtract'])
-  action: 'set' | 'add' | 'subtract';
+  @IsEnum(["set", "add", "subtract"])
+  action: "set" | "add" | "subtract";
 
   @IsOptional()
   @IsString()

@@ -5,8 +5,8 @@ import { toast } from 'sonner'
 export function useCreateProduct() {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async({data}:{data:any})=>{
-     return await createProduct({data})
+    mutationFn: async ({ data }: { data: any }) => {
+      return await createProduct({ data })
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['products'] })
@@ -14,7 +14,7 @@ export function useCreateProduct() {
     },
     onError: (err: Error) => {
       toast.error(err.message)
-        console.error('[CREATE] Error:', err)
+      console.error('[CREATE] Error:', err)
     },
   })
 }
