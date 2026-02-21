@@ -1,8 +1,15 @@
 import {
+  addVariant,
   createProduct,
   deleteProduct,
+  deleteVariant,
   exportProducts,
   getAllProducts,
+  getLowStockProducts,
+  getProductById,
+  updateProduct,
+  updateStock,
+  updateVariant,
 } from '@/lib/services/product-services'
 import { bulkImportProducts } from '@/lib/services/product-services.client'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
@@ -89,7 +96,163 @@ export function useDeleteProduct() {
     },
     onError: (err: Error) => {
       toast.error(err.message)
-      console.error('[CREATE] Error:', err)
+      console.error('[DELETE] Error:', err)
+    },
+  })
+}
+
+export function useGetProductById(productId: string) {
+  return useQuery({
+    queryKey: ['product', productId],
+    queryFn: () => getProductById({ data: { productId } }),
+    enabled: !!productId,
+    retry: false,
+    staleTime: 5 * 60 * 1000,
+  })
+}
+
+export function useUpdateProduct() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async ({ data }: { data: { id: string; product: any } }) => {
+      console.log("hooks update",data)
+      return await updateProduct({ data })
+    },
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['products'] })
+      queryClient.invalidateQueries({
+        queryKey: ['product', variables.data.id],
+      })
+      toast.success('Product updated successfully')
+    },
+    onError: (err: Error) => {
+      toast.error(err.message)
+      console.error('[UPDATE] Error:', err)
+    },
+  })
+}
+
+// ==================== Low Stock Products ====================
+export function useGetLowStockProducts(threshold: number = 10) {
+  return useQuery({
+    queryKey: ['products', 'low-stock', threshold],
+    queryFn: () => getLowStockProducts({ data: { threshold } }),
+    retry: false,
+    staleTime: 5 * 60 * 1000,
+  })
+}
+
+// ==================== Product Variants ====================
+export function useAddVariant() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async ({
+      productId,
+      variant,
+    }: {
+      productId: string
+      variant: any
+    }) => {
+      return await addVariant({ data: { productId, variant } })
+    },
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['products'] })
+      queryClient.invalidateQueries({
+        queryKey: ['product', variables.productId],
+      })
+      toast.success('Variant added successfully')
+    },
+    onError: (err: Error) => {
+      toast.error(err.message)
+      console.error('[ADD_VARIANT] Error:', err)
+    },
+  })
+}
+
+export function useUpdateVariant() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async ({
+      productId,
+      variantId,
+      variant,
+    }: {
+      productId: string
+      variantId: string
+      variant: any
+    }) => {
+      return await updateVariant({
+        data: { productId, variantId, variant },
+      })
+    },
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['products'] })
+      queryClient.invalidateQueries({
+        queryKey: ['product', variables.productId],
+      })
+      toast.success('Variant updated successfully')
+    },
+    onError: (err: Error) => {
+      toast.error(err.message)
+      console.error('[UPDATE_VARIANT] Error:', err)
+    },
+  })
+}
+
+export function useDeleteVariant() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async ({
+      productId,
+      variantId,
+    }: {
+      productId: string
+      variantId: string
+    }) => {
+      return await deleteVariant({ data: { productId, variantId } })
+    },
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['products'] })
+      queryClient.invalidateQueries({
+        queryKey: ['product', variables.productId],
+      })
+      toast.success('Variant deleted successfully')
+    },
+    onError: (err: Error) => {
+      toast.error(err.message)
+      console.error('[DELETE_VARIANT] Error:', err)
+    },
+  })
+}
+
+// ==================== Stock Management ====================
+export function useUpdateStock() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async ({
+      productId,
+      stock,
+    }: {
+      productId: string
+      stock: {
+        quantity: number
+        action: 'set' | 'add' | 'subtract'
+        variantId?: string
+        reason?: string
+      }
+    }) => {
+      return await updateStock({ data: { productId, stock } })
+    },
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['products'] })
+      queryClient.invalidateQueries({
+        queryKey: ['product', variables.productId],
+      })
+      toast.success('Stock updated successfully')
+    },
+    onError: (err: Error) => {
+      toast.error(err.message)
+      console.error('[UPDATE_STOCK] Error:', err)
     },
   })
 }

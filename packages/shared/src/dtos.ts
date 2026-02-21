@@ -344,6 +344,9 @@ export const UpdateProductDtoSchema = z.object({
   weight: z.number().optional(),
   weightUnit: z.string().optional(),
   taxable: z.boolean().optional(),
+  // Image upload fields (base64 string and filename)
+  product_image: z.string().optional(),
+  productImageName: z.string().optional(),
 });
 export const UpdateProductInputSchema = z.object({
   id: z.string(),

@@ -2,11 +2,16 @@ import {
   bulkImportProductsResponse,
   bulkImportSchema,
   CreateProductResponse,
+  CreateVariantDtoSchema,
   DeleteProductSchema,
   exportProductParamsSchema,
   getAllProductsResponse,
   paginationDtoSchema,
+  ProductDto,
+  ProductVariantDto,
   UpdateProductInputSchema,
+  UpdateStockDtoSchema,
+  UpdateVariantDtoSchema,
 } from '@repo/shared'
 import { createServerFn } from '@tanstack/react-start'
 import { api } from '../axios'
@@ -101,6 +106,37 @@ export const getAllProducts = createServerFn({ method: 'GET' })
     }
   })
 
+export const getProductById = createServerFn({ method: 'GET' })
+  .inputValidator((data: unknown) => {
+    const productId = (data as { productId: string }).productId
+    if (!productId || typeof productId !== 'string') {
+      throw new Error('Product ID is required')
+    }
+    return { productId }
+  })
+  .handler(async ({ data }) => {
+    try {
+      const response = await api<{
+        success: boolean
+        message: string
+        data: ProductDto
+        timestamp: string
+      }>(`/product/${data.productId}`, {
+        method: 'GET',
+      })
+      return response.data.data
+    } catch (error: unknown) {
+      if (isAxiosError(error)) {
+        console.error(
+          '[getProductById] error:',
+          JSON.stringify(error.response?.data, null, 2),
+        )
+      }
+      const err = error as Error
+      throw new Error(err.message || 'Failed to retrieve product')
+    }
+  })
+
 export const updateProduct = createServerFn({ method: 'POST' })
   .inputValidator((data: unknown) => UpdateProductInputSchema.parse(data))
   .handler(async ({ data }: { data: any }) => {
@@ -133,11 +169,26 @@ export const updateProduct = createServerFn({ method: 'POST' })
         }
       })
 
-      if (data.product.product_image instanceof File) {
-        const { buffer, mimeType } = base64ToBuffer(data.product.product_image)
-        const blob = new Blob([buffer], { type: mimeType })
+      // Handle product_image as base64 string (same pattern as createProduct)
+      const productImage = data.product.product_image
+      const productImageName = data.product.productImageName
 
-        formData.append('product_image', blob, data.product.product_image)
+      console.log('updateProduct - product_image:', productImage ? 'present' : 'not present')
+      console.log('updateProduct - productImageName:', productImageName)
+
+      if (
+        productImage &&
+        typeof productImage === 'string' &&
+        productImage !== ''
+      ) {
+        const { buffer, mimeType } = base64ToBuffer(productImage)
+        const blob = new Blob([buffer], { type: mimeType })
+        formData.append(
+          'product_image',
+          blob,
+          productImageName || 'product_image',
+        )
+        console.log('updateProduct - image added to formData')
       }
 
       const response = await api<CreateProductResponse>(`/product/${data.id}`, {
@@ -149,12 +200,15 @@ export const updateProduct = createServerFn({ method: 'POST' })
       })
 
       return response.data.data
-    } catch (error: any) {
-      const errorMessage =
-        error.response?.data?.message ||
-        error.message ||
-        'Failed to update product'
-      throw new Error(errorMessage)
+    } catch (error: unknown) {
+      if (isAxiosError(error)) {
+        console.error(
+          '[updateProduct] validation errors:',
+          JSON.stringify(error.response?.data, null, 2),
+        )
+      }
+      const err = error as Error
+      throw new Error(err.message || 'Failed to update product')
     }
   })
 
@@ -220,9 +274,176 @@ export const deleteProduct = createServerFn({ method: 'POST' })
         method: 'DELETE',
       })
       return response.data
-      // return data
     } catch (e: unknown) {
       const err = e as Error
       throw new Error(err.message || 'Failed to delete products')
+    }
+  })
+
+// ==================== Low Stock Products ====================
+export const getLowStockProducts = createServerFn({ method: 'GET' })
+  .inputValidator((data: unknown) => {
+    const threshold = (data as { threshold?: number }).threshold ?? 10
+    return { threshold }
+  })
+  .handler(async ({ data }) => {
+    try {
+      const response = await api<{
+        success: boolean
+        message: string
+        data: ProductDto[]
+        timestamp: string
+      }>('/product/low-stock', {
+        method: 'GET',
+        params: { threshold: data.threshold },
+      })
+      return response.data.data
+    } catch (error: unknown) {
+      if (isAxiosError(error)) {
+        console.error(
+          '[getLowStockProducts] error:',
+          JSON.stringify(error.response?.data, null, 2),
+        )
+      }
+      const err = error as Error
+      throw new Error(err.message || 'Failed to retrieve low stock products')
+    }
+  })
+
+// ==================== Product Variants ====================
+export const addVariant = createServerFn({ method: 'POST' })
+  .inputValidator((data: unknown) => {
+    const { productId, variant } = data as {
+      productId: string
+      variant: unknown
+    }
+    if (!productId) throw new Error('Product ID is required')
+    return { productId, variant: CreateVariantDtoSchema.parse(variant) }
+  })
+  .handler(async ({ data }) => {
+    try {
+      const response = await api<{
+        success: boolean
+        message: string
+        data: ProductVariantDto
+        timestamp: string
+      }>(`/product/${data.productId}/variants`, {
+        method: 'POST',
+        data: data.variant,
+      })
+      return response.data.data
+    } catch (error: unknown) {
+      if (isAxiosError(error)) {
+        console.error(
+          '[addVariant] error:',
+          JSON.stringify(error.response?.data, null, 2),
+        )
+      }
+      const err = error as Error
+      throw new Error(err.message || 'Failed to add variant')
+    }
+  })
+
+export const updateVariant = createServerFn({ method: 'POST' })
+  .inputValidator((data: unknown) => {
+    const { productId, variantId, variant } = data as {
+      productId: string
+      variantId: string
+      variant: unknown
+    }
+    if (!productId) throw new Error('Product ID is required')
+    if (!variantId) throw new Error('Variant ID is required')
+    return {
+      productId,
+      variantId,
+      variant: UpdateVariantDtoSchema.parse(variant),
+    }
+  })
+  .handler(async ({ data }) => {
+    try {
+      const response = await api<{
+        success: boolean
+        message: string
+        data: ProductVariantDto
+        timestamp: string
+      }>(`/product/${data.productId}/variants/${data.variantId}`, {
+        method: 'PUT',
+        data: data.variant,
+      })
+      return response.data.data
+    } catch (error: unknown) {
+      if (isAxiosError(error)) {
+        console.error(
+          '[updateVariant] error:',
+          JSON.stringify(error.response?.data, null, 2),
+        )
+      }
+      const err = error as Error
+      throw new Error(err.message || 'Failed to update variant')
+    }
+  })
+
+export const deleteVariant = createServerFn({ method: 'POST' })
+  .inputValidator((data: unknown) => {
+    const { productId, variantId } = data as {
+      productId: string
+      variantId: string
+    }
+    if (!productId) throw new Error('Product ID is required')
+    if (!variantId) throw new Error('Variant ID is required')
+    return { productId, variantId }
+  })
+  .handler(async ({ data }) => {
+    try {
+      const response = await api(
+        `/product/${data.productId}/variants/${data.variantId}`,
+        {
+          method: 'DELETE',
+        },
+      )
+      return response.data
+    } catch (error: unknown) {
+      if (isAxiosError(error)) {
+        console.error(
+          '[deleteVariant] error:',
+          JSON.stringify(error.response?.data, null, 2),
+        )
+      }
+      const err = error as Error
+      throw new Error(err.message || 'Failed to delete variant')
+    }
+  })
+
+// ==================== Stock Management ====================
+export const updateStock = createServerFn({ method: 'POST' })
+  .inputValidator((data: unknown) => {
+    const { productId, stock } = data as {
+      productId: string
+      stock: unknown
+    }
+    if (!productId) throw new Error('Product ID is required')
+    return { productId, stock: UpdateStockDtoSchema.parse(stock) }
+  })
+  .handler(async ({ data }) => {
+    try {
+      const response = await api<{
+        success: boolean
+        message: string
+        data: ProductDto
+        timestamp: string
+      }>(`/product/${data.productId}/stock`, {
+        method: 'PUT',
+        data: data.stock,
+      })
+      return response.data.data
+    } catch (error: unknown) {
+      if (isAxiosError(error)) {
+        console.error(
+          '[updateStock] error:',
+          JSON.stringify(error.response?.data, null, 2),
+        )
+      }
+      const err = error as Error
+      throw new Error(err.message || 'Failed to update stock')
     }
   })
