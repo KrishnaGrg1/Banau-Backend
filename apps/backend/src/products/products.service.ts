@@ -31,6 +31,9 @@ export class ProductServices {
         id: productId,
         tenantId: tenant.id,
       },
+      include: {
+        variants: true
+      },
     });
 
     if (!product) {
@@ -59,6 +62,7 @@ export class ProductServices {
         },
         include: {
           featuredImage: true,
+          variants:true
         },
       }),
       this.prisma.product.count({

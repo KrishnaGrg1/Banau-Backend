@@ -31,7 +31,6 @@ import {
 } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { useUpdateProduct, useGetProductById } from '@/hooks/use-product'
-import { CreateProductFormSchema } from '@repo/shared'
 import { AssetUpload } from '../new'
 
 export const Route = createFileRoute('/dashboard/products/$id/edit')({
@@ -104,16 +103,17 @@ export default function EditProductPage() {
       taxable: true,
       product_image: undefined as string | undefined,
       productImageName: '',
-    } as Partial<(typeof CreateProductFormSchema)['_input']>,
-    validators: {
-      onSubmit: CreateProductFormSchema,
     },
     onSubmit: async ({ value }) => {
+      // Ensure status is valid
+      const validStatus = ['DRAFT', 'ACTIVE', 'ARCHIVED']
+      const status = validStatus.includes(value.status) ? value.status : 'DRAFT'
       await mutateAsync({
         data: {
           id,
           product: {
             ...value,
+            status,
             price: value.price !== '' ? Number(value.price) : undefined,
             compareAtPrice:
               value.compareAtPrice !== ''
@@ -125,6 +125,7 @@ export default function EditProductPage() {
       })
       navigate({ to: '/dashboard/products' })
     },
+    // Removed fieldConfig: status validator, move to form.Field below
   })
 
   // Populate form when product data is loaded
@@ -287,10 +288,10 @@ export default function EditProductPage() {
           e.stopPropagation()
           form.handleSubmit()
         }}
-        className="flex flex-col gap-6"
+        className="grid grid-cols-1 lg:grid-cols-3 gap-6"
       >
         {/* LEFT COLUMN */}
-        <div className="space-y-6">
+        <div className="lg:col-span-2 space-y-6">
           {/* Basic Info */}
           <div className="rounded-2xl border border-border bg-card p-6 space-y-5">
             <SectionHeader
@@ -870,7 +871,17 @@ export default function EditProductPage() {
               desc="Control how this product appears"
             />
 
-            <form.Field name="status">
+            <form.Field
+              name="status"
+              validators={{
+                onChange: ({ value }) => {
+                  if (!['DRAFT', 'ACTIVE', 'ARCHIVED'].includes(value)) {
+                    return "Status must be 'DRAFT', 'ACTIVE', or 'ARCHIVED'"
+                  }
+                  return undefined
+                },
+              }}
+            >
               {(field) => (
                 <div className="space-y-1.5">
                   <Label className="text-sm font-medium text-foreground">
@@ -904,6 +915,7 @@ export default function EditProductPage() {
                       </SelectItem>
                     </SelectContent>
                   </Select>
+                  <FieldError errors={field.state.meta.errors} />
                 </div>
               )}
             </form.Field>
