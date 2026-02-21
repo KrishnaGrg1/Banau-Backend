@@ -3,7 +3,7 @@ import {
   DateRange,
   DateRangeSelector,
   StatCard,
-} from '@/components/Analytics'
+} from '@/components/dashboard/Analytics'
 import {
   BEHAVIOR_RADAR,
   GROWTH_DATA,
@@ -12,8 +12,12 @@ import {
   SEGMENTS,
   STATS,
   TOP_CUSTOMERS,
-} from '@/components/Analytics/mockup'
-import { Legend, PageHeader, SectionCard } from '@/components/Analytics/shared'
+} from '@/components/dashboard/Analytics/mockup'
+import {
+  Legend,
+  PageHeader,
+  SectionCard,
+} from '@/components/dashboard/Analytics/shared'
 import {
   Table,
   TableHeader,

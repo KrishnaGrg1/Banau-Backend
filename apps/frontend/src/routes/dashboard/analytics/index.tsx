@@ -8,7 +8,7 @@ import {
   RevenueChart,
   StatCard,
   TopProductsTable,
-} from '@/components/Analytics'
+} from '@/components/dashboard/Analytics'
 import {
   CUSTOMER_GROWTH_DATA,
   LOW_STOCK_ITEMS,
@@ -17,7 +17,7 @@ import {
   REVENUE_DATA,
   STAT_CARDS,
   TOP_PRODUCTS,
-} from '@/components/Analytics/mockup'
+} from '@/components/dashboard/Analytics/mockup'
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 export const Route = createFileRoute('/dashboard/analytics/')({

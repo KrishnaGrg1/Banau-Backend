@@ -7,7 +7,7 @@ import {
   PageHeader,
   Badge,
   Legend,
-} from '@/components/Analytics/shared'
+} from '@/components/dashboard/Analytics/shared'
 
 // /dashboard/analytics/products.tsx  →  Product Analytics
 
@@ -26,7 +26,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from 'recharts'
-import { DateRange } from '@/components/Analytics'
+import { DateRange } from '@/components/dashboard/Analytics'
 import {
   Table,
   TableHeader,
@@ -43,7 +43,7 @@ import {
   STATS,
   PRODUCT_LINES,
   REVENUE_TREND,
-} from '@/components/Analytics/mockup'
+} from '@/components/dashboard/Analytics/mockup'
 
 export const Route = createFileRoute('/dashboard/analytics/products')({
   component: AnalyticsProducts,

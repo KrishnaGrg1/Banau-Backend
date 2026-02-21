@@ -368,7 +368,8 @@ export default function AddProductPage() {
           e.stopPropagation()
           form.handleSubmit()
         }}
-        className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-6 items-start"
+        // className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-6 items-start"
+        className="flex flex-col  gap-6"
       >
         {/* ── LEFT COLUMN ── */}
         <div className="space-y-6">
@@ -910,9 +911,9 @@ export default function AddProductPage() {
         </div>
 
         {/* ── RIGHT COLUMN ── */}
-        <div className="space-y-5 lg:sticky lg:top-6">
+        <div className="space-y-6 ">
           {/* Product Image */}
-          <div className="rounded-2xl border border-border bg-card p-5 space-y-4">
+          <div className="rounded-2xl border border-border bg-card p-5 space-y-5">
             <SectionHeader
               icon={<ImageIcon className="h-4 w-4" />}
               title="Product Image"
@@ -940,7 +941,7 @@ export default function AddProductPage() {
           </div>
 
           {/* Visibility */}
-          <div className="rounded-2xl border border-border bg-card p-5 space-y-4">
+          <div className="rounded-2xl border border-border bg-card p-5 space-y-5">
             <SectionHeader
               icon={<Eye className="h-4 w-4" />}
               title="Visibility"
@@ -1014,7 +1015,7 @@ export default function AddProductPage() {
           )}
 
           {/* Summary */}
-          <div className="rounded-2xl border border-border bg-foreground text-background p-5 space-y-4">
+          <div className="rounded-2xl border border-border bg-foreground text-background p-5 space-y-5">
             <div className="flex items-center gap-2">
               <Tag className="h-4 w-4 opacity-60" />
               <p className="text-sm font-semibold">Summary</p>

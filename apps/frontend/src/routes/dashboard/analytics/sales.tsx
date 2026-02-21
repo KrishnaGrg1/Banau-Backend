@@ -20,20 +20,20 @@ import {
   ChartTooltip,
   DateRangeSelector,
   DateRange,
-} from '@/components/Analytics'
+} from '@/components/dashboard/Analytics'
 
 import {
   Badge,
   Legend,
   PageHeader,
   SectionCard,
-} from '@/components/Analytics/shared'
+} from '@/components/dashboard/Analytics/shared'
 import {
   REFUND_DATA,
   SALES_DATA,
   STATS,
   STATUS_DATA,
-} from '@/components/Analytics/mockup'
+} from '@/components/dashboard/Analytics/mockup'
 
 const AVG_LINE_DATA = SALES_DATA.map((d) => ({ ...d, avg: 158.4 }))
 import { createFileRoute } from '@tanstack/react-router'

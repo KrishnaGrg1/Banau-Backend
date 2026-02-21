@@ -19,9 +19,6 @@ export function useLogin() {
     mutationFn: login,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['auth'] })
-      // setUser(data.data.user)
-      // setAuthSession(data.data.token)
-      // setAuthenticated(true)
       navigate({ to: '/dashboard' })
       toast.success('Login successfully ')
     },

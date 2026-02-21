@@ -26,7 +26,7 @@ export class ProductServices {
       throw new NotFoundException('Tenant not found');
     }
 
-    const product = await this.prisma.product.findFirst({
+    const product = await this.prisma.product.findUnique({
       where: {
         id: productId,
         tenantId: tenant.id,
@@ -250,7 +250,6 @@ export class ProductServices {
         id: product.id.toString(),
       },
     });
-    return null;
   }
   async bulkImport(req, file: { file: Express.Multer.File }) {
     const tenant = await this.prisma.tenant.findUnique({

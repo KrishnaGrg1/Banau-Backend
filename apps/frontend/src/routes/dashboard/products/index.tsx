@@ -1,6 +1,6 @@
 // apps/web/app/routes/dashboard/products/index.tsx
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { useGetAllProducts } from '@/hooks/use-product'
+import { useExportAllProducts, useGetAllProducts } from '@/hooks/use-product'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -31,18 +31,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import {
-  Plus,
-  MoreHorizontal,
-  Edit,
-  Trash2,
-  Eye,
-  Package,
-  ChevronLeft,
-  ChevronRight,
-} from 'lucide-react'
+import { Plus, Package, ChevronLeft, ChevronRight } from 'lucide-react'
 import { Spinner } from '@/components/ui/spinner'
 import { ProductDto } from '@repo/shared'
+import { BulkImportDialog } from '@/components/dashboard/products/bulk-import-dialog'
+import { ExportButton } from '@/components/dashboard/products/export-button'
+import { ProductActionsMenu } from '@/components/dashboard/products/delete-product'
 
 // ✅ Define search params for pagination
 interface ProductsSearch {
@@ -72,6 +66,7 @@ export const Route = createFileRoute('/dashboard/products/')({
 export default function ProductsPage() {
   const navigate = useNavigate({ from: Route.fullPath })
   const search = Route.useSearch()
+  // const [open, setOpen] = useState(false)
 
   // ✅ Use search params for pagination
   const limit = search.limit || 10
@@ -82,7 +77,6 @@ export default function ProductsPage() {
     limit,
     offset,
   })
-
   const products: ProductDto[] = Array.isArray(data?.data?.existingProducts)
     ? data.data.existingProducts
     : []
@@ -164,10 +158,16 @@ export default function ProductsPage() {
             Manage your product catalog
           </p>
         </div>
-        <Button onClick={() => navigate({ to: '/dashboard/products/new' })}>
-          <Plus className="mr-2 h-4 w-4" />
-          Add Product
-        </Button>
+
+        <div className="flex items-center gap-2">
+          <BulkImportDialog />
+          <ExportButton />
+
+          <Button onClick={() => navigate({ to: '/dashboard/products/new' })}>
+            <Plus className="mr-2 h-4 w-4" />
+            Add Product
+          </Button>
+        </div>
       </div>
 
       {/* Stats */}
@@ -329,41 +329,10 @@ export default function ProductsPage() {
                         </Badge>
                       </TableCell>
                       <TableCell className="text-right">
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon">
-                              <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem
-                              onClick={() =>
-                                navigate({
-                                  to: '/dashboard/products/$id',
-                                  params: { id: product.id },
-                                })
-                              }
-                            >
-                              <Eye className="mr-2 h-4 w-4" />
-                              View
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                              onClick={() =>
-                                navigate({
-                                  to: '/dashboard/products/$id/edit',
-                                  params: { id: product.id },
-                                })
-                              }
-                            >
-                              <Edit className="mr-2 h-4 w-4" />
-                              Edit
-                            </DropdownMenuItem>
-                            <DropdownMenuItem className="text-red-600">
-                              <Trash2 className="mr-2 h-4 w-4" />
-                              Delete
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
+                        <ProductActionsMenu
+                          id={product.id}
+                          name={product.name}
+                        />
                       </TableCell>
                     </TableRow>
                   ))}

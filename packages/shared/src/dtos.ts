@@ -1,5 +1,5 @@
-import {  z } from "zod";
-import {  User } from "@repo/db/dist/generated/prisma/client";
+import { z } from "zod";
+import { User } from "@repo/db/dist/generated/prisma/client";
 import { Setting } from "@repo/db/dist/generated/prisma/client";
 import { Asset } from "@repo/db/dist/generated/prisma/client";
 // Auth DTOs
@@ -481,3 +481,27 @@ export const CreateProductFormSchema = z.object({
 });
 
 export type CreateProductFormValues = z.infer<typeof CreateProductFormSchema>;
+
+export const exportProductParamsSchema = z.object({
+  format: z.enum(["csv", "xlsx"]),
+});
+
+export interface bulkImportProductsResponse {
+  success: boolean;
+  message: string;
+  data: {
+    success: number;
+    failed: number;
+    errors: string[];
+  };
+  timestamp: Date;
+}
+
+export const bulkImportSchema = z.object({
+  file: z.string(),
+  filename: z.string(),
+});
+
+export const DeleteProductSchema = z.object({
+  productId: z.string(),
+});

@@ -34,7 +34,7 @@ import {
   SectionCard,
   PageHeader,
   Legend,
-} from '@/components/Analytics/shared'
+} from '@/components/dashboard/Analytics/shared'
 
 import {
   DEVICES,
@@ -43,8 +43,8 @@ import {
   STATS,
   TOP_PAGES,
   TRAFFIC_DATA,
-} from '@/components/Analytics/mockup'
-import { DateRange } from '@/components/Analytics'
+} from '@/components/dashboard/Analytics/mockup'
+import { DateRange } from '@/components/dashboard/Analytics'
 export const Route = createFileRoute('/dashboard/analytics/traffic')({
   component: RouteComponent,
 })

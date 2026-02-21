@@ -1,5 +1,9 @@
 import {
+  bulkImportProductsResponse,
+  bulkImportSchema,
   CreateProductResponse,
+  DeleteProductSchema,
+  exportProductParamsSchema,
   getAllProductsResponse,
   paginationDtoSchema,
   UpdateProductInputSchema,
@@ -8,6 +12,7 @@ import { createServerFn } from '@tanstack/react-start'
 import { api } from '../axios'
 import { base64ToBuffer } from './setting.services'
 import { isAxiosError } from 'axios'
+import { string } from 'zod'
 export const createProduct = createServerFn({ method: 'POST' }).handler(
   async ({ data }: { data: any }) => {
     try {
@@ -151,5 +156,74 @@ export const updateProduct = createServerFn({ method: 'POST' })
         error.message ||
         'Failed to update product'
       throw new Error(errorMessage)
+    }
+  })
+
+export const exportProducts = createServerFn({ method: 'GET' })
+  .inputValidator((data: unknown) => exportProductParamsSchema.parse(data))
+  .handler(async ({ data }) => {
+    try {
+      const res = await api('/product/export', {
+        method: 'GET',
+        params: data,
+        responseType: 'arraybuffer', // 👈 critical: get raw binary
+      })
+
+      if (res.status === 200) {
+        const buffer = Buffer.from(res.data)
+        const format = data.format ?? 'csv'
+        const filename = `products-${Date.now()}.${format}`
+        const mimeType =
+          format === 'xlsx'
+            ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            : 'text/csv'
+
+        return {
+          success: true,
+          base64: buffer.toString('base64'), // 👈 serialize binary as base64
+          filename,
+          mimeType,
+        }
+      }
+    } catch (e: unknown) {
+      const err = e as Error
+      throw new Error(err.message || 'Failed to export products')
+    }
+  })
+
+export const bulkImportProducts = createServerFn({ method: 'POST' })
+  .inputValidator((data: unknown) => bulkImportSchema.parse(data))
+  .handler(async ({ data }: { data: any }) => {
+    try {
+      const form = new FormData()
+      const { buffer, mimeType } = base64ToBuffer(data.file)
+      const blob = new Blob([buffer], { type: mimeType })
+      form.append('file', blob, data.filename)
+      const res = await api<bulkImportProductsResponse>('/product/bulk', {
+        method: 'POST',
+        data: form,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      return res.data
+    } catch (e: unknown) {
+      const err = e as Error
+      throw new Error(err.message || 'Failed to bulk import products')
+    }
+  })
+
+export const deleteProduct = createServerFn({ method: 'POST' })
+  .inputValidator((data: unknown) => DeleteProductSchema.parse(data))
+  .handler(async ({ data }) => {
+    try {
+      const response = await api(`/product/${data.productId}`, {
+        method: 'DELETE',
+      })
+      return response.data
+      // return data
+    } catch (e: unknown) {
+      const err = e as Error
+      throw new Error(err.message || 'Failed to delete products')
     }
   })

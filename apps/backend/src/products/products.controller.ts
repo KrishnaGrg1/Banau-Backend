@@ -58,7 +58,7 @@ export class ProductController {
   }
 
   @Get(':id')
-  async getProductById(@Param(':id') productId: string, @Request() req) {
+  async getProductById(@Param('id') productId: string, @Request() req) {
     const data = await this.productsServices.getProductbyProductId(
       req,
       productId,
@@ -99,7 +99,7 @@ export class ProductController {
   )
   async updateProduct(
     @Request() req,
-    @Param(':id') productId: string,
+    @Param('id') productId: string,
     @Body() dto: backendDtos.UpdateProductDto,
     @UploadedFiles(new FileSizeValidationPipe())
     file: { product_image: Express.Multer.File },
@@ -118,11 +118,11 @@ export class ProductController {
   }
 
   @Delete(':id')
-  async deleteProductbyId(@Param(':id') productId, @Request() req) {
+  async deleteProductbyId(@Param('id') productId, @Request() req) {
     await this.productsServices.deleteProductByid(req, productId);
     return ApiResponseDto.success(
       null,
-      "Deleted tenant's products successfully",
+      `Deleted tenant's products successfully `,
     );
   }
 
