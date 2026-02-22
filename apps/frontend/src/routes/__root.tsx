@@ -14,7 +14,6 @@ import appCss from '../styles.css?url'
 
 import type { QueryClient } from '@tanstack/react-query'
 import { Toaster } from 'sonner'
-import { subdomainMiddleware } from '@/utils/middleware'
 import { Tenant } from '@repo/db/dist/generated/prisma/client'
 
 interface MyRouterContext {
@@ -60,10 +59,6 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
       },
     ],
   }),
-  server: {
-    middleware: [subdomainMiddleware],
-  },
-
   component: RootComponent,
   notFoundComponent: NotFound,
 })
