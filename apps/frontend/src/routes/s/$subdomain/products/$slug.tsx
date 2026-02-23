@@ -78,7 +78,7 @@ function RouteComponent() {
           This product may have been removed or doesn't exist.
         </p>
         <Link
-          to="/s/$subdomain/shop"
+          to="/s/$subdomain/products"
           params={{ subdomain }}
           className="inline-flex items-center gap-2 text-sm text-primary underline underline-offset-2"
         >
@@ -175,11 +175,11 @@ function RouteComponent() {
           {/* Price */}
           <div className="flex items-center gap-3">
             <span className="text-3xl font-bold text-foreground">
-              ${price.toFixed(2)}
+              Rs.{price.toFixed(2)}
             </span>
             {compareAt && (
               <span className="text-lg text-muted-foreground line-through">
-                ${compareAt.toFixed(2)}
+                Rs.{compareAt.toFixed(2)}
               </span>
             )}
             {discount && (
@@ -347,7 +347,7 @@ function RouteComponent() {
             More Products
           </h2>
           <Link
-            to="/s/$subdomain/shop"
+            to="/s/$subdomain/products"
             params={{ subdomain }}
             className="text-xs text-primary underline underline-offset-2 hover:opacity-70 transition-opacity"
           >

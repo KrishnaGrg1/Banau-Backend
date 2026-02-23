@@ -36,9 +36,9 @@ export default function PublicProductCard({ product }: PublicProductCardProps) {
       <Card className="flex flex-col h-full border border-border bg-card overflow-hidden transition-shadow hover:shadow-md">
         <CardContent className="flex flex-col gap-2 p-3 flex-1">
           <div className="relative aspect-[4/5] overflow-hidden rounded-md mb-2 bg-muted">
-            {product.imageUrl ? (
+            {product.featuredImage.url ? (
               <img
-                src={product.imageUrl}
+                src={product.featuredImage.url}
                 alt={product.name}
                 className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
                 loading="lazy"

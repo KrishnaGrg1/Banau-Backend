@@ -122,11 +122,11 @@ export function ProductCard({ product, subdomain }: ProductCardProps) {
         <div className="flex items-center justify-between pt-1">
           <div className="flex items-center gap-2">
             <span className="font-bold text-base text-foreground">
-              ${price.toFixed(2)}
+              Rs.{price.toFixed(2)}
             </span>
             {compareAt && (
               <span className="text-xs text-muted-foreground line-through">
-                ${compareAt.toFixed(2)}
+                Rs.{compareAt.toFixed(2)}
               </span>
             )}
           </div>

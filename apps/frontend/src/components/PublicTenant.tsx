@@ -233,11 +233,11 @@ function StorefrontContent({
                   )}
                   <div className="flex items-center gap-2 pt-1">
                     <span className="font-semibold text-sm">
-                      ${Number(product.price).toFixed(2)}
+                      Rs.{Number(product.price).toFixed(2)}
                     </span>
                     {product.compareAtPrice && (
                       <span className="text-xs text-muted-foreground line-through">
-                        ${Number(product.compareAtPrice).toFixed(2)}
+                        Rs.{Number(product.compareAtPrice).toFixed(2)}
                       </span>
                     )}
                   </div>

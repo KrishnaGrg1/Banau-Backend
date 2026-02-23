@@ -66,7 +66,7 @@ export function TopProductsTable({ data, onViewAll }: TopProductsTableProps) {
                     {product.sold} sold
                   </span>
                   <span className="text-xs font-semibold">
-                    ${product.revenue.toLocaleString()}
+                    Rs.{product.revenue.toLocaleString()}
                   </span>
                 </div>
               </div>
