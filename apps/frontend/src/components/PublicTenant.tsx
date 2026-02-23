@@ -258,16 +258,18 @@ function StorefrontContent({
               </div>
             ))
           )}
-          <div className="col-span-full flex justify-center pt-6">
-            <Link
-              to="/s/$subdomain/shop"
-              params={{ subdomain: tenant.subdomain }}
-              className="inline-flex items-center gap-2 rounded-full border border-border bg-card hover:bg-muted px-6 py-2.5 text-sm font-medium text-foreground transition-colors"
-            >
-              View All Products
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
+          {products.length > 0 && (
+            <div className="col-span-full flex justify-center pt-6">
+              <Link
+                to="/s/$subdomain/shop"
+                params={{ subdomain: tenant.subdomain }}
+                className="inline-flex items-center gap-2 rounded-full border border-border bg-card hover:bg-muted px-6 py-2.5 text-sm font-medium text-foreground transition-colors"
+              >
+                View All Products
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+          )}
         </div>
       </section>
 
