@@ -25,7 +25,7 @@ const config = defineConfig({
   plugins: [
     devtools(),
     tanstackStart(),
-        nitro(),
+    nitro(),
     viteReact(),
     // this is the plugin that enables path aliases
     viteTsConfigPaths({

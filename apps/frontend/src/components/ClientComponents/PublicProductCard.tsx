@@ -16,9 +16,7 @@ function formatPrice(price: number | string): string {
   }).format(num)
 }
 
-export default function PublicProductCard({
-  product,
-}: PublicProductCardProps) {
+export default function PublicProductCard({ product }: PublicProductCardProps) {
   const price = Number(product.price)
   const compareAtPrice = product.compareAtPrice
     ? Number(product.compareAtPrice)

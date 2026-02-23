@@ -115,7 +115,7 @@ export function useUpdateProduct() {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async ({ data }: { data: { id: string; product: any } }) => {
-      console.log("hooks update",data)
+      console.log('hooks update', data)
       return await updateProduct({ data })
     },
     onSuccess: (_, variables) => {
@@ -256,4 +256,3 @@ export function useUpdateStock() {
     },
   })
 }
-

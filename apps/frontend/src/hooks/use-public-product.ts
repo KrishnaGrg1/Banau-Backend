@@ -5,14 +5,13 @@ import {
   getPublicProductBySlug,
 } from '@/lib/services/public-product-services'
 
-
 export function usePublicProducts(params: {
- subdomain: string
+  subdomain: string
   page?: number
   limit?: number
   minPrice?: number
   maxPrice?: number
-  inStockOnly?: boolean  // ✅ boolean
+  inStockOnly?: boolean // ✅ boolean
   sortBy?: 'newest' | 'oldest' | 'price_asc' | 'price_desc'
 }) {
   return useQuery({

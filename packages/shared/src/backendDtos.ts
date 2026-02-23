@@ -471,9 +471,7 @@ export class UpdateStockDto {
   reason?: string;
 }
 
-
-export class updateOrderStatus{
-
+export class updateOrderStatus {
   @IsEnum([
     "PENDING",
     "PAID",
@@ -482,7 +480,7 @@ export class updateOrderStatus{
     "DELIVERED",
     "CANCELLED",
     "REFUNDED",
-    "FAILED"
+    "FAILED",
   ])
   status:
     | "PENDING"
@@ -495,7 +493,7 @@ export class updateOrderStatus{
     | "FAILED";
 }
 
-export class addTrackingDto{
+export class addTrackingDto {
   @IsString()
   trackingNumber: string;
 
@@ -503,14 +501,14 @@ export class addTrackingDto{
   trackingCarrier: string;
 }
 
-export class refundDto{
+export class refundDto {
   @IsOptional()
   @IsNumber()
   amount?: number;
 
   @IsOptional()
   @IsString()
-  reason?:string
+  reason?: string;
 }
 
 // =========================

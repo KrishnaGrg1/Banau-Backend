@@ -1,4 +1,3 @@
-
 import axios from 'axios'
 
 const axiosInstance = axios.create({
@@ -15,12 +14,11 @@ export const bulkImportProducts = async ({ file }: { file: File }) => {
   } catch (error: any) {
     throw new Error(
       error?.response?.data?.message ||
-      error?.message ||
-      'Failed to import products'
+        error?.message ||
+        'Failed to import products',
     )
   }
 }
-
 
 export const exportProducts = async (format: 'csv' | 'xlsx') => {
   try {
@@ -31,8 +29,8 @@ export const exportProducts = async (format: 'csv' | 'xlsx') => {
   } catch (error: any) {
     throw new Error(
       error?.response?.data?.message ||
-      error?.message ||
-      'Failed to export products'
+        error?.message ||
+        'Failed to export products',
     )
   }
 }

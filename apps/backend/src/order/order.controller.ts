@@ -91,9 +91,12 @@ export class OrderController {
   @Get('my-orders')
   async getMyOrders(
     @Request() req,
-  @Query() paginationDto: backendDtos.PaginationDto,
+    @Query() paginationDto: backendDtos.PaginationDto,
   ) {
-    const orders = await this.orderServices.getCustomerOrders(req, paginationDto);
+    const orders = await this.orderServices.getCustomerOrders(
+      req,
+      paginationDto,
+    );
     return ApiResponseDto.success(orders, 'Your orders retrieved');
   }
 

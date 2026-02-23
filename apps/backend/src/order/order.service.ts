@@ -1,4 +1,8 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { backendDtos } from '@repo/shared';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as xlsx from 'xlsx';
@@ -220,7 +224,7 @@ export class OrderServices {
       return this.orderToDto(updatedOrder);
     });
   }
-  async getCustomerOrders(req,paginationDto:backendDtos.PaginationDto){
+  async getCustomerOrders(req, paginationDto: backendDtos.PaginationDto) {
     const { limit = 10, offset = 0, role } = paginationDto;
     const customer = await this.prisma.customer.findUnique({
       where: { userId: req.user.id },
@@ -229,7 +233,7 @@ export class OrderServices {
     if (!customer) {
       throw new NotFoundException('Customer profile not found');
     }
-    const [orders,total]=await Promise.all([
+    const [orders, total] = await Promise.all([
       this.prisma.order.findMany({
         where: { customerId: customer.id },
         include: {
@@ -246,7 +250,7 @@ export class OrderServices {
       this.prisma.order.count({
         where: { customerId: customer.id },
       }),
-    ])
+    ]);
     return {
       orders: orders.map(this.orderToDto),
       meta: {
@@ -307,9 +311,11 @@ export class OrderServices {
       if (!product) continue;
 
       const price = item.variantId
-        ? (await this.prisma.productVariant.findUnique({
-            where: { id: item.variantId },
-          }))?.price || product.price
+        ? (
+            await this.prisma.productVariant.findUnique({
+              where: { id: item.variantId },
+            })
+          )?.price || product.price
         : product.price;
 
       total += Number(price) * item.quantity;
@@ -330,7 +336,6 @@ export class OrderServices {
       amount: total,
     };
   }
- 
 
   async confirmOrder(dto: backendDtos.ConfirmOrderDto) {
     // Verify payment intent
@@ -367,42 +372,42 @@ export class OrderServices {
     // Create order
     const order = await this.prisma.order.create({
       data: {
-      tenantId,
-      customerId: customer.id,
-      status: 'PAID',
-      subtotal: dto.subtotal ?? paymentIntent.amount / 100,
-      tax: dto.tax ?? 0,
-      shipping: dto.shipping ?? 0,
-      discount: dto.discount ?? 0,
-      total: dto.total ?? paymentIntent.amount / 100,
-      paymentIntentId: dto.paymentIntentId,
-      paymentMethod: dto.paymentMethod ?? 'card',
-      ShippingfirstName: dto.firstName,
-      ShippinglastName: dto.lastName,
-      ShippingEmail: dto.email,
-      ShippingContactNumber: dto.phone,
-      ShippingAddress: dto.shippingAddress,
-      ShippingCity: dto.shippingCity,
-      ShippingState: dto.shippingState,
-      ShippingDistrict: dto.shippingDistrict,
-      ShippingCountry: dto.shippingCountry,
-      notes: dto.notes,
-      customerNotes: dto.customerNotes,
-      paidAt: new Date(),
-      items: {
-        create: dto.items.map((item: any) => ({
-        productId: item.productId,
-        variantId: item.variantId,
-        quantity: item.quantity,
-        price: item.price,
-        productName: item.productName,
-        variantName: item.variantName,
-        })),
-      },
+        tenantId,
+        customerId: customer.id,
+        status: 'PAID',
+        subtotal: dto.subtotal ?? paymentIntent.amount / 100,
+        tax: dto.tax ?? 0,
+        shipping: dto.shipping ?? 0,
+        discount: dto.discount ?? 0,
+        total: dto.total ?? paymentIntent.amount / 100,
+        paymentIntentId: dto.paymentIntentId,
+        paymentMethod: dto.paymentMethod ?? 'card',
+        ShippingfirstName: dto.firstName,
+        ShippinglastName: dto.lastName,
+        ShippingEmail: dto.email,
+        ShippingContactNumber: dto.phone,
+        ShippingAddress: dto.shippingAddress,
+        ShippingCity: dto.shippingCity,
+        ShippingState: dto.shippingState,
+        ShippingDistrict: dto.shippingDistrict,
+        ShippingCountry: dto.shippingCountry,
+        notes: dto.notes,
+        customerNotes: dto.customerNotes,
+        paidAt: new Date(),
+        items: {
+          create: dto.items.map((item: any) => ({
+            productId: item.productId,
+            variantId: item.variantId,
+            quantity: item.quantity,
+            price: item.price,
+            productName: item.productName,
+            variantName: item.variantName,
+          })),
+        },
       },
       include: {
-      items: { include: { product: true, variant: true } },
-      customer: true,
+        items: { include: { product: true, variant: true } },
+        customer: true,
       },
     });
 
@@ -423,6 +428,4 @@ export class OrderServices {
 
     return this.orderToDto(order);
   }
-
-  
 }

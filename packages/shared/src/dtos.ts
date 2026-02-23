@@ -292,16 +292,16 @@ export interface ProductDto {
 
   variants?: ProductVariantDto[];
   featuredImage: {
-    id: string,
-    fileName: string,
-    url: string,
-    fileSize: number,
-    mimeType: string,
-    type: AssetType, // Use the enum type, not a value
-    tenantId: string,
-    createdAt: string,
-    updatedAt: string
-  },
+    id: string;
+    fileName: string;
+    url: string;
+    fileSize: number;
+    mimeType: string;
+    type: AssetType; // Use the enum type, not a value
+    tenantId: string;
+    createdAt: string;
+    updatedAt: string;
+  };
 }
 
 export interface ProductVariantDto {
