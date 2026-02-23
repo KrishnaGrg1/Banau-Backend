@@ -12,11 +12,8 @@ export class EmailService {
     const apiKey = this.configService.get<string>('RESEND_API_KEY');
     this.resend = new Resend(apiKey);
     this.fromEmail = this.configService.get<string>('RESEND_EMAIL_FROM') || '';
-    const isProd = this.configService.get<string>('NODE_ENV') === 'production';
 
-    this.frontendUrl = isProd
-      ? this.configService.get<string>('FRONTEND_URL_PROD')!
-      : this.configService.get<string>('FRONTEND_URL')!;
+    this.frontendUrl = this.configService.get<string>('FRONTEND_URL')!;
   }
 
   async sendEmail(to: string, subject: string, htmlMsg: string): Promise<any> {

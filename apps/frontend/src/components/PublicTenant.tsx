@@ -1,10 +1,15 @@
 import { Setting, Tenant } from '@repo/db/dist/generated/prisma/client'
 import { Button } from './ui/button'
 import { Link } from '@tanstack/react-router'
-import Header from './ClientComponents/Headers'
 import StoreHero from './ClientComponents/StoreHero'
-import StoreFooter from './ClientComponents/StoreFooter'
-import { Sparkles, AlertCircle, Lock } from 'lucide-react'
+import {
+  Sparkles,
+  AlertCircle,
+  Lock,
+  ShoppingBag,
+  ArrowRight,
+} from 'lucide-react'
+import { usePublicProducts } from '@/hooks/use-public-product'
 
 interface PublicTenantProps {
   tenant?: Tenant | null
@@ -21,7 +26,11 @@ export function PublicTenant({ tenant, setting, logo }: PublicTenantProps) {
   const dashboardUrl = isSubdomain
     ? `http://localhost:3000/dashboard`
     : '/dashboard'
+  const { data, isLoading } = usePublicProducts(
+    tenant?.subdomain ? { subdomain: tenant.subdomain } : { subdomain: '' },
+  )
 
+  const products = data?.products ?? []
   // ── Not found ──────────────────────────────────────────────────────────────
   if (!tenant) {
     return (
@@ -121,20 +130,28 @@ export function PublicTenant({ tenant, setting, logo }: PublicTenantProps) {
 
   // ── Published ─────────────────────────────────────────────────────────────
   return (
-    <div className="min-h-screen flex flex-col bg-background">
-      <Header tenant={tenant} logo={logo ? { url: logo } : undefined} />
+    <>
       {setting && <StoreHero setting={setting} />}
-      <main className="flex-1">
-        <StorefrontContent tenant={tenant} />
-      </main>
-      <StoreFooter tenant={tenant} />
-    </div>
+      <StorefrontContent
+        tenant={tenant}
+        products={Array.isArray(products) ? products : []}
+        isLoading={isLoading}
+      />
+    </>
   )
 }
 
 // ── Storefront content placeholder ────────────────────────────────────────────
 
-function StorefrontContent({ tenant }: { tenant: Tenant }) {
+function StorefrontContent({
+  tenant,
+  products,
+  isLoading,
+}: {
+  tenant: Tenant
+  products: any[]
+  isLoading: boolean
+}) {
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 space-y-20">
       {/* Products section placeholder */}
@@ -148,25 +165,110 @@ function StorefrontContent({ tenant }: { tenant: Tenant }) {
           </h2>
         </div>
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {Array.from({ length: 4 }).map((_, i) => (
-            <div
-              key={i}
-              className="group rounded-2xl border border-border bg-card overflow-hidden hover:shadow-md transition-shadow"
-            >
-              <div className="aspect-square bg-muted flex items-center justify-center">
-                <Sparkles className="h-8 w-8 text-muted-foreground opacity-30" />
+          {isLoading ? (
+            // Skeleton Loading
+            Array.from({ length: 8 }).map((_, i) => (
+              <div
+                key={i}
+                className="group rounded-2xl border border-border bg-card overflow-hidden"
+              >
+                <div className="aspect-square bg-muted flex items-center justify-center relative">
+                  <Sparkles className="h-8 w-8 text-muted-foreground opacity-30" />
+                  <span className="absolute top-3 left-3 text-[10px] font-semibold uppercase tracking-widest bg-background/80 backdrop-blur-sm border border-border text-muted-foreground px-2.5 py-1 rounded-full">
+                    Coming Soon
+                  </span>
+                </div>
+                <div className="p-4 space-y-2">
+                  <div className="h-3 rounded-full bg-muted w-3/4" />
+                  <div className="h-2.5 rounded-full bg-muted w-1/2" />
+                  <div className="h-3 rounded-full bg-muted w-1/4 mt-3" />
+                </div>
               </div>
-              <div className="p-4 space-y-2">
-                <div className="h-3 rounded-full bg-muted w-3/4" />
-                <div className="h-2.5 rounded-full bg-muted w-1/2" />
-                <div className="h-3 rounded-full bg-muted w-1/4 mt-3" />
-              </div>
+            ))
+          ) : products.length === 0 ? (
+            // Empty state
+            <div className="col-span-full text-center py-16 text-muted-foreground text-sm">
+              No products available yet.
             </div>
-          ))}
+          ) : (
+            // Actual Products
+            products.map((product) => (
+              <div
+                key={product.id}
+                className="group rounded-2xl border border-border bg-card overflow-hidden hover:shadow-md transition-shadow"
+              >
+                <div className="aspect-square bg-muted flex items-center justify-center overflow-hidden">
+                  {product.featuredImage ? (
+                    <img
+                      src={product.featuredImage.url}
+                      alt={product.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex flex-col items-center justify-center gap-3 bg-gradient-to-br from-muted via-muted/60 to-muted/30 relative overflow-hidden">
+                      {/* Decorative blobs */}
+                      <div className="absolute -top-6 -right-6 h-24 w-24 rounded-full bg-primary/10 blur-2xl" />
+                      <div className="absolute -bottom-6 -left-6 h-24 w-24 rounded-full bg-primary/10 blur-2xl" />
+
+                      {/* Icon */}
+                      <div className="h-14 w-14 rounded-2xl bg-background/60 backdrop-blur-sm border border-border flex items-center justify-center shadow-sm">
+                        <ShoppingBag className="h-6 w-6 text-muted-foreground" />
+                      </div>
+
+                      {/* Label */}
+                      <span className="text-[11px] font-medium text-muted-foreground/70 tracking-wide">
+                        No image
+                      </span>
+                    </div>
+                  )}
+                </div>
+                <div className="p-4 space-y-2">
+                  <h3 className="font-medium text-sm leading-tight line-clamp-2 group-hover:text-primary transition-colors">
+                    {product.name}
+                  </h3>
+                  {product.description && (
+                    <p className="text-xs text-muted-foreground line-clamp-2">
+                      {product.description}
+                    </p>
+                  )}
+                  <div className="flex items-center gap-2 pt-1">
+                    <span className="font-semibold text-sm">
+                      ${Number(product.price).toFixed(2)}
+                    </span>
+                    {product.compareAtPrice && (
+                      <span className="text-xs text-muted-foreground line-through">
+                        ${Number(product.compareAtPrice).toFixed(2)}
+                      </span>
+                    )}
+                  </div>
+                  {product.trackInventory && (
+                    <div className="pt-1">
+                      {product.quantity > 0 ? (
+                        <span className="text-xs text-emerald-600 font-medium">
+                          In Stock
+                        </span>
+                      ) : (
+                        <span className="text-xs text-destructive font-medium">
+                          Out of Stock
+                        </span>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))
+          )}
+          <div className="col-span-full flex justify-center pt-6">
+            <Link
+              to="/s/$subdomain/shop"
+              params={{ subdomain: tenant.subdomain }}
+              className="inline-flex items-center gap-2 rounded-full border border-border bg-card hover:bg-muted px-6 py-2.5 text-sm font-medium text-foreground transition-colors"
+            >
+              View All Products
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
         </div>
-        <p className="text-xs text-muted-foreground text-center pt-4">
-          Products will appear here once added from your dashboard.
-        </p>
       </section>
 
       {/* About section */}

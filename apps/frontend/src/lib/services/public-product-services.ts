@@ -4,14 +4,20 @@ import { api } from '../axios'
 import { isAxiosError } from 'axios'
 import { z } from 'zod'
 
-// ==================== Schemas ====================
 
+export type SortBy = 'newest' | 'oldest' | 'price_asc' | 'price_desc'
+// ==================== Schemas ====================
 export const publicProductsListSchema = z.object({
   subdomain: z.string().min(1),
   page: z.number().positive().optional().default(1),
   limit: z.number().positive().optional().default(10),
-  category: z.string().optional(),
-  status: z.string().optional(),
+  minPrice: z.number().positive().optional(),
+  maxPrice: z.number().positive().optional(),
+  inStockOnly: z.boolean().optional(),           // ✅ boolean not number
+  sortBy: z
+    .enum(['newest', 'oldest', 'price_asc', 'price_desc'])
+    .optional()
+    .default('newest'),                           // ✅ proper z.enum syntax
 })
 
 export const publicProductsSearchSchema = z.object({
@@ -59,6 +65,16 @@ export const getPublicProducts = createServerFn({ method: 'GET' })
   .inputValidator((data) => publicProductsListSchema.parse(data))
   .handler(async ({ data }) => {
     try {
+            const params: Record<string, any> = {
+        page: data.page,
+        limit: data.limit,
+        sortBy: data.sortBy,
+      }
+      // Only send optional params if they have values
+      if (data.minPrice !== undefined) params.minPrice = data.minPrice
+      if (data.maxPrice !== undefined) params.maxPrice = data.maxPrice
+      if (data.inStockOnly) params.inStock = 'true'   // backend expects 'inStock'
+
       const response = await api<{
         success: boolean
         message: string
@@ -66,12 +82,7 @@ export const getPublicProducts = createServerFn({ method: 'GET' })
         timestamp: string
       }>(`/public/${data.subdomain}/products`, {
         method: 'GET',
-        params: {
-          category: data.category,
-          status: data.status,
-          page: data.page,
-          limit: data.limit,
-        },
+        params
       })
       return response.data.data
     } catch (error: unknown) {

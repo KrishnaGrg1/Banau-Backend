@@ -59,7 +59,6 @@ import {
   AlertTriangle,
   BarChart3,
   DollarSign,
-  Truck,
 } from 'lucide-react'
 import { useState } from 'react'
 import { ProductDto, ProductVariantDto } from '@repo/shared'
@@ -71,7 +70,7 @@ export const Route = createFileRoute('/dashboard/products/$id/')({
 
 function formatPrice(price: string | null) {
   if (!price) return '—'
-  return `$${parseFloat(price).toFixed(2)}`
+  return `Rs.${parseFloat(price).toFixed(2)}`
 }
 
 function getStatusColor(status: string) {
@@ -94,12 +93,18 @@ function StockUpdateDialog({ product }: { product: ProductDto }) {
 
   const form = useForm({
     defaultValues: {
-      quantity: 0,
+      quantity: String(product.quantity),
       action: 'set' as 'set' | 'add' | 'subtract',
       reason: '',
     },
     onSubmit: async ({ value }) => {
-      await mutateAsync({ productId: product.id, stock: value })
+      await mutateAsync({
+        productId: product.id,
+        stock: {
+          ...value,
+          quantity: value.quantity === '' ? 0 : Number(value.quantity),
+        },
+      })
       setOpen(false)
     },
   })
@@ -132,7 +137,14 @@ function StockUpdateDialog({ product }: { product: ProductDto }) {
                 <Label>Action</Label>
                 <Select
                   value={field.state.value}
-                  onValueChange={(v) => field.handleChange(v as any)}
+                  onValueChange={(v) => {
+                    field.handleChange(v as any)
+                    if (v === 'set') {
+                      form.setFieldValue('quantity', String(product.quantity))
+                    } else {
+                      form.setFieldValue('quantity', '')
+                    }
+                  }}
                 >
                   <SelectTrigger>
                     <SelectValue />
@@ -154,7 +166,7 @@ function StockUpdateDialog({ product }: { product: ProductDto }) {
                   type="number"
                   min="0"
                   value={field.state.value}
-                  onChange={(e) => field.handleChange(Number(e.target.value))}
+                  onChange={(e) => field.handleChange(e.target.value)}
                 />
               </div>
             )}
@@ -201,7 +213,7 @@ function AddVariantDialog({ productId }: { productId: string }) {
       sku: '',
       barcode: '',
       price: '',
-      quantity: 0,
+      quantity: '',
       option1Name: '',
       option1Value: '',
       option2Name: '',
@@ -215,7 +227,7 @@ function AddVariantDialog({ productId }: { productId: string }) {
           sku: value.sku || undefined,
           barcode: value.barcode || undefined,
           price: value.price ? Number(value.price) : undefined,
-          quantity: value.quantity,
+          quantity: value.quantity === '' ? 0 : Number(value.quantity),
           option1Name: value.option1Name || undefined,
           option1Value: value.option1Value || undefined,
           option2Name: value.option2Name || undefined,
@@ -270,7 +282,7 @@ function AddVariantDialog({ productId }: { productId: string }) {
                     type="number"
                     min="0"
                     value={field.state.value}
-                    onChange={(e) => field.handleChange(Number(e.target.value))}
+                    onChange={(e) => field.handleChange(e.target.value)}
                   />
                 </div>
               )}
@@ -662,9 +674,9 @@ export default function ProductDetailPage() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          {product.imageUrl ? (
+          {product.featuredImage.url ? (
             <img
-              src={product.imageUrl}
+              src={product.featuredImage.url}
               alt={product.name}
               className="max-h-64 object-contain rounded border mx-auto"
             />

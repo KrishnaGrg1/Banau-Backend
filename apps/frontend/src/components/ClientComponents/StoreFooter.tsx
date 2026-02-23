@@ -4,9 +4,12 @@ interface StoreFooterProps {
   tenant: Tenant
 }
 
-const NAV_LINKS = ['home', 'products', 'about']
-
 const StoreFooter = ({ tenant }: StoreFooterProps) => {
+  const NAV_LINKS = [
+    { label: 'Home', href: `./` },
+    { label: 'Products', href: `./products` },
+    { label: 'About', href: `./about` },
+  ]
   const year = new Date().getFullYear()
 
   return (
@@ -45,11 +48,11 @@ const StoreFooter = ({ tenant }: StoreFooterProps) => {
             <nav className="flex flex-col gap-2.5">
               {NAV_LINKS.map((link) => (
                 <a
-                  key={link}
-                  href={`#${link}`}
+                  key={link.href}
+                  href={link.href}
                   className="text-sm text-muted-foreground capitalize hover:text-foreground transition-colors w-fit"
                 >
-                  {link}
+                  {link.label}
                 </a>
               ))}
             </nav>

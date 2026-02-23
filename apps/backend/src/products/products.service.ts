@@ -32,7 +32,8 @@ export class ProductServices {
         tenantId: tenant.id,
       },
       include: {
-        variants: true
+        variants: true,
+        featuredImage:true
       },
     });
 
@@ -73,15 +74,8 @@ export class ProductServices {
     ]);
     return {
       existingProducts: await Promise.all(
-        existingProducts.map(async (product) => {
-          let imageUrl: string | null = null;
-          if (product.featuredImageId) {
-            const asset = await this.prisma.asset.findUnique({
-              where: { id: product.featuredImageId },
-            });
-            imageUrl = asset?.url || null;
-          }
-          return productToDto({ ...product, imageUrl });
+        existingProducts.map(async (product) => { 
+          return productToDto({ ...product });
         }),
       ),
       meta: {
@@ -603,6 +597,5 @@ function productToDto(product: any) {
     price: product.price?.toString(),
     compareAtPrice: product.compareAtPrice?.toString(),
     weight: product.weight?.toString(),
-    imageUrl: product.imageUrl || null,
   };
 }

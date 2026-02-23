@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { User } from "@repo/db/dist/generated/prisma/client";
+import { AssetType, User } from "@repo/db/dist/generated/prisma/client";
 import { Setting } from "@repo/db/dist/generated/prisma/client";
 import { Asset } from "@repo/db/dist/generated/prisma/client";
 // Auth DTOs
@@ -291,7 +291,17 @@ export interface ProductDto {
   publishedAt: Date | null;
 
   variants?: ProductVariantDto[];
-  imageUrl?: string;
+  featuredImage: {
+    id: string,
+    fileName: string,
+    url: string,
+    fileSize: number,
+    mimeType: string,
+    type: AssetType, // Use the enum type, not a value
+    tenantId: string,
+    createdAt: string,
+    updatedAt: string
+  },
 }
 
 export interface ProductVariantDto {

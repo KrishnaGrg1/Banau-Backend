@@ -12,13 +12,12 @@ interface HeaderProps {
   }
 }
 
-const NAV_LINKS = [
-  { label: 'Home', href: '#home' },
-  { label: 'Products', href: '#products' },
-  { label: 'About', href: '#about' },
-]
-
 export default function Header({ tenant, logo }: HeaderProps) {
+  const NAV_LINKS = [
+    { label: 'Home', href: `/s/${tenant.subdomain}` },
+    { label: 'Products', href: `/s/${tenant.subdomain}/products` },
+    { label: 'About', href: `/s/${tenant.subdomain}/about` },
+  ]
   const [mobileOpen, setMobileOpen] = useState(false)
 
   return (

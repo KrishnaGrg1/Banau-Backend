@@ -8,17 +8,21 @@ export class PublicProductController {
 
   @Get()
   async listStoreProducts(
-    @Param('subdomain') subdomain: string,
-    @Query('category') category?: string,
-    @Query('status') status?: string,
-    @Query('page') page: string = '1',
-    @Query('limit') limit: string = '10',
+  @Param('subdomain') subdomain: string,
+  @Query('page') page: string = '1',
+  @Query('limit') limit: string = '12',
+  @Query('minPrice') minPrice?: string,
+  @Query('maxPrice') maxPrice?: string,
+  @Query('inStock') inStock?: string,
+  @Query('sortBy') sortBy?: 'newest' | 'oldest' | 'price_asc' | 'price_desc',
   ) {
     const products = await this.productService.getPublicProducts(subdomain, {
-      category,
-      status,
-      page: parseInt(page),
-      limit: parseInt(limit),
+   page: parseInt(page),
+    limit: parseInt(limit),
+    minPrice: minPrice ? parseFloat(minPrice) : undefined,
+    maxPrice: maxPrice ? parseFloat(maxPrice) : undefined,
+    inStockOnly: inStock === 'true',
+    sortBy,
     });
     return ApiResponseDto.success(products);
   }

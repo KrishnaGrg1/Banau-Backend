@@ -4,14 +4,16 @@ import {
   searchPublicProducts,
   getPublicProductBySlug,
 } from '@/lib/services/public-product-services'
-import { toast } from 'sonner'
+
 
 export function usePublicProducts(params: {
-  subdomain: string
+ subdomain: string
   page?: number
   limit?: number
-  category?: string
-  status?: string
+  minPrice?: number
+  maxPrice?: number
+  inStockOnly?: boolean  // ✅ boolean
+  sortBy?: 'newest' | 'oldest' | 'price_asc' | 'price_desc'
 }) {
   return useQuery({
     queryKey: ['publicProducts', params],

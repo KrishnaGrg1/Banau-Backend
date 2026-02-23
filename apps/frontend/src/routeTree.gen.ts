@@ -63,7 +63,7 @@ import { Route as AdminSettingFeaturesRouteImport } from './routes/admin/setting
 import { Route as AdminAnalyticsRevenueRouteImport } from './routes/admin/analytics/revenue'
 import { Route as AdminAnalyticsGrowthRouteImport } from './routes/admin/analytics/growth'
 import { Route as authResetPasswordTokenRouteImport } from './routes/(auth)/reset-password.$token'
-import { Route as SSubdomainShopIndexRouteImport } from './routes/s/$subdomain/shop/index'
+import { Route as SSubdomainProductsIndexRouteImport } from './routes/s/$subdomain/products/index'
 import { Route as SSubdomainCheckoutIndexRouteImport } from './routes/s/$subdomain/checkout/index'
 import { Route as SSubdomainAccountIndexRouteImport } from './routes/s/$subdomain/account/index'
 import { Route as DashboardProductsIdIndexRouteImport } from './routes/dashboard/products/$id/index'
@@ -71,7 +71,7 @@ import { Route as DashboardOrdersIdIndexRouteImport } from './routes/dashboard/o
 import { Route as DashboardCustomersIdIndexRouteImport } from './routes/dashboard/customers/$id/index'
 import { Route as AdminUsersIdIndexRouteImport } from './routes/admin/users/$id/index'
 import { Route as AdminTenantsIdIndexRouteImport } from './routes/admin/tenants/$id/index'
-import { Route as SSubdomainShopSlugRouteImport } from './routes/s/$subdomain/shop/$slug'
+import { Route as SSubdomainProductsSlugRouteImport } from './routes/s/$subdomain/products/$slug'
 import { Route as SSubdomainCheckoutSuccessRouteImport } from './routes/s/$subdomain/checkout/success'
 import { Route as SSubdomainCheckoutFailedRouteImport } from './routes/s/$subdomain/checkout/failed'
 import { Route as SSubdomainCategoriesSlugRouteImport } from './routes/s/$subdomain/categories/$slug'
@@ -375,9 +375,9 @@ const authResetPasswordTokenRoute = authResetPasswordTokenRouteImport.update({
   path: '/reset-password/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SSubdomainShopIndexRoute = SSubdomainShopIndexRouteImport.update({
-  id: '/shop/',
-  path: '/shop/',
+const SSubdomainProductsIndexRoute = SSubdomainProductsIndexRouteImport.update({
+  id: '/products/',
+  path: '/products/',
   getParentRoute: () => SSubdomainRouteRoute,
 } as any)
 const SSubdomainCheckoutIndexRoute = SSubdomainCheckoutIndexRouteImport.update({
@@ -417,9 +417,9 @@ const AdminTenantsIdIndexRoute = AdminTenantsIdIndexRouteImport.update({
   path: '/tenants/$id/',
   getParentRoute: () => AdminRouteRoute,
 } as any)
-const SSubdomainShopSlugRoute = SSubdomainShopSlugRouteImport.update({
-  id: '/shop/$slug',
-  path: '/shop/$slug',
+const SSubdomainProductsSlugRoute = SSubdomainProductsSlugRouteImport.update({
+  id: '/products/$slug',
+  path: '/products/$slug',
   getParentRoute: () => SSubdomainRouteRoute,
 } as any)
 const SSubdomainCheckoutSuccessRoute =
@@ -593,7 +593,7 @@ export interface FileRoutesByFullPath {
   '/s/$subdomain/categories/$slug': typeof SSubdomainCategoriesSlugRoute
   '/s/$subdomain/checkout/failed': typeof SSubdomainCheckoutFailedRoute
   '/s/$subdomain/checkout/success': typeof SSubdomainCheckoutSuccessRoute
-  '/s/$subdomain/shop/$slug': typeof SSubdomainShopSlugRoute
+  '/s/$subdomain/products/$slug': typeof SSubdomainProductsSlugRoute
   '/admin/tenants/$id/': typeof AdminTenantsIdIndexRoute
   '/admin/users/$id/': typeof AdminUsersIdIndexRoute
   '/dashboard/customers/$id/': typeof DashboardCustomersIdIndexRoute
@@ -601,7 +601,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/products/$id/': typeof DashboardProductsIdIndexRoute
   '/s/$subdomain/account/': typeof SSubdomainAccountIndexRoute
   '/s/$subdomain/checkout/': typeof SSubdomainCheckoutIndexRoute
-  '/s/$subdomain/shop/': typeof SSubdomainShopIndexRoute
+  '/s/$subdomain/products/': typeof SSubdomainProductsIndexRoute
   '/s/$subdomain/account/addresses/new': typeof SSubdomainAccountAddressesNewRoute
   '/s/$subdomain/account/orders/$id': typeof SSubdomainAccountOrdersIdRoute
   '/s/$subdomain/account/addresses/': typeof SSubdomainAccountAddressesIndexRoute
@@ -673,7 +673,7 @@ export interface FileRoutesByTo {
   '/s/$subdomain/categories/$slug': typeof SSubdomainCategoriesSlugRoute
   '/s/$subdomain/checkout/failed': typeof SSubdomainCheckoutFailedRoute
   '/s/$subdomain/checkout/success': typeof SSubdomainCheckoutSuccessRoute
-  '/s/$subdomain/shop/$slug': typeof SSubdomainShopSlugRoute
+  '/s/$subdomain/products/$slug': typeof SSubdomainProductsSlugRoute
   '/admin/tenants/$id': typeof AdminTenantsIdIndexRoute
   '/admin/users/$id': typeof AdminUsersIdIndexRoute
   '/dashboard/customers/$id': typeof DashboardCustomersIdIndexRoute
@@ -681,7 +681,7 @@ export interface FileRoutesByTo {
   '/dashboard/products/$id': typeof DashboardProductsIdIndexRoute
   '/s/$subdomain/account': typeof SSubdomainAccountIndexRoute
   '/s/$subdomain/checkout': typeof SSubdomainCheckoutIndexRoute
-  '/s/$subdomain/shop': typeof SSubdomainShopIndexRoute
+  '/s/$subdomain/products': typeof SSubdomainProductsIndexRoute
   '/s/$subdomain/account/addresses/new': typeof SSubdomainAccountAddressesNewRoute
   '/s/$subdomain/account/orders/$id': typeof SSubdomainAccountOrdersIdRoute
   '/s/$subdomain/account/addresses': typeof SSubdomainAccountAddressesIndexRoute
@@ -757,7 +757,7 @@ export interface FileRoutesById {
   '/s/$subdomain/categories/$slug': typeof SSubdomainCategoriesSlugRoute
   '/s/$subdomain/checkout/failed': typeof SSubdomainCheckoutFailedRoute
   '/s/$subdomain/checkout/success': typeof SSubdomainCheckoutSuccessRoute
-  '/s/$subdomain/shop/$slug': typeof SSubdomainShopSlugRoute
+  '/s/$subdomain/products/$slug': typeof SSubdomainProductsSlugRoute
   '/admin/tenants/$id/': typeof AdminTenantsIdIndexRoute
   '/admin/users/$id/': typeof AdminUsersIdIndexRoute
   '/dashboard/customers/$id/': typeof DashboardCustomersIdIndexRoute
@@ -765,7 +765,7 @@ export interface FileRoutesById {
   '/dashboard/products/$id/': typeof DashboardProductsIdIndexRoute
   '/s/$subdomain/account/': typeof SSubdomainAccountIndexRoute
   '/s/$subdomain/checkout/': typeof SSubdomainCheckoutIndexRoute
-  '/s/$subdomain/shop/': typeof SSubdomainShopIndexRoute
+  '/s/$subdomain/products/': typeof SSubdomainProductsIndexRoute
   '/s/$subdomain/account/addresses/new': typeof SSubdomainAccountAddressesNewRoute
   '/s/$subdomain/account/orders/$id': typeof SSubdomainAccountOrdersIdRoute
   '/s/$subdomain/account/addresses/': typeof SSubdomainAccountAddressesIndexRoute
@@ -842,7 +842,7 @@ export interface FileRouteTypes {
     | '/s/$subdomain/categories/$slug'
     | '/s/$subdomain/checkout/failed'
     | '/s/$subdomain/checkout/success'
-    | '/s/$subdomain/shop/$slug'
+    | '/s/$subdomain/products/$slug'
     | '/admin/tenants/$id/'
     | '/admin/users/$id/'
     | '/dashboard/customers/$id/'
@@ -850,7 +850,7 @@ export interface FileRouteTypes {
     | '/dashboard/products/$id/'
     | '/s/$subdomain/account/'
     | '/s/$subdomain/checkout/'
-    | '/s/$subdomain/shop/'
+    | '/s/$subdomain/products/'
     | '/s/$subdomain/account/addresses/new'
     | '/s/$subdomain/account/orders/$id'
     | '/s/$subdomain/account/addresses/'
@@ -922,7 +922,7 @@ export interface FileRouteTypes {
     | '/s/$subdomain/categories/$slug'
     | '/s/$subdomain/checkout/failed'
     | '/s/$subdomain/checkout/success'
-    | '/s/$subdomain/shop/$slug'
+    | '/s/$subdomain/products/$slug'
     | '/admin/tenants/$id'
     | '/admin/users/$id'
     | '/dashboard/customers/$id'
@@ -930,7 +930,7 @@ export interface FileRouteTypes {
     | '/dashboard/products/$id'
     | '/s/$subdomain/account'
     | '/s/$subdomain/checkout'
-    | '/s/$subdomain/shop'
+    | '/s/$subdomain/products'
     | '/s/$subdomain/account/addresses/new'
     | '/s/$subdomain/account/orders/$id'
     | '/s/$subdomain/account/addresses'
@@ -1005,7 +1005,7 @@ export interface FileRouteTypes {
     | '/s/$subdomain/categories/$slug'
     | '/s/$subdomain/checkout/failed'
     | '/s/$subdomain/checkout/success'
-    | '/s/$subdomain/shop/$slug'
+    | '/s/$subdomain/products/$slug'
     | '/admin/tenants/$id/'
     | '/admin/users/$id/'
     | '/dashboard/customers/$id/'
@@ -1013,7 +1013,7 @@ export interface FileRouteTypes {
     | '/dashboard/products/$id/'
     | '/s/$subdomain/account/'
     | '/s/$subdomain/checkout/'
-    | '/s/$subdomain/shop/'
+    | '/s/$subdomain/products/'
     | '/s/$subdomain/account/addresses/new'
     | '/s/$subdomain/account/orders/$id'
     | '/s/$subdomain/account/addresses/'
@@ -1413,11 +1413,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authResetPasswordTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/s/$subdomain/shop/': {
-      id: '/s/$subdomain/shop/'
-      path: '/shop'
-      fullPath: '/s/$subdomain/shop/'
-      preLoaderRoute: typeof SSubdomainShopIndexRouteImport
+    '/s/$subdomain/products/': {
+      id: '/s/$subdomain/products/'
+      path: '/products'
+      fullPath: '/s/$subdomain/products/'
+      preLoaderRoute: typeof SSubdomainProductsIndexRouteImport
       parentRoute: typeof SSubdomainRouteRoute
     }
     '/s/$subdomain/checkout/': {
@@ -1469,11 +1469,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminTenantsIdIndexRouteImport
       parentRoute: typeof AdminRouteRoute
     }
-    '/s/$subdomain/shop/$slug': {
-      id: '/s/$subdomain/shop/$slug'
-      path: '/shop/$slug'
-      fullPath: '/s/$subdomain/shop/$slug'
-      preLoaderRoute: typeof SSubdomainShopSlugRouteImport
+    '/s/$subdomain/products/$slug': {
+      id: '/s/$subdomain/products/$slug'
+      path: '/products/$slug'
+      fullPath: '/s/$subdomain/products/$slug'
+      preLoaderRoute: typeof SSubdomainProductsSlugRouteImport
       parentRoute: typeof SSubdomainRouteRoute
     }
     '/s/$subdomain/checkout/success': {
@@ -1741,10 +1741,10 @@ interface SSubdomainRouteRouteChildren {
   SSubdomainCategoriesSlugRoute: typeof SSubdomainCategoriesSlugRoute
   SSubdomainCheckoutFailedRoute: typeof SSubdomainCheckoutFailedRoute
   SSubdomainCheckoutSuccessRoute: typeof SSubdomainCheckoutSuccessRoute
-  SSubdomainShopSlugRoute: typeof SSubdomainShopSlugRoute
+  SSubdomainProductsSlugRoute: typeof SSubdomainProductsSlugRoute
   SSubdomainAccountIndexRoute: typeof SSubdomainAccountIndexRoute
   SSubdomainCheckoutIndexRoute: typeof SSubdomainCheckoutIndexRoute
-  SSubdomainShopIndexRoute: typeof SSubdomainShopIndexRoute
+  SSubdomainProductsIndexRoute: typeof SSubdomainProductsIndexRoute
   SSubdomainAccountAddressesNewRoute: typeof SSubdomainAccountAddressesNewRoute
   SSubdomainAccountOrdersIdRoute: typeof SSubdomainAccountOrdersIdRoute
   SSubdomainAccountAddressesIndexRoute: typeof SSubdomainAccountAddressesIndexRoute
@@ -1764,10 +1764,10 @@ const SSubdomainRouteRouteChildren: SSubdomainRouteRouteChildren = {
   SSubdomainCategoriesSlugRoute: SSubdomainCategoriesSlugRoute,
   SSubdomainCheckoutFailedRoute: SSubdomainCheckoutFailedRoute,
   SSubdomainCheckoutSuccessRoute: SSubdomainCheckoutSuccessRoute,
-  SSubdomainShopSlugRoute: SSubdomainShopSlugRoute,
+  SSubdomainProductsSlugRoute: SSubdomainProductsSlugRoute,
   SSubdomainAccountIndexRoute: SSubdomainAccountIndexRoute,
   SSubdomainCheckoutIndexRoute: SSubdomainCheckoutIndexRoute,
-  SSubdomainShopIndexRoute: SSubdomainShopIndexRoute,
+  SSubdomainProductsIndexRoute: SSubdomainProductsIndexRoute,
   SSubdomainAccountAddressesNewRoute: SSubdomainAccountAddressesNewRoute,
   SSubdomainAccountOrdersIdRoute: SSubdomainAccountOrdersIdRoute,
   SSubdomainAccountAddressesIndexRoute: SSubdomainAccountAddressesIndexRoute,

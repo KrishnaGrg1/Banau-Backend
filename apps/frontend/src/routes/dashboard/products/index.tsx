@@ -1,6 +1,6 @@
 // apps/web/app/routes/dashboard/products/index.tsx
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { useExportAllProducts, useGetAllProducts } from '@/hooks/use-product'
+import { useGetAllProducts } from '@/hooks/use-product'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -18,12 +18,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { Badge } from '@/components/ui/badge'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+
 import {
   Select,
   SelectContent,
@@ -119,7 +114,7 @@ export default function ProductsPage() {
   }
 
   const formatPrice = (price: string) => {
-    return `$${parseFloat(price).toFixed(2)}`
+    return `Rs${parseFloat(price).toFixed(2)}`
   }
 
   const getStatusColor = (status: string) => {
@@ -276,10 +271,10 @@ export default function ProductsPage() {
                     <TableRow key={product.id}>
                       <TableCell>
                         <div className="flex items-center gap-3">
-                          {product.imageUrl ? (
+                          {product.featuredImage?.url ? (
                             // <div className="h-10 w-10 rounded border bg-muted" />
                             <img
-                              src={product.imageUrl}
+                              src={product.featuredImage?.url}
                               className="h-10 rounded border "
                             />
                           ) : (

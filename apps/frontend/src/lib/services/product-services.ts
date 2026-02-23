@@ -176,20 +176,26 @@ export const updateProduct = createServerFn({ method: 'POST' })
       console.log('updateProduct - product_image:', productImage ? 'present' : 'not present')
       console.log('updateProduct - productImageName:', productImageName)
 
-      if (
-        productImage &&
-        typeof productImage === 'string' &&
-        productImage !== ''
-      ) {
-        const { buffer, mimeType } = base64ToBuffer(productImage)
-        const blob = new Blob([buffer], { type: mimeType })
-        formData.append(
-          'product_image',
-          blob,
-          productImageName || 'product_image',
-        )
-        console.log('updateProduct - image added to formData')
-      }
+ if (
+  productImage &&
+  typeof productImage === 'string' &&
+  productImage !== ''
+) {
+  // ✅ Only process as base64 if it's actually base64, not a URL
+  if (productImage.startsWith('data:')) {
+    const { buffer, mimeType } = base64ToBuffer(productImage)
+    const blob = new Blob([buffer], { type: mimeType })
+    formData.append(
+      'product_image',
+      blob,
+      productImageName || 'product_image',
+    )
+    console.log('updateProduct - new image added to formData')
+  } else {
+    console.log('updateProduct - existing URL, skipping image upload')
+    // Don't append anything — backend keeps the existing image
+  }
+}
 
       const response = await api<CreateProductResponse>(`/product/${data.id}`, {
         method: 'PUT',
