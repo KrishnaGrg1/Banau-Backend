@@ -470,3 +470,161 @@ export class UpdateStockDto {
   @IsString()
   reason?: string;
 }
+
+
+export class updateOrderStatus{
+
+  @IsEnum([
+    "PENDING",
+    "PAID",
+    "PROCESSING",
+    "SHIPPED",
+    "DELIVERED",
+    "CANCELLED",
+    "REFUNDED",
+    "FAILED"
+  ])
+  status:
+    | "PENDING"
+    | "PAID"
+    | "PROCESSING"
+    | "SHIPPED"
+    | "DELIVERED"
+    | "CANCELLED"
+    | "REFUNDED"
+    | "FAILED";
+}
+
+export class addTrackingDto{
+  @IsString()
+  trackingNumber: string;
+
+  @IsString()
+  trackingCarrier: string;
+}
+
+export class refundDto{
+  @IsOptional()
+  @IsNumber()
+  amount?: number;
+
+  @IsOptional()
+  @IsString()
+  reason?:string
+}
+
+// =========================
+// Payment & Order DTOs
+// =========================
+
+export class PaymentIntentItemDto {
+  @IsString()
+  productId: string;
+
+  @IsOptional()
+  @IsString()
+  variantId?: string;
+
+  @IsNumber()
+  @IsPositive()
+  quantity: number;
+}
+
+export class CreatePaymentIntentDto {
+  @IsString()
+  subdomain: string;
+
+  @IsNotEmpty({ each: true })
+  items: PaymentIntentItemDto[];
+}
+
+export class ConfirmOrderDto {
+  @IsString()
+  paymentIntentId: string;
+
+  @IsEmail()
+  email: string;
+
+  @IsString()
+  firstName: string;
+
+  @IsString()
+  lastName: string;
+
+  @IsString()
+  phone: string;
+
+  @IsString()
+  shippingAddress: string;
+
+  @IsString()
+  shippingCity: string;
+
+  @IsString()
+  shippingState: string;
+
+  @IsOptional()
+  @IsString()
+  shippingDistrict?: string;
+
+  @IsString()
+  shippingCountry: string;
+
+  @IsOptional()
+  @IsString()
+  notes?: string;
+
+  @IsOptional()
+  @IsString()
+  customerNotes?: string;
+
+  @IsOptional()
+  @IsNumber()
+  subtotal?: number;
+
+  @IsOptional()
+  @IsNumber()
+  tax?: number;
+
+  @IsOptional()
+  @IsNumber()
+  shipping?: number;
+
+  @IsOptional()
+  @IsNumber()
+  discount?: number;
+
+  @IsOptional()
+  @IsNumber()
+  total?: number;
+
+  @IsOptional()
+  @IsString()
+  paymentMethod?: string;
+
+  @IsNotEmpty({ each: true })
+  items: ConfirmOrderItemDto[];
+}
+
+export class ConfirmOrderItemDto {
+  @IsString()
+  productId: string;
+
+  @IsOptional()
+  @IsString()
+  variantId?: string;
+
+  @IsNumber()
+  @IsPositive()
+  quantity: number;
+
+  @IsNumber()
+  price: number;
+
+  @IsString()
+  productName: string;
+
+  @IsOptional()
+  @IsString()
+  variantName?: string;
+}

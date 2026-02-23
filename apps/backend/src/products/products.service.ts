@@ -33,7 +33,7 @@ export class ProductServices {
       },
       include: {
         variants: true,
-        featuredImage:true
+        featuredImage: true,
       },
     });
 
@@ -63,7 +63,7 @@ export class ProductServices {
         },
         include: {
           featuredImage: true,
-          variants:true
+          variants: true,
         },
       }),
       this.prisma.product.count({
@@ -74,7 +74,7 @@ export class ProductServices {
     ]);
     return {
       existingProducts: await Promise.all(
-        existingProducts.map(async (product) => { 
+        existingProducts.map(async (product) => {
           return productToDto({ ...product });
         }),
       ),

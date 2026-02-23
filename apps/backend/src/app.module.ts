@@ -11,6 +11,7 @@ import { SettingModule } from './setting/setting.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { ProductsModule } from './products/products.module';
 import { PublicProductsModule } from './public-products/public-products.module';
+import { OrderModule } from './order/order.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -23,6 +24,7 @@ import { PublicProductsModule } from './public-products/public-products.module';
     TenantModule,
     ProductsModule,
     PublicProductsModule,
+    OrderModule,
   ],
   providers: [PrismaService],
   exports: [PrismaService],

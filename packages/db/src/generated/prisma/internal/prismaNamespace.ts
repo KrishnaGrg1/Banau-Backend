@@ -1387,9 +1387,32 @@ export const OrderScalarFieldEnum = {
   tenantId: 'tenantId',
   customerId: 'customerId',
   status: 'status',
+  subtotal: 'subtotal',
+  tax: 'tax',
+  shipping: 'shipping',
+  discount: 'discount',
   total: 'total',
+  paymentIntentId: 'paymentIntentId',
+  paymentMethod: 'paymentMethod',
+  ShippingfirstName: 'ShippingfirstName',
+  ShippinglastName: 'ShippinglastName',
+  ShippingEmail: 'ShippingEmail',
+  ShippingContactNumber: 'ShippingContactNumber',
+  ShippingCountry: 'ShippingCountry',
+  ShippingState: 'ShippingState',
+  ShippingDistrict: 'ShippingDistrict',
+  ShippingCity: 'ShippingCity',
+  ShippingAddress: 'ShippingAddress',
+  trackingNumber: 'trackingNumber',
+  trackingCarrier: 'trackingCarrier',
+  trackingUrl: 'trackingUrl',
+  notes: 'notes',
+  customerNotes: 'customerNotes',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  paidAt: 'paidAt',
+  shippedAt: 'shippedAt',
+  deliveredAt: 'deliveredAt'
 } as const
 
 export type OrderScalarFieldEnum = (typeof OrderScalarFieldEnum)[keyof typeof OrderScalarFieldEnum]

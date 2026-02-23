@@ -53,12 +53,14 @@ enum AssetType {
 }
 
 enum OrderStatus {
-  PENDING
-  PAID
-  SHIPPED
-  COMPLETED
-  CANCELLED
-  REFUNDED
+  PENDING // Payment pending / Draft
+  PAID // Payment successful
+  PROCESSING // Being prepared
+  SHIPPED // On the way
+  DELIVERED // Completed
+  CANCELLED // Cancelled
+  REFUNDED // Money returned
+  FAILED // Payment failed
 }
 
 // ============================================
@@ -278,13 +280,46 @@ model Order {
   tenantId   String
   customerId String
   status     OrderStatus @default(PENDING) // enum for status
-  total      Decimal     @db.Decimal(10, 2)
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
+
+  subtotal Decimal  @db.Decimal(10, 2) // Items total
+  tax      Decimal? @db.Decimal(10, 2) // Tax amount
+  shipping Decimal? @db.Decimal(10, 2) // Shipping cost
+  discount Decimal? @db.Decimal(10, 2) // Discount amount
+  total    Decimal  @db.Decimal(10, 2) // Final total
+
+  // Payment info
+  paymentIntentId String? // Stripe payment intent ID
+  paymentMethod   String? // "card", "cash", etc.
+
+  //shipping info
+  ShippingfirstName     String?
+  ShippinglastName      String?
+  ShippingEmail         String?
+  ShippingContactNumber String?
+  ShippingCountry       String?
+  ShippingState         String?
+  ShippingDistrict      String?
+  ShippingCity          String?
+  ShippingAddress       String?
+
+  //order tracking info
+  trackingNumber  String?
+  trackingCarrier String? // "UPS", "FedEx", etc.
+  trackingUrl     String?
+
+  //notes
+  notes         String? // Internal notes (staff only)
+  customerNotes String? // Notes from customer
 
   tenant   Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   customer Customer    @relation(fields: [customerId], references: [id], onDelete: Cascade)
   items    OrderItem[]
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  paidAt      DateTime?
+  shippedAt   DateTime?
+  deliveredAt DateTime?
 
   @@index([tenantId])
   @@index([customerId])

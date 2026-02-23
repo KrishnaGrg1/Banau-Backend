@@ -61,10 +61,12 @@ export type AssetType = (typeof AssetType)[keyof typeof AssetType]
 export const OrderStatus = {
   PENDING: 'PENDING',
   PAID: 'PAID',
+  PROCESSING: 'PROCESSING',
   SHIPPED: 'SHIPPED',
-  COMPLETED: 'COMPLETED',
+  DELIVERED: 'DELIVERED',
   CANCELLED: 'CANCELLED',
-  REFUNDED: 'REFUNDED'
+  REFUNDED: 'REFUNDED',
+  FAILED: 'FAILED'
 } as const
 
 export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus]
