@@ -845,6 +845,250 @@
           "PublicProduct"
         ]
       }
+    },
+    "/api/v1/order": {
+      "get": {
+        "operationId": "OrderController_getAllOrders",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Order"
+        ]
+      }
+    },
+    "/api/v1/order/export": {
+      "get": {
+        "operationId": "OrderController_exportOrders",
+        "parameters": [
+          {
+            "name": "format",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Order"
+        ]
+      }
+    },
+    "/api/v1/order/{id}": {
+      "get": {
+        "operationId": "OrderController_getOrderById",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Order"
+        ]
+      }
+    },
+    "/api/v1/order/{id}/status": {
+      "put": {
+        "operationId": "OrderController_updateOrderStatus",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/updateOrderStatus"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Order"
+        ]
+      }
+    },
+    "/api/v1/order/{id}/tracking": {
+      "put": {
+        "operationId": "OrderController_addTracking",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/addTrackingDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Order"
+        ]
+      }
+    },
+    "/api/v1/order/{id}/refund": {
+      "post": {
+        "operationId": "OrderController_refundOrder",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/refundDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Order"
+        ]
+      }
+    },
+    "/api/v1/order/my-orders": {
+      "get": {
+        "operationId": "OrderController_getMyOrders",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Order"
+        ]
+      }
+    },
+    "/api/v1/order/my-orders/{id}": {
+      "get": {
+        "operationId": "OrderController_getMyOrder",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Order"
+        ]
+      }
+    },
+    "/api/v1/order/create-payment-intent": {
+      "post": {
+        "operationId": "OrderController_createPaymentIntent",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePaymentIntentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Order"
+        ]
+      }
+    },
+    "/api/v1/order/confirm": {
+      "post": {
+        "operationId": "OrderController_confirmOrder",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConfirmOrderDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Order"
+        ]
+      }
     }
   },
   "info": {
@@ -910,6 +1154,26 @@
         "properties": {}
       },
       "UpdateStockDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "updateOrderStatus": {
+        "type": "object",
+        "properties": {}
+      },
+      "addTrackingDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "refundDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "CreatePaymentIntentDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "ConfirmOrderDto": {
         "type": "object",
         "properties": {}
       }
