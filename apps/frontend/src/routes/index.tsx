@@ -14,7 +14,7 @@ export const Route = createFileRoute('/')({
   component: IndexPage,
 })
 
-async function IndexPage() {
+function IndexPage() {
   const data = Route.useLoaderData()
   console.log('aslkdjf;a', data)
   // useEffect(() => {

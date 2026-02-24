@@ -12,6 +12,7 @@ import { CTA } from '@/components/Home/Cta'
 import { Footer } from '@/components/Home/Footer'
 
 export default function Home() {
+  // console.log('HOme rendered')
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       <Nav />
@@ -20,7 +21,7 @@ export default function Home() {
       <Features />
       <WhyBanau />
       <Domains />
-      <Pricing />
+      {/* <Pricing /> */}
       <CTA />
       <Footer />
     </div>

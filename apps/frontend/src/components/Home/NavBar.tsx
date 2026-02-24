@@ -23,7 +23,7 @@ interface NavProps {
 const DEFAULT_LINKS: NavLink[] = [
   { label: 'How It Works', href: '#how-it-works' },
   { label: 'Features', href: '#features' },
-  { label: 'Pricing', href: '#pricing' },
+  // { label: 'Pricing', href: '#pricing' },
 ]
 
 // ── Component ─────────────────────────────────────────────────────────────────
