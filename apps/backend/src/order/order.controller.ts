@@ -30,12 +30,12 @@ export class OrderController {
   @UseGuards(AuthGuard)
   @Get('export')
   async exportOrders(
-    @Request() requestAnimationFrame,
+    @Request() req,
     @Response({ passthrough: false }) res,
     @Query('format') format: 'csv' | 'xlsx' = 'csv',
   ) {
     const { buffer, filename, mimeType } =
-      await this.orderServices.exportOrders(requestAnimationFrame, format);
+      await this.orderServices.exportOrders(req, format);
     res.setHeader('Content-Type', mimeType);
     res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
     res.send(buffer);

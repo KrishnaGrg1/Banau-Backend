@@ -626,3 +626,72 @@ export class ConfirmOrderItemDto {
   @IsString()
   variantName?: string;
 }
+
+
+export class CreateCustomerDto{
+  @IsEmail()
+  email: string;
+
+  @IsString()
+  firstName: string;
+
+  @IsString()
+  lastName: string;
+
+  @IsString()
+  @IsOptional()
+  phone?: string;
+}
+
+export class UpdateCustomerDto{
+  @IsEmail()
+    @IsOptional()
+  email?: string;
+
+  @IsOptional()
+  @IsString()
+  firstName?: string;
+
+  @IsOptional()
+  @IsString()
+  lastName?: string;
+
+  @IsString()
+  @IsOptional()
+  phone?: string; 
+}
+
+export class RegisterCustomerDto{
+   @IsString()
+  @MinLength(3)
+  @Matches(/^[a-z0-9-]+$/)
+  subdomain: string;
+
+   @IsEmail()
+  email: string;
+
+ 
+  @IsString()
+  @MinLength(8)
+  password: string;
+  
+  @IsString()
+  firstName: string;
+
+  @IsString()
+  lastName: string;
+
+  @IsString()
+  @IsOptional()
+  phone?: string; 
+}
+
+export class LoginCustomerDto{
+     @IsEmail()
+  email: string;
+
+
+  @IsString()
+  @MinLength(8)
+  password: string;
+}
