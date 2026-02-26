@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { Menu, X, ShoppingBag } from 'lucide-react'
+import { Menu, X, ShoppingBag, ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { useNavigate } from '@tanstack/react-router'
 
 interface HeaderProps {
   tenant: {
@@ -18,6 +19,7 @@ export default function Header({ tenant, logo }: HeaderProps) {
     { label: 'Products', href: `/s/${tenant.subdomain}/products` },
     { label: 'About', href: `/s/${tenant.subdomain}/about` },
   ]
+  const navigate = useNavigate()
   const [mobileOpen, setMobileOpen] = useState(false)
 
   return (
@@ -72,9 +74,24 @@ export default function Header({ tenant, logo }: HeaderProps) {
             >
               <ShoppingBag className="h-4 w-4" />
             </Button>
-
+            <Button
+              variant="ghost"
+              size="sm"
+              className="hidden md:inline-flex"
+              onClick={() => navigate({ to: '/login' })}
+            >
+              Log in
+            </Button>
+            <Button
+              size="sm"
+              className="rounded-lg hidden md:inline-flex"
+              onClick={() => navigate({ to: '/register' })}
+            >
+              Get Started
+              <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+            </Button>
             {/* Mobile menu toggle */}
-            <button
+            <Button
               className="md:hidden rounded-lg p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
               onClick={() => setMobileOpen((v) => !v)}
               aria-label="Toggle menu"
@@ -84,7 +101,7 @@ export default function Header({ tenant, logo }: HeaderProps) {
               ) : (
                 <Menu className="h-5 w-5" />
               )}
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -93,6 +110,17 @@ export default function Header({ tenant, logo }: HeaderProps) {
       {mobileOpen && (
         <div className="md:hidden border-t border-border bg-background">
           <nav className="mx-auto max-w-7xl px-4 py-4 flex flex-col gap-1">
+            {/* Login/Register buttons for desktop */}
+            <a href="/login">
+              <Button variant="outline" className="hidden md:inline-flex">
+                Login
+              </Button>
+            </a>
+            <a href="/register">
+              <Button variant="default" className="hidden md:inline-flex">
+                Register
+              </Button>
+            </a>
             {NAV_LINKS.map((link) => (
               <a
                 key={link.href}
@@ -103,6 +131,19 @@ export default function Header({ tenant, logo }: HeaderProps) {
                 {link.label}
               </a>
             ))}
+            {/* Login/Register buttons for mobile */}
+            <a
+              href="/login"
+              className="rounded-lg px-3 py-2.5 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+            >
+              Login
+            </a>
+            <a
+              href="/register"
+              className="rounded-lg px-3 py-2.5 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+            >
+              Register
+            </a>
           </nav>
         </div>
       )}
