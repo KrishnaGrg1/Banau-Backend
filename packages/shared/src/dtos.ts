@@ -518,3 +518,144 @@ export const bulkImportSchema = z.object({
 export const DeleteProductSchema = z.object({
   productId: z.string(),
 });
+
+
+export const CreateCustomerSchema=z.object({
+  email:z.string().email('Email required'),
+  firstName: z.string().min(2),
+  lastName: z.string().min(2),
+  phone:z.string().min(8).optional()
+})
+export const UpdateCustomerSchema=z.object({
+  email:z.string().email('Email required').optional(),
+  firstName: z.string().min(2).optional(),
+  lastName: z.string().min(2).optional(),
+  phone:z.string().min(8).optional()
+})
+
+// UpdateTenantDto
+export const UpdateTenantDtoSchema = z.object({
+  name: z.string().min(3),
+  subdomain: z
+    .string()
+    .min(3)
+    .regex(/^[a-z0-9-]+$/),
+  email: z.string().email(),
+  status: z.enum(["TRIAL", "ACTIVE", "SUSPENDED", "CANCELLED"]).optional(),
+  published: z.boolean(),
+});
+
+export type UpdateTenantDto = z.infer<typeof UpdateTenantDtoSchema>;
+
+// updateOrderStatus
+export const updateOrderStatusSchema = z.object({
+  status: z.enum(
+    ["PENDING", "PAID", "PROCESSING", "SHIPPED", "DELIVERED", "CANCELLED", "REFUNDED", "FAILED"],
+    {
+      required_error: "Status is required",
+      invalid_type_error:
+        "Status must be PENDING, PAID, PROCESSING, SHIPPED, DELIVERED, CANCELLED, REFUNDED, or FAILED",
+    },
+  ),
+});
+
+export type updateOrderStatus = z.infer<typeof updateOrderStatusSchema>;
+
+// addTrackingDto
+export const addTrackingDtoSchema = z.object({
+  trackingNumber: z.string().min(1, "Tracking number is required"),
+  trackingCarrier: z.string().min(1, "Tracking carrier is required"),
+});
+
+export type addTrackingDto = z.infer<typeof addTrackingDtoSchema>;
+
+// refundDto
+export const refundDtoSchema = z.object({
+  amount: z.number().optional(),
+  reason: z.string().optional(),
+});
+
+export type refundDto = z.infer<typeof refundDtoSchema>;
+
+// PaymentIntentItemDto
+export const PaymentIntentItemDtoSchema = z.object({
+  productId: z.string().min(1, "Product ID is required"),
+  variantId: z.string().optional(),
+  quantity: z.number().positive("Quantity must be a positive number"),
+});
+
+export type PaymentIntentItemDto = z.infer<typeof PaymentIntentItemDtoSchema>;
+
+// CreatePaymentIntentDto
+export const CreatePaymentIntentDtoSchema = z.object({
+  subdomain: z.string().min(1, "Subdomain is required"),
+  items: z
+    .array(PaymentIntentItemDtoSchema)
+    .min(1, "At least one item is required"),
+});
+
+export type CreatePaymentIntentDto = z.infer<
+  typeof CreatePaymentIntentDtoSchema
+>;
+
+// ConfirmOrderItemDto
+export const ConfirmOrderItemDtoSchema = z.object({
+  productId: z.string().min(1, "Product ID is required"),
+  variantId: z.string().optional(),
+  quantity: z.number().positive("Quantity must be a positive number"),
+  price: z.number(),
+  productName: z.string().min(1, "Product name is required"),
+  variantName: z.string().optional(),
+});
+
+export type ConfirmOrderItemDto = z.infer<typeof ConfirmOrderItemDtoSchema>;
+
+// ConfirmOrderDto
+export const ConfirmOrderDtoSchema = z.object({
+  paymentIntentId: z.string().min(1, "Payment intent ID is required"),
+  email: z.string().email("Valid email is required"),
+  firstName: z.string().min(1, "First name is required"),
+  lastName: z.string().min(1, "Last name is required"),
+  phone: z.string().min(1, "Phone is required"),
+  shippingAddress: z.string().min(1, "Shipping address is required"),
+  shippingCity: z.string().min(1, "Shipping city is required"),
+  shippingState: z.string().min(1, "Shipping state is required"),
+  shippingDistrict: z.string().optional(),
+  shippingCountry: z.string().min(1, "Shipping country is required"),
+  notes: z.string().optional(),
+  customerNotes: z.string().optional(),
+  subtotal: z.number().optional(),
+  tax: z.number().optional(),
+  shipping: z.number().optional(),
+  discount: z.number().optional(),
+  total: z.number().optional(),
+  paymentMethod: z.string().optional(),
+  items: z
+    .array(ConfirmOrderItemDtoSchema)
+    .min(1, "At least one item is required"),
+});
+
+export type ConfirmOrderDto = z.infer<typeof ConfirmOrderDtoSchema>;
+
+// RegisterCustomerDto
+export const RegisterCustomerDtoSchema = z.object({
+  subdomain: z
+    .string()
+    .min(3)
+    .regex(/^[a-z0-9-]+$/, "Subdomain must contain only lowercase letters, numbers, and hyphens"),
+  email: z.string().email("Valid email is required"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
+  firstName: z.string().min(1, "First name is required"),
+  lastName: z.string().min(1, "Last name is required"),
+  phone: z.string().optional(),
+});
+
+export type RegisterCustomerDto = z.infer<typeof RegisterCustomerDtoSchema>;
+
+// LoginCustomerDto
+export const LoginCustomerDtoSchema = z.object({
+  email: z.string().email("Valid email is required"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
+});
+
+export type LoginCustomerDto = z.infer<typeof LoginCustomerDtoSchema>;

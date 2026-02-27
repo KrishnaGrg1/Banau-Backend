@@ -78,14 +78,18 @@ export default function Header({ tenant, logo }: HeaderProps) {
               variant="ghost"
               size="sm"
               className="hidden md:inline-flex"
-              onClick={() => navigate({ to: '/login' })}
+              onClick={() =>
+                navigate({ to: `/s/${tenant.subdomain}/account/login` })
+              }
             >
               Log in
             </Button>
             <Button
               size="sm"
               className="rounded-lg hidden md:inline-flex"
-              onClick={() => navigate({ to: '/register' })}
+              onClick={() =>
+                navigate({ to: `/s/${tenant.subdomain}/account/register` })
+              }
             >
               Get Started
               <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
