@@ -5,9 +5,15 @@ import { ValidationPipe, Logger } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import * as fs from 'fs';
 import * as path from 'path';
+import * as express from 'express';
+
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
   const app = await NestFactory.create(AppModule);
+
+  // Raw body for Stripe webhooks (MUST be before other middleware)
+  app.use('/api/v1/order/webhook', express.raw({ type: 'application/json' }));
+
   app.enableCors({
     origin: (origin, callback) => {
       // Allow non-browser requests (Postman, server-to-server)

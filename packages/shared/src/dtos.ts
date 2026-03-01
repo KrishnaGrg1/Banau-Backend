@@ -519,19 +519,18 @@ export const DeleteProductSchema = z.object({
   productId: z.string(),
 });
 
-
-export const CreateCustomerSchema=z.object({
-  email:z.string().email('Email required'),
+export const CreateCustomerSchema = z.object({
+  email: z.string().email("Email required"),
   firstName: z.string().min(2),
   lastName: z.string().min(2),
-  phone:z.string().min(8).optional()
-})
-export const UpdateCustomerSchema=z.object({
-  email:z.string().email('Email required').optional(),
+  phone: z.string().min(8).optional(),
+});
+export const UpdateCustomerSchema = z.object({
+  email: z.string().email("Email required").optional(),
   firstName: z.string().min(2).optional(),
   lastName: z.string().min(2).optional(),
-  phone:z.string().min(8).optional()
-})
+  phone: z.string().min(8).optional(),
+});
 
 // UpdateTenantDto
 export const UpdateTenantDtoSchema = z.object({
@@ -550,7 +549,16 @@ export type UpdateTenantDto = z.infer<typeof UpdateTenantDtoSchema>;
 // updateOrderStatus
 export const updateOrderStatusSchema = z.object({
   status: z.enum(
-    ["PENDING", "PAID", "PROCESSING", "SHIPPED", "DELIVERED", "CANCELLED", "REFUNDED", "FAILED"],
+    [
+      "PENDING",
+      "PAID",
+      "PROCESSING",
+      "SHIPPED",
+      "DELIVERED",
+      "CANCELLED",
+      "REFUNDED",
+      "FAILED",
+    ],
     {
       required_error: "Status is required",
       invalid_type_error:
@@ -642,7 +650,10 @@ export const RegisterCustomerDtoSchema = z.object({
   subdomain: z
     .string()
     .min(3)
-    .regex(/^[a-z0-9-]+$/, "Subdomain must contain only lowercase letters, numbers, and hyphens"),
+    .regex(
+      /^[a-z0-9-]+$/,
+      "Subdomain must contain only lowercase letters, numbers, and hyphens",
+    ),
   email: z.string().email("Valid email is required"),
   password: z.string().min(8, "Password must be at least 8 characters"),
   firstName: z.string().min(1, "First name is required"),
@@ -659,3 +670,157 @@ export const LoginCustomerDtoSchema = z.object({
 });
 
 export type LoginCustomerDto = z.infer<typeof LoginCustomerDtoSchema>;
+
+// ==================== Stripe Checkout Session DTOs ====================
+
+// CheckoutSessionItemDto
+export const CheckoutSessionItemDtoSchema = z.object({
+  productId: z.string().min(1, "Product ID is required"),
+  variantId: z.string().optional(),
+  quantity: z.number().positive("Quantity must be a positive number"),
+  price: z.number(),
+  productName: z.string().min(1, "Product name is required"),
+  variantName: z.string().optional(),
+});
+
+export type CheckoutSessionItemDto = z.infer<
+  typeof CheckoutSessionItemDtoSchema
+>;
+
+// CreateCheckoutSessionDto
+export const CreateCheckoutSessionDtoSchema = z.object({
+  subdomain: z
+    .string()
+    .min(3)
+    .regex(
+      /^[a-z0-9-]+$/,
+      "Subdomain must contain only lowercase letters, numbers, and hyphens",
+    ),
+  email: z.string().email("Valid email is required"),
+  firstName: z.string().min(2, "First name must be at least 2 characters"),
+  lastName: z.string().min(2, "Last name must be at least 2 characters"),
+  phone: z.string().min(1, "Phone is required"),
+  shippingAddress: z.string().min(1, "Shipping address is required"),
+  shippingCity: z.string().min(1, "Shipping city is required"),
+  shippingState: z.string().min(1, "Shipping state is required"),
+  shippingDistrict: z.string().optional(),
+  shippingCountry: z.string().min(1, "Shipping country is required"),
+  customerNotes: z.string().optional(),
+  items: z
+    .array(CheckoutSessionItemDtoSchema)
+    .min(1, "At least one item is required"),
+});
+
+export type CreateCheckoutSessionDto = z.infer<
+  typeof CreateCheckoutSessionDtoSchema
+>;
+
+export interface CheckoutSessionResponse {
+  sessionId: string;
+  url: string;
+}
+
+// ==================== ORDER TYPES ====================
+
+export type OrderStatus =
+  | "PENDING"
+  | "PAID"
+  | "PROCESSING"
+  | "SHIPPED"
+  | "DELIVERED"
+  | "CANCELLED"
+  | "REFUNDED"
+  | "FAILED";
+
+export interface OrderItemDto {
+  id: string;
+  orderId: string;
+  productId: string;
+  variantId: string | null;
+  quantity: number;
+  price: string;
+  productName: string;
+  variantName: string | null;
+}
+
+export interface OrderDto {
+  id: string;
+  tenantId: string;
+  customerId: string;
+  status: OrderStatus;
+  subtotal: string;
+  tax: string | null;
+  shipping: string | null;
+  discount: string | null;
+  total: string;
+  paymentIntentId: string | null;
+  paymentMethod: string | null;
+  ShippingfirstName: string | null;
+  ShippinglastName: string | null;
+  ShippingEmail: string | null;
+  ShippingContactNumber: string | null;
+  ShippingCountry: string | null;
+  ShippingState: string | null;
+  ShippingDistrict: string | null;
+  ShippingCity: string | null;
+  ShippingAddress: string | null;
+  trackingNumber: string | null;
+  trackingCarrier: string | null;
+  trackingUrl: string | null;
+  notes: string | null;
+  customerNotes: string | null;
+  createdAt: Date | string;
+  updatedAt: Date | string;
+  paidAt: Date | string | null;
+  shippedAt: Date | string | null;
+  deliveredAt: Date | string | null;
+  items?: OrderItemDto[];
+  customer?: {
+    id: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+    phone: string | null;
+  };
+}
+
+export interface OrdersListResponse {
+  success: boolean;
+  message: string;
+  data: {
+    orders: OrderDto[];
+    meta: {
+      total: number;
+      limit: number;
+      offset: number;
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+    };
+  };
+  timestamp: string;
+}
+
+export interface OrderResponse {
+  success: boolean;
+  message: string;
+  data: OrderDto;
+  timestamp: string;
+}
+
+export interface PaymentIntentResponse {
+  success: boolean;
+  message: string;
+  data: {
+    paymentIntentId: string;
+    clientSecret: string;
+    amount: number;
+    currency: string;
+  };
+  timestamp: string;
+}
+
+export const exportOrdersParamsSchema = z.object({
+  format: z.enum(["csv", "xlsx"]),
+});
+
+export type ExportOrdersParams = z.infer<typeof exportOrdersParamsSchema>;

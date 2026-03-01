@@ -1090,6 +1090,53 @@
         ]
       }
     },
+    "/api/v1/order/create-checkout-session": {
+      "post": {
+        "operationId": "OrderController_createCheckoutSession",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCheckoutSessionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Order"
+        ]
+      }
+    },
+    "/api/v1/order/webhook": {
+      "post": {
+        "operationId": "OrderController_handleWebhook",
+        "parameters": [
+          {
+            "name": "stripe-signature",
+            "required": true,
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Order"
+        ]
+      }
+    },
     "/api/v1/customers": {
       "get": {
         "operationId": "CustomerController_listCustomers",
@@ -1429,6 +1476,10 @@
         "properties": {}
       },
       "ConfirmOrderDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "CreateCheckoutSessionDto": {
         "type": "object",
         "properties": {}
       },

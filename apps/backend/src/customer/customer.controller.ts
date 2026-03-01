@@ -75,8 +75,11 @@ export class CustomerController {
 
   @UseGuards(AuthGuard)
   @Post('')
-  async registerCustomer(@Request() req: RequestWithUser, @Body() dto:backendDtos.CreateCustomerDto) {
-    const data = await this.customerServices.createCustomer(req,dto);
+  async registerCustomer(
+    @Request() req: RequestWithUser,
+    @Body() dto: backendDtos.CreateCustomerDto,
+  ) {
+    const data = await this.customerServices.createCustomer(req, dto);
     return ApiResponseDto.success(data, "Retrieved all tenant's customers");
   }
 
@@ -107,25 +110,27 @@ export class CustomerController {
 
   @UseGuards(AuthGuard)
   @Put('me')
-  async updateMyProfile(@Request() req, @Body() dto: backendDtos.UpdateCustomerDto) {
+  async updateMyProfile(
+    @Request() req,
+    @Body() dto: backendDtos.UpdateCustomerDto,
+  ) {
     const customer = await this.customerServices.updateMyProfile(req, dto);
     return ApiResponseDto.success(customer, 'Profile updated');
   }
 
-   @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @Get('me/orders')
   async getMyOrders(
     @Request() req,
-    @Query() pagination:backendDtos.PaginationDto 
+    @Query() pagination: backendDtos.PaginationDto,
   ) {
     const orders = await this.customerServices.getMyOrders(req, pagination);
     return ApiResponseDto.success(orders, 'Your orders retrieved');
   }
 
+  // PUBLIC ROUTES (Storefront)
 
-   // PUBLIC ROUTES (Storefront)
-
-   @Post('register')
+  @Post('register')
   async register(
     @Body() dto: backendDtos.RegisterCustomerDto,
     @Res({ passthrough: true }) res: Response, // ✅ passthrough lets NestJS handle response

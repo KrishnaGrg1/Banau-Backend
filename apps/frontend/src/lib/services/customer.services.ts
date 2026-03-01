@@ -1,7 +1,4 @@
-import {
-  LoginCustomerDtoSchema,
-  RegisterCustomerDtoSchema,
-} from '@repo/shared'
+import { LoginCustomerDtoSchema, RegisterCustomerDtoSchema } from '@repo/shared'
 import { api } from '../axios'
 import { createServerFn } from '@tanstack/react-start'
 import { useAppSession } from '../session'

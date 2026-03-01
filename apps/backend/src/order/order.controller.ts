@@ -9,10 +9,13 @@ import {
   Request,
   Response,
   UseGuards,
+  Headers,
+  BadRequestException,
 } from '@nestjs/common';
 import { OrderServices } from './order.service';
 import { ApiResponseDto, AuthGuard } from 'src/common';
 import { backendDtos } from '@repo/shared';
+import Stripe from 'stripe';
 
 @Controller('order')
 export class OrderController {
@@ -44,10 +47,10 @@ export class OrderController {
   @UseGuards(AuthGuard)
   @Get(':id')
   async getOrderById(@Param('id') orderId: string, @Request() req) {
-    const data = await this.getOrderById(orderId, req);
+    const data = await this.orderServices.getOrderById(orderId, req);
     return ApiResponseDto.success(
       data,
-      "Retrieved all tenant's specific product by productId",
+      "Retrieved tenant's specific order by orderId",
     );
   }
 
@@ -121,5 +124,23 @@ export class OrderController {
   async confirmOrder(@Body() dto: backendDtos.ConfirmOrderDto) {
     const order = await this.orderServices.confirmOrder(dto);
     return ApiResponseDto.success(order, 'Order confirmed');
+  }
+
+  @Post('create-checkout-session')
+  async createCheckoutSession(
+    @Body() dto: backendDtos.CreateCheckoutSessionDto,
+  ) {
+    const session = await this.orderServices.createCheckoutSession(dto);
+    return ApiResponseDto.success(session, 'Checkout session created');
+  }
+
+  @Post('webhook')
+  async handleWebhook(
+    @Request() req: any,
+    @Headers('stripe-signature') signature: string,
+  ) {
+    const rawBody = req.rawBody || req.body;
+    const result = await this.orderServices.handleWebhook(rawBody, signature);
+    return result;
   }
 }

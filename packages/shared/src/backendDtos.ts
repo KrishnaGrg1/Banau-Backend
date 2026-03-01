@@ -627,8 +627,7 @@ export class ConfirmOrderItemDto {
   variantName?: string;
 }
 
-
-export class CreateCustomerDto{
+export class CreateCustomerDto {
   @IsEmail()
   email: string;
 
@@ -643,9 +642,9 @@ export class CreateCustomerDto{
   phone?: string;
 }
 
-export class UpdateCustomerDto{
+export class UpdateCustomerDto {
   @IsEmail()
-    @IsOptional()
+  @IsOptional()
   email?: string;
 
   @IsOptional()
@@ -658,23 +657,22 @@ export class UpdateCustomerDto{
 
   @IsString()
   @IsOptional()
-  phone?: string; 
+  phone?: string;
 }
 
-export class RegisterCustomerDto{
-   @IsString()
+export class RegisterCustomerDto {
+  @IsString()
   @MinLength(3)
   @Matches(/^[a-z0-9-]+$/)
   subdomain: string;
 
-   @IsEmail()
+  @IsEmail()
   email: string;
 
- 
   @IsString()
   @MinLength(8)
   password: string;
-  
+
   @IsString()
   firstName: string;
 
@@ -683,15 +681,85 @@ export class RegisterCustomerDto{
 
   @IsString()
   @IsOptional()
-  phone?: string; 
+  phone?: string;
 }
 
-export class LoginCustomerDto{
-     @IsEmail()
+export class LoginCustomerDto {
+  @IsEmail()
   email: string;
-
 
   @IsString()
   @MinLength(8)
   password: string;
+}
+
+// =========================
+// Stripe Checkout Session DTOs
+// =========================
+
+export class CheckoutSessionItemDto {
+  @IsString()
+  productId: string;
+
+  @IsOptional()
+  @IsString()
+  variantId?: string;
+
+  @IsNumber()
+  @IsPositive()
+  quantity: number;
+
+  @IsNumber()
+  price: number;
+
+  @IsString()
+  productName: string;
+
+  @IsOptional()
+  @IsString()
+  variantName?: string;
+}
+
+export class CreateCheckoutSessionDto {
+  @IsString()
+  @MinLength(3)
+  @Matches(/^[a-z0-9-]+$/)
+  subdomain: string;
+
+  @IsEmail()
+  email: string;
+
+  @IsString()
+  @MinLength(2)
+  firstName: string;
+
+  @IsString()
+  @MinLength(2)
+  lastName: string;
+
+  @IsString()
+  phone: string;
+
+  @IsString()
+  shippingAddress: string;
+
+  @IsString()
+  shippingCity: string;
+
+  @IsString()
+  shippingState: string;
+
+  @IsOptional()
+  @IsString()
+  shippingDistrict?: string;
+
+  @IsString()
+  shippingCountry: string;
+
+  @IsOptional()
+  @IsString()
+  customerNotes?: string;
+
+  @IsNotEmpty({ each: true })
+  items: CheckoutSessionItemDto[];
 }

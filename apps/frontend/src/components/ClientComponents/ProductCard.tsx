@@ -1,22 +1,10 @@
-import { ShoppingBag, ShoppingCart, Heart, Star } from 'lucide-react'
+import { ShoppingBag, Heart, Star } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
-
-export interface Product {
-  id: string
-  name: string
-  description?: string | null
-  slug: string
-  price: string
-  compareAtPrice?: string | null
-  quantity: number
-  trackInventory: boolean
-  featured: boolean
-  featuredImage?: { url: string } | null
-  variants?: any[]
-}
+import { AddToCartButton } from '@/components/storefront/AddToCartButton'
+import type { ProductDto } from '@repo/shared'
 
 interface ProductCardProps {
-  product: Product
+  product: ProductDto
   subdomain: string
 }
 
@@ -137,14 +125,24 @@ export function ProductCard({ product, subdomain }: ProductCardProps) {
           )}
         </div>
 
-        {/* Add to Cart */}
-        <button
-          disabled={!inStock}
-          className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary text-primary-foreground text-xs font-semibold py-2.5 hover:opacity-90 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed"
-        >
-          <ShoppingCart className="h-3.5 w-3.5" />
-          {inStock ? 'Add to Cart' : 'Unavailable'}
-        </button>
+        {/* Add to Cart Button */}
+        {hasVariants ? (
+          <Link
+            to="/s/$subdomain/products/$slug"
+            params={{ subdomain, slug: product.slug }}
+            className="block"
+          >
+            <button className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary text-primary-foreground text-xs font-semibold py-2.5 hover:opacity-90 transition-opacity">
+              View Options
+            </button>
+          </Link>
+        ) : (
+          <AddToCartButton
+            product={product}
+            showQuantity={false}
+            className="w-full [&>button]:w-full"
+          />
+        )}
       </div>
     </div>
   )

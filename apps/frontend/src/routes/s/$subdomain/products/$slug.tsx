@@ -1,8 +1,7 @@
-import { createFileRoute, getRouteApi, Link } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import { usePublicProductBySlug } from '@/hooks/use-public-product'
 import {
   ShoppingBag,
-  ShoppingCart,
   Heart,
   Star,
   ArrowLeft,
@@ -10,11 +9,10 @@ import {
   Truck,
   RotateCcw,
   ChevronRight,
-  Minus,
-  Plus,
 } from 'lucide-react'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
+import { AddToCartButton } from '@/components/storefront/AddToCartButton'
 
 export const Route = createFileRoute('/s/$subdomain/products/$slug')({
   component: RouteComponent,
@@ -27,9 +25,7 @@ function RouteComponent() {
     subdomain,
     slug,
   })
-  console.log('data', product)
   const [selectedVariant, setSelectedVariant] = useState<string | null>(null)
-  const [quantity, setQuantity] = useState(1)
 
   const activeVariant = product?.variants?.find((v) => v.id === selectedVariant)
   const price = activeVariant
@@ -48,6 +44,7 @@ function RouteComponent() {
   const inStock = product?.trackInventory
     ? (activeVariant ? activeVariant.quantity : product.quantity) > 0
     : true
+  const hasVariants = product?.variants && product.variants.length > 0
 
   // ── Loading ──────────────────────────────────────────────
   if (isLoading) {
@@ -213,13 +210,13 @@ function RouteComponent() {
           )}
 
           {/* Variants */}
-          {product.variants && product.variants.length > 0 && (
+          {hasVariants && (
             <div className="space-y-3 border-t border-border pt-6">
               <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
                 Variants
               </p>
               <div className="flex flex-wrap gap-2">
-                {product.variants.map((variant) => (
+                {product.variants!.map((variant) => (
                   <Button
                     key={variant.id}
                     onClick={() =>
@@ -241,49 +238,40 @@ function RouteComponent() {
                     )}
                     {variant.price !== product.price && (
                       <span className="ml-1 font-semibold">
-                        ${Number(variant.price).toFixed(2)}
+                        Rs.{Number(variant.price).toFixed(2)}
                       </span>
                     )}
                   </Button>
                 ))}
               </div>
+              {hasVariants && !selectedVariant && (
+                <p className="text-xs text-amber-600">
+                  Please select a variant to add to cart
+                </p>
+              )}
             </div>
           )}
 
-          {/* Quantity + Add to Cart */}
+          {/* Add to Cart */}
           <div className="space-y-3 border-t border-border pt-6">
             <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
               Quantity
             </p>
-            <div className="flex items-center gap-3">
-              {/* Qty selector */}
-              <div className="flex items-center rounded-xl border border-border bg-card">
-                <Button
-                  onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                  className="h-11 w-11 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  <Minus className="h-4 w-4" />
-                </Button>
-                <span className="w-10 text-center text-sm font-semibold text-foreground">
-                  {quantity}
-                </span>
-                <Button
-                  onClick={() => setQuantity((q) => q + 1)}
-                  className="h-11 w-11 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  <Plus className="h-4 w-4" />
-                </Button>
-              </div>
-
-              {/* Add to cart */}
+            {hasVariants && !selectedVariant ? (
               <Button
-                disabled={!inStock}
-                className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-primary text-primary-foreground font-semibold py-3 text-sm hover:opacity-90 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed"
+                disabled
+                className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary text-primary-foreground font-semibold py-3 text-sm opacity-50 cursor-not-allowed"
               >
-                <ShoppingCart className="h-4 w-4" />
-                {inStock ? 'Add to Cart' : 'Out of Stock'}
+                Select a variant first
               </Button>
-            </div>
+            ) : (
+              <AddToCartButton
+                product={product}
+                variant={activeVariant}
+                showQuantity={true}
+                className="w-full [&>button]:flex-1"
+              />
+            )}
           </div>
 
           {/* Trust badges */}

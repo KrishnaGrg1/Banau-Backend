@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Menu, X, ShoppingBag, ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useNavigate } from '@tanstack/react-router'
+import { useCartCount } from '@/lib/stores/cart.store'
 
 interface HeaderProps {
   tenant: {
@@ -21,6 +22,7 @@ export default function Header({ tenant, logo }: HeaderProps) {
   ]
   const navigate = useNavigate()
   const [mobileOpen, setMobileOpen] = useState(false)
+  const cartCount = useCartCount()
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
@@ -69,10 +71,16 @@ export default function Header({ tenant, logo }: HeaderProps) {
             <Button
               variant="ghost"
               size="icon"
-              className="hidden md:inline-flex"
+              className=" relative"
               aria-label="Cart"
+              onClick={() => navigate({ to: `/s/${tenant.subdomain}/cart` })}
             >
               <ShoppingBag className="h-4 w-4" />
+              {cartCount > 0 && (
+                <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-primary text-[10px] font-bold text-primary-foreground flex items-center justify-center">
+                  {cartCount > 9 ? '9+' : cartCount}
+                </span>
+              )}
             </Button>
             <Button
               variant="ghost"

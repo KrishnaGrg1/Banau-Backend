@@ -8,7 +8,7 @@ import { CustomerServices } from './customer.service';
 import { JwtModule } from '@nestjs/jwt';
 
 @Module({
-  imports: [CloudinaryModule, ConfigModule,JwtModule, EmailModule],
+  imports: [CloudinaryModule, ConfigModule, JwtModule, EmailModule],
   controllers: [CustomerController],
   providers: [PrismaService, CustomerServices],
 })

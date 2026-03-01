@@ -14,11 +14,12 @@ import { JwtService } from '@nestjs/jwt';
 import { EmailService } from 'src/email/email.service';
 import { ConfigService } from '@nestjs/config';
 
-
 @Injectable()
 export class CustomerServices {
-  constructor(private readonly prisma: PrismaService,    private jwtService: JwtService,
-        private configService: ConfigService,
+  constructor(
+    private readonly prisma: PrismaService,
+    private jwtService: JwtService,
+    private configService: ConfigService,
     private emailService: EmailService,
   ) {}
 
@@ -58,7 +59,9 @@ export class CustomerServices {
       }),
     ]);
     // Map all customers to DTOs
-    const customersDto = exsitingCustomers.map((customer) => this.customerToDto(customer));
+    const customersDto = exsitingCustomers.map((customer) =>
+      this.customerToDto(customer),
+    );
     return {
       customers: customersDto,
       meta: {
@@ -131,7 +134,7 @@ export class CustomerServices {
     };
   }
 
-  async createCustomer(req, dto:backendDtos.CreateCustomerDto) {
+  async createCustomer(req, dto: backendDtos.CreateCustomerDto) {
     const tenant = await this.getExistingTenant(req);
 
     const existingCustomer = await this.prisma.customer.findUnique({
@@ -154,7 +157,11 @@ export class CustomerServices {
 
     return customer;
   }
-  async updateCustomer(req: any, id: string, dto:backendDtos.UpdateCustomerDto) {
+  async updateCustomer(
+    req: any,
+    id: string,
+    dto: backendDtos.UpdateCustomerDto,
+  ) {
     const tenant = await this.getExistingTenant(req);
 
     const customer = await this.prisma.customer.findFirst({
@@ -258,7 +265,6 @@ export class CustomerServices {
     }
   }
 
-
   async getMyProfile(req: any) {
     const customer = await this.prisma.customer.findUnique({
       where: { userId: req.user.id },
@@ -275,7 +281,7 @@ export class CustomerServices {
 
     return customer;
   }
-async updateMyProfile(req: any, dto:backendDtos.UpdateCustomerDto) {
+  async updateMyProfile(req: any, dto: backendDtos.UpdateCustomerDto) {
     const customer = await this.prisma.customer.findUnique({
       where: { userId: req.user.id },
     });
@@ -306,7 +312,7 @@ async updateMyProfile(req: any, dto:backendDtos.UpdateCustomerDto) {
 
     return updated;
   }
-async getMyOrders(req: any, paginationDto: backendDtos.PaginationDto) {
+  async getMyOrders(req: any, paginationDto: backendDtos.PaginationDto) {
     const customer = await this.prisma.customer.findUnique({
       where: { userId: req.user.id },
     });
@@ -349,39 +355,39 @@ async getMyOrders(req: any, paginationDto: backendDtos.PaginationDto) {
     };
   }
 
-private async generateToken(user: any) {
-  const payload = { sub: user.id, role: user.role, isActive: user.isActive };
-  
-  // Clean expired tokens
-  await this.prisma.token.deleteMany({
-    where: { expiresAt: { lt: new Date() } },
-  });
-  
-  // Same JWT structure as auth
-  const accessToken = this.jwtService.sign(payload, {
-    secret: this.configService.get('JWT_ACCESS_SECRET'),
-    expiresIn: '7m',
-  });
-  
-  const refreshToken = this.jwtService.sign(payload, {
-    secret: this.configService.get('JWT_REFRESH_SECRET'),
-    expiresIn: '7d',
-  });
-  
-  // Store hashed refresh token
-  const hashedRefreshToken = await bcrypt.hash(refreshToken, 10);
-  await this.prisma.token.create({
-    data: {
-      userId: String(user.id),
-      token: hashedRefreshToken,
-      type: 'REFRESH',
-      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-    },
-  });
-  
-  return { accessToken, refreshToken };
-}
-  async registerCustomer(dto:backendDtos.RegisterCustomerDto, res: any) {
+  private async generateToken(user: any) {
+    const payload = { sub: user.id, role: user.role, isActive: user.isActive };
+
+    // Clean expired tokens
+    await this.prisma.token.deleteMany({
+      where: { expiresAt: { lt: new Date() } },
+    });
+
+    // Same JWT structure as auth
+    const accessToken = this.jwtService.sign(payload, {
+      secret: this.configService.get('JWT_ACCESS_SECRET'),
+      expiresIn: '7m',
+    });
+
+    const refreshToken = this.jwtService.sign(payload, {
+      secret: this.configService.get('JWT_REFRESH_SECRET'),
+      expiresIn: '7d',
+    });
+
+    // Store hashed refresh token
+    const hashedRefreshToken = await bcrypt.hash(refreshToken, 10);
+    await this.prisma.token.create({
+      data: {
+        userId: String(user.id),
+        token: hashedRefreshToken,
+        type: 'REFRESH',
+        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      },
+    });
+
+    return { accessToken, refreshToken };
+  }
+  async registerCustomer(dto: backendDtos.RegisterCustomerDto, res: any) {
     // Verify tenant exists
     const tenant = await this.prisma.tenant.findUnique({
       where: { subdomain: dto.subdomain },
@@ -473,7 +479,7 @@ private async generateToken(user: any) {
     };
   }
 
-  async loginCustomer(dto:backendDtos.LoginCustomerDto, res: any) {
+  async loginCustomer(dto: backendDtos.LoginCustomerDto, res: any) {
     // Find user
     const existingUser = await this.prisma.user.findUnique({
       where: { email: dto.email },
@@ -582,5 +588,4 @@ private async generateToken(user: any) {
       })),
     };
   }
-
 }
