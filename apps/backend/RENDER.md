@@ -13,15 +13,15 @@
    - **Name**: `banau-backend`
    - **Region**: Choose closest to you
    - **Branch**: `main`
-   - **Root Directory**: `apps/backend`
+   - **Root Directory**: (leave empty - use repo root)
    - **Runtime**: `Node`
    - **Build Command**:
      ```bash
-     cd ../.. && pnpm install --prod=false && pnpm --filter @repo/shared build && pnpm --filter @repo/db build && pnpm turbo run build --filter=banau
+     pnpm install --frozen-lockfile && pnpm --filter @repo/shared build && pnpm --filter @repo/db build && pnpm turbo run build --filter=backend
      ```
    - **Start Command**:
      ```bash
-     node dist/main.js
+     node apps/backend/dist/main.js
      ```
    - **Instance Type**: Free (or paid for better performance)
 

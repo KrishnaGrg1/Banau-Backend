@@ -1,3 +1,5 @@
+import "reflect-metadata";
+import "reflect-metadata";
 import {
   IsOptional,
   IsPositive,
@@ -11,7 +13,10 @@ import {
   IsBoolean,
   IsHexColor,
   IsNotEmpty,
+  IsArray,
+  ValidateNested,
 } from "class-validator";
+import { Type } from "class-transformer";
 import type { Express } from "express";
 
 export enum UserRoleDto {
@@ -760,6 +765,8 @@ export class CreateCheckoutSessionDto {
   @IsString()
   customerNotes?: string;
 
-  @IsNotEmpty({ each: true })
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CheckoutSessionItemDto)
   items: CheckoutSessionItemDto[];
 }

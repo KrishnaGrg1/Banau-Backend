@@ -130,6 +130,8 @@ export class OrderController {
   async createCheckoutSession(
     @Body() dto: backendDtos.CreateCheckoutSessionDto,
   ) {
+    console.log('[Controller] Received checkout request with', dto.items?.length, 'items');
+    console.log('[Controller] DTO items:', JSON.stringify(dto.items, null, 2));
     const session = await this.orderServices.createCheckoutSession(dto);
     return ApiResponseDto.success(session, 'Checkout session created');
   }
@@ -139,8 +141,27 @@ export class OrderController {
     @Request() req: any,
     @Headers('stripe-signature') signature: string,
   ) {
-    const rawBody = req.rawBody || req.body;
-    const result = await this.orderServices.handleWebhook(rawBody, signature);
-    return result;
+    try {
+      // Raw body should be available from express.raw() middleware
+      const rawBody = req.body;
+      
+      if (!rawBody) {
+        console.error('[Webhook] No raw body found in request');
+        throw new BadRequestException('No body found');
+      }
+
+      if (!signature) {
+        console.error('[Webhook] No stripe-signature header found');
+        throw new BadRequestException('No signature found');
+      }
+
+      console.log('[Webhook] Received webhook request');
+      const result = await this.orderServices.handleWebhook(rawBody, signature);
+      console.log('[Webhook] Successfully processed webhook');
+      return result;
+    } catch (error) {
+      console.error('[Webhook] Error processing webhook:', error);
+      throw error;
+    }
   }
 }

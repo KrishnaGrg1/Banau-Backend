@@ -20,9 +20,19 @@ export class OrderServices {
   ) {
     const apiKey = this.configService.get<string>('STRIPE_API_KEY');
     if (!apiKey) {
-      throw new Error('STRIPE_API_KEY is not defined in environment variables');
+      console.warn('⚠️  STRIPE_API_KEY is not defined - payment features will not work');
+      console.warn('⚠️  Add STRIPE_API_KEY to your .env file to enable payments');
+      // Create a dummy stripe instance to prevent crashes
+      this.stripe = null as any;
+    } else {
+      this.stripe = new Stripe(apiKey);
     }
-    this.stripe = new Stripe(apiKey!);
+  }
+
+  private ensureStripe() {
+    if (!this.stripe) {
+      throw new Error('Stripe is not configured. Please add STRIPE_API_KEY to your environment variables.');
+    }
   }
 
   private orderToDto(order: any) {
@@ -79,7 +89,7 @@ export class OrderServices {
       }),
     ]);
     return {
-      existingProducts: await Promise.all(
+      orders: await Promise.all(
         existingProducts.map(async (product) => {
           return this.orderToDto({ ...product });
         }),
@@ -153,6 +163,9 @@ export class OrderServices {
         id: orderId,
         tenantId: String(existingTenant.id),
       },
+      include:{
+        items:true
+      }
     });
     if (!existingOrder) throw new ConflictException('Order not found');
     return existingOrder;
@@ -200,6 +213,8 @@ export class OrderServices {
     );
   }
   async refundOrder(req, id: string, dto: backendDtos.refundDto) {
+    this.ensureStripe();
+    
     const existingOrder = await this.getOrderById(id, req);
     if (!existingOrder.paymentIntentId)
       throw new ConflictException('No payment to refund');
@@ -292,6 +307,8 @@ export class OrderServices {
   // ==========================================
 
   async createPaymentIntent(dto: backendDtos.CreatePaymentIntentDto) {
+    this.ensureStripe();
+    
     // Verify tenant
     const tenant = await this.prisma.tenant.findUnique({
       where: { subdomain: dto.subdomain },
@@ -339,6 +356,8 @@ export class OrderServices {
   }
 
   async confirmOrder(dto: backendDtos.ConfirmOrderDto) {
+    this.ensureStripe();
+    
     // Verify payment intent
     const paymentIntent = await this.stripe.paymentIntents.retrieve(
       dto.paymentIntentId,
@@ -431,6 +450,11 @@ export class OrderServices {
   }
 
   async createCheckoutSession(dto: backendDtos.CreateCheckoutSessionDto) {
+    this.ensureStripe();
+    
+    console.log('[CreateSession] Received DTO with', dto.items.length, 'items');
+    console.log('[CreateSession] DTO items:', JSON.stringify(dto.items, null, 2));
+    
     // Verify tenant
     const tenant = await this.prisma.tenant.findUnique({
       where: { subdomain: dto.subdomain },
@@ -474,15 +498,18 @@ export class OrderServices {
       });
     }
 
+    // Get frontend URL
+    const frontendUrl = this.configService.get<string>('FRONTEND_URL') || 'http://localhost:3000';
+
     // Create Stripe Checkout Session
     const session = await this.stripe.checkout.sessions.create({
-      payment_method_types: ['card'], // Can add more: 'alipay', 'wechat_pay', etc.
+      payment_method_types: ['card'],
       line_items: lineItems,
       mode: 'payment',
 
       // Success/Cancel URLs
-      success_url: `${process.env.FRONTEND_URL}/s/${dto.subdomain}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.FRONTEND_URL}/s/${dto.subdomain}/checkout`,
+      success_url: `${frontendUrl}/s/${dto.subdomain}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${frontendUrl}/s/${dto.subdomain}/checkout`,
 
       // Customer info
       customer_email: dto.email,
@@ -505,17 +532,10 @@ export class OrderServices {
         }),
         items: JSON.stringify(dto.items),
       },
-
-      // Optional: Shipping address collection
-      shipping_address_collection: {
-        allowed_countries: ['US', 'CA', 'GB', 'NP'], // Add your countries
-      },
-
-      // Optional: Automatic tax calculation
-      automatic_tax: {
-        enabled: true, // Requires Stripe Tax setup
-      },
     });
+    
+    console.log('[CreateSession] Stored items in metadata:', JSON.stringify(dto.items));
+    console.log('[CreateSession] Session created:', session.id);
 
     return {
       sessionId: session.id,
@@ -525,21 +545,41 @@ export class OrderServices {
   // apps/api/src/order/order.service.ts
 
   async handleCheckoutCompleted(session: Stripe.Checkout.Session) {
-    const metadata = session.metadata || {};
-    const tenantId = metadata.tenantId;
-    const subdomain = metadata.subdomain;
-    const customerDataStr = metadata.customerData;
-    const itemsStr = metadata.items;
+    try {
+      console.log('[CheckoutCompleted] Processing session:', session.id);
+      
+      const metadata = session.metadata || {};
+      const tenantId = metadata.tenantId;
+      const subdomain = metadata.subdomain;
+      const customerDataStr = metadata.customerData;
+      const itemsStr = metadata.items;
 
-    if (!tenantId || !customerDataStr || !itemsStr) {
-      throw new Error('Missing required metadata in checkout session');
-    }
+      console.log('[CheckoutCompleted] Metadata:', {
+        tenantId,
+        subdomain,
+        hasCustomerData: !!customerDataStr,
+        hasItems: !!itemsStr,
+      });
+      
+      console.log('[CheckoutCompleted] Raw items string:', itemsStr);
 
-    // Parse metadata
-    const customer = JSON.parse(customerDataStr);
-    const orderItems = JSON.parse(itemsStr);
+      if (!tenantId || !customerDataStr || !itemsStr) {
+        console.error('[CheckoutCompleted] Missing required metadata');
+        throw new Error('Missing required metadata in checkout session');
+      }
+
+      // Parse metadata
+      const customer = JSON.parse(customerDataStr);
+      const orderItems = JSON.parse(itemsStr);
+
+      console.log('[CheckoutCompleted] Parsed data:', {
+        customerEmail: customer.email,
+        itemCount: orderItems.length,
+      });
+      console.log('[CheckoutCompleted] Order items structure:', JSON.stringify(orderItems, null, 2));
 
     // Create or get customer
+    console.log('[CheckoutCompleted] Looking for customer:', customer.email);
     let dbCustomer = await this.prisma.customer.findFirst({
       where: {
         email: customer.email,
@@ -548,6 +588,7 @@ export class OrderServices {
     });
 
     if (!dbCustomer) {
+      console.log('[CheckoutCompleted] Creating new customer');
       dbCustomer = await this.prisma.customer.create({
         data: {
           email: customer.email,
@@ -557,9 +598,13 @@ export class OrderServices {
           tenantId,
         },
       });
+      console.log('[CheckoutCompleted] Customer created:', dbCustomer.id);
+    } else {
+      console.log('[CheckoutCompleted] Found existing customer:', dbCustomer.id);
     }
 
     // Create order
+    console.log('[CheckoutCompleted] Creating order...');
     const order = await this.prisma.order.create({
       data: {
         tenantId,
@@ -587,19 +632,34 @@ export class OrderServices {
         customerNotes: customer.customerNotes,
         paidAt: new Date(),
         items: {
-          create: orderItems.map((item: any) => ({
-            productId: item.productId,
-            variantId: item.variantId,
-            quantity: item.quantity,
-            price: item.price,
-            productName: item.productName,
-            variantName: item.variantName,
-          })),
+          create: orderItems.map((item: any) => {
+            const itemData: any = {
+              productId: item.productId,
+              quantity: item.quantity,
+              price: item.price,
+              productName: item.productName,
+            };
+            
+            // Only include variantId if it exists
+            if (item.variantId) {
+              itemData.variantId = item.variantId;
+            }
+            
+            // Only include variantName if it exists
+            if (item.variantName) {
+              itemData.variantName = item.variantName;
+            }
+            
+            return itemData;
+          }),
         },
       },
     });
 
+    console.log('[CheckoutCompleted] Order created:', order.id);
+
     // Deduct inventory
+    console.log('[CheckoutCompleted] Deducting inventory for', orderItems.length, 'items');
     for (const item of orderItems) {
       if (item.variantId) {
         await this.prisma.productVariant.update({
@@ -614,14 +674,25 @@ export class OrderServices {
       }
     }
 
+    console.log('[CheckoutCompleted] Inventory updated successfully');
     // Optional: Send email confirmation
     // await this.emailService.sendOrderConfirmation(order);
 
+    console.log('[CheckoutCompleted] Completed successfully for order:', order.id);
     return order;
+    } catch (error) {
+      console.error('[CheckoutCompleted] Error processing checkout:', error);
+      console.error('[CheckoutCompleted] Error stack:', error.stack);
+      throw error;
+    }
   }
 
   async handleWebhook(rawBody: Buffer, signature: string) {
+    this.ensureStripe();
+    
     let event: Stripe.Event;
+
+    console.log('[Webhook] Processing webhook...');
 
     try {
       // Verify webhook signature
@@ -629,39 +700,50 @@ export class OrderServices {
         'STRIPE_WEBHOOK_SECRET',
       );
       if (!webhookSecret) {
+        console.error('[Webhook] STRIPE_WEBHOOK_SECRET not found in environment');
         throw new Error(
           'STRIPE_WEBHOOK_SECRET is not defined in environment variables',
         );
       }
 
+      console.log('[Webhook] Verifying signature...');
       event = this.stripe.webhooks.constructEvent(
         rawBody,
         signature,
         webhookSecret,
       );
+      console.log('[Webhook] Signature verified. Event type:', event.type);
     } catch (err: any) {
-      console.error('Webhook signature verification failed:', err.message);
+      console.error('[Webhook] Signature verification failed:', err.message);
       throw new Error(`Webhook Error: ${err.message}`);
     }
 
     // Handle the event
-    switch (event.type) {
-      case 'checkout.session.completed':
-        await this.handleCheckoutCompleted(
-          event.data.object as Stripe.Checkout.Session,
-        );
-        break;
+    try {
+      switch (event.type) {
+        case 'checkout.session.completed':
+          console.log('[Webhook] Processing checkout.session.completed');
+          const order = await this.handleCheckoutCompleted(
+            event.data.object as Stripe.Checkout.Session,
+          );
+          console.log('[Webhook] Order created successfully:', order?.id);
+          break;
 
-      case 'payment_intent.succeeded':
-        console.log('Payment succeeded:', event.data.object.id);
-        break;
+        case 'payment_intent.succeeded':
+          console.log('[Webhook] Payment succeeded:', event.data.object.id);
+          break;
 
-      case 'payment_intent.payment_failed':
-        console.log('Payment failed:', event.data.object.id);
-        break;
+        case 'payment_intent.payment_failed':
+          console.log('[Webhook] Payment failed:', event.data.object.id);
+          break;
 
-      default:
-        console.log(`Unhandled event type ${event.type}`);
+        default:
+          console.log(`[Webhook] Unhandled event type: ${event.type}`);
+      }
+    } catch (err: any) {
+      console.error('[Webhook] Error handling event:', err.message);
+      console.error('[Webhook] Stack trace:', err.stack);
+      throw err;
     }
 
     return { received: true };

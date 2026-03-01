@@ -59,6 +59,7 @@ export const getOrderById = createServerFn({ method: 'GET' })
       const response = await api<OrderResponse>(`/order/${data.orderId}`, {
         method: 'GET',
       })
+      console.log("get orderby id",response.data.data)
       return response.data.data
     } catch (error: unknown) {
       if (isAxiosError(error)) {

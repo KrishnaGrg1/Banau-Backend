@@ -461,12 +461,18 @@ importers:
       '@repo/db':
         specifier: workspace:*
         version: link:../db
+      class-transformer:
+        specifier: ^0.5.1
+        version: 0.5.1
       class-validator:
         specifier: ^0.14.3
         version: 0.14.3
       express:
         specifier: ^5.2.1
         version: 5.2.1
+      reflect-metadata:
+        specifier: ^0.2.2
+        version: 0.2.2
       zod:
         specifier: ^3.23.8
         version: 3.25.76
