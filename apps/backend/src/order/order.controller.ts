@@ -130,7 +130,11 @@ export class OrderController {
   async createCheckoutSession(
     @Body() dto: backendDtos.CreateCheckoutSessionDto,
   ) {
-    console.log('[Controller] Received checkout request with', dto.items?.length, 'items');
+    console.log(
+      '[Controller] Received checkout request with',
+      dto.items?.length,
+      'items',
+    );
     console.log('[Controller] DTO items:', JSON.stringify(dto.items, null, 2));
     const session = await this.orderServices.createCheckoutSession(dto);
     return ApiResponseDto.success(session, 'Checkout session created');
@@ -144,7 +148,7 @@ export class OrderController {
     try {
       // Raw body should be available from express.raw() middleware
       const rawBody = req.body;
-      
+
       if (!rawBody) {
         console.error('[Webhook] No raw body found in request');
         throw new BadRequestException('No body found');
