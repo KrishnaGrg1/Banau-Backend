@@ -1,7 +1,6 @@
 import { PrismaService } from './prisma/prisma.service';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
-import { UserModule } from './user/user.module';
 import { TenantModule } from './tenant/tenant.module';
 import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { SubdomainMiddleware } from './common/middleware/subdomain.middleware';
@@ -17,7 +16,6 @@ import { CustomerModule } from './customer/customer.module';
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     AuthModule,
-    UserModule,
     EmailModule,
     AdminModule,
     CloudinaryModule,

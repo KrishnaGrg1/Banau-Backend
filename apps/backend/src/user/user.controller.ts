@@ -1,4 +1,4 @@
-import { Controller, Get, Logger, UseGuards } from '@nestjs/common';
+import { Controller, Get, UseGuards } from '@nestjs/common';
 import { UserServices } from './user.service';
 import { AuthGuard, User, ApiResponseDto } from 'src/common';
 

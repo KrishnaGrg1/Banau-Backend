@@ -8,7 +8,6 @@ import {
   Put,
   Get,
   Query,
-  Logger,
 } from '@nestjs/common';
 import { backendDtos } from '@repo/shared';
 import { AuthServices } from './auth.service';
@@ -58,11 +57,7 @@ export class AuthController {
   @UseGuards(RefreshGuard)
   @Post('refresh')
   async refresh(@Request() req, @Response({ passthrough: true }) res) {
-    Logger.log('refreshing getting hit');
     const data = await this.userServies.refreshToken(req, res);
-    return ApiResponseDto.success(
-      data,
-      'Refresh the token both:accesstoken, refreshToken successfully',
-    );
+    return ApiResponseDto.success(data, 'Tokens refreshed successfully');
   }
 }

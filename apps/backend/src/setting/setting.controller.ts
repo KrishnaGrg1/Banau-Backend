@@ -1,4 +1,3 @@
-// apps/api/src/setting/setting.controller.ts
 import {
   Body,
   Controller,

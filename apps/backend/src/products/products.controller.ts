@@ -3,7 +3,6 @@ import {
   Controller,
   Delete,
   Get,
-  Logger,
   Param,
   Post,
   Put,
@@ -105,7 +104,6 @@ export class ProductController {
     file: { product_image: Express.Multer.File },
   ) {
     const productImage = file?.product_image?.[0];
-    console.log('update product', file);
     const data = await this.productsServices.updateProduct(
       req,
       productId,
