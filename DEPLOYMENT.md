@@ -37,7 +37,35 @@ pnpm --filter @repo/db db:push
 
 ---
 
+
 ## 🎯 Step 2: Deploy Backend (API)
+
+---
+
+## 🚢 Deploying to Render
+
+### Backend Service Setup
+
+1. **Root Directory:**
+   - `apps/backend`
+
+2. **Build Command:**
+   - `cd ../.. && pnpm install --prod=false && pnpm --filter @repo/db build && pnpm --filter @repo/shared build && pnpm turbo run build --filter=backend`
+
+3. **Start Command:**
+   - `pnpm dev`
+
+4. **Node.js Version:**
+   - Ensure your `package.json` has `"engines": { "node": ">=18" }` or set Node version in Render settings.
+
+5. **Environment Variables:**
+   - Same as Vercel (see above)
+
+6. **Troubleshooting:**
+   - If you see `No package found with name 'banau' in workspace`, change `--filter=banau` to `--filter=backend` in your build command.
+   - See [Render Node Version Docs](https://render.com/docs/node-version) for Node.js version issues.
+
+---
 
 ### Via Vercel Dashboard
 
