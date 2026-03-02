@@ -1,4 +1,6 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
+import { useEffect } from 'react'
+import { useCart } from '@/hooks/use-cart'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -15,6 +17,11 @@ export const Route = createFileRoute('/s/$subdomain/checkout/success')({
 
 function CheckoutSuccessPage() {
   const { subdomain } = Route.useParams()
+  const { clearCart } = useCart()
+
+  useEffect(() => {
+    clearCart()
+  }, [])
 
   return (
     <div className="container mx-auto px-4 py-16">

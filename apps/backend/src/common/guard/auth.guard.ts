@@ -8,12 +8,14 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { RequestWithUser } from '../interfaces/request.interface';
+import { hashToken, RedisService } from 'src/redis/redis.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
     private jwtService: JwtService,
     private configService: ConfigService,
+    private redis: RedisService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -25,17 +27,20 @@ export class AuthGuard implements CanActivate {
     }
 
     try {
-      // Verify JWT token using the secret from environment
       const payload = await this.jwtService.verifyAsync(accessToken, {
         secret:
           this.configService.get<string>('JWT_ACCESS_SECRET') ||
           'your-secret-key',
       });
 
-      // Attach user data to request for use in decorators and controllers
+      // Check if token was revoked (e.g. after logout)
+      if (await this.redis.isRevoked(hashToken(accessToken))) {
+        throw new UnauthorizedException('Token has been revoked');
+      }
+
       request.user = { id: payload.sub };
       request.refreshToken = request.cookies.refreshToken;
-      request.accessToken = accessToken; // Store the token for logout operations
+      request.accessToken = accessToken;
     } catch (error) {
       throw new UnauthorizedException('Invalid or expired token');
     }

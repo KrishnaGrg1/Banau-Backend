@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { LoginCustomerDtoSchema } from '@repo/shared'
 import { useCustomerLogin } from '@/hooks/use-customer-auth'
-import { Loader2, AlertCircle, ArrowLeft } from 'lucide-react'
+import { Loader2, AlertCircle } from 'lucide-react'
 
 export const Route = createFileRoute('/s/$subdomain/account/login')({
   component: LoginPageComponent,
@@ -26,7 +26,7 @@ function LoginPageComponent() {
         {
           onSuccess: () => {
             navigate({
-              to: '/s/$subdomain/account/profile',
+              to: '/s/$subdomain/account/',
               params: { subdomain },
             })
           },
@@ -39,13 +39,6 @@ function LoginPageComponent() {
     <div className="flex items-center justify-center py-12 px-4">
       <div className="w-full max-w-md space-y-8">
         <div className="space-y-1">
-          <div className="flex items-center gap-2 mb-4">
-            <Button variant="ghost" size="icon" asChild>
-              <Link to="/s/$subdomain" params={{ subdomain }}>
-                <ArrowLeft className="h-4 w-4" />
-              </Link>
-            </Button>
-          </div>
           <h1 className="text-2xl font-bold">Welcome back</h1>
           <p className="text-sm">
             Enter your credentials to access your account

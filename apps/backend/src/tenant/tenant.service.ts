@@ -6,10 +6,14 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { backendDtos } from '@repo/shared';
+import { CacheKey, RedisService, TTL } from 'src/redis/redis.service';
 
 @Injectable()
 export class TenantService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private redis: RedisService,
+  ) {}
 
   async createTenant(req, data: backendDtos.CreateTenantDto) {
     const existingOwner = await this.prisma.tenant.findFirst({
@@ -52,6 +56,10 @@ export class TenantService {
   }
 
   async getTenantDetailsBySubdomain(subdomain: string) {
+    const cacheKey = CacheKey.storeTenant(subdomain);
+    const cached = await this.redis.get(cacheKey);
+    if (cached) return cached;
+
     const existingTenant = await this.prisma.tenant.findUnique({
       where: { subdomain },
     });
@@ -79,12 +87,14 @@ export class TenantService {
         },
       }),
     ]);
-    return {
+    const result = {
       existingTenant,
       existingSetting,
       logo,
       favicon,
     };
+    await this.redis.set(cacheKey, result, TTL.STORE_TENANT);
+    return result;
   }
 
   async updateTenant(req, data: backendDtos.UpdateTenantDto) {
@@ -119,6 +129,12 @@ export class TenantService {
       },
     });
 
+    // Invalidate storefront cache for old subdomain (and new, if changed)
+    this.redis.del(CacheKey.storeTenant(existingTenant.subdomain)).catch(() => {});
+    if (data.subdomain && data.subdomain !== existingTenant.subdomain) {
+      this.redis.del(CacheKey.storeTenant(data.subdomain)).catch(() => {});
+    }
+
     return tenant;
   }
 
@@ -135,5 +151,6 @@ export class TenantService {
         ownerId: String(req.user.id),
       },
     });
+    this.redis.del(CacheKey.storeTenant(existingTenant.subdomain)).catch(() => {});
   }
 }

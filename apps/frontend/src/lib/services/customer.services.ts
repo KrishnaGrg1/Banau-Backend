@@ -1,7 +1,37 @@
-import { LoginCustomerDtoSchema, RegisterCustomerDtoSchema } from '@repo/shared'
+import { LoginCustomerDtoSchema, OrdersListResponse, paginationDtoSchema, RegisterCustomerDtoSchema } from '@repo/shared'
 import { api } from '../axios'
 import { createServerFn } from '@tanstack/react-start'
 import { useAppSession } from '../session'
+import { isAxiosError } from 'axios'
+
+// Get my profile
+export const getMyProfile = createServerFn({ method: 'GET' }).handler(
+  async () => {
+    try {
+      const response = await api<any>('/customers/me', { method: 'GET' })
+      return response.data
+    } catch (error: unknown) {
+      const err = error as Error
+      throw new Error(err.message || 'Failed to get profile')
+    }
+  },
+)
+
+// Update my profile
+export const updateMyProfile = createServerFn({ method: 'POST' })
+  .inputValidator((data: unknown) => data as Record<string, any>)
+  .handler(async ({ data }) => {
+    try {
+      const response = await api<any>('/customers/me', {
+        method: 'PUT',
+        data,
+      })
+      return response.data
+    } catch (error: unknown) {
+      const err = error as Error
+      throw new Error(err.message || 'Failed to update profile')
+    }
+  })
 
 // Customer login - calls /customers/login
 export const customerLogin = createServerFn({ method: 'POST' })
@@ -60,3 +90,25 @@ export const customerLogout = createServerFn({ method: 'POST' }).handler(
     }
   },
 )
+
+
+export const getCustomerOrders = createServerFn({ method: 'GET' })
+  .inputValidator((data) => paginationDtoSchema.parse(data))
+  .handler(async ({ data }) => {
+    try {
+      const response = await api<OrdersListResponse>('/customers/me/orders', {
+        method: 'GET',
+        params: data,
+      })
+      return response.data
+    } catch (error: unknown) {
+      if (isAxiosError(error)) {
+        console.error(
+          '[getMyOrders] error:',
+          JSON.stringify(error.response?.data, null, 2),
+        )
+      }
+      const err = error as Error
+      throw new Error(err.message || 'Failed to retrieve your orders')
+    }
+  })

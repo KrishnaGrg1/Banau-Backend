@@ -4,10 +4,14 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { CacheKey, RedisService, TTL } from 'src/redis/redis.service';
 
 @Injectable()
 export class PublicProductService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly redis: RedisService,
+  ) {}
 
   // Backend — extend filters
   async getPublicProducts(
@@ -21,6 +25,10 @@ export class PublicProductService {
       sortBy?: 'newest' | 'oldest' | 'price_asc' | 'price_desc';
     },
   ) {
+    const cacheKey = CacheKey.storeProducts(subdomain, filters);
+    const cached = await this.redis.get(cacheKey);
+    if (cached) return cached;
+
     const tenant = await this.prisma.tenant.findUnique({
       where: { subdomain },
     });
@@ -80,7 +88,7 @@ export class PublicProductService {
       }),
     ]);
 
-    return {
+    const result = {
       products,
       pagination: {
         page: filters.page,
@@ -89,12 +97,23 @@ export class PublicProductService {
         pages: Math.ceil(total / filters.limit),
       },
     };
+    await this.redis.set(cacheKey, result, TTL.STORE_PRODUCTS);
+    return result;
   }
 
   async searchProducts(
     subdomain: string,
     options: { query: string; page: number; limit: number },
   ) {
+    const cacheKey = CacheKey.storeSearch(
+      subdomain,
+      options.query,
+      options.page,
+      options.limit,
+    );
+    const cached = await this.redis.get(cacheKey);
+    if (cached) return cached;
+
     const tenant = await this.prisma.tenant.findUnique({
       where: { subdomain },
     });
@@ -135,7 +154,7 @@ export class PublicProductService {
       }),
     ]);
 
-    return {
+    const result = {
       products,
       query: options.query,
       pagination: {
@@ -145,9 +164,15 @@ export class PublicProductService {
         pages: Math.ceil(total / options.limit),
       },
     };
+    await this.redis.set(cacheKey, result, TTL.SEARCH);
+    return result;
   }
 
   async getProductBySlug(subdomain: string, slug: string) {
+    const cacheKey = CacheKey.storeProduct(subdomain, slug);
+    const cached = await this.redis.get(cacheKey);
+    if (cached) return cached;
+
     const tenant = await this.prisma.tenant.findUnique({
       where: { subdomain },
     });
@@ -172,6 +197,7 @@ export class PublicProductService {
       throw new NotFoundException('Product not found');
     }
 
+    await this.redis.set(cacheKey, product, TTL.STORE_PRODUCT);
     return product;
   }
 }

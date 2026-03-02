@@ -8,6 +8,7 @@ import { AssetType } from '@repo/db/dist/generated/prisma/enums';
 import { backendDtos, BulkImportResult } from '@repo/shared';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { RedisService } from 'src/redis/redis.service';
 import * as xlsx from 'xlsx';
 import * as Papa from 'papaparse';
 
@@ -16,7 +17,22 @@ export class ProductServices {
   constructor(
     private readonly prisma: PrismaService,
     private readonly cloudinaryServices: CloudinaryService,
+    private readonly redis: RedisService,
   ) {}
+
+  private async invalidateBySub(req: any): Promise<void> {
+    const tenant = await this.prisma.tenant.findUnique({
+      where: { ownerId: String(req.user.id) },
+      select: { subdomain: true },
+    });
+    if (tenant?.subdomain) {
+      await Promise.all([
+        this.redis.invalidateByPrefix(`store:products:${tenant.subdomain}:`),
+        this.redis.invalidateByPrefix(`store:search:${tenant.subdomain}:`),
+        this.redis.invalidateByPrefix(`store:product:${tenant.subdomain}:`),
+      ]);
+    }
+  }
   private async verifyProductOwnership(req: any, productId: string) {
     const tenant = await this.prisma.tenant.findUnique({
       where: { ownerId: String(req.user.id) },
@@ -122,7 +138,7 @@ export class ProductServices {
       );
       Logger.log('upload image', uploadImage);
     }
-    return productToDto(
+    const created = productToDto(
       await this.prisma.$transaction(async (tx) => {
         let imageId: string | null = null;
         if (uploadImage) {
@@ -148,6 +164,8 @@ export class ProductServices {
         });
       }),
     );
+    this.invalidateBySub(req).catch(() => {});
+    return created;
   }
 
   async updateProduct(
@@ -189,7 +207,7 @@ export class ProductServices {
         `tenants/${tenant.id}/products/`,
       );
     }
-    return productToDto(
+    const updated = productToDto(
       await this.prisma.$transaction(async (tx) => {
         // If new image uploaded, update or create asset
         if (uploadImage) {
@@ -234,6 +252,8 @@ export class ProductServices {
         });
       }),
     );
+    this.invalidateBySub(req).catch(() => {});
+    return updated;
   }
   async deleteProductByid(req, productId: string) {
     const product = await this.verifyProductOwnership(req, productId);
@@ -248,6 +268,7 @@ export class ProductServices {
         id: product.id.toString(),
       },
     });
+    this.invalidateBySub(req).catch(() => {});
   }
   async bulkImport(req, file: { file: Express.Multer.File }) {
     const tenant = await this.prisma.tenant.findUnique({
@@ -427,6 +448,7 @@ export class ProductServices {
       },
     });
 
+    this.invalidateBySub(req).catch(() => {});
     return variant;
   }
 
@@ -449,7 +471,7 @@ export class ProductServices {
     }
 
     // Update variant
-    return await this.prisma.productVariant.update({
+    const updatedVariant = await this.prisma.productVariant.update({
       where: { id: variantId },
       data: {
         name: dto.name,
@@ -466,6 +488,8 @@ export class ProductServices {
         option3Value: dto.option3Value,
       },
     });
+    this.invalidateBySub(req).catch(() => {});
+    return updatedVariant;
   }
 
   async deleteVariant(req: any, productId: string, variantId: string) {
@@ -485,6 +509,7 @@ export class ProductServices {
     await this.prisma.productVariant.delete({
       where: { id: variantId },
     });
+    this.invalidateBySub(req).catch(() => {});
   }
 
   // ==========================================
@@ -499,6 +524,7 @@ export class ProductServices {
     // Verify ownership
     const product = await this.verifyProductOwnership(req, productId);
 
+    let stockResult: any;
     if (dto.variantId) {
       // Update variant stock
       const variant = await this.prisma.productVariant.findFirst({
@@ -509,7 +535,7 @@ export class ProductServices {
         throw new NotFoundException('Variant not found');
       }
 
-      return await this.prisma.productVariant.update({
+      stockResult = await this.prisma.productVariant.update({
         where: { id: dto.variantId },
         data: {
           quantity:
@@ -520,7 +546,7 @@ export class ProductServices {
       });
     } else {
       // Update product stock
-      return await this.prisma.product.update({
+      stockResult = await this.prisma.product.update({
         where: { id: productId },
         data: {
           quantity:
@@ -530,6 +556,8 @@ export class ProductServices {
         },
       });
     }
+    this.invalidateBySub(req).catch(() => {});
+    return stockResult;
   }
 
   async getLowStockProducts(req: any, threshold: number = 10) {

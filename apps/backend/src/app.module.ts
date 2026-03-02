@@ -1,5 +1,6 @@
 import { PrismaService } from './prisma/prisma.service';
 import { ConfigModule } from '@nestjs/config';
+import { RedisModule } from './redis/redis.module';
 import { AuthModule } from './auth/auth.module';
 import { TenantModule } from './tenant/tenant.module';
 import { MiddlewareConsumer, Module } from '@nestjs/common';
@@ -15,6 +16,7 @@ import { CustomerModule } from './customer/customer.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    RedisModule,
     AuthModule,
     EmailModule,
     AdminModule,

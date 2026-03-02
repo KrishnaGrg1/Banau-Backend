@@ -1,16 +1,18 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useNavigate } from '@tanstack/react-router'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import {
   customerLogin,
   customerRegister,
   customerLogout,
+  getMyProfile,
+  updateMyProfile,
+  getCustomerOrders,
 } from '@/lib/services/customer.services'
 import { useCartStore } from '@/lib/stores/cart.store'
+import { paginationDto } from '@repo/shared'
 
 export function useCustomerLogin() {
   const queryClient = useQueryClient()
-  const navigate = useNavigate()
 
   return useMutation({
     mutationFn: async ({
@@ -21,7 +23,8 @@ export function useCustomerLogin() {
       return customerLogin({ data })
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['customer'] })
+      queryClient.invalidateQueries({ queryKey: ['my-profile'] })
+      queryClient.invalidateQueries({ queryKey: ['my-orders'] })
       toast.success('Login successful!')
     },
     onError: (err: Error) => {
@@ -31,7 +34,6 @@ export function useCustomerLogin() {
 }
 
 export function useCustomerRegister() {
-  const navigate = useNavigate()
   const queryClient = useQueryClient()
 
   return useMutation({
@@ -39,7 +41,8 @@ export function useCustomerRegister() {
       return customerRegister({ data })
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['customer'] })
+      queryClient.invalidateQueries({ queryKey: ['my-profile'] })
+      queryClient.invalidateQueries({ queryKey: ['my-orders'] })
       toast.success('Registration successful!')
     },
     onError: (err: Error) => {
@@ -50,7 +53,6 @@ export function useCustomerRegister() {
 
 export function useCustomerLogout() {
   const queryClient = useQueryClient()
-  const navigate = useNavigate()
   const clearCart = useCartStore((state) => state.clearCart)
   const setCustomerId = useCartStore((state) => state.setCustomerId)
 
@@ -68,5 +70,37 @@ export function useCustomerLogout() {
       setCustomerId(null)
       toast.error(error.message || 'Logout failed')
     },
+  })
+}
+
+export function useMyProfile() {
+  return useQuery({
+    queryKey: ['my-profile'],
+    queryFn: () => getMyProfile(),
+    retry: false,
+  })
+}
+
+export function useUpdateMyProfile() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (data: Record<string, any>) => updateMyProfile({ data }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['my-profile'] })
+      toast.success('Profile updated successfully')
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || 'Failed to update profile')
+    },
+  })
+}
+
+
+export function useCustomerOrders(params: paginationDto = {}) {
+  return useQuery({
+    queryKey: ['my-orders', params],
+    queryFn: () => getCustomerOrders({ data: params }),
+    select: (data) => data, // Return full response with data.orders structure
   })
 }

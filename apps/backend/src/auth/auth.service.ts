@@ -11,6 +11,7 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { User } from '@repo/db/dist/generated/prisma/client';
 import { EmailService } from 'src/email/email.service';
+import { hashToken, RedisService } from 'src/redis/redis.service';
 
 @Injectable()
 export class AuthServices {
@@ -19,6 +20,7 @@ export class AuthServices {
     private jwtService: JwtService,
     private configService: ConfigService,
     private emailService: EmailService,
+    private redis: RedisService,
   ) {}
 
   private async generateToken(user: Partial<User>) {
@@ -137,8 +139,6 @@ export class AuthServices {
     });
     // Remove password from response
     const { password, ...userWithoutPassword } = existingUser;
-    Logger.log('accessToken', accessToken);
-    Logger.log('refreshToken', refreshToken);
     return { user: userWithoutPassword, accessToken, refreshToken };
   }
 
@@ -259,10 +259,24 @@ export class AuthServices {
       throw new UnauthorizedException('Invalid refresh token');
     }
 
-    // ✅ delete ONLY the matched refresh token
+    // Delete the matched refresh token
     await this.prisma.token.delete({
       where: { id: matchedTokenId },
     });
+
+    // Revoke the access token so it can't be used after logout
+    if (req.accessToken) {
+      const decoded = this.jwtService.decode(req.accessToken) as {
+        exp?: number;
+      } | null;
+      const remaining = Math.max(
+        (decoded?.exp ?? 0) - Math.floor(Date.now() / 1000),
+        0,
+      );
+      if (remaining > 0) {
+        this.redis.revoke(hashToken(req.accessToken), remaining).catch(() => {});
+      }
+    }
 
     res.clearCookie('refreshToken');
     return { message: 'Logged out successfully' };
@@ -318,7 +332,6 @@ export class AuthServices {
         this.configService.get('NODE_ENV') === 'production' ? 'none' : 'lax',
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days in milliseconds
     });
-    Logger.log('Refreshed token created again');
     return { accessToken, refreshToken, existingUser };
   }
 }

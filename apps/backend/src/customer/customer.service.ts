@@ -540,8 +540,6 @@ export class CustomerServices {
     const { password, ...userWithoutPassword } = existingUser;
 
     Logger.log('Customer logged in');
-    Logger.log('accessToken', accessToken);
-    Logger.log('refreshToken', refreshToken);
 
     return {
       user: userWithoutPassword,

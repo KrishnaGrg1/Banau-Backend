@@ -63,6 +63,7 @@ import { Route as AdminSettingFeaturesRouteImport } from './routes/admin/setting
 import { Route as AdminAnalyticsRevenueRouteImport } from './routes/admin/analytics/revenue'
 import { Route as AdminAnalyticsGrowthRouteImport } from './routes/admin/analytics/growth'
 import { Route as authResetPasswordTokenRouteImport } from './routes/(auth)/reset-password.$token'
+import { Route as SSubdomainAccountRouteRouteImport } from './routes/s/$subdomain/account/route'
 import { Route as SSubdomainProductsIndexRouteImport } from './routes/s/$subdomain/products/index'
 import { Route as SSubdomainCheckoutIndexRouteImport } from './routes/s/$subdomain/checkout/index'
 import { Route as SSubdomainAccountIndexRouteImport } from './routes/s/$subdomain/account/index'
@@ -375,6 +376,11 @@ const authResetPasswordTokenRoute = authResetPasswordTokenRouteImport.update({
   path: '/reset-password/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SSubdomainAccountRouteRoute = SSubdomainAccountRouteRouteImport.update({
+  id: '/account',
+  path: '/account',
+  getParentRoute: () => SSubdomainRouteRoute,
+} as any)
 const SSubdomainProductsIndexRoute = SSubdomainProductsIndexRouteImport.update({
   id: '/products/',
   path: '/products/',
@@ -386,9 +392,9 @@ const SSubdomainCheckoutIndexRoute = SSubdomainCheckoutIndexRouteImport.update({
   getParentRoute: () => SSubdomainRouteRoute,
 } as any)
 const SSubdomainAccountIndexRoute = SSubdomainAccountIndexRouteImport.update({
-  id: '/account/',
-  path: '/account/',
-  getParentRoute: () => SSubdomainRouteRoute,
+  id: '/',
+  path: '/',
+  getParentRoute: () => SSubdomainAccountRouteRoute,
 } as any)
 const DashboardProductsIdIndexRoute =
   DashboardProductsIdIndexRouteImport.update({
@@ -442,20 +448,20 @@ const SSubdomainCategoriesSlugRoute =
   } as any)
 const SSubdomainAccountRegisterRoute =
   SSubdomainAccountRegisterRouteImport.update({
-    id: '/account/register',
-    path: '/account/register',
-    getParentRoute: () => SSubdomainRouteRoute,
+    id: '/register',
+    path: '/register',
+    getParentRoute: () => SSubdomainAccountRouteRoute,
   } as any)
 const SSubdomainAccountProfileRoute =
   SSubdomainAccountProfileRouteImport.update({
-    id: '/account/profile',
-    path: '/account/profile',
-    getParentRoute: () => SSubdomainRouteRoute,
+    id: '/profile',
+    path: '/profile',
+    getParentRoute: () => SSubdomainAccountRouteRoute,
   } as any)
 const SSubdomainAccountLoginRoute = SSubdomainAccountLoginRouteImport.update({
-  id: '/account/login',
-  path: '/account/login',
-  getParentRoute: () => SSubdomainRouteRoute,
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => SSubdomainAccountRouteRoute,
 } as any)
 const DashboardStaffIdEditRoute = DashboardStaffIdEditRouteImport.update({
   id: '/staff/$id/edit',
@@ -496,33 +502,33 @@ const AdminTenantsIdEditRoute = AdminTenantsIdEditRouteImport.update({
 } as any)
 const SSubdomainAccountOrdersIndexRoute =
   SSubdomainAccountOrdersIndexRouteImport.update({
-    id: '/account/orders/',
-    path: '/account/orders/',
-    getParentRoute: () => SSubdomainRouteRoute,
+    id: '/orders/',
+    path: '/orders/',
+    getParentRoute: () => SSubdomainAccountRouteRoute,
   } as any)
 const SSubdomainAccountAddressesIndexRoute =
   SSubdomainAccountAddressesIndexRouteImport.update({
-    id: '/account/addresses/',
-    path: '/account/addresses/',
-    getParentRoute: () => SSubdomainRouteRoute,
+    id: '/addresses/',
+    path: '/addresses/',
+    getParentRoute: () => SSubdomainAccountRouteRoute,
   } as any)
 const SSubdomainAccountOrdersIdRoute =
   SSubdomainAccountOrdersIdRouteImport.update({
-    id: '/account/orders/$id',
-    path: '/account/orders/$id',
-    getParentRoute: () => SSubdomainRouteRoute,
+    id: '/orders/$id',
+    path: '/orders/$id',
+    getParentRoute: () => SSubdomainAccountRouteRoute,
   } as any)
 const SSubdomainAccountAddressesNewRoute =
   SSubdomainAccountAddressesNewRouteImport.update({
-    id: '/account/addresses/new',
-    path: '/account/addresses/new',
-    getParentRoute: () => SSubdomainRouteRoute,
+    id: '/addresses/new',
+    path: '/addresses/new',
+    getParentRoute: () => SSubdomainAccountRouteRoute,
   } as any)
 const SSubdomainAccountAddressesIdEditRoute =
   SSubdomainAccountAddressesIdEditRouteImport.update({
-    id: '/account/addresses/$id/edit',
-    path: '/account/addresses/$id/edit',
-    getParentRoute: () => SSubdomainRouteRoute,
+    id: '/addresses/$id/edit',
+    path: '/addresses/$id/edit',
+    getParentRoute: () => SSubdomainAccountRouteRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -536,6 +542,7 @@ export interface FileRoutesByFullPath {
   '/verify': typeof authVerifyRoute
   '/admin/': typeof AdminIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/s/$subdomain/account': typeof SSubdomainAccountRouteRouteWithChildren
   '/reset-password/$token': typeof authResetPasswordTokenRoute
   '/admin/analytics/growth': typeof AdminAnalyticsGrowthRoute
   '/admin/analytics/revenue': typeof AdminAnalyticsRevenueRoute
@@ -700,6 +707,7 @@ export interface FileRoutesById {
   '/(auth)/verify': typeof authVerifyRoute
   '/admin/': typeof AdminIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/s/$subdomain/account': typeof SSubdomainAccountRouteRouteWithChildren
   '/(auth)/reset-password/$token': typeof authResetPasswordTokenRoute
   '/admin/analytics/growth': typeof AdminAnalyticsGrowthRoute
   '/admin/analytics/revenue': typeof AdminAnalyticsRevenueRoute
@@ -785,6 +793,7 @@ export interface FileRouteTypes {
     | '/verify'
     | '/admin/'
     | '/dashboard/'
+    | '/s/$subdomain/account'
     | '/reset-password/$token'
     | '/admin/analytics/growth'
     | '/admin/analytics/revenue'
@@ -948,6 +957,7 @@ export interface FileRouteTypes {
     | '/(auth)/verify'
     | '/admin/'
     | '/dashboard/'
+    | '/s/$subdomain/account'
     | '/(auth)/reset-password/$token'
     | '/admin/analytics/growth'
     | '/admin/analytics/revenue'
@@ -1413,6 +1423,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authResetPasswordTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/s/$subdomain/account': {
+      id: '/s/$subdomain/account'
+      path: '/account'
+      fullPath: '/s/$subdomain/account'
+      preLoaderRoute: typeof SSubdomainAccountRouteRouteImport
+      parentRoute: typeof SSubdomainRouteRoute
+    }
     '/s/$subdomain/products/': {
       id: '/s/$subdomain/products/'
       path: '/products'
@@ -1429,10 +1446,10 @@ declare module '@tanstack/react-router' {
     }
     '/s/$subdomain/account/': {
       id: '/s/$subdomain/account/'
-      path: '/account'
+      path: '/'
       fullPath: '/s/$subdomain/account/'
       preLoaderRoute: typeof SSubdomainAccountIndexRouteImport
-      parentRoute: typeof SSubdomainRouteRoute
+      parentRoute: typeof SSubdomainAccountRouteRoute
     }
     '/dashboard/products/$id/': {
       id: '/dashboard/products/$id/'
@@ -1499,24 +1516,24 @@ declare module '@tanstack/react-router' {
     }
     '/s/$subdomain/account/register': {
       id: '/s/$subdomain/account/register'
-      path: '/account/register'
+      path: '/register'
       fullPath: '/s/$subdomain/account/register'
       preLoaderRoute: typeof SSubdomainAccountRegisterRouteImport
-      parentRoute: typeof SSubdomainRouteRoute
+      parentRoute: typeof SSubdomainAccountRouteRoute
     }
     '/s/$subdomain/account/profile': {
       id: '/s/$subdomain/account/profile'
-      path: '/account/profile'
+      path: '/profile'
       fullPath: '/s/$subdomain/account/profile'
       preLoaderRoute: typeof SSubdomainAccountProfileRouteImport
-      parentRoute: typeof SSubdomainRouteRoute
+      parentRoute: typeof SSubdomainAccountRouteRoute
     }
     '/s/$subdomain/account/login': {
       id: '/s/$subdomain/account/login'
-      path: '/account/login'
+      path: '/login'
       fullPath: '/s/$subdomain/account/login'
       preLoaderRoute: typeof SSubdomainAccountLoginRouteImport
-      parentRoute: typeof SSubdomainRouteRoute
+      parentRoute: typeof SSubdomainAccountRouteRoute
     }
     '/dashboard/staff/$id/edit': {
       id: '/dashboard/staff/$id/edit'
@@ -1569,38 +1586,38 @@ declare module '@tanstack/react-router' {
     }
     '/s/$subdomain/account/orders/': {
       id: '/s/$subdomain/account/orders/'
-      path: '/account/orders'
+      path: '/orders'
       fullPath: '/s/$subdomain/account/orders/'
       preLoaderRoute: typeof SSubdomainAccountOrdersIndexRouteImport
-      parentRoute: typeof SSubdomainRouteRoute
+      parentRoute: typeof SSubdomainAccountRouteRoute
     }
     '/s/$subdomain/account/addresses/': {
       id: '/s/$subdomain/account/addresses/'
-      path: '/account/addresses'
+      path: '/addresses'
       fullPath: '/s/$subdomain/account/addresses/'
       preLoaderRoute: typeof SSubdomainAccountAddressesIndexRouteImport
-      parentRoute: typeof SSubdomainRouteRoute
+      parentRoute: typeof SSubdomainAccountRouteRoute
     }
     '/s/$subdomain/account/orders/$id': {
       id: '/s/$subdomain/account/orders/$id'
-      path: '/account/orders/$id'
+      path: '/orders/$id'
       fullPath: '/s/$subdomain/account/orders/$id'
       preLoaderRoute: typeof SSubdomainAccountOrdersIdRouteImport
-      parentRoute: typeof SSubdomainRouteRoute
+      parentRoute: typeof SSubdomainAccountRouteRoute
     }
     '/s/$subdomain/account/addresses/new': {
       id: '/s/$subdomain/account/addresses/new'
-      path: '/account/addresses/new'
+      path: '/addresses/new'
       fullPath: '/s/$subdomain/account/addresses/new'
       preLoaderRoute: typeof SSubdomainAccountAddressesNewRouteImport
-      parentRoute: typeof SSubdomainRouteRoute
+      parentRoute: typeof SSubdomainAccountRouteRoute
     }
     '/s/$subdomain/account/addresses/$id/edit': {
       id: '/s/$subdomain/account/addresses/$id/edit'
-      path: '/account/addresses/$id/edit'
+      path: '/addresses/$id/edit'
       fullPath: '/s/$subdomain/account/addresses/$id/edit'
       preLoaderRoute: typeof SSubdomainAccountAddressesIdEditRouteImport
-      parentRoute: typeof SSubdomainRouteRoute
+      parentRoute: typeof SSubdomainAccountRouteRoute
     }
   }
 }
@@ -1729,22 +1746,11 @@ const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(
   DashboardRouteRouteChildren,
 )
 
-interface SSubdomainRouteRouteChildren {
-  SSubdomainAboutRoute: typeof SSubdomainAboutRoute
-  SSubdomainCartRoute: typeof SSubdomainCartRoute
-  SSubdomainContactRoute: typeof SSubdomainContactRoute
-  SSubdomainSearchRoute: typeof SSubdomainSearchRoute
-  SSubdomainIndexRoute: typeof SSubdomainIndexRoute
+interface SSubdomainAccountRouteRouteChildren {
   SSubdomainAccountLoginRoute: typeof SSubdomainAccountLoginRoute
   SSubdomainAccountProfileRoute: typeof SSubdomainAccountProfileRoute
   SSubdomainAccountRegisterRoute: typeof SSubdomainAccountRegisterRoute
-  SSubdomainCategoriesSlugRoute: typeof SSubdomainCategoriesSlugRoute
-  SSubdomainCheckoutFailedRoute: typeof SSubdomainCheckoutFailedRoute
-  SSubdomainCheckoutSuccessRoute: typeof SSubdomainCheckoutSuccessRoute
-  SSubdomainProductsSlugRoute: typeof SSubdomainProductsSlugRoute
   SSubdomainAccountIndexRoute: typeof SSubdomainAccountIndexRoute
-  SSubdomainCheckoutIndexRoute: typeof SSubdomainCheckoutIndexRoute
-  SSubdomainProductsIndexRoute: typeof SSubdomainProductsIndexRoute
   SSubdomainAccountAddressesNewRoute: typeof SSubdomainAccountAddressesNewRoute
   SSubdomainAccountOrdersIdRoute: typeof SSubdomainAccountOrdersIdRoute
   SSubdomainAccountAddressesIndexRoute: typeof SSubdomainAccountAddressesIndexRoute
@@ -1752,27 +1758,53 @@ interface SSubdomainRouteRouteChildren {
   SSubdomainAccountAddressesIdEditRoute: typeof SSubdomainAccountAddressesIdEditRoute
 }
 
+const SSubdomainAccountRouteRouteChildren: SSubdomainAccountRouteRouteChildren =
+  {
+    SSubdomainAccountLoginRoute: SSubdomainAccountLoginRoute,
+    SSubdomainAccountProfileRoute: SSubdomainAccountProfileRoute,
+    SSubdomainAccountRegisterRoute: SSubdomainAccountRegisterRoute,
+    SSubdomainAccountIndexRoute: SSubdomainAccountIndexRoute,
+    SSubdomainAccountAddressesNewRoute: SSubdomainAccountAddressesNewRoute,
+    SSubdomainAccountOrdersIdRoute: SSubdomainAccountOrdersIdRoute,
+    SSubdomainAccountAddressesIndexRoute: SSubdomainAccountAddressesIndexRoute,
+    SSubdomainAccountOrdersIndexRoute: SSubdomainAccountOrdersIndexRoute,
+    SSubdomainAccountAddressesIdEditRoute:
+      SSubdomainAccountAddressesIdEditRoute,
+  }
+
+const SSubdomainAccountRouteRouteWithChildren =
+  SSubdomainAccountRouteRoute._addFileChildren(
+    SSubdomainAccountRouteRouteChildren,
+  )
+
+interface SSubdomainRouteRouteChildren {
+  SSubdomainAccountRouteRoute: typeof SSubdomainAccountRouteRouteWithChildren
+  SSubdomainAboutRoute: typeof SSubdomainAboutRoute
+  SSubdomainCartRoute: typeof SSubdomainCartRoute
+  SSubdomainContactRoute: typeof SSubdomainContactRoute
+  SSubdomainSearchRoute: typeof SSubdomainSearchRoute
+  SSubdomainIndexRoute: typeof SSubdomainIndexRoute
+  SSubdomainCategoriesSlugRoute: typeof SSubdomainCategoriesSlugRoute
+  SSubdomainCheckoutFailedRoute: typeof SSubdomainCheckoutFailedRoute
+  SSubdomainCheckoutSuccessRoute: typeof SSubdomainCheckoutSuccessRoute
+  SSubdomainProductsSlugRoute: typeof SSubdomainProductsSlugRoute
+  SSubdomainCheckoutIndexRoute: typeof SSubdomainCheckoutIndexRoute
+  SSubdomainProductsIndexRoute: typeof SSubdomainProductsIndexRoute
+}
+
 const SSubdomainRouteRouteChildren: SSubdomainRouteRouteChildren = {
+  SSubdomainAccountRouteRoute: SSubdomainAccountRouteRouteWithChildren,
   SSubdomainAboutRoute: SSubdomainAboutRoute,
   SSubdomainCartRoute: SSubdomainCartRoute,
   SSubdomainContactRoute: SSubdomainContactRoute,
   SSubdomainSearchRoute: SSubdomainSearchRoute,
   SSubdomainIndexRoute: SSubdomainIndexRoute,
-  SSubdomainAccountLoginRoute: SSubdomainAccountLoginRoute,
-  SSubdomainAccountProfileRoute: SSubdomainAccountProfileRoute,
-  SSubdomainAccountRegisterRoute: SSubdomainAccountRegisterRoute,
   SSubdomainCategoriesSlugRoute: SSubdomainCategoriesSlugRoute,
   SSubdomainCheckoutFailedRoute: SSubdomainCheckoutFailedRoute,
   SSubdomainCheckoutSuccessRoute: SSubdomainCheckoutSuccessRoute,
   SSubdomainProductsSlugRoute: SSubdomainProductsSlugRoute,
-  SSubdomainAccountIndexRoute: SSubdomainAccountIndexRoute,
   SSubdomainCheckoutIndexRoute: SSubdomainCheckoutIndexRoute,
   SSubdomainProductsIndexRoute: SSubdomainProductsIndexRoute,
-  SSubdomainAccountAddressesNewRoute: SSubdomainAccountAddressesNewRoute,
-  SSubdomainAccountOrdersIdRoute: SSubdomainAccountOrdersIdRoute,
-  SSubdomainAccountAddressesIndexRoute: SSubdomainAccountAddressesIndexRoute,
-  SSubdomainAccountOrdersIndexRoute: SSubdomainAccountOrdersIndexRoute,
-  SSubdomainAccountAddressesIdEditRoute: SSubdomainAccountAddressesIdEditRoute,
 }
 
 const SSubdomainRouteRouteWithChildren = SSubdomainRouteRoute._addFileChildren(

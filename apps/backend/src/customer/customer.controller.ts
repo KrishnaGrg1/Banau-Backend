@@ -48,6 +48,37 @@ export class CustomerController {
     res.send(buffer);
   }
 
+  // ── Customer self-service routes (must be before :id to avoid shadowing) ──
+
+  @UseGuards(AuthGuard)
+  @Get('me')
+  async getMyProfile(@Request() req) {
+    const customer = await this.customerServices.getMyProfile(req);
+    return ApiResponseDto.success(customer, 'Profile retrieved');
+  }
+
+  @UseGuards(AuthGuard)
+  @Put('me')
+  async updateMyProfile(
+    @Request() req,
+    @Body() dto: backendDtos.UpdateCustomerDto,
+  ) {
+    const customer = await this.customerServices.updateMyProfile(req, dto);
+    return ApiResponseDto.success(customer, 'Profile updated');
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('me/orders')
+  async getMyOrders(
+    @Request() req,
+    @Query() pagination: backendDtos.PaginationDto,
+  ) {
+    const orders = await this.customerServices.getMyOrders(req, pagination);
+    return ApiResponseDto.success(orders, 'Your orders retrieved');
+  }
+
+  // ── Admin / tenant routes ──
+
   @UseGuards(AuthGuard)
   @Get(':id')
   async getCustomerById(
@@ -99,33 +130,6 @@ export class CustomerController {
   async deleteCustomer(@Request() req, @Param('id') id: string) {
     await this.customerServices.deleteCustomer(req, id);
     return ApiResponseDto.success(null, 'Customer deleted');
-  }
-
-  @UseGuards(AuthGuard)
-  @Get('me')
-  async getMyProfile(@Request() req) {
-    const customer = await this.customerServices.getMyProfile(req);
-    return ApiResponseDto.success(customer, 'Profile retrieved');
-  }
-
-  @UseGuards(AuthGuard)
-  @Put('me')
-  async updateMyProfile(
-    @Request() req,
-    @Body() dto: backendDtos.UpdateCustomerDto,
-  ) {
-    const customer = await this.customerServices.updateMyProfile(req, dto);
-    return ApiResponseDto.success(customer, 'Profile updated');
-  }
-
-  @UseGuards(AuthGuard)
-  @Get('me/orders')
-  async getMyOrders(
-    @Request() req,
-    @Query() pagination: backendDtos.PaginationDto,
-  ) {
-    const orders = await this.customerServices.getMyOrders(req, pagination);
-    return ApiResponseDto.success(orders, 'Your orders retrieved');
   }
 
   // PUBLIC ROUTES (Storefront)

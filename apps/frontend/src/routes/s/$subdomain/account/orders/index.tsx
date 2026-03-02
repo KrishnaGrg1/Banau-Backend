@@ -1,141 +1,118 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { useMyOrders } from '@/hooks/use-order'
 import type { OrderDto, OrderItemDto } from '@repo/shared'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Spinner } from '@/components/ui/spinner'
 import { format } from 'date-fns'
+import { ShoppingBag, ChevronRight, Package } from 'lucide-react'
+import { useCustomerOrders } from '@/hooks/use-customer-auth'
 
 export const Route = createFileRoute('/s/$subdomain/account/orders/')({
   component: CustomerOrdersPage,
 })
 
+const STATUS_STYLES: Record<string, string> = {
+  PENDING: 'bg-yellow-50 text-yellow-700 border-yellow-200',
+  PROCESSING: 'bg-blue-50 text-blue-700 border-blue-200',
+  SHIPPED: 'bg-indigo-50 text-indigo-700 border-indigo-200',
+  DELIVERED: 'bg-green-50 text-green-700 border-green-200',
+  CANCELLED: 'bg-red-50 text-red-700 border-red-200',
+}
+
 function CustomerOrdersPage() {
   const { subdomain } = Route.useParams()
-  const { data: response, isLoading, error } = useMyOrders()
+  const { data: response, isLoading, error } = useCustomerOrders()
 
-  const orders = response?.data?.orders ?? []
+  const orders: OrderDto[] = response?.data?.orders ?? []
 
   if (isLoading) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex justify-center items-center min-h-[400px]">
-          <Spinner className="w-8 h-8" />
-        </div>
+      <div className="flex justify-center items-center min-h-[40vh]">
+        <Spinner className="w-8 h-8" />
       </div>
     )
   }
 
   if (error) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="text-center py-8">
-          <p className="text-red-500">Failed to load orders</p>
-          <p className="text-muted-foreground mt-2">
-            Please try again later or contact support.
-          </p>
-        </div>
+      <div className="rounded-xl border bg-card p-8 text-center">
+        <p className="text-sm text-destructive font-medium">
+          Failed to load orders
+        </p>
+        <p className="text-xs text-muted-foreground mt-1">
+          Please try again later.
+        </p>
       </div>
     )
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8">My Orders</h1>
+    <div className="space-y-4">
+      <div>
+        <h2 className="text-xl font-bold">My Orders</h2>
+        <p className="text-sm text-muted-foreground mt-1">
+          {orders.length} order{orders.length !== 1 ? 's' : ''} found
+        </p>
+      </div>
 
       {orders.length === 0 ? (
-        <Card>
-          <CardContent className="py-12 text-center">
-            <p className="text-muted-foreground mb-4">
-              You have no orders yet.
-            </p>
-            <Button asChild>
-              <Link to="/s/$subdomain" params={{ subdomain }}>
-                Start Shopping
-              </Link>
-            </Button>
-          </CardContent>
-        </Card>
+        <div className="rounded-xl border bg-card p-12 text-center">
+          <ShoppingBag className="h-10 w-10 mx-auto text-muted-foreground/40 mb-4" />
+          <p className="font-medium mb-1">No orders yet</p>
+          <p className="text-sm text-muted-foreground mb-5">
+            When you place an order it will appear here.
+          </p>
+          <Button asChild size="sm">
+            <Link to="/s/$subdomain" params={{ subdomain }}>
+              Start Shopping
+            </Link>
+          </Button>
+        </div>
       ) : (
-        <div className="space-y-4">
+        <div className="rounded-xl border bg-card divide-y overflow-hidden">
           {orders.map((order: OrderDto) => (
-            <Card key={order.id}>
-              <CardHeader className="pb-2">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <CardTitle className="text-lg">
-                      Order #{order.id.slice(-8).toUpperCase()}
-                    </CardTitle>
-                    <CardDescription>
-                      Placed on {format(new Date(order.createdAt), 'PPP')}
-                    </CardDescription>
-                  </div>
-                  <Badge
-                    variant={
-                      order.status === 'DELIVERED'
-                        ? 'default'
-                        : order.status === 'CANCELLED'
-                          ? 'destructive'
-                          : 'secondary'
-                    }
-                  >
-                    {order.status.replace(/_/g, ' ')}
-                  </Badge>
+            <Link
+              key={order.id}
+              to="/s/$subdomain/account/orders/$id"
+              params={{ subdomain, id: order.id }}
+              className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 hover:bg-muted/40 transition-colors group"
+            >
+              <div className="flex items-start gap-3">
+                <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                  <Package className="h-4 w-4 text-primary" />
                 </div>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {/* Order Items Preview */}
-                  <div className="flex flex-wrap gap-2">
+                <div>
+                  <p className="font-semibold text-sm">
+                    #{order.id.slice(-8).toUpperCase()}
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-0.5">
+                    {format(new Date(order.createdAt), 'MMM d, yyyy')}
+                  </p>
+                  {/* Items preview */}
+                  <p className="text-xs text-muted-foreground mt-0.5">
                     {(order.items ?? [])
-                      .slice(0, 3)
-                      .map((item: OrderItemDto) => (
-                        <div
-                          key={item.id}
-                          className="flex items-center gap-2 bg-muted rounded-md p-2"
-                        >
-                          <div className="text-sm">
-                            <p className="font-medium truncate max-w-[150px]">
-                              {item.productName}
-                            </p>
-                            <p className="text-muted-foreground">
-                              {item.quantity} x ${item.price}
-                            </p>
-                          </div>
-                        </div>
-                      ))}
-                    {(order.items?.length ?? 0) > 3 && (
-                      <div className="flex items-center text-muted-foreground text-sm">
-                        +{(order.items?.length ?? 0) - 3} more items
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Order Summary */}
-                  <div className="flex justify-between items-center pt-2 border-t">
-                    <div className="text-sm">
-                      <span className="text-muted-foreground">Total: </span>
-                      <span className="font-bold">${order.total}</span>
-                    </div>
-                    <Button variant="outline" size="sm" asChild>
-                      <Link
-                        to="/s/$subdomain/account/orders/$orderId"
-                        params={{ subdomain, orderId: order.id }}
-                      >
-                        View Details
-                      </Link>
-                    </Button>
-                  </div>
+                      .slice(0, 2)
+                      .map((item: OrderItemDto) => item.productName)
+                      .join(', ')}
+                    {(order.items?.length ?? 0) > 2 &&
+                      ` +${(order.items?.length ?? 0) - 2} more`}
+                  </p>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+              <div className="flex items-center gap-3 sm:ml-auto shrink-0">
+                <span
+                  className={`text-[11px] font-medium px-2.5 py-0.5 rounded-full border ${
+                    STATUS_STYLES[order.status] ??
+                    'bg-muted text-muted-foreground border-border'
+                  }`}
+                >
+                  {order.status.replace(/_/g, ' ')}
+                </span>
+                <span className="font-bold text-sm">
+                  ${Number(order.total).toFixed(2)}
+                </span>
+                <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:translate-x-0.5 transition-transform" />
+              </div>
+            </Link>
           ))}
         </div>
       )}

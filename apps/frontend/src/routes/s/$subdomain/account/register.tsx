@@ -5,15 +5,8 @@ import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { RegisterCustomerDtoSchema } from '@repo/shared'
 import { useCustomerRegister } from '@/hooks/use-customer-auth'
-import {
-  Loader2,
-  AlertCircle,
-  CheckCircle2,
-  ArrowLeft,
-  ArrowRight,
-} from 'lucide-react'
+import { Loader2, AlertCircle, CheckCircle2, ArrowRight } from 'lucide-react'
 
 export const Route = createFileRoute('/s/$subdomain/account/register')({
   component: RegisterPageComponent,
@@ -40,7 +33,7 @@ function RegisterPageComponent() {
         if (prev === null || prev <= 1) {
           clearInterval(interval)
           navigate({
-            to: '/s/$subdomain/account/profile',
+            to: '/s/$subdomain/account/',
             params: { subdomain },
           })
           return null
@@ -76,13 +69,6 @@ function RegisterPageComponent() {
     <div className="flex items-center justify-center py-12 px-4">
       <div className="w-full max-w-md space-y-8">
         <div className="space-y-1">
-          <div className="flex items-center gap-2 mb-4">
-            <Button variant="ghost" size="icon" asChild>
-              <Link to="/s/$subdomain" params={{ subdomain }}>
-                <ArrowLeft className="h-4 w-4" />
-              </Link>
-            </Button>
-          </div>
           <h1 className="text-2xl font-bold">Create your account</h1>
           <p className="text-sm">
             Register to access your account and track orders
