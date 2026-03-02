@@ -61,6 +61,15 @@ function AccountLayout() {
 
   /* ── auth gate ───────────────────────────────────────────────── */
   if (!profile) {
+    // Allow the login and register routes to render even when unauthenticated
+    // so users can reach the sign-in pages which are children of this layout.
+    if (
+      pathname.includes(`/s/${subdomain}/account/login`) ||
+      pathname.includes(`/s/${subdomain}/account/register`)
+    ) {
+      return <Outlet />
+    }
+
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] px-4 text-center">
         <div className="w-16 h-16 rounded-2xl bg-muted flex items-center justify-center mb-5">

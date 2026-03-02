@@ -1,6 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { useMyProfile } from '@/hooks/use-customer-auth'
-import { useMyOrders } from '@/hooks/use-order'
+import { useCustomerOrders, useMyProfile } from '@/hooks/use-customer-auth'
 import { Button } from '@/components/ui/button'
 import { Spinner } from '@/components/ui/spinner'
 import { Separator } from '@/components/ui/separator'
@@ -29,7 +28,7 @@ const STATUS_STYLES: Record<string, string> = {
 function AccountDashboard() {
   const { subdomain } = Route.useParams()
   const { data: profileRes } = useMyProfile()
-  const { data: ordersRes, isLoading: ordersLoading } = useMyOrders({
+  const { data: ordersRes, isLoading: ordersLoading } = useCustomerOrders({
     limit: 50,
   })
 

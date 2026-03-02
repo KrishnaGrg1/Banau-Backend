@@ -1,6 +1,7 @@
 // apps/web/app/routes/s/$subdomain/checkout/index.tsx
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
+import { useForm } from '@tanstack/react-form'
 import { useCart } from '@/hooks/use-cart'
 import { useCreateCheckoutSession } from '@/hooks/use-order'
 import { Button } from '@/components/ui/button'
@@ -16,45 +17,15 @@ import {
 import { Separator } from '@/components/ui/separator'
 import { toast } from 'sonner'
 import { Loader2, Lock, CreditCard } from 'lucide-react'
-
 export const Route = createFileRoute('/s/$subdomain/checkout/')({
   component: CheckoutPage,
 })
-
-interface CheckoutFormData {
-  email: string
-  firstName: string
-  lastName: string
-  phone: string
-  shippingAddress: string
-  shippingCity: string
-  shippingState: string
-  shippingDistrict: string
-  shippingCountry: string
-  customerNotes: string
-}
-
-const initialFormData: CheckoutFormData = {
-  email: '',
-  firstName: '',
-  lastName: '',
-  phone: '',
-  shippingAddress: '',
-  shippingCity: '',
-  shippingState: '',
-  shippingDistrict: '',
-  shippingCountry: '',
-  customerNotes: '',
-}
 
 function CheckoutPage() {
   const { subdomain } = Route.useParams()
   const navigate = useNavigate()
 
   const { items, subtotal } = useCart()
-  const [formData, setFormData] = useState<CheckoutFormData>(initialFormData)
-  const [isProcessing, setIsProcessing] = useState(false)
-
   const createCheckoutSession = useCreateCheckoutSession()
 
   // Redirect if cart is empty
@@ -64,74 +35,53 @@ function CheckoutPage() {
     }
   }, [items.length, navigate, subdomain])
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
+  const form = useForm({
+    defaultValues: {
+      email: '',
+      firstName: '',
+      lastName: '',
+      phone: '',
+      shippingAddress: '',
+      shippingCity: '',
+      shippingState: '',
+      shippingDistrict: '',
+      shippingCountry: '',
+      customerNotes: '',
+    },
+    onSubmit: async ({ value }) => {
+      try {
+        const result = await createCheckoutSession.mutateAsync({
+          subdomain,
+          ...value,
+          items: items.map((item) => ({
+            productId: item.product.id,
+            variantId: item.variant?.id,
+            quantity: item.quantity,
+            price: item.price,
+            productName: item.product.name,
+            variantName: item.variant?.name,
+          })),
+        })
 
-  const validateForm = (): boolean => {
-    const required = [
-      'email',
-      'firstName',
-      'lastName',
-      'phone',
-      'shippingAddress',
-      'shippingCity',
-      'shippingState',
-      'shippingCountry',
-    ]
-
-    for (const field of required) {
-      if (!formData[field as keyof CheckoutFormData]) {
+        if (result?.data?.url) {
+          window.location.href = result.data.url
+        } else {
+          throw new Error('Failed to create checkout session')
+        }
+      } catch (error: any) {
+        console.error('Checkout error:', error)
         toast.error(
-          `Please fill in ${field.replace(/([A-Z])/g, ' $1').toLowerCase()}`,
+          error.message || 'Failed to start checkout. Please try again.',
         )
-        return false
       }
-    }
-    return true
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-
-    if (!validateForm()) return
-
-    setIsProcessing(true)
-
-    try {
-      // Create Stripe Checkout session
-      const result = await createCheckoutSession.mutateAsync({
-        subdomain,
-        ...formData,
-        items: items.map((item) => ({
-          productId: item.product.id,
-          variantId: item.variant?.id,
-          quantity: item.quantity,
-          price: item.price,
-          productName: item.product.name,
-          variantName: item.variant?.name,
-        })),
-      })
-
-      if (result?.data?.url) {
-        // Redirect to Stripe Checkout (hosted page)
-        window.location.href = result.data.url
-      } else {
-        throw new Error('Failed to create checkout session')
-      }
-    } catch (error: any) {
-      console.error('Checkout error:', error)
-      toast.error(
-        error.message || 'Failed to start checkout. Please try again.',
-      )
-      setIsProcessing(false)
-    }
-  }
+    },
+  })
 
   if (items.length === 0) {
     return null
   }
+
+  const isSubmitting = form.state.isSubmitting
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-7xl">
@@ -140,7 +90,14 @@ function CheckoutPage() {
       <div className="grid lg:grid-cols-2 gap-8">
         {/* Checkout Form */}
         <div>
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              form.handleSubmit()
+            }}
+            className="space-y-6"
+          >
             {/* Contact Information */}
             <Card>
               <CardHeader>
@@ -150,30 +107,57 @@ function CheckoutPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="grid gap-2">
-                  <Label htmlFor="email">Email *</Label>
-                  <Input
-                    id="email"
-                    name="email"
-                    type="email"
-                    placeholder="john@example.com"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="phone">Phone *</Label>
-                  <Input
-                    id="phone"
-                    name="phone"
-                    type="tel"
-                    placeholder="+1 234 567 8900"
-                    value={formData.phone}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
+                <form.Field
+                  name="email"
+                  validators={{
+                    onChange: ({ value }) =>
+                      !value
+                        ? 'Email is required'
+                        : !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+                          ? 'Invalid email format'
+                          : undefined,
+                  }}
+                >
+                  {(field) => (
+                    <div className="grid gap-2">
+                      <Label htmlFor={field.name}>Email *</Label>
+                      <Input
+                        id={field.name}
+                        name={field.name}
+                        type="email"
+                        placeholder="john@example.com"
+                        value={field.state.value}
+                        onChange={(e) => field.handleChange(e.target.value)}
+                        onBlur={field.handleBlur}
+                      />
+                      <FieldError errors={field.state.meta.errors} />
+                    </div>
+                  )}
+                </form.Field>
+
+                <form.Field
+                  name="phone"
+                  validators={{
+                    onChange: ({ value }) =>
+                      !value ? 'Phone is required' : undefined,
+                  }}
+                >
+                  {(field) => (
+                    <div className="grid gap-2">
+                      <Label htmlFor={field.name}>Phone *</Label>
+                      <Input
+                        id={field.name}
+                        name={field.name}
+                        type="tel"
+                        placeholder="+1 234 567 8900"
+                        value={field.state.value}
+                        onChange={(e) => field.handleChange(e.target.value)}
+                        onBlur={field.handleBlur}
+                      />
+                      <FieldError errors={field.state.meta.errors} />
+                    </div>
+                  )}
+                </form.Field>
               </CardContent>
             </Card>
 
@@ -184,103 +168,188 @@ function CheckoutPage() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="grid gap-2">
-                    <Label htmlFor="firstName">First Name *</Label>
-                    <Input
-                      id="firstName"
-                      name="firstName"
-                      placeholder="John"
-                      value={formData.firstName}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="lastName">Last Name *</Label>
-                    <Input
-                      id="lastName"
-                      name="lastName"
-                      placeholder="Doe"
-                      value={formData.lastName}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </div>
+                  <form.Field
+                    name="firstName"
+                    validators={{
+                      onChange: ({ value }) =>
+                        !value
+                          ? 'First name is required'
+                          : value.length < 2
+                            ? 'At least 2 characters'
+                            : undefined,
+                    }}
+                  >
+                    {(field) => (
+                      <div className="grid gap-2">
+                        <Label htmlFor={field.name}>First Name *</Label>
+                        <Input
+                          id={field.name}
+                          name={field.name}
+                          placeholder="John"
+                          value={field.state.value}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          onBlur={field.handleBlur}
+                        />
+                        <FieldError errors={field.state.meta.errors} />
+                      </div>
+                    )}
+                  </form.Field>
+
+                  <form.Field
+                    name="lastName"
+                    validators={{
+                      onChange: ({ value }) =>
+                        !value
+                          ? 'Last name is required'
+                          : value.length < 2
+                            ? 'At least 2 characters'
+                            : undefined,
+                    }}
+                  >
+                    {(field) => (
+                      <div className="grid gap-2">
+                        <Label htmlFor={field.name}>Last Name *</Label>
+                        <Input
+                          id={field.name}
+                          name={field.name}
+                          placeholder="Doe"
+                          value={field.state.value}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          onBlur={field.handleBlur}
+                        />
+                        <FieldError errors={field.state.meta.errors} />
+                      </div>
+                    )}
+                  </form.Field>
                 </div>
 
-                <div className="grid gap-2">
-                  <Label htmlFor="shippingAddress">Address *</Label>
-                  <Input
-                    id="shippingAddress"
-                    name="shippingAddress"
-                    placeholder="123 Main St"
-                    value={formData.shippingAddress}
-                    onChange={handleInputChange}
-                    required
-                  />
+                <form.Field
+                  name="shippingAddress"
+                  validators={{
+                    onChange: ({ value }) =>
+                      !value ? 'Shipping address is required' : undefined,
+                  }}
+                >
+                  {(field) => (
+                    <div className="grid gap-2">
+                      <Label htmlFor={field.name}>Address *</Label>
+                      <Input
+                        id={field.name}
+                        name={field.name}
+                        placeholder="123 Main St"
+                        value={field.state.value}
+                        onChange={(e) => field.handleChange(e.target.value)}
+                        onBlur={field.handleBlur}
+                      />
+                      <FieldError errors={field.state.meta.errors} />
+                    </div>
+                  )}
+                </form.Field>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <form.Field
+                    name="shippingCity"
+                    validators={{
+                      onChange: ({ value }) =>
+                        !value ? 'City is required' : undefined,
+                    }}
+                  >
+                    {(field) => (
+                      <div className="grid gap-2">
+                        <Label htmlFor={field.name}>City *</Label>
+                        <Input
+                          id={field.name}
+                          name={field.name}
+                          placeholder="New York"
+                          value={field.state.value}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          onBlur={field.handleBlur}
+                        />
+                        <FieldError errors={field.state.meta.errors} />
+                      </div>
+                    )}
+                  </form.Field>
+
+                  <form.Field
+                    name="shippingState"
+                    validators={{
+                      onChange: ({ value }) =>
+                        !value ? 'State / Province is required' : undefined,
+                    }}
+                  >
+                    {(field) => (
+                      <div className="grid gap-2">
+                        <Label htmlFor={field.name}>State/Province *</Label>
+                        <Input
+                          id={field.name}
+                          name={field.name}
+                          placeholder="NY"
+                          value={field.state.value}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          onBlur={field.handleBlur}
+                        />
+                        <FieldError errors={field.state.meta.errors} />
+                      </div>
+                    )}
+                  </form.Field>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="grid gap-2">
-                    <Label htmlFor="shippingCity">City *</Label>
-                    <Input
-                      id="shippingCity"
-                      name="shippingCity"
-                      placeholder="New York"
-                      value={formData.shippingCity}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="shippingState">State/Province *</Label>
-                    <Input
-                      id="shippingState"
-                      name="shippingState"
-                      placeholder="NY"
-                      value={formData.shippingState}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </div>
+                  <form.Field name="shippingDistrict">
+                    {(field) => (
+                      <div className="grid gap-2">
+                        <Label htmlFor={field.name}>District (Optional)</Label>
+                        <Input
+                          id={field.name}
+                          name={field.name}
+                          placeholder="District"
+                          value={field.state.value}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          onBlur={field.handleBlur}
+                        />
+                      </div>
+                    )}
+                  </form.Field>
+
+                  <form.Field
+                    name="shippingCountry"
+                    validators={{
+                      onChange: ({ value }) =>
+                        !value ? 'Country is required' : undefined,
+                    }}
+                  >
+                    {(field) => (
+                      <div className="grid gap-2">
+                        <Label htmlFor={field.name}>Country *</Label>
+                        <Input
+                          id={field.name}
+                          name={field.name}
+                          placeholder="United States"
+                          value={field.state.value}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          onBlur={field.handleBlur}
+                        />
+                        <FieldError errors={field.state.meta.errors} />
+                      </div>
+                    )}
+                  </form.Field>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="grid gap-2">
-                    <Label htmlFor="shippingDistrict">
-                      District (Optional)
-                    </Label>
-                    <Input
-                      id="shippingDistrict"
-                      name="shippingDistrict"
-                      placeholder="District"
-                      value={formData.shippingDistrict}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="shippingCountry">Country *</Label>
-                    <Input
-                      id="shippingCountry"
-                      name="shippingCountry"
-                      placeholder="United States"
-                      value={formData.shippingCountry}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="grid gap-2">
-                  <Label htmlFor="customerNotes">Order Notes (Optional)</Label>
-                  <Input
-                    id="customerNotes"
-                    name="customerNotes"
-                    placeholder="Special instructions for your order"
-                    value={formData.customerNotes}
-                    onChange={handleInputChange}
-                  />
-                </div>
+                <form.Field name="customerNotes">
+                  {(field) => (
+                    <div className="grid gap-2">
+                      <Label htmlFor={field.name}>Order Notes (Optional)</Label>
+                      <Input
+                        id={field.name}
+                        name={field.name}
+                        placeholder="Special instructions for your order"
+                        value={field.state.value}
+                        onChange={(e) => field.handleChange(e.target.value)}
+                        onBlur={field.handleBlur}
+                      />
+                    </div>
+                  )}
+                </form.Field>
               </CardContent>
             </Card>
 
@@ -334,9 +403,9 @@ function CheckoutPage() {
               type="submit"
               className="w-full"
               size="lg"
-              disabled={isProcessing}
+              disabled={isSubmitting}
             >
-              {isProcessing ? (
+              {isSubmitting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Redirecting to Secure Checkout...
@@ -430,4 +499,14 @@ function CheckoutPage() {
       </div>
     </div>
   )
+}
+
+// ── FieldError ────────────────────────────────────────────────────────────────
+
+function FieldError({ errors }: { errors: unknown[] }) {
+  if (!errors?.length) return null
+  const msg =
+    typeof errors[0] === 'string' ? errors[0] : (errors[0] as any)?.message
+  if (!msg) return null
+  return <p className="text-xs text-destructive">{msg}</p>
 }
