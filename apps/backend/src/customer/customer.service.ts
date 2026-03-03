@@ -224,6 +224,9 @@ export class CustomerServices {
     await this.prisma.customer.delete({
       where: { id },
     });
+    await this.prisma.user.delete({
+      where:{email:customer.email}
+    })
   }
   async exportCustomers(req, format: 'csv' | 'xlsx') {
     const existingTenant = await this.getExistingTenant(req);
