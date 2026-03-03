@@ -24,11 +24,13 @@ export class CustomerServices {
   ) {}
 
   private async getExistingTenant(req) {
+    console.log("userId",req.user.id)
     const existingTenant = await this.prisma.tenant.findUnique({
       where: {
         ownerId: String(req.user.id),
       },
     });
+    console.log("tenants",existingTenant)
     if (!existingTenant) throw new ConflictException('Tenant not exists');
     return existingTenant;
   }
@@ -208,10 +210,14 @@ export class CustomerServices {
       throw new NotFoundException('Customer not found');
     }
 
-    // Check if customer has orders
-    if (customer.orders.length > 0) {
+    // Check if customer has orders that are not delivered
+    const hasNonDeliveredOrders = customer.orders.some(
+      (order) => order.status !== 'DELIVERED',
+    );
+
+    if (hasNonDeliveredOrders) {
       throw new ConflictException(
-        'Cannot delete customer with existing orders. Consider archiving instead.',
+      'Cannot delete customer with pending orders. Only customers with delivered orders can be deleted.',
       );
     }
 

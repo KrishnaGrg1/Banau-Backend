@@ -7,6 +7,9 @@ import {
   getMyProfile,
   updateMyProfile,
   getCustomerOrders,
+  getAllCustomers,
+  getCustomerById,
+  deleteCustomerById,
 } from '@/lib/services/customer.services'
 import { useCartStore } from '@/lib/stores/cart.store'
 import { paginationDto } from '@repo/shared'
@@ -102,5 +105,43 @@ export function useCustomerOrders(params: paginationDto = {}) {
     queryKey: ['my-orders', params],
     queryFn: () => getCustomerOrders({ data: params }),
     select: (data) => data, // Return full response with data.orders structure
+  })
+}
+
+
+export function useListAllCustomers(params: { limit: number; offset: number }) {
+  return useQuery({
+    queryKey: ['customers', params],
+    queryFn: () => getAllCustomers({ data: params }),
+    retry: false,
+    staleTime: 5 * 60 * 1000,
+  })
+}
+
+
+export function useGetCustomerById(customerId: string) {
+  return useQuery({
+    queryKey: ['customer', customerId],
+    queryFn: () => getCustomerById({data:{customerId}}),
+    enabled: !!customerId,
+    retry: false,
+    staleTime: 5 * 60 * 1000,
+  })
+}
+
+export function useDeleteCustomer() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ data }: { data: { customerId: string } }) =>
+      deleteCustomerById({ data }),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['customers'] })
+      queryClient.removeQueries({ queryKey: ['customer', variables.data.customerId] })
+      toast.success('Customer deleted successfully')
+    },
+    onError: (err: Error) => {
+      toast.error(err.message)
+      console.error('[DELETE] Error:', err)
+    },
   })
 }

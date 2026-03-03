@@ -348,3 +348,31 @@ export const createCheckoutSession = createServerFn({ method: 'POST' })
       throw new Error(err.message || 'Failed to create checkout session')
     }
   })
+
+
+
+  export const deleteOrderById = createServerFn({ method: 'POST' })
+  .inputValidator((data: unknown) => {
+    const orderId = (data as { orderId: string }).orderId
+    if (!orderId || typeof orderId !== 'string') {
+      throw new Error('Order ID is required')
+    }
+    return { orderId }
+  })
+  .handler(async ({ data }) => {
+    try {
+      const response = await api(`/order/${data.orderId}`, {
+        method: 'DELETE',
+      })
+      return response.data
+    } catch (error: unknown) {
+      if (isAxiosError(error)) {
+        console.error(
+          '[deleteCustomer] error:',
+          JSON.stringify(error.response?.data, null, 2),
+        )
+      }
+      const err = error as Error
+      throw new Error(err.message || 'Failed to delete customer')
+    }
+  })

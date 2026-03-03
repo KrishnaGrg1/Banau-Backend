@@ -96,6 +96,9 @@ export class AuthServices {
     const existingUser = await this.prisma.user.findUnique({
       where: {
         email: data.email,
+        role:{
+          not:'CUSTOMER'
+        }
       },
     });
     if (!existingUser) {

@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { useCustomerOrders, useMyProfile } from '@/hooks/use-customer-auth'
+import { useCustomerOrders, useMyProfile } from '@/hooks/use-customer'
 import { Button } from '@/components/ui/button'
 import { Spinner } from '@/components/ui/spinner'
 import { Separator } from '@/components/ui/separator'

@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { LoginCustomerDtoSchema } from '@repo/shared'
-import { useCustomerLogin } from '@/hooks/use-customer-auth'
+import { useCustomerLogin } from '@/hooks/use-customer'
 import { Loader2, AlertCircle } from 'lucide-react'
 
 export const Route = createFileRoute('/s/$subdomain/account/login')({

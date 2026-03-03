@@ -11,7 +11,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { Link, useNavigate } from '@tanstack/react-router'
 import { useCartCount } from '@/lib/stores/cart.store'
-import { useMyProfile, useCustomerLogout } from '@/hooks/use-customer-auth'
+import { useMyProfile, useCustomerLogout } from '@/hooks/use-customer'
 import {
   DropdownMenu,
   DropdownMenuContent,

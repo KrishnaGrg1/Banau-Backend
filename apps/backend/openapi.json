@@ -904,6 +904,27 @@
         "tags": [
           "Order"
         ]
+      },
+      "delete": {
+        "operationId": "OrderController_deleteOrder",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Order"
+        ]
       }
     },
     "/api/v1/order/{id}/status": {

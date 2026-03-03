@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { useCustomerRegister } from '@/hooks/use-customer-auth'
+import { useCustomerRegister } from '@/hooks/use-customer'
 import { Loader2, AlertCircle, CheckCircle2, ArrowRight } from 'lucide-react'
 
 export const Route = createFileRoute('/s/$subdomain/account/register')({

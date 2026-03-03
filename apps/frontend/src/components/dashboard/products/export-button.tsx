@@ -10,14 +10,20 @@ import {
 import { Spinner } from '@/components/ui/spinner'
 import { useExportAllProducts } from '@/hooks/use-product'
 
-export function ExportButton() {
-  const { mutate: exportProducts, isPending } = useExportAllProducts()
+interface ExportButtonProps {
+  onExport: (format: 'csv' | 'xlsx') => void
+  isLoading?: boolean
+}
 
+export function ExportButton({
+  onExport,
+  isLoading = false,
+}: ExportButtonProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" disabled={isPending}>
-          {isPending ? (
+        <Button variant="outline" disabled={isLoading}>
+          {isLoading ? (
             <Spinner className="mr-2 h-4 w-4" />
           ) : (
             <Download className="mr-2 h-4 w-4" />
@@ -26,10 +32,10 @@ export function ExportButton() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => exportProducts('csv')}>
+        <DropdownMenuItem onClick={() => onExport('csv')}>
           Export as CSV
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => exportProducts('xlsx')}>
+        <DropdownMenuItem onClick={() => onExport('xlsx')}>
           Export as Excel
         </DropdownMenuItem>
       </DropdownMenuContent>

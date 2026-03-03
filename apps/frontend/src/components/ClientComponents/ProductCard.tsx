@@ -126,7 +126,14 @@ export function ProductCard({ product, subdomain }: ProductCardProps) {
         </div>
 
         {/* Add to Cart Button */}
-        {hasVariants ? (
+        {!inStock ? (
+          <button
+            disabled
+            className="w-full flex items-center justify-center gap-2 rounded-xl bg-muted text-muted-foreground text-xs font-semibold py-2.5 cursor-not-allowed opacity-60"
+          >
+            Out of Stock
+          </button>
+        ) : hasVariants ? (
           <Link
             to="/s/$subdomain/products/$slug"
             params={{ subdomain, slug: product.slug }}

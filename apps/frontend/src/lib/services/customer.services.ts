@@ -1,4 +1,4 @@
-import { LoginCustomerDtoSchema, OrdersListResponse, paginationDtoSchema, RegisterCustomerDtoSchema } from '@repo/shared'
+import { CustomerListResponse, CustomerResponse, DeleteCustomerSchema, LoginCustomerDtoSchema, OrdersListResponse, paginationDtoSchema, RegisterCustomerDtoSchema } from '@repo/shared'
 import { api } from '../axios'
 import { createServerFn } from '@tanstack/react-start'
 import { useAppSession } from '../session'
@@ -110,5 +110,70 @@ export const getCustomerOrders = createServerFn({ method: 'GET' })
       }
       const err = error as Error
       throw new Error(err.message || 'Failed to retrieve your orders')
+    }
+  })
+
+
+  export  const getAllCustomers=createServerFn({method:'GET'})
+  .inputValidator((data)=>paginationDtoSchema.parse(data))
+  .handler(async({data})=>{
+    try {
+      console.log("input data",data)
+      const response = await api<CustomerListResponse>('/customers', {
+        method: 'GET',
+        params: data,
+      })
+      return response.data
+    } catch (error: unknown) {
+      if (isAxiosError(error)) {
+        console.error(
+          '[getMyCustomers] error:',
+          JSON.stringify(error.response?.data, null, 2),
+        )
+      }
+      const err = error as Error
+      throw new Error(err.message || 'Failed to retrieve your customers')
+    } 
+  })
+
+
+  export const getCustomerById = createServerFn({ method: 'GET' })
+  .inputValidator((data: unknown) => DeleteCustomerSchema.parse(data))
+  .handler(async ({ data }) => {
+    try {
+      const response = await api<CustomerResponse>(`/customers/${data.customerId}`, {
+        method: 'GET',
+      })
+      return response.data.data
+    } catch (error: unknown) {
+      if (isAxiosError(error)) {
+        console.error(
+          '[getOrderById] error:',
+          JSON.stringify(error.response?.data, null, 2),
+        )
+      }
+      const err = error as Error
+      throw new Error(err.message || 'Failed to retrieve customer')
+    }
+  })
+
+
+  export const deleteCustomerById = createServerFn({ method: 'POST' })
+  .inputValidator((data: unknown) => DeleteCustomerSchema.parse(data))
+  .handler(async ({ data }) => {
+    try {
+      const response = await api(`/customers/${data.customerId}`, {
+        method: 'DELETE',
+      })
+      return response.data
+    } catch (error: unknown) {
+      if (isAxiosError(error)) {
+        console.error(
+          '[deleteCustomer] error:',
+          JSON.stringify(error.response?.data, null, 2),
+        )
+      }
+      const err = error as Error
+      throw new Error(err.message || 'Failed to delete customer')
     }
   })

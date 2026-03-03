@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Spinner } from '@/components/ui/spinner'
 import { format } from 'date-fns'
 import { ShoppingBag, ChevronRight, Package } from 'lucide-react'
-import { useCustomerOrders } from '@/hooks/use-customer-auth'
+import { useCustomerOrders } from '@/hooks/use-customer'
 
 export const Route = createFileRoute('/s/$subdomain/account/orders/')({
   component: CustomerOrdersPage,

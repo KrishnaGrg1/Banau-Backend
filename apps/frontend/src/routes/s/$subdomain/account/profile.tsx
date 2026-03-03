@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useState, useEffect } from 'react'
-import { useMyProfile, useUpdateMyProfile } from '@/hooks/use-customer-auth'
+import { useMyProfile, useUpdateMyProfile } from '@/hooks/use-customer'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'

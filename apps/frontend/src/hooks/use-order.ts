@@ -12,6 +12,7 @@ import {
   createPaymentIntent,
   confirmOrder,
   createCheckoutSession,
+  deleteOrderById,
 } from '@/lib/services/order.services'
 import type {
   paginationDto,
@@ -234,6 +235,24 @@ export function useCreateCheckoutSession() {
     },
     onError: (error: Error) => {
       toast.error(error.message || 'Failed to create checkout session')
+    },
+  })
+}
+
+
+export function useDeleteOrder() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ data }: { data: { orderId: string } }) =>
+      deleteOrderById({ data }),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['orders'] })
+      queryClient.removeQueries({ queryKey: ['order', variables.data.orderId] })
+      toast.success('Order deleted successfully')
+    },
+    onError: (err: Error) => {
+      toast.error(err.message)
+      console.error('[DELETE] Error:', err)
     },
   })
 }

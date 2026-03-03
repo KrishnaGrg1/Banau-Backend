@@ -1,6 +1,6 @@
 // apps/web/app/routes/dashboard/products/index.tsx
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { useGetAllProducts } from '@/hooks/use-product'
+import { useExportAllProducts, useGetAllProducts } from '@/hooks/use-product'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -72,6 +72,7 @@ export default function ProductsPage() {
     limit,
     offset,
   })
+  const { mutate: exportProducts, isPending } = useExportAllProducts()
   const products: ProductDto[] = Array.isArray(data?.data?.existingProducts)
     ? data.data.existingProducts
     : []
@@ -156,7 +157,7 @@ export default function ProductsPage() {
 
         <div className="flex items-center gap-2">
           <BulkImportDialog />
-          <ExportButton />
+          <ExportButton onExport={exportProducts} isLoading={isLoading} />
 
           <Button onClick={() => navigate({ to: '/dashboard/products/new' })}>
             <Plus className="mr-2 h-4 w-4" />

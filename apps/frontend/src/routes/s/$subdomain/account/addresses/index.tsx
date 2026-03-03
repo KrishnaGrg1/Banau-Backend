@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Spinner } from '@/components/ui/spinner'
 import { MapPin } from 'lucide-react'
 import type { OrderDto } from '@repo/shared'
-import { useCustomerOrders } from '@/hooks/use-customer-auth'
+import { useCustomerOrders } from '@/hooks/use-customer'
 
 export const Route = createFileRoute('/s/$subdomain/account/addresses/')({
   component: AddressesPage,

@@ -257,7 +257,14 @@ function RouteComponent() {
             <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
               Quantity
             </p>
-            {hasVariants && !selectedVariant ? (
+            {!inStock ? (
+              <Button
+                disabled
+                className="w-full flex items-center justify-center gap-2 rounded-xl bg-muted text-muted-foreground font-semibold py-3 text-sm opacity-60 cursor-not-allowed"
+              >
+                Out of Stock
+              </Button>
+            ) : hasVariants && !selectedVariant ? (
               <Button
                 disabled
                 className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary text-primary-foreground font-semibold py-3 text-sm opacity-50 cursor-not-allowed"

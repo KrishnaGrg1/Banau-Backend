@@ -4,7 +4,7 @@ import {
   Outlet,
   useRouterState,
 } from '@tanstack/react-router'
-import { useMyProfile } from '@/hooks/use-customer-auth'
+import { useMyProfile } from '@/hooks/use-customer'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { Spinner } from '@/components/ui/spinner'

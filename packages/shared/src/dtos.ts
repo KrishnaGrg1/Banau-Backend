@@ -824,3 +824,57 @@ export const exportOrdersParamsSchema = z.object({
 });
 
 export type ExportOrdersParams = z.infer<typeof exportOrdersParamsSchema>;
+
+export interface CustomerDto {
+  id: string;
+  tenantId: string;
+  userId: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  phone: string | null;
+  totalSpent: string;
+  ordersCount: number;
+  lastOrderAt: Date | string | null;
+  createdAt: Date | string;
+  updatedAt: Date | string;
+  _count: {
+    orders: number;
+  };
+}
+
+export interface CustomerListResponse {
+  success: boolean;
+  message: string;
+  data: {
+    customers: CustomerDto[];
+    meta: {
+      total: number;
+      limit: number;
+      offset: number;
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+    };
+  };
+  timestamp: Date;
+}
+
+export interface CustomerResponse {
+  success: boolean;
+  message: string;
+  data: CustomerDto;
+  timestamp: Date;
+}
+
+
+export const DeleteCustomerSchema = z.object({
+  customerId: z.string(),
+});
+
+
+export interface SearchTypes {
+  limit?: number
+  offset?: number
+}
+
+

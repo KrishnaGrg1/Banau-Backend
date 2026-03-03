@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -15,7 +16,6 @@ import {
 import { OrderServices } from './order.service';
 import { ApiResponseDto, AuthGuard } from 'src/common';
 import { backendDtos } from '@repo/shared';
-import Stripe from 'stripe';
 
 @Controller('order')
 export class OrderController {
@@ -88,6 +88,13 @@ export class OrderController {
   ) {
     const order = await this.orderServices.refundOrder(req, id, dto);
     return ApiResponseDto.success(order, 'Order refunded');
+  }
+
+  @UseGuards(AuthGuard)
+  @Delete(':id')
+  async deleteOrder(@Request() req, @Param('id') id: string) {
+    const result = await this.orderServices.deleteOrder(id, req);
+    return ApiResponseDto.success(result, 'Order deleted successfully');
   }
 
   @UseGuards(AuthGuard)

@@ -4,7 +4,9 @@ import {
   useOrders,
   useUpdateOrderStatus,
   useExportOrders,
+  useDeleteOrder,
 } from '@/hooks/use-order'
+import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -29,7 +31,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { ChevronLeft, ChevronRight, Download, ShoppingBag } from 'lucide-react'
+import {
+  ChevronLeft,
+  ChevronRight,
+  Download,
+  ShoppingBag,
+  Trash2,
+} from 'lucide-react'
 import { Spinner } from '@/components/ui/spinner'
 import type { OrderDto, OrderStatus } from '@repo/shared'
 import { format } from 'date-fns'
@@ -42,6 +50,16 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { MoreHorizontal } from 'lucide-react'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
 
 // Define search params for pagination
 interface OrdersSearch {
@@ -82,6 +100,13 @@ const statusOptions: OrderStatus[] = [
   'FAILED',
 ]
 
+const DELETABLE_STATUSES: OrderStatus[] = [
+  'PENDING',
+  'CANCELLED',
+  'REFUNDED',
+  'FAILED',
+]
+
 export default function OrdersPage() {
   const navigate = useNavigate({ from: Route.fullPath })
   const search = Route.useSearch()
@@ -92,6 +117,8 @@ export default function OrdersPage() {
   const { data, isLoading, error } = useOrders({ limit, offset })
   const updateOrderStatus = useUpdateOrderStatus()
   const exportOrders = useExportOrders()
+  const deleteOrder = useDeleteOrder()
+  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null)
 
   const orders: OrderDto[] = data?.data?.orders ?? []
   const meta = data?.data?.meta
@@ -140,6 +167,12 @@ export default function OrdersPage() {
 
   const handleExport = async (format: 'csv' | 'xlsx') => {
     await exportOrders.mutateAsync({ format })
+  }
+
+  const handleDeleteConfirm = async () => {
+    if (!deleteTargetId) return
+    await deleteOrder.mutateAsync({ data: { orderId: deleteTargetId } })
+    setDeleteTargetId(null)
   }
 
   const formatPrice = (price: string) => {
@@ -369,6 +402,18 @@ export default function OrdersPage() {
                                 Edit Order
                               </Link>
                             </DropdownMenuItem>
+                            {DELETABLE_STATUSES.includes(order.status) && (
+                              <>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem
+                                  onClick={() => setDeleteTargetId(order.id)}
+                                  className="text-destructive focus:text-destructive"
+                                >
+                                  <Trash2 className="mr-2 h-4 w-4" />
+                                  Delete
+                                </DropdownMenuItem>
+                              </>
+                            )}
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </TableCell>
@@ -419,6 +464,35 @@ export default function OrdersPage() {
           )}
         </CardContent>
       </Card>
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog
+        open={!!deleteTargetId}
+        onOpenChange={(open) => !open && setDeleteTargetId(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Order</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete this order? This action cannot be
+              undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={deleteOrder.isPending}>
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDeleteConfirm}
+              disabled={deleteOrder.isPending}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90 flex items-center gap-2"
+            >
+              {deleteOrder.isPending && <Spinner className="h-4 w-4" />}
+              {deleteOrder.isPending ? 'Deleting...' : 'Delete'}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }

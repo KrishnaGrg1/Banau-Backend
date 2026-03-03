@@ -129,6 +129,33 @@ export class OrderServices {
     return { customer, isNewUser: isNew, tempPassword };
   }
 
+  // ─── Private customer stats helper ───────────────────────────────────────
+
+  /**
+   * Recalculates and persists totalSpent, ordersCount, lastOrderAt, and
+   * averageSpent for the given customer based on their actual order history.
+   * Call this after every order creation or cancellation.
+   */
+  private async updateCustomerStats(customerId: string) {
+    const agg = await this.prisma.order.aggregate({
+      where: { customerId },
+      _sum: { total: true },
+      _count: { id: true },
+      _max: { createdAt: true },
+    });
+
+    const totalSpent = agg._sum.total ?? 0;
+    const ordersCount = agg._count.id;
+    const lastOrderAt = agg._max.createdAt;
+    const averageSpent =
+      ordersCount > 0 ? Number(totalSpent) / ordersCount : 0;
+
+    await this.prisma.customer.update({
+      where: { id: customerId },
+      data: { totalSpent, ordersCount, lastOrderAt, averageSpent },
+    });
+  }
+
   // ─── Private inventory helper ─────────────────────────────────────────────
 
   private async deductInventory(
@@ -341,6 +368,28 @@ export class OrderServices {
     });
   }
 
+  async deleteOrder(orderId: string, req: any) {
+    const tenant = await this.getTenantByOwner(req);
+
+    const order = await this.prisma.order.findUnique({
+      where: { id: orderId, tenantId: tenant.id },
+    });
+    if (!order) throw new NotFoundException('Order not found');
+
+    const DELETABLE_STATUSES = ['PENDING', 'CANCELLED', 'REFUNDED', 'FAILED'];
+    if (!DELETABLE_STATUSES.includes(order.status)) {
+      throw new ConflictException(
+        `Cannot delete an order with status "${order.status}". ` +
+          `Only ${DELETABLE_STATUSES.join(', ')} orders can be deleted.`,
+      );
+    }
+
+    await this.prisma.order.delete({ where: { id: orderId } });
+    await this.updateCustomerStats(order.customerId);
+
+    return { deleted: true, orderId };
+  }
+
   async exportOrders(req: any, format: 'csv' | 'xlsx') {
     const tenant = await this.getTenantByOwner(req);
     const orders = await this.prisma.order.findMany({
@@ -490,10 +539,10 @@ export class OrderServices {
 
     const { customer, isNewUser, tempPassword } =
       await this.getOrCreateCustomer(tenantId, {
-        email: dto.email,
-        firstName: dto.firstName,
-        lastName: dto.lastName,
-        phone: dto.phone,
+      email: dto.email,
+      firstName: dto.firstName,
+      lastName: dto.lastName,
+      phone: dto.phone,
       });
 
     const order = await this.prisma.order.create({
@@ -535,6 +584,7 @@ export class OrderServices {
     });
 
     await this.deductInventory(dto.items);
+    await this.updateCustomerStats(customer.id);
     this.sendOrderEmails({
       order,
       customer: order.customer,
@@ -667,6 +717,7 @@ export class OrderServices {
     });
 
     await this.deductInventory(items);
+    await this.updateCustomerStats(customer.id);
     this.sendOrderEmails({
       order,
       customer,
