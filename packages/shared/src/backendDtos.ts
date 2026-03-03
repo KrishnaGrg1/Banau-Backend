@@ -658,6 +658,11 @@ export class UpdateCustomerDto {
 
   @IsOptional()
   @IsString()
+  @MinLength(8)
+  password?: string;
+
+  @IsOptional()
+  @IsString()
   lastName?: string;
 
   @IsString()

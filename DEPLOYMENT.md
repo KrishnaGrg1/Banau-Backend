@@ -37,7 +37,6 @@ pnpm --filter @repo/db db:push
 
 ---
 
-
 ## 🎯 Step 2: Deploy Backend (API)
 
 ---

@@ -106,7 +106,7 @@ export class CustomerController {
 
   @UseGuards(AuthGuard)
   @Post('')
-  async registerCustomer(
+  async createCustomer(
     @Request() req: RequestWithUser,
     @Body() dto: backendDtos.CreateCustomerDto,
   ) {
@@ -150,5 +150,11 @@ export class CustomerController {
   ) {
     const result = await this.customerServices.loginCustomer(dto, res);
     return ApiResponseDto.success(result, 'Login successful');
+  }
+
+  @Post('logout')
+  async logout(@Request() req, @Response({ passthrough: true }) res) {
+    const data = await this.customerServices.logout(req, res);
+    return ApiResponseDto.success(data, 'Logout Customer Successfully');
   }
 }

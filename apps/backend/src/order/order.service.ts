@@ -147,8 +147,7 @@ export class OrderServices {
     const totalSpent = agg._sum.total ?? 0;
     const ordersCount = agg._count.id;
     const lastOrderAt = agg._max.createdAt;
-    const averageSpent =
-      ordersCount > 0 ? Number(totalSpent) / ordersCount : 0;
+    const averageSpent = ordersCount > 0 ? Number(totalSpent) / ordersCount : 0;
 
     await this.prisma.customer.update({
       where: { id: customerId },
@@ -539,10 +538,10 @@ export class OrderServices {
 
     const { customer, isNewUser, tempPassword } =
       await this.getOrCreateCustomer(tenantId, {
-      email: dto.email,
-      firstName: dto.firstName,
-      lastName: dto.lastName,
-      phone: dto.phone,
+        email: dto.email,
+        firstName: dto.firstName,
+        lastName: dto.lastName,
+        phone: dto.phone,
       });
 
     const order = await this.prisma.order.create({

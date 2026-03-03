@@ -96,9 +96,9 @@ export class AuthServices {
     const existingUser = await this.prisma.user.findUnique({
       where: {
         email: data.email,
-        role:{
-          not:'CUSTOMER'
-        }
+        role: {
+          not: 'CUSTOMER',
+        },
       },
     });
     if (!existingUser) {
@@ -277,7 +277,9 @@ export class AuthServices {
         0,
       );
       if (remaining > 0) {
-        this.redis.revoke(hashToken(req.accessToken), remaining).catch(() => {});
+        this.redis
+          .revoke(hashToken(req.accessToken), remaining)
+          .catch(() => {});
       }
     }
 

@@ -130,7 +130,9 @@ export class TenantService {
     });
 
     // Invalidate storefront cache for old subdomain (and new, if changed)
-    this.redis.del(CacheKey.storeTenant(existingTenant.subdomain)).catch(() => {});
+    this.redis
+      .del(CacheKey.storeTenant(existingTenant.subdomain))
+      .catch(() => {});
     if (data.subdomain && data.subdomain !== existingTenant.subdomain) {
       this.redis.del(CacheKey.storeTenant(data.subdomain)).catch(() => {});
     }
@@ -151,6 +153,8 @@ export class TenantService {
         ownerId: String(req.user.id),
       },
     });
-    this.redis.del(CacheKey.storeTenant(existingTenant.subdomain)).catch(() => {});
+    this.redis
+      .del(CacheKey.storeTenant(existingTenant.subdomain))
+      .catch(() => {});
   }
 }

@@ -1172,7 +1172,7 @@
         ]
       },
       "post": {
-        "operationId": "CustomerController_registerCustomer",
+        "operationId": "CustomerController_createCustomer",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -1403,6 +1403,20 @@
             }
           }
         },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Customer"
+        ]
+      }
+    },
+    "/api/v1/customers/logout": {
+      "post": {
+        "operationId": "CustomerController_logout",
+        "parameters": [],
         "responses": {
           "201": {
             "description": ""

@@ -112,4 +112,3 @@ function RouteComponent() {
     </div>
   )
 }
-

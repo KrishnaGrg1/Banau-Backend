@@ -239,7 +239,6 @@ export function useCreateCheckoutSession() {
   })
 }
 
-
 export function useDeleteOrder() {
   const queryClient = useQueryClient()
   return useMutation({

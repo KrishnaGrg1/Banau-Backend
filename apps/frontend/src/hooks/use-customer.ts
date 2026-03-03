@@ -99,7 +99,6 @@ export function useUpdateMyProfile() {
   })
 }
 
-
 export function useCustomerOrders(params: paginationDto = {}) {
   return useQuery({
     queryKey: ['my-orders', params],
@@ -107,7 +106,6 @@ export function useCustomerOrders(params: paginationDto = {}) {
     select: (data) => data, // Return full response with data.orders structure
   })
 }
-
 
 export function useListAllCustomers(params: { limit: number; offset: number }) {
   return useQuery({
@@ -118,11 +116,10 @@ export function useListAllCustomers(params: { limit: number; offset: number }) {
   })
 }
 
-
 export function useGetCustomerById(customerId: string) {
   return useQuery({
     queryKey: ['customer', customerId],
-    queryFn: () => getCustomerById({data:{customerId}}),
+    queryFn: () => getCustomerById({ data: { customerId } }),
     enabled: !!customerId,
     retry: false,
     staleTime: 5 * 60 * 1000,
@@ -136,7 +133,9 @@ export function useDeleteCustomer() {
       deleteCustomerById({ data }),
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['customers'] })
-      queryClient.removeQueries({ queryKey: ['customer', variables.data.customerId] })
+      queryClient.removeQueries({
+        queryKey: ['customer', variables.data.customerId],
+      })
       toast.success('Customer deleted successfully')
     },
     onError: (err: Error) => {

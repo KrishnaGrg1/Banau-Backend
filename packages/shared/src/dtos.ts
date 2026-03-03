@@ -866,15 +866,11 @@ export interface CustomerResponse {
   timestamp: Date;
 }
 
-
 export const DeleteCustomerSchema = z.object({
   customerId: z.string(),
 });
 
-
 export interface SearchTypes {
-  limit?: number
-  offset?: number
+  limit?: number;
+  offset?: number;
 }
-
-

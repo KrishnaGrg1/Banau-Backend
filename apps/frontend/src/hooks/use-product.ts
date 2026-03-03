@@ -90,9 +90,11 @@ export function useDeleteProduct() {
   return useMutation({
     mutationFn: ({ data }: { data: { productId: string } }) =>
       deleteProduct({ data }),
-      onSuccess: (_, variables) => {
+    onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['products'] })
-      queryClient.removeQueries({ queryKey: ['product', variables.data.productId] })
+      queryClient.removeQueries({
+        queryKey: ['product', variables.data.productId],
+      })
       toast.success('Product deleted successfully')
     },
     onError: (err: Error) => {

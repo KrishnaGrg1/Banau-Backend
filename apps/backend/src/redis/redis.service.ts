@@ -28,7 +28,12 @@ export const CacheKey = {
     `:min${filters.minPrice ?? ''}:max${filters.maxPrice ?? ''}` +
     `:stock${filters.inStockOnly ? 1 : 0}:sort${filters.sortBy ?? 'newest'}`,
 
-  storeSearch: (subdomain: string, query: string, page: number, limit: number) =>
+  storeSearch: (
+    subdomain: string,
+    query: string,
+    page: number,
+    limit: number,
+  ) =>
     `store:search:${subdomain}:${encodeURIComponent(query)}:p${page}:l${limit}`,
 
   storeProduct: (subdomain: string, slug: string) =>

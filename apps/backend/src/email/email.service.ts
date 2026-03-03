@@ -236,6 +236,45 @@ export class EmailService {
     );
   }
 
+  // --- Customer emails ------------------------------------------------------
+
+  async sendCustomerWelcomeEmail(params: {
+    to: string;
+    firstName: string;
+    lastName: string;
+    tempPassword: string;
+    subdomain: string;
+  }): Promise<void> {
+    const { to, firstName, lastName, tempPassword, subdomain } = params;
+    const fullName = `${firstName} ${lastName}`;
+    const loginUrl = `${this.frontendUrl}/s/${subdomain}/account/login`;
+
+    const body = `
+      <p style="margin-top:0;">Hi <b>${fullName}</b>,</p>
+      <p>Welcome! An account has been created for you. Use the credentials below to log in and manage your orders.</p>
+      <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:10px;padding:20px;margin:24px 0;">
+        <p style="margin:0 0 8px;font-weight:700;color:#15803d;">Your Login Details</p>
+        <p style="margin:4px 0;"><b>Email:</b> ${to}</p>
+        <p style="margin:4px 0 16px;"><b>Temporary Password:</b>
+          <code style="background:#f3f4f6;padding:2px 10px;border-radius:4px;font-size:15px;letter-spacing:1px;">${tempPassword}</code>
+        </p>
+        <a href="${loginUrl}" style="display:inline-block;background:#4f46e5;color:#fff;text-decoration:none;padding:10px 22px;border-radius:8px;font-weight:600;">Login to your account &rarr;</a>
+      </div>
+      <p style="margin:0;font-size:13px;color:#888;">For your security, please change your password after your first login. Never share your credentials with anyone.</p>`;
+
+    return this.sendEmail(
+      to,
+      'Welcome – Your Account Details',
+      emailShell({
+        headerColor: '#4f46e5',
+        headerText: 'Welcome!',
+        subheader: 'Your account is ready',
+        body,
+        footerLabel: '&mdash; The <b>Banau</b> Team',
+      }),
+    );
+  }
+
   // --- Private template builder ---------------------------------------------
 
   private buildTokenEmail(params: {
@@ -275,7 +314,3 @@ export class EmailService {
     });
   }
 }
-
-
-
-

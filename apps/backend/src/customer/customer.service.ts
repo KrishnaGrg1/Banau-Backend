@@ -13,6 +13,7 @@ import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { EmailService } from 'src/email/email.service';
 import { ConfigService } from '@nestjs/config';
+import { hashToken, RedisService } from 'src/redis/redis.service';
 
 @Injectable()
 export class CustomerServices {
@@ -21,16 +22,17 @@ export class CustomerServices {
     private jwtService: JwtService,
     private configService: ConfigService,
     private emailService: EmailService,
+    private redis: RedisService,
   ) {}
 
   private async getExistingTenant(req) {
-    console.log("userId",req.user.id)
+    console.log('userId', req.user.id);
     const existingTenant = await this.prisma.tenant.findUnique({
       where: {
         ownerId: String(req.user.id),
       },
     });
-    console.log("tenants",existingTenant)
+    console.log('tenants', existingTenant);
     if (!existingTenant) throw new ConflictException('Tenant not exists');
     return existingTenant;
   }
@@ -148,14 +150,65 @@ export class CustomerServices {
       },
     });
     if (existingCustomer)
-      throw new ConflictException('Customer with these email already exists');
+      throw new ConflictException('Customer with this email already exists');
 
-    const customer = await this.prisma.customer.create({
-      data: {
-        ...dto,
-        tenantId: tenant.id,
+    // Pre-compute hash outside the transaction (bcrypt is CPU-heavy)
+    const tempPassword =
+      Math.random().toString(36).slice(-10) +
+      Math.random().toString(36).slice(-4).toUpperCase() +
+      '!';
+    const hashedPassword = await bcrypt.hash(tempPassword, 10);
+
+    // Wrap all writes in a transaction — rolls back both if either fails
+    const { customer, isNewUser } = await this.prisma.$transaction(
+      async (tx) => {
+        // 1. Find or create the User account
+        let existingUser = await tx.user.findUnique({
+          where: { email: dto.email },
+        });
+
+        const newUser = !existingUser;
+
+        if (!existingUser) {
+          existingUser = await tx.user.create({
+            data: {
+              email: dto.email,
+              firstName: dto.firstName,
+              lastName: dto.lastName,
+              password: hashedPassword,
+              role: 'CUSTOMER',
+              isVerified: true,
+              verifiedAt: new Date(),
+            },
+          });
+        }
+
+        // 2. Create the Customer profile linked to the User
+        const newCustomer = await tx.customer.create({
+          data: {
+            email: dto.email,
+            firstName: dto.firstName,
+            lastName: dto.lastName,
+            phone: dto.phone,
+            tenantId: tenant.id,
+            userId: existingUser.id,
+          },
+        });
+
+        return { customer: newCustomer, isNewUser: newUser };
       },
-    });
+    );
+
+    // 3. Send welcome email only for newly created user accounts (outside tx)
+    if (isNewUser) {
+      await this.emailService.sendCustomerWelcomeEmail({
+        to: dto.email,
+        firstName: dto.firstName,
+        lastName: dto.lastName,
+        tempPassword,
+        subdomain: tenant.subdomain,
+      });
+    }
 
     return customer;
   }
@@ -188,10 +241,29 @@ export class CustomerServices {
         throw new ConflictException('Email already in use');
       }
     }
+    const { password, ...customerFields } = dto as any;
+
+    // Keep the linked User record in sync (email, name, password)
+    if (customer.userId) {
+      const userUpdate: Record<string, any> = {};
+      if (password) userUpdate.password = await bcrypt.hash(password, 10);
+      if (customerFields.email) userUpdate.email = customerFields.email;
+      if (customerFields.firstName)
+        userUpdate.firstName = customerFields.firstName;
+      if (customerFields.lastName)
+        userUpdate.lastName = customerFields.lastName;
+
+      if (Object.keys(userUpdate).length > 0) {
+        await this.prisma.user.update({
+          where: { id: customer.userId },
+          data: userUpdate,
+        });
+      }
+    }
 
     const updated = await this.prisma.customer.update({
       where: { id },
-      data: dto,
+      data: customerFields,
     });
 
     return updated;
@@ -217,16 +289,19 @@ export class CustomerServices {
 
     if (hasNonDeliveredOrders) {
       throw new ConflictException(
-      'Cannot delete customer with pending orders. Only customers with delivered orders can be deleted.',
+        'Cannot delete customer with pending orders. Only customers with delivered orders can be deleted.',
       );
     }
 
     await this.prisma.customer.delete({
       where: { id },
     });
-    await this.prisma.user.delete({
-      where:{email:customer.email}
-    })
+
+    if (customer.userId) {
+      await this.prisma.user.delete({
+        where: { id: customer.userId },
+      });
+    }
   }
   async exportCustomers(req, format: 'csv' | 'xlsx') {
     const existingTenant = await this.getExistingTenant(req);
@@ -489,11 +564,12 @@ export class CustomerServices {
   }
 
   async loginCustomer(dto: backendDtos.LoginCustomerDto, res: any) {
+    console.log("dto",dto)
     // Find user
     const existingUser = await this.prisma.user.findUnique({
       where: { email: dto.email },
     });
-
+console.log("login",existingUser)
     if (!existingUser || existingUser.role !== 'CUSTOMER') {
       throw new UnauthorizedException('Invalid email or password');
     }
@@ -556,6 +632,60 @@ export class CustomerServices {
       accessToken,
       refreshToken,
     };
+  }
+
+  async logout(req, res) {
+    const refreshToken = req.refreshToken;
+    const userId = req.user.id;
+
+    if (!refreshToken) {
+      throw new UnauthorizedException('Missing refresh token');
+    }
+
+    const tokens = await this.prisma.token.findMany({
+      where: {
+        type: 'REFRESH',
+        userId,
+      },
+    });
+
+    let matchedTokenId: string | null = null;
+
+    for (const t of tokens) {
+      const isMatch = await bcrypt.compare(refreshToken, t.token);
+      if (isMatch) {
+        matchedTokenId = t.id;
+        break;
+      }
+    }
+
+    if (!matchedTokenId) {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+
+    // Delete the matched refresh token
+    await this.prisma.token.delete({
+      where: { id: matchedTokenId },
+    });
+
+    // Revoke the access token so it can't be used after logout
+    if (req.accessToken) {
+      const decoded = this.jwtService.decode(req.accessToken) as {
+        exp?: number;
+      } | null;
+      const remaining = Math.max(
+        (decoded?.exp ?? 0) - Math.floor(Date.now() / 1000),
+        0,
+      );
+      if (remaining > 0) {
+        this.redis
+          .revoke(hashToken(req.accessToken), remaining)
+          .catch(() => {});
+      }
+    }
+
+    res.clearCookie('refreshToken');
+    return { message: 'Logged out successfully' };
   }
 
   // ==========================================

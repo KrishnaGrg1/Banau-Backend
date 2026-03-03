@@ -59,7 +59,7 @@ export const getOrderById = createServerFn({ method: 'GET' })
       const response = await api<OrderResponse>(`/order/${data.orderId}`, {
         method: 'GET',
       })
-      console.log("get orderby id",response.data.data)
+      console.log('get orderby id', response.data.data)
       return response.data.data
     } catch (error: unknown) {
       if (isAxiosError(error)) {
@@ -349,9 +349,7 @@ export const createCheckoutSession = createServerFn({ method: 'POST' })
     }
   })
 
-
-
-  export const deleteOrderById = createServerFn({ method: 'POST' })
+export const deleteOrderById = createServerFn({ method: 'POST' })
   .inputValidator((data: unknown) => {
     const orderId = (data as { orderId: string }).orderId
     if (!orderId || typeof orderId !== 'string') {
