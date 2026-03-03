@@ -97,6 +97,7 @@ const navMain = [
     to: '/dashboard/customers',
     children: [
       { title: 'All Customers', icon: Users, to: '/dashboard/customers' },
+      { title: 'Add Customer', icon: Plus, to: '/dashboard/customers/new' },
     ],
   },
   {

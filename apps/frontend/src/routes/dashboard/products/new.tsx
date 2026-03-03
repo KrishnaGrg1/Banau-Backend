@@ -293,7 +293,7 @@ export default function AddProductPage() {
       {/* ── Header ── */}
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <div className="flex items-center gap-3">
-          <Button
+          {/* <Button
             type="button"
             variant="outline"
             size="sm"
@@ -302,7 +302,7 @@ export default function AddProductPage() {
           >
             <ChevronLeft className="h-3.5 w-3.5" />
             Products
-          </Button>
+          </Button> */}
           <Separator orientation="vertical" className="h-5" />
           <div>
             <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
