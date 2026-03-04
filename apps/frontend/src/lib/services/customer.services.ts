@@ -222,6 +222,7 @@ export const createCustomer = createServerFn({ method: 'POST' })
           '[createCustomer] error:',
           JSON.stringify(error.response?.data, null, 2),
         )
+        throw new Error(error.response?.data.message || 'Failed to create customer')
       }
       const err = error as Error
       throw new Error(err.message || 'Failed to create customer')

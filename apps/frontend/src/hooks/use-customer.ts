@@ -10,6 +10,7 @@ import {
   getAllCustomers,
   getCustomerById,
   deleteCustomerById,
+  createCustomer,
 } from '@/lib/services/customer.services'
 import { useCartStore } from '@/lib/stores/cart.store'
 import { paginationDto } from '@repo/shared'
@@ -141,6 +142,24 @@ export function useDeleteCustomer() {
     onError: (err: Error) => {
       toast.error(err.message)
       console.error('[DELETE] Error:', err)
+    },
+  })
+}
+export function useCustomerCreate() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async ({ data }: { data: any }) => {
+      return createCustomer({ data })
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['customers'] })
+      toast.success('Customer created successfully!')
+    },
+    onError: (err: Error) => {
+      const message =
+        err?.message ||
+        'Failed to create customer'
+      toast.error(message)
     },
   })
 }

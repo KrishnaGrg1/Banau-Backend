@@ -48,6 +48,7 @@ import { Route as DashboardSettingsBillingRouteImport } from './routes/dashboard
 import { Route as DashboardProductsNewRouteImport } from './routes/dashboard/products/new'
 import { Route as DashboardInventoryLowStockRouteImport } from './routes/dashboard/inventory/low-stock'
 import { Route as DashboardInventoryAdjustmentsRouteImport } from './routes/dashboard/inventory/adjustments'
+import { Route as DashboardCustomersNewRouteImport } from './routes/dashboard/customers/new'
 import { Route as DashboardCategoriesNewRouteImport } from './routes/dashboard/categories/new'
 import { Route as DashboardAnalyticsTrafficRouteImport } from './routes/dashboard/analytics/traffic'
 import { Route as DashboardAnalyticsSalesRouteImport } from './routes/dashboard/analytics/sales'
@@ -296,6 +297,11 @@ const DashboardInventoryAdjustmentsRoute =
     path: '/inventory/adjustments',
     getParentRoute: () => DashboardRouteRoute,
   } as any)
+const DashboardCustomersNewRoute = DashboardCustomersNewRouteImport.update({
+  id: '/customers/new',
+  path: '/customers/new',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
 const DashboardCategoriesNewRoute = DashboardCategoriesNewRouteImport.update({
   id: '/categories/new',
   path: '/categories/new',
@@ -558,6 +564,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/analytics/sales': typeof DashboardAnalyticsSalesRoute
   '/dashboard/analytics/traffic': typeof DashboardAnalyticsTrafficRoute
   '/dashboard/categories/new': typeof DashboardCategoriesNewRoute
+  '/dashboard/customers/new': typeof DashboardCustomersNewRoute
   '/dashboard/inventory/adjustments': typeof DashboardInventoryAdjustmentsRoute
   '/dashboard/inventory/low-stock': typeof DashboardInventoryLowStockRoute
   '/dashboard/products/new': typeof DashboardProductsNewRoute
@@ -638,6 +645,7 @@ export interface FileRoutesByTo {
   '/dashboard/analytics/sales': typeof DashboardAnalyticsSalesRoute
   '/dashboard/analytics/traffic': typeof DashboardAnalyticsTrafficRoute
   '/dashboard/categories/new': typeof DashboardCategoriesNewRoute
+  '/dashboard/customers/new': typeof DashboardCustomersNewRoute
   '/dashboard/inventory/adjustments': typeof DashboardInventoryAdjustmentsRoute
   '/dashboard/inventory/low-stock': typeof DashboardInventoryLowStockRoute
   '/dashboard/products/new': typeof DashboardProductsNewRoute
@@ -723,6 +731,7 @@ export interface FileRoutesById {
   '/dashboard/analytics/sales': typeof DashboardAnalyticsSalesRoute
   '/dashboard/analytics/traffic': typeof DashboardAnalyticsTrafficRoute
   '/dashboard/categories/new': typeof DashboardCategoriesNewRoute
+  '/dashboard/customers/new': typeof DashboardCustomersNewRoute
   '/dashboard/inventory/adjustments': typeof DashboardInventoryAdjustmentsRoute
   '/dashboard/inventory/low-stock': typeof DashboardInventoryLowStockRoute
   '/dashboard/products/new': typeof DashboardProductsNewRoute
@@ -809,6 +818,7 @@ export interface FileRouteTypes {
     | '/dashboard/analytics/sales'
     | '/dashboard/analytics/traffic'
     | '/dashboard/categories/new'
+    | '/dashboard/customers/new'
     | '/dashboard/inventory/adjustments'
     | '/dashboard/inventory/low-stock'
     | '/dashboard/products/new'
@@ -889,6 +899,7 @@ export interface FileRouteTypes {
     | '/dashboard/analytics/sales'
     | '/dashboard/analytics/traffic'
     | '/dashboard/categories/new'
+    | '/dashboard/customers/new'
     | '/dashboard/inventory/adjustments'
     | '/dashboard/inventory/low-stock'
     | '/dashboard/products/new'
@@ -973,6 +984,7 @@ export interface FileRouteTypes {
     | '/dashboard/analytics/sales'
     | '/dashboard/analytics/traffic'
     | '/dashboard/categories/new'
+    | '/dashboard/customers/new'
     | '/dashboard/inventory/adjustments'
     | '/dashboard/inventory/low-stock'
     | '/dashboard/products/new'
@@ -1316,6 +1328,13 @@ declare module '@tanstack/react-router' {
       path: '/inventory/adjustments'
       fullPath: '/dashboard/inventory/adjustments'
       preLoaderRoute: typeof DashboardInventoryAdjustmentsRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/customers/new': {
+      id: '/dashboard/customers/new'
+      path: '/customers/new'
+      fullPath: '/dashboard/customers/new'
+      preLoaderRoute: typeof DashboardCustomersNewRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
     '/dashboard/categories/new': {
@@ -1670,6 +1689,7 @@ interface DashboardRouteRouteChildren {
   DashboardAnalyticsSalesRoute: typeof DashboardAnalyticsSalesRoute
   DashboardAnalyticsTrafficRoute: typeof DashboardAnalyticsTrafficRoute
   DashboardCategoriesNewRoute: typeof DashboardCategoriesNewRoute
+  DashboardCustomersNewRoute: typeof DashboardCustomersNewRoute
   DashboardInventoryAdjustmentsRoute: typeof DashboardInventoryAdjustmentsRoute
   DashboardInventoryLowStockRoute: typeof DashboardInventoryLowStockRoute
   DashboardProductsNewRoute: typeof DashboardProductsNewRoute
@@ -1711,6 +1731,7 @@ const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardAnalyticsSalesRoute: DashboardAnalyticsSalesRoute,
   DashboardAnalyticsTrafficRoute: DashboardAnalyticsTrafficRoute,
   DashboardCategoriesNewRoute: DashboardCategoriesNewRoute,
+  DashboardCustomersNewRoute: DashboardCustomersNewRoute,
   DashboardInventoryAdjustmentsRoute: DashboardInventoryAdjustmentsRoute,
   DashboardInventoryLowStockRoute: DashboardInventoryLowStockRoute,
   DashboardProductsNewRoute: DashboardProductsNewRoute,

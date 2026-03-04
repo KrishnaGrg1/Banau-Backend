@@ -231,7 +231,7 @@ function LoginPage() {
 
 // ── FieldError ────────────────────────────────────────────────────────────────
 
-function FieldError({ errors }: { errors: unknown[] }) {
+export function FieldError({ errors }: { errors: unknown[] }) {
   if (!errors?.length) return null
   const msg =
     typeof errors[0] === 'string' ? errors[0] : (errors[0] as any)?.message
