@@ -181,6 +181,13 @@ export class CustomerServices {
               verifiedAt: new Date(),
             },
           });
+          await this.emailService.sendCustomerWelcomeEmail({
+            to: dto.email,
+            firstName: dto.firstName,
+            lastName: dto.lastName,
+            tempPassword,
+            subdomain: tenant.subdomain,
+          });
         }
 
         // 2. Create the Customer profile linked to the User
@@ -564,12 +571,12 @@ export class CustomerServices {
   }
 
   async loginCustomer(dto: backendDtos.LoginCustomerDto, res: any) {
-    console.log("dto",dto)
+    console.log('dto', dto);
     // Find user
     const existingUser = await this.prisma.user.findUnique({
       where: { email: dto.email },
     });
-console.log("login",existingUser)
+    console.log('login', existingUser);
     if (!existingUser || existingUser.role !== 'CUSTOMER') {
       throw new UnauthorizedException('Invalid email or password');
     }
