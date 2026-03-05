@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   Post,
+  Put,
   Query,
   Request,
   Response,
@@ -15,13 +16,13 @@ import { ApiResponseDto, AuthGuard } from 'src/common';
 import { TenantOwnerGuard } from 'src/common/guard/tenant-owner.guard';
 import { StaffManagementService } from './staff-management.service';
 
-@UseGuards(AuthGuard, TenantOwnerGuard)
 @Controller('staff-management')
 export class StaffManagementController {
   constructor(
     private readonly staffManagementService: StaffManagementService,
   ) {}
 
+  @UseGuards(AuthGuard, TenantOwnerGuard)
   @Get('')
   async listAllStaff(
     @Request() req,
@@ -34,6 +35,7 @@ export class StaffManagementController {
     return ApiResponseDto.success(data, "Retrieved all tenant's customers");
   }
 
+  @UseGuards(AuthGuard, TenantOwnerGuard)
   @Get('export')
   async exportStaffMembers(
     @Request() req,
@@ -47,18 +49,24 @@ export class StaffManagementController {
     res.send(buffer);
   }
 
-  @Get(':id')
-  async getStaffById(@Request() req, @Param('id') id: string) {
-    const data = await this.staffManagementService.getStaffById(req, id);
-    return ApiResponseDto.success(data, 'Retrieved staff member successfully');
+  // PUBLIC — no guards
+  @Post('accept-invite')
+  async acceptInvite(@Body() dto: backendDtos.AcceptInviteDto) {
+    const data = await this.staffManagementService.acceptInvite(dto);
+    return ApiResponseDto.success(data, 'Invitation accepted successfully');
   }
 
-  @Delete(':id')
-  async deleteStaffById(@Request() req, @Param('id') id: string) {
-    await this.staffManagementService.deleteStaffMember(req, id);
-    return ApiResponseDto.success(null, 'Staff member deleted successfully');
+  @UseGuards(AuthGuard, TenantOwnerGuard)
+  @Post('invite')
+  async inviteStaffMember(
+    @Request() req,
+    @Body() dto: backendDtos.InviteStaffDto,
+  ) {
+    const data = await this.staffManagementService.inviteStaffMember(req, dto);
+    return ApiResponseDto.success(data, 'Invitation sent successfully');
   }
 
+  @UseGuards(AuthGuard, TenantOwnerGuard)
   @Post('')
   async createStaffMember(
     @Request() req,
@@ -69,5 +77,41 @@ export class StaffManagementController {
       dto,
     );
     return ApiResponseDto.success(data, "Created staff memeber's successfully");
+  }
+
+  @UseGuards(AuthGuard, TenantOwnerGuard)
+  @Get(':id/activity')
+  async getStaffActivity(@Request() req, @Param('id') id: string) {
+    const data = await this.staffManagementService.getStaffActivity(req, id);
+    return ApiResponseDto.success(data, 'Retrieved staff activity successfully');
+  }
+
+  @UseGuards(AuthGuard, TenantOwnerGuard)
+  @Get(':id')
+  async getStaffById(@Request() req, @Param('id') id: string) {
+    const data = await this.staffManagementService.getStaffById(req, id);
+    return ApiResponseDto.success(data, 'Retrieved staff member successfully');
+  }
+
+  @UseGuards(AuthGuard, TenantOwnerGuard)
+  @Delete(':id')
+  async deleteStaffById(@Request() req, @Param('id') id: string) {
+    await this.staffManagementService.deleteStaffMember(req, id);
+    return ApiResponseDto.success(null, 'Staff member deleted successfully');
+  }
+
+  @UseGuards(AuthGuard, TenantOwnerGuard)
+  @Put(':id')
+  async updateStaffPermission(
+    @Request() req,
+    @Param('id') staffId: string,
+    @Body() dto: backendDtos.UpdateTenantStaffPermission,
+  ) {
+    const data = await this.staffManagementService.updateStaffPermission(
+      req,
+      staffId,
+      dto,
+    );
+    return ApiResponseDto.success(data, 'Updated the staff member permission');
   }
 }

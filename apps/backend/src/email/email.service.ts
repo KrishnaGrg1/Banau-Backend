@@ -314,6 +314,35 @@ export class EmailService {
     });
   }
 
+  async sendStaffInviteEmail(params: {
+    to: string;
+    tenantName: string;
+    inviteToken: string;
+  }): Promise<void> {
+    const { to, tenantName, inviteToken } = params;
+    const inviteUrl = `${this.frontendUrl}/accept-invite?token=${inviteToken}`;
+
+    const body = `
+        <p style="margin-top:0;">You've been invited to join <b>${tenantName}</b> as a staff member on the Banau platform.</p>
+        <p>Click the button below to accept your invitation and set up your account. This link expires in <b>48 hours</b>.</p>
+        <div style="text-align:center;margin:32px 0;">
+          <a href="${inviteUrl}" style="display:inline-block;background:#4f46e5;color:#fff;text-decoration:none;padding:14px 28px;border-radius:8px;font-weight:600;font-size:16px;">Accept Invitation &rarr;</a>
+        </div>
+        <p style="margin:0;font-size:13px;color:#888;">If you weren't expecting this invitation, you can safely ignore this email. The link will expire automatically.</p>`;
+
+    return this.sendEmail(
+      to,
+      `You're invited to join ${tenantName} on Banau`,
+      emailShell({
+        headerColor: '#4f46e5',
+        headerText: 'Staff Invitation',
+        subheader: `You've been invited to ${tenantName}`,
+        body,
+        footerLabel: '&mdash; The <b>Banau</b> Team',
+      }),
+    );
+  }
+
   async sendStaffWelcomeEmail(params: {
     to: string;
     firstName: string;

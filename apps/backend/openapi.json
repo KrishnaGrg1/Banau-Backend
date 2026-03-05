@@ -1486,6 +1486,77 @@
         ]
       }
     },
+    "/api/v1/staff-management/accept-invite": {
+      "post": {
+        "operationId": "StaffManagementController_acceptInvite",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AcceptInviteDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "StaffManagement"
+        ]
+      }
+    },
+    "/api/v1/staff-management/invite": {
+      "post": {
+        "operationId": "StaffManagementController_inviteStaffMember",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InviteStaffDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "StaffManagement"
+        ]
+      }
+    },
+    "/api/v1/staff-management/{id}/activity": {
+      "get": {
+        "operationId": "StaffManagementController_getStaffActivity",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "StaffManagement"
+        ]
+      }
+    },
     "/api/v1/staff-management/{id}": {
       "get": {
         "operationId": "StaffManagementController_getStaffById",
@@ -1520,6 +1591,37 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "StaffManagement"
+        ]
+      },
+      "put": {
+        "operationId": "StaffManagementController_updateStaffPermission",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateTenantStaffPermission"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": ""
@@ -1637,7 +1739,19 @@
         "type": "object",
         "properties": {}
       },
+      "AcceptInviteDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "InviteStaffDto": {
+        "type": "object",
+        "properties": {}
+      },
       "CreateTenantStaffDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "UpdateTenantStaffPermission": {
         "type": "object",
         "properties": {}
       }

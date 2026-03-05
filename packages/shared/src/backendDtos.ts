@@ -811,3 +811,58 @@ export class CreateTenantStaffDto {
   @IsBoolean()
   canManageStaff?: boolean;
 }
+
+export class UpdateTenantStaffPermission{
+  @IsBoolean()
+  canManageProducts: boolean;
+
+  @IsBoolean()
+  canManageOrders: boolean;
+
+  @IsBoolean()
+  canManageCustomers: boolean;
+
+  @IsBoolean()
+  canViewAnalytics: boolean;
+
+  @IsBoolean()
+  canManageStaff: boolean;
+}
+export class InviteStaffDto {
+  @IsEmail()
+  email: string;
+
+  @IsBoolean()
+  canManageProducts: boolean;
+
+  @IsBoolean()
+  canManageOrders: boolean;
+
+  @IsBoolean()
+  canManageCustomers: boolean;
+
+  @IsBoolean()
+  canViewAnalytics: boolean;
+
+  @IsBoolean()
+  canManageStaff: boolean;
+}
+
+export class AcceptInviteDto {
+  @IsString()
+  @IsNotEmpty()
+  token: string;
+
+  @IsString()
+  @MinLength(2)
+  firstName: string;
+
+  @IsString()
+  @MinLength(2)
+  lastName: string;
+
+  @IsOptional()
+  @IsString()
+  @MinLength(8)
+  password?: string;
+}
