@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -50,6 +51,12 @@ export class StaffManagementController {
   async getStaffById(@Request() req, @Param('id') id: string) {
     const data = await this.staffManagementService.getStaffById(req, id);
     return ApiResponseDto.success(data, 'Retrieved staff member successfully');
+  }
+
+  @Delete(':id')
+  async deleteStaffById(@Request() req, @Param('id') id: string) {
+    await this.staffManagementService.deleteStaffMember(req, id);
+    return ApiResponseDto.success(null, 'Staff member deleted successfully');
   }
 
   @Post('')

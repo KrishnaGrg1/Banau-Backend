@@ -78,15 +78,18 @@ export class StaffManagementService {
     return result;
   }
 
-  async exportStaffMembers(req, format) {
+  async exportStaffMembers(req: any, format: string) {
     const existingTenant = await this.getTenant(req);
     const cacheKey = CacheKey.staffExport(existingTenant.id);
-    let cache = (await this.redis.get(cacheKey)) as TenantStaff[];
+    let cache = (await this.redis.get(cacheKey)) as (TenantStaff & { user: any })[];
 
     if (!cache) {
       cache = await this.prisma.tenantStaff.findMany({
         where: {
           tenantId: String(existingTenant.id),
+        },
+        include: {
+          user: true,
         },
       });
 
@@ -95,7 +98,8 @@ export class StaffManagementService {
     const exportData = cache.map((x) => ({
       id: x.id,
       tenantId: x.tenantId,
-      userId: x.userId,
+      StaffMemberName: `${x.user.firstName} ${x.user.lastName}`,
+      email: x.user.email,
       canManageProducts: x.canManageProducts ? '✓' : '✗',
       canManageOrders: x.canManageOrders ? '✓' : '✗',
       canManageCustomers: x.canManageCustomers ? '✓' : '✗',
@@ -127,10 +131,10 @@ export class StaffManagementService {
     }
   }
 
-  async getStaffById(req, staffId: string) {
+  async getStaffById(req, staffId: string): Promise<TenantStaff> {
     const existingTenant = await this.getTenant(req);
     const cacheKey = CacheKey.staffById(existingTenant.id, staffId);
-    const cache = await this.redis.get(cacheKey);
+    const cache = await this.redis.get(cacheKey) as TenantStaff;
     if (cache) {
       return cache;
     }
@@ -186,5 +190,23 @@ export class StaffManagementService {
 
     await this.redis.invalidateByPrefix(CacheKey.staffPrefix(existingTenant.id));
     return newStaffMember;
+  }
+
+  async deleteStaffMember(req: any, staffId: string): Promise<void> {
+    const existingTenant = await this.getTenant(req);
+    const existingStaff = await this.getStaffById(req, staffId);
+
+    await this.prisma.$transaction([
+      this.prisma.user.delete({
+        where: { id: existingStaff.userId },
+      }),
+      this.prisma.tenantStaff.delete({
+        where: { id: existingStaff.id },
+      }),
+    ]);
+
+    await this.redis.invalidateByPrefix(
+      CacheKey.staffPrefix(existingTenant.id)
+    );
   }
 }
