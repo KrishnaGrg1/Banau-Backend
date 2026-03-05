@@ -775,3 +775,41 @@ export class CreateCheckoutSessionDto {
   @Type(() => CheckoutSessionItemDto)
   items: CheckoutSessionItemDto[];
 }
+
+
+export class CreateTenantStaffDto {
+  @IsEmail()
+  email: string;
+
+  @IsString()
+  @MinLength(2)
+  firstName: string;
+
+  @IsString()
+  @MinLength(2)
+  lastName: string;
+
+  @IsOptional()
+  @IsString()
+  phone?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  canManageProducts?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  canManageOrders?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  canManageCustomers?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  canViewAnalytics?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  canManageStaff?: boolean;
+}

@@ -44,6 +44,14 @@ export const CacheKey = {
   storeProductsPrefix: (subdomain: string) => `store:products:${subdomain}:`,
 
   storeSearchPrefix: (subdomain: string) => `store:search:${subdomain}:`,
+
+  products: (tenatId: string, page: number, limit: number) =>
+    `tennat:products:${tenatId}:p${page}:l${limit}`,
+
+  staffList: (tenantId: string, page: number, limit: number) =>
+    `tenant:staff:${tenantId}:p${page}:l${limit}`,
+  staffPrefix: (tenantId: string) => `tenant:staff:${tenantId}:`,
+  tenantStaffList: (tenantId: string) => `tenant:staff:${tenantId}`,
 };
 
 /** Hash a JWT access token for safe use as a Redis key. */

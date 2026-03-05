@@ -1426,6 +1426,65 @@
           "Customer"
         ]
       }
+    },
+    "/api/v1/staff-management": {
+      "get": {
+        "operationId": "StaffManagementController_listAllStaff",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "StaffManagement"
+        ]
+      },
+      "post": {
+        "operationId": "StaffManagementController_createStaffMember",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTenantStaffDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "StaffManagement"
+        ]
+      }
+    },
+    "/api/v1/staff-management/export": {
+      "get": {
+        "operationId": "StaffManagementController_exportStaffMembers",
+        "parameters": [
+          {
+            "name": "format",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "StaffManagement"
+        ]
+      }
     }
   },
   "info": {
@@ -1531,6 +1590,10 @@
         "properties": {}
       },
       "LoginCustomerDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "CreateTenantStaffDto": {
         "type": "object",
         "properties": {}
       }

@@ -67,6 +67,14 @@ export class ProductServices {
       },
     });
     if (!existingTenant) throw new ConflictException('User dont have tenants');
+    const page = Math.floor(offset / limit) + 1;
+    const cacheKey = `tennat:products:${existingTenant.id}:p${page}:l${limit}`;
+
+    const cache = await this.redis.get(cacheKey);
+    if (cache) {
+      return cache;
+    }
+
     const [existingProducts, total] = await Promise.all([
       await this.prisma.product.findMany({
         where: {
@@ -88,7 +96,7 @@ export class ProductServices {
         },
       }),
     ]);
-    return {
+    const result = {
       existingProducts: await Promise.all(
         existingProducts.map(async (product) => {
           return productToDto({ ...product });
@@ -102,6 +110,8 @@ export class ProductServices {
         hasPreviousPage: offset > 0,
       },
     };
+    await this.redis.set(cacheKey, result, 3600);
+    return result;
   }
   async getProductbyProductId(req, productId: string) {
     const product = await this.verifyProductOwnership(req, productId);

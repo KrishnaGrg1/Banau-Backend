@@ -13,6 +13,7 @@ import { ProductsModule } from './products/products.module';
 import { PublicProductsModule } from './public-products/public-products.module';
 import { OrderModule } from './order/order.module';
 import { CustomerModule } from './customer/customer.module';
+import { StaffManagementModule } from './staff-management/staff-management.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -27,6 +28,7 @@ import { CustomerModule } from './customer/customer.module';
     PublicProductsModule,
     OrderModule,
     CustomerModule,
+    StaffManagementModule,
   ],
   providers: [PrismaService],
   exports: [PrismaService],
