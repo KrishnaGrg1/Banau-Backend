@@ -1,7 +1,8 @@
 import {
-    Body,
+  Body,
   Controller,
   Get,
+  Param,
   Post,
   Query,
   Request,
@@ -45,12 +46,21 @@ export class StaffManagementController {
     res.send(buffer);
   }
 
+  @Get(':id')
+  async getStaffById(@Request() req, @Param('id') id: string) {
+    const data = await this.staffManagementService.getStaffById(req, id);
+    return ApiResponseDto.success(data, 'Retrieved staff member successfully');
+  }
+
   @Post('')
   async createStaffMember(
-    @Request()req,
-    @Body()dto:backendDtos.CreateTenantStaffDto
-  ){
-    const data=await this.staffManagementService.createTenantStaffMember(req,dto)
-    return ApiResponseDto.success(data, "Created staff memeber's successfully"); 
+    @Request() req,
+    @Body() dto: backendDtos.CreateTenantStaffDto,
+  ) {
+    const data = await this.staffManagementService.createTenantStaffMember(
+      req,
+      dto,
+    );
+    return ApiResponseDto.success(data, "Created staff memeber's successfully");
   }
 }

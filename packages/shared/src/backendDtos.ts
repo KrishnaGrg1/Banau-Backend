@@ -789,9 +789,7 @@ export class CreateTenantStaffDto {
   @MinLength(2)
   lastName: string;
 
-  @IsOptional()
-  @IsString()
-  phone?: string;
+
 
   @IsOptional()
   @IsBoolean()

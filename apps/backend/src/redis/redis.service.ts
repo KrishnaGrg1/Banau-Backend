@@ -51,7 +51,9 @@ export const CacheKey = {
   staffList: (tenantId: string, page: number, limit: number) =>
     `tenant:staff:${tenantId}:p${page}:l${limit}`,
   staffPrefix: (tenantId: string) => `tenant:staff:${tenantId}:`,
-  tenantStaffList: (tenantId: string) => `tenant:staff:${tenantId}`,
+  staffById: (tenantId: string, staffId: string) =>
+    `tenant:staff:${tenantId}:${staffId}`,
+  staffExport: (tenantId: string) => `tenant:staff:${tenantId}:export`,
 };
 
 /** Hash a JWT access token for safe use as a Redis key. */

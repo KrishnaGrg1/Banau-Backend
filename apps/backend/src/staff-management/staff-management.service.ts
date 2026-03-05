@@ -1,12 +1,18 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { TenantStaff } from '@repo/db/dist/generated/prisma/client';
 import { backendDtos } from '@repo/shared';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { EmailService } from 'src/email/email.service';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { RedisService } from 'src/redis/redis.service';
+import { CacheKey, RedisService } from 'src/redis/redis.service';
 import * as xlsx from 'xlsx';
 import * as Papa from 'papaparse';
+import { v4 as uuidv4 } from 'uuid';
+import * as bcrypt from 'bcrypt';
 @Injectable()
 export class StaffManagementService {
   constructor(
@@ -25,6 +31,7 @@ export class StaffManagementService {
     if (!existingTenant) throw new ConflictException('Tenant doesnot exist');
     return existingTenant;
   }
+
   async listAllStaff(req: any, pagination: backendDtos.PaginationDto) {
     const { limit = 10, offset = 0 } = pagination;
 
@@ -32,7 +39,7 @@ export class StaffManagementService {
 
     const page = Math.floor(offset / limit) + 1;
 
-    const cacheKey = `staff:${tenant.id}:${page}:${limit}`;
+    const cacheKey = CacheKey.staffList(tenant.id, page, limit);
 
     // 1️⃣ Check cache
     const cached = await this.redis.get(cacheKey);
@@ -73,15 +80,17 @@ export class StaffManagementService {
 
   async exportStaffMembers(req, format) {
     const existingTenant = await this.getTenant(req);
-    const cacheKey = `tenant:staff:${existingTenant.id}`;
-    const cache = (await this.redis.get(cacheKey)) as TenantStaff[];
+    const cacheKey = CacheKey.staffExport(existingTenant.id);
+    let cache = (await this.redis.get(cacheKey)) as TenantStaff[];
+
     if (!cache) {
-      const existingStaff = await this.prisma.tenantStaff.findMany({
+      cache = await this.prisma.tenantStaff.findMany({
         where: {
           tenantId: String(existingTenant.id),
         },
       });
-      const cache = await this.redis.set(cacheKey, existingStaff, 3600);
+
+      await this.redis.set(cacheKey, cache, 3600);
     }
     const exportData = cache.map((x) => ({
       id: x.id,
@@ -118,8 +127,64 @@ export class StaffManagementService {
     }
   }
 
-  async createTenantStaffMember(req,dto:backendDtos.CreateTenantStaffDto){
-        const existingTenant=await this.getTenant(req)
-        
+  async getStaffById(req, staffId: string) {
+    const existingTenant = await this.getTenant(req);
+    const cacheKey = CacheKey.staffById(existingTenant.id, staffId);
+    const cache = await this.redis.get(cacheKey);
+    if (cache) {
+      return cache;
+    }
+    const existingStaff = await this.prisma.tenantStaff.findUnique({
+      where: {
+        id: String(staffId),
+        tenantId: String(existingTenant.id),
+      },
+    });
+    if (!existingStaff) throw new NotFoundException('Staff doesnt exist');
+    await this.redis.set(cacheKey, existingStaff, 3600);
+    return existingStaff;
+  }
+
+  async createTenantStaffMember(req, dto: backendDtos.CreateTenantStaffDto) {
+    const existingTenant = await this.getTenant(req);
+
+    const exisitngUser = await this.prisma.user.findUnique({
+      where: {
+        email: String(dto.email),
+      },
+    });
+    if (exisitngUser) {
+     throw new ConflictException('Email already exists');
+    }
+    const tempPassword = uuidv4().replace(/-/g, '').slice(0, 12);
+    const hashedPassword = await bcrypt.hash(tempPassword, 10);
+    const newUser = await this.prisma.user.create({
+      data: {
+        email: dto.email,
+        firstName: dto.firstName,
+        lastName: dto.lastName,
+        password: hashedPassword,
+      },
+    });
+    const newStaffMember = await this.prisma.tenantStaff.create({
+      data: {
+        tenantId: existingTenant.id.toString(),
+        userId: newUser.id.toString(),
+        canManageCustomers: dto.canManageCustomers,
+        canManageOrders: dto.canManageOrders,
+        canManageProducts: dto.canManageProducts,
+        canManageStaff: dto.canManageStaff,
+        canViewAnalytics: dto.canViewAnalytics,
+      },
+    });
+    await this.emailService.sendStaffWelcomeEmail({
+      to: newUser.email,
+      firstName: newUser.firstName,
+      lastName: newUser.lastName,
+      tempPassword,
+    });
+
+    await this.redis.invalidateByPrefix(CacheKey.staffPrefix(existingTenant.id));
+    return newStaffMember;
   }
 }

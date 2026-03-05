@@ -1485,6 +1485,29 @@
           "StaffManagement"
         ]
       }
+    },
+    "/api/v1/staff-management/{id}": {
+      "get": {
+        "operationId": "StaffManagementController_getStaffById",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "StaffManagement"
+        ]
+      }
     }
   },
   "info": {

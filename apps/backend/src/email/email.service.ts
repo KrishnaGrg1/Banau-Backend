@@ -313,4 +313,40 @@ export class EmailService {
       footerLabel: '&mdash; The <b>Banau</b> Team',
     });
   }
+
+  async sendStaffWelcomeEmail(params: {
+    to: string;
+    firstName: string;
+    lastName: string;
+    tempPassword: string;
+  }): Promise<void> {
+    const { to, firstName, lastName, tempPassword } = params;
+    const fullName = `${firstName} ${lastName}`;
+    const loginUrl = `${this.frontendUrl}/login`;
+
+    const body = `
+        <p style="margin-top:0;">Hi <b>${fullName}</b>,</p>
+        <p>Welcome to the Banau platform! Your staff account has been created and is ready to use.</p>
+        <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:10px;padding:20px;margin:24px 0;">
+          <p style="margin:0 0 8px;font-weight:700;color:#15803d;">Your Login Credentials</p>
+          <p style="margin:4px 0;"><b>Email:</b> ${to}</p>
+          <p style="margin:4px 0 16px;"><b>Temporary Password:</b>
+            <code style="background:#f3f4f6;padding:2px 10px;border-radius:4px;font-size:15px;letter-spacing:1px;">${tempPassword}</code>
+          </p>
+          <a href="${loginUrl}" style="display:inline-block;background:#4f46e5;color:#fff;text-decoration:none;padding:10px 22px;border-radius:8px;font-weight:600;">Sign in to your account &rarr;</a>
+        </div>
+        <p style="margin:0;font-size:13px;color:#888;">For security, please change your password immediately after your first login. Keep your credentials confidential.</p>`;
+
+    return this.sendEmail(
+      to,
+      'Welcome to Banau – Staff Account Ready',
+      emailShell({
+        headerColor: '#4f46e5',
+        headerText: 'Welcome to Banau!',
+        subheader: 'Your staff account is ready',
+        body,
+        footerLabel: '&mdash; The <b>Banau</b> Team',
+      }),
+    );
+  }
 }

@@ -12,7 +12,6 @@ import { AuthModule } from 'src/auth/auth.module';
   imports: [
     ConfigModule,
     CloudinaryModule,
-    ConfigModule,
     EmailModule,
     RedisModule,
     PrismaModule,
