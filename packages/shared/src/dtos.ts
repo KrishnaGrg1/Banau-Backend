@@ -874,3 +874,113 @@ export interface SearchTypes {
   limit?: number;
   offset?: number;
 }
+
+export interface StaffDto {
+ id: string;
+  tenantId: string;
+  userId: string;
+  canManageProducts: boolean;
+  canManageOrders: boolean;
+  canManageCustomers: boolean;
+  canViewAnalytics: boolean;
+  canManageStaff: boolean;
+  createdAt: Date | string;
+  updatedAt: Date | string;
+  user?: {
+    id: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+    role: string;
+    isVerified: boolean;
+    isActive: boolean;
+    createdAt: Date | string;
+    updatedAt: Date | string;
+    lastLoginAt: Date | string | null;
+  };
+}
+export interface StaffListResponse {
+  success: boolean;
+  message: string;
+  data: {
+    data: StaffDto[];
+    meta: {
+      total: number;
+      limit: number;
+      offset: number;
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+    };
+  };
+  timestamp: Date;
+}
+
+export interface getStaffByIdResponse{
+  success:boolean;
+  message:string;
+  data:StaffDto,
+  timeStamp:Date
+}
+
+export interface deleteStaffResponse{
+  success:boolean;
+  message:string;
+  data:null,
+  timeStamp:Date
+}
+
+export const StaffById=z.object({
+  staffId:z.string({
+    message:'Staff id is required'
+  })
+})
+
+
+// CreateTenantStaffDto
+export const CreateTenantStaffDtoSchema = z.object({
+  email: z.string().email("Invalid email"),
+  firstName: z.string().min(2, "First name must be at least 2 characters"),
+  lastName: z.string().min(2, "Last name must be at least 2 characters"),
+  canManageProducts: z.boolean(),
+  canManageOrders: z.boolean(),
+  canManageCustomers: z.boolean(),
+  canViewAnalytics: z.boolean(),
+  canManageStaff: z.boolean()
+});
+
+export type CreateTenantStaffDto = z.infer<typeof CreateTenantStaffDtoSchema>;
+
+// UpdateTenantStaffPermission
+export const UpdateTenantStaffPermissionSchema = z.object({
+   staffId:z.string({
+    message:'Staff id is required'
+  }),
+  canManageProducts: z.boolean(),
+  canManageOrders: z.boolean(),
+  canManageCustomers: z.boolean(),
+  canViewAnalytics: z.boolean(),
+  canManageStaff: z.boolean(),
+});
+
+export type UpdateTenantStaffPermission = z.infer<typeof UpdateTenantStaffPermissionSchema>;
+
+// InviteStaffDto
+export const InviteStaffDtoSchema = z.object({
+  email: z.string().email("Invalid email"),
+  canManageProducts: z.boolean(),
+  canManageOrders: z.boolean(),
+  canManageCustomers: z.boolean(),
+  canViewAnalytics: z.boolean(),
+  canManageStaff: z.boolean(),
+});
+
+export type InviteStaffDto = z.infer<typeof InviteStaffDtoSchema>;
+
+// AcceptInviteDto
+export const AcceptInviteDtoSchema = z.object({
+  token: z.string().min(1, "Token is required"),
+  firstName: z.string().min(2, "First name must be at least 2 characters"),
+  lastName: z.string().min(2, "Last name must be at least 2 characters")
+});
+
+export type AcceptInviteDto = z.infer<typeof AcceptInviteDtoSchema>;

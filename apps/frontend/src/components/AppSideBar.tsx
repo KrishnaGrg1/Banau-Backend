@@ -63,6 +63,7 @@ import {
   Palette,
   Lock,
   UserCircle,
+  MailPlus,
 } from 'lucide-react'
 
 // ─── Nav config ──────────────────────────────────────────────────────────────
@@ -151,6 +152,7 @@ const navMain = [
     children: [
       { title: 'All Staff', icon: UserCog, to: '/dashboard/staff' },
       { title: 'Add Member', icon: Plus, to: '/dashboard/staff/new' },
+      { title: 'Invite Member', icon: MailPlus, to: '/dashboard/staff/invite' },
     ],
   },
   {

@@ -156,9 +156,7 @@ export function useCustomerCreate() {
       toast.success('Customer created successfully!')
     },
     onError: (err: Error) => {
-      const message =
-        err?.message ||
-        'Failed to create customer'
+      const message = err?.message || 'Failed to create customer'
       toast.error(message)
     },
   })

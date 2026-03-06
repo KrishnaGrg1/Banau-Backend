@@ -87,7 +87,7 @@ export const customerRegister = createServerFn({ method: 'POST' })
       })
       return response.data
     } catch (error: unknown) {
-       if (isAxiosError(error)) {
+      if (isAxiosError(error)) {
         console.error(
           '[loginCustomer] error:',
           JSON.stringify(error.response?.data, null, 2),
@@ -109,7 +109,7 @@ export const customerLogout = createServerFn({ method: 'POST' }).handler(
       await session.clear()
       return response.data
     } catch (error: unknown) {
-       if (isAxiosError(error)) {
+      if (isAxiosError(error)) {
         console.error(
           '[logoutCustomer] error:',
           JSON.stringify(error.response?.data, null, 2),
@@ -222,7 +222,9 @@ export const createCustomer = createServerFn({ method: 'POST' })
           '[createCustomer] error:',
           JSON.stringify(error.response?.data, null, 2),
         )
-        throw new Error(error.response?.data.message || 'Failed to create customer')
+        throw new Error(
+          error.response?.data.message || 'Failed to create customer',
+        )
       }
       const err = error as Error
       throw new Error(err.message || 'Failed to create customer')

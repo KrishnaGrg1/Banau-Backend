@@ -790,26 +790,20 @@ export class CreateTenantStaffDto {
   lastName: string;
 
 
-
-  @IsOptional()
   @IsBoolean()
-  canManageProducts?: boolean;
+  canManageProducts: boolean;
 
-  @IsOptional()
   @IsBoolean()
-  canManageOrders?: boolean;
+  canManageOrders: boolean;
 
-  @IsOptional()
   @IsBoolean()
-  canManageCustomers?: boolean;
+  canManageCustomers: boolean;
 
-  @IsOptional()
   @IsBoolean()
-  canViewAnalytics?: boolean;
+  canViewAnalytics: boolean;
 
-  @IsOptional()
   @IsBoolean()
-  canManageStaff?: boolean;
+  canManageStaff: boolean;
 }
 
 export class UpdateTenantStaffPermission{

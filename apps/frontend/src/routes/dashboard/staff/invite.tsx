@@ -3,8 +3,6 @@ import { FieldError } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Checkbox } from '@/components/ui/checkbox'
-import { useCreateStaffMember } from '@/hooks/use-staff-management'
-import { CreateTenantStaffDtoSchema } from '@repo/shared'
 import { useForm } from '@tanstack/react-form'
 import { createFileRoute } from '@tanstack/react-router'
 import { AlertCircle, Loader2 } from 'lucide-react'
@@ -15,19 +13,18 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { useInviteStaff } from '@/hooks/use-staff-management'
+import { InviteStaffDtoSchema } from '@repo/shared'
 
-export const Route = createFileRoute('/dashboard/staff/new')({
+export const Route = createFileRoute('/dashboard/staff/invite')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  const { mutateAsync, isPending, error } = useCreateStaffMember()
-
+  const { mutateAsync, isPending, error } = useInviteStaff()
   const form = useForm({
     defaultValues: {
       email: '',
-      firstName: '',
-      lastName: '',
       canManageProducts: false,
       canManageOrders: false,
       canManageCustomers: false,
@@ -35,13 +32,12 @@ function RouteComponent() {
       canManageStaff: false,
     },
     validators: {
-      onSubmit: CreateTenantStaffDtoSchema,
+      onSubmit: InviteStaffDtoSchema,
     },
     onSubmit: async ({ value }) => {
       await mutateAsync({ data: value })
     },
   })
-
   return (
     <Card className=" space-y-6">
       {/* Header */}
@@ -94,69 +90,6 @@ function RouteComponent() {
               </div>
             )}
           </form.Field>
-
-          {/* Name Grid */}
-          <div className="grid grid-cols-2 gap-4">
-            <form.Field
-              name="firstName"
-              validators={{
-                onChange: ({ value }) =>
-                  !value
-                    ? 'Required'
-                    : value.length < 2
-                      ? 'Min 2 characters'
-                      : undefined,
-              }}
-            >
-              {(field) => (
-                <div className="space-y-2">
-                  <Label htmlFor={field.name}>First Name</Label>
-                  <Input
-                    id={field.name}
-                    placeholder="John"
-                    value={field.state.value}
-                    onBlur={field.handleBlur}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                  />
-                  <FieldError
-                    errors={field.state.meta.errors?.map((e) =>
-                      typeof e === 'string' ? { message: e } : e,
-                    )}
-                  />
-                </div>
-              )}
-            </form.Field>
-
-            <form.Field
-              name="lastName"
-              validators={{
-                onChange: ({ value }) =>
-                  !value
-                    ? 'Required'
-                    : value.length < 2
-                      ? 'Min 2 characters'
-                      : undefined,
-              }}
-            >
-              {(field) => (
-                <div className="space-y-2">
-                  <Label htmlFor={field.name}>Last Name</Label>
-                  <Input
-                    id={field.name}
-                    placeholder="Doe"
-                    value={field.state.value}
-                    onBlur={field.handleBlur}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                  />
-                  <FieldError
-                    errors={field.state.meta.errors?.map((e) =>
-                      typeof e === 'string' ? { message: e } : e,
-                    )}
-                  />
-                </div>
-              )}
-            </form.Field>
-          </div>
 
           {/* Permissions */}
           <div className="space-y-4 rounded-xl border p-4">

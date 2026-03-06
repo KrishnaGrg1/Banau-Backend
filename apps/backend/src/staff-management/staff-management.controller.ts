@@ -62,8 +62,8 @@ export class StaffManagementController {
     @Request() req,
     @Body() dto: backendDtos.InviteStaffDto,
   ) {
-    const data = await this.staffManagementService.inviteStaffMember(req, dto);
-    return ApiResponseDto.success(data, 'Invitation sent successfully');
+     await this.staffManagementService.inviteStaffMember(req, dto);
+    return ApiResponseDto.success( 'Invitation sent successfully');
   }
 
   @UseGuards(AuthGuard, TenantOwnerGuard)

@@ -145,6 +145,7 @@ export class StaffManagementService {
         id: String(staffId),
         tenantId: String(existingTenant.id),
       },
+       include: { user: true },
     });
     if (!existingStaff) throw new NotFoundException('Staff doesnt exist');
     await this.redis.set(cacheKey, existingStaff, 3600);
@@ -185,6 +186,9 @@ export class StaffManagementService {
         canManageStaff: dto.canManageStaff,
         canViewAnalytics: dto.canViewAnalytics,
       },
+      include:{
+        user:true
+      }
     });
     await this.emailService.sendStaffWelcomeEmail({
       to: newUser.email,
@@ -299,6 +303,9 @@ export class StaffManagementService {
         userId: user.id,
         ...invite.permissions,
       },
+      include:{
+        user:true
+      }
     });
 
     await this.redis.del(CacheKey.staffInvite(dto.token));
@@ -390,6 +397,9 @@ export class StaffManagementService {
         canManageStaff: dto.canManageStaff,
         canViewAnalytics: dto.canViewAnalytics,
       },
+      include:{
+        user:true
+      }
     });
 
     await this.redis.invalidateByPrefix(

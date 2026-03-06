@@ -18,6 +18,7 @@ import { Route as authVerifyRouteImport } from './routes/(auth)/verify'
 import { Route as authRegisterRouteImport } from './routes/(auth)/register'
 import { Route as authLoginRouteImport } from './routes/(auth)/login'
 import { Route as authForgetPasswordRouteImport } from './routes/(auth)/forget-password'
+import { Route as authAcceptInviteRouteImport } from './routes/(auth)/accept-invite'
 import { Route as SSubdomainRouteRouteImport } from './routes/s/$subdomain/route'
 import { Route as SSubdomainIndexRouteImport } from './routes/s/$subdomain/index'
 import { Route as DashboardTenantsIndexRouteImport } from './routes/dashboard/tenants/index'
@@ -37,6 +38,7 @@ import { Route as SSubdomainContactRouteImport } from './routes/s/$subdomain/con
 import { Route as SSubdomainCartRouteImport } from './routes/s/$subdomain/cart'
 import { Route as SSubdomainAboutRouteImport } from './routes/s/$subdomain/about'
 import { Route as DashboardStaffNewRouteImport } from './routes/dashboard/staff/new'
+import { Route as DashboardStaffInviteRouteImport } from './routes/dashboard/staff/invite'
 import { Route as DashboardSettingsTaxesRouteImport } from './routes/dashboard/settings/taxes'
 import { Route as DashboardSettingsShippingRouteImport } from './routes/dashboard/settings/shipping'
 import { Route as DashboardSettingsPaymentsRouteImport } from './routes/dashboard/settings/payments'
@@ -68,6 +70,7 @@ import { Route as SSubdomainAccountRouteRouteImport } from './routes/s/$subdomai
 import { Route as SSubdomainProductsIndexRouteImport } from './routes/s/$subdomain/products/index'
 import { Route as SSubdomainCheckoutIndexRouteImport } from './routes/s/$subdomain/checkout/index'
 import { Route as SSubdomainAccountIndexRouteImport } from './routes/s/$subdomain/account/index'
+import { Route as DashboardStaffIdIndexRouteImport } from './routes/dashboard/staff/$id/index'
 import { Route as DashboardProductsIdIndexRouteImport } from './routes/dashboard/products/$id/index'
 import { Route as DashboardOrdersIdIndexRouteImport } from './routes/dashboard/orders/$id/index'
 import { Route as DashboardCustomersIdIndexRouteImport } from './routes/dashboard/customers/$id/index'
@@ -80,7 +83,7 @@ import { Route as SSubdomainCategoriesSlugRouteImport } from './routes/s/$subdom
 import { Route as SSubdomainAccountRegisterRouteImport } from './routes/s/$subdomain/account/register'
 import { Route as SSubdomainAccountProfileRouteImport } from './routes/s/$subdomain/account/profile'
 import { Route as SSubdomainAccountLoginRouteImport } from './routes/s/$subdomain/account/login'
-import { Route as DashboardStaffIdEditRouteImport } from './routes/dashboard/staff/$id.edit'
+import { Route as DashboardStaffIdEditRouteImport } from './routes/dashboard/staff/$id/edit'
 import { Route as DashboardProductsIdEditRouteImport } from './routes/dashboard/products/$id/edit'
 import { Route as DashboardOrdersIdEditRouteImport } from './routes/dashboard/orders/$id/edit'
 import { Route as DashboardCustomersIdEditRouteImport } from './routes/dashboard/customers/$id/edit'
@@ -136,6 +139,11 @@ const authLoginRoute = authLoginRouteImport.update({
 const authForgetPasswordRoute = authForgetPasswordRouteImport.update({
   id: '/(auth)/forget-password',
   path: '/forget-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const authAcceptInviteRoute = authAcceptInviteRouteImport.update({
+  id: '/(auth)/accept-invite',
+  path: '/accept-invite',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SSubdomainRouteRoute = SSubdomainRouteRouteImport.update({
@@ -232,6 +240,11 @@ const SSubdomainAboutRoute = SSubdomainAboutRouteImport.update({
 const DashboardStaffNewRoute = DashboardStaffNewRouteImport.update({
   id: '/staff/new',
   path: '/staff/new',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardStaffInviteRoute = DashboardStaffInviteRouteImport.update({
+  id: '/staff/invite',
+  path: '/staff/invite',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardSettingsTaxesRoute = DashboardSettingsTaxesRouteImport.update({
@@ -402,6 +415,11 @@ const SSubdomainAccountIndexRoute = SSubdomainAccountIndexRouteImport.update({
   path: '/',
   getParentRoute: () => SSubdomainAccountRouteRoute,
 } as any)
+const DashboardStaffIdIndexRoute = DashboardStaffIdIndexRouteImport.update({
+  id: '/staff/$id/',
+  path: '/staff/$id/',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
 const DashboardProductsIdIndexRoute =
   DashboardProductsIdIndexRouteImport.update({
     id: '/products/$id/',
@@ -542,6 +560,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteRouteWithChildren
   '/dashboard': typeof DashboardRouteRouteWithChildren
   '/s/$subdomain': typeof SSubdomainRouteRouteWithChildren
+  '/accept-invite': typeof authAcceptInviteRoute
   '/forget-password': typeof authForgetPasswordRoute
   '/login': typeof authLoginRoute
   '/register': typeof authRegisterRoute
@@ -576,6 +595,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/settings/payments': typeof DashboardSettingsPaymentsRoute
   '/dashboard/settings/shipping': typeof DashboardSettingsShippingRoute
   '/dashboard/settings/taxes': typeof DashboardSettingsTaxesRoute
+  '/dashboard/staff/invite': typeof DashboardStaffInviteRoute
   '/dashboard/staff/new': typeof DashboardStaffNewRoute
   '/s/$subdomain/about': typeof SSubdomainAboutRoute
   '/s/$subdomain/cart': typeof SSubdomainCartRoute
@@ -613,6 +633,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/customers/$id/': typeof DashboardCustomersIdIndexRoute
   '/dashboard/orders/$id/': typeof DashboardOrdersIdIndexRoute
   '/dashboard/products/$id/': typeof DashboardProductsIdIndexRoute
+  '/dashboard/staff/$id/': typeof DashboardStaffIdIndexRoute
   '/s/$subdomain/account/': typeof SSubdomainAccountIndexRoute
   '/s/$subdomain/checkout/': typeof SSubdomainCheckoutIndexRoute
   '/s/$subdomain/products/': typeof SSubdomainProductsIndexRoute
@@ -624,6 +645,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/accept-invite': typeof authAcceptInviteRoute
   '/forget-password': typeof authForgetPasswordRoute
   '/login': typeof authLoginRoute
   '/register': typeof authRegisterRoute
@@ -657,6 +679,7 @@ export interface FileRoutesByTo {
   '/dashboard/settings/payments': typeof DashboardSettingsPaymentsRoute
   '/dashboard/settings/shipping': typeof DashboardSettingsShippingRoute
   '/dashboard/settings/taxes': typeof DashboardSettingsTaxesRoute
+  '/dashboard/staff/invite': typeof DashboardStaffInviteRoute
   '/dashboard/staff/new': typeof DashboardStaffNewRoute
   '/s/$subdomain/about': typeof SSubdomainAboutRoute
   '/s/$subdomain/cart': typeof SSubdomainCartRoute
@@ -694,6 +717,7 @@ export interface FileRoutesByTo {
   '/dashboard/customers/$id': typeof DashboardCustomersIdIndexRoute
   '/dashboard/orders/$id': typeof DashboardOrdersIdIndexRoute
   '/dashboard/products/$id': typeof DashboardProductsIdIndexRoute
+  '/dashboard/staff/$id': typeof DashboardStaffIdIndexRoute
   '/s/$subdomain/account': typeof SSubdomainAccountIndexRoute
   '/s/$subdomain/checkout': typeof SSubdomainCheckoutIndexRoute
   '/s/$subdomain/products': typeof SSubdomainProductsIndexRoute
@@ -709,6 +733,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteRouteWithChildren
   '/dashboard': typeof DashboardRouteRouteWithChildren
   '/s/$subdomain': typeof SSubdomainRouteRouteWithChildren
+  '/(auth)/accept-invite': typeof authAcceptInviteRoute
   '/(auth)/forget-password': typeof authForgetPasswordRoute
   '/(auth)/login': typeof authLoginRoute
   '/(auth)/register': typeof authRegisterRoute
@@ -743,6 +768,7 @@ export interface FileRoutesById {
   '/dashboard/settings/payments': typeof DashboardSettingsPaymentsRoute
   '/dashboard/settings/shipping': typeof DashboardSettingsShippingRoute
   '/dashboard/settings/taxes': typeof DashboardSettingsTaxesRoute
+  '/dashboard/staff/invite': typeof DashboardStaffInviteRoute
   '/dashboard/staff/new': typeof DashboardStaffNewRoute
   '/s/$subdomain/about': typeof SSubdomainAboutRoute
   '/s/$subdomain/cart': typeof SSubdomainCartRoute
@@ -780,6 +806,7 @@ export interface FileRoutesById {
   '/dashboard/customers/$id/': typeof DashboardCustomersIdIndexRoute
   '/dashboard/orders/$id/': typeof DashboardOrdersIdIndexRoute
   '/dashboard/products/$id/': typeof DashboardProductsIdIndexRoute
+  '/dashboard/staff/$id/': typeof DashboardStaffIdIndexRoute
   '/s/$subdomain/account/': typeof SSubdomainAccountIndexRoute
   '/s/$subdomain/checkout/': typeof SSubdomainCheckoutIndexRoute
   '/s/$subdomain/products/': typeof SSubdomainProductsIndexRoute
@@ -796,6 +823,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/dashboard'
     | '/s/$subdomain'
+    | '/accept-invite'
     | '/forget-password'
     | '/login'
     | '/register'
@@ -830,6 +858,7 @@ export interface FileRouteTypes {
     | '/dashboard/settings/payments'
     | '/dashboard/settings/shipping'
     | '/dashboard/settings/taxes'
+    | '/dashboard/staff/invite'
     | '/dashboard/staff/new'
     | '/s/$subdomain/about'
     | '/s/$subdomain/cart'
@@ -867,6 +896,7 @@ export interface FileRouteTypes {
     | '/dashboard/customers/$id/'
     | '/dashboard/orders/$id/'
     | '/dashboard/products/$id/'
+    | '/dashboard/staff/$id/'
     | '/s/$subdomain/account/'
     | '/s/$subdomain/checkout/'
     | '/s/$subdomain/products/'
@@ -878,6 +908,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/accept-invite'
     | '/forget-password'
     | '/login'
     | '/register'
@@ -911,6 +942,7 @@ export interface FileRouteTypes {
     | '/dashboard/settings/payments'
     | '/dashboard/settings/shipping'
     | '/dashboard/settings/taxes'
+    | '/dashboard/staff/invite'
     | '/dashboard/staff/new'
     | '/s/$subdomain/about'
     | '/s/$subdomain/cart'
@@ -948,6 +980,7 @@ export interface FileRouteTypes {
     | '/dashboard/customers/$id'
     | '/dashboard/orders/$id'
     | '/dashboard/products/$id'
+    | '/dashboard/staff/$id'
     | '/s/$subdomain/account'
     | '/s/$subdomain/checkout'
     | '/s/$subdomain/products'
@@ -962,6 +995,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/dashboard'
     | '/s/$subdomain'
+    | '/(auth)/accept-invite'
     | '/(auth)/forget-password'
     | '/(auth)/login'
     | '/(auth)/register'
@@ -996,6 +1030,7 @@ export interface FileRouteTypes {
     | '/dashboard/settings/payments'
     | '/dashboard/settings/shipping'
     | '/dashboard/settings/taxes'
+    | '/dashboard/staff/invite'
     | '/dashboard/staff/new'
     | '/s/$subdomain/about'
     | '/s/$subdomain/cart'
@@ -1033,6 +1068,7 @@ export interface FileRouteTypes {
     | '/dashboard/customers/$id/'
     | '/dashboard/orders/$id/'
     | '/dashboard/products/$id/'
+    | '/dashboard/staff/$id/'
     | '/s/$subdomain/account/'
     | '/s/$subdomain/checkout/'
     | '/s/$subdomain/products/'
@@ -1048,6 +1084,7 @@ export interface RootRouteChildren {
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
   DashboardRouteRoute: typeof DashboardRouteRouteWithChildren
   SSubdomainRouteRoute: typeof SSubdomainRouteRouteWithChildren
+  authAcceptInviteRoute: typeof authAcceptInviteRoute
   authForgetPasswordRoute: typeof authForgetPasswordRoute
   authLoginRoute: typeof authLoginRoute
   authRegisterRoute: typeof authRegisterRoute
@@ -1118,6 +1155,13 @@ declare module '@tanstack/react-router' {
       path: '/forget-password'
       fullPath: '/forget-password'
       preLoaderRoute: typeof authForgetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(auth)/accept-invite': {
+      id: '/(auth)/accept-invite'
+      path: '/accept-invite'
+      fullPath: '/accept-invite'
+      preLoaderRoute: typeof authAcceptInviteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/s/$subdomain': {
@@ -1251,6 +1295,13 @@ declare module '@tanstack/react-router' {
       path: '/staff/new'
       fullPath: '/dashboard/staff/new'
       preLoaderRoute: typeof DashboardStaffNewRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/staff/invite': {
+      id: '/dashboard/staff/invite'
+      path: '/staff/invite'
+      fullPath: '/dashboard/staff/invite'
+      preLoaderRoute: typeof DashboardStaffInviteRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
     '/dashboard/settings/taxes': {
@@ -1469,6 +1520,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/s/$subdomain/account/'
       preLoaderRoute: typeof SSubdomainAccountIndexRouteImport
       parentRoute: typeof SSubdomainAccountRouteRoute
+    }
+    '/dashboard/staff/$id/': {
+      id: '/dashboard/staff/$id/'
+      path: '/staff/$id'
+      fullPath: '/dashboard/staff/$id/'
+      preLoaderRoute: typeof DashboardStaffIdIndexRouteImport
+      parentRoute: typeof DashboardRouteRoute
     }
     '/dashboard/products/$id/': {
       id: '/dashboard/products/$id/'
@@ -1701,6 +1759,7 @@ interface DashboardRouteRouteChildren {
   DashboardSettingsPaymentsRoute: typeof DashboardSettingsPaymentsRoute
   DashboardSettingsShippingRoute: typeof DashboardSettingsShippingRoute
   DashboardSettingsTaxesRoute: typeof DashboardSettingsTaxesRoute
+  DashboardStaffInviteRoute: typeof DashboardStaffInviteRoute
   DashboardStaffNewRoute: typeof DashboardStaffNewRoute
   DashboardAnalyticsIndexRoute: typeof DashboardAnalyticsIndexRoute
   DashboardCategoriesIndexRoute: typeof DashboardCategoriesIndexRoute
@@ -1719,6 +1778,7 @@ interface DashboardRouteRouteChildren {
   DashboardCustomersIdIndexRoute: typeof DashboardCustomersIdIndexRoute
   DashboardOrdersIdIndexRoute: typeof DashboardOrdersIdIndexRoute
   DashboardProductsIdIndexRoute: typeof DashboardProductsIdIndexRoute
+  DashboardStaffIdIndexRoute: typeof DashboardStaffIdIndexRoute
 }
 
 const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
@@ -1743,6 +1803,7 @@ const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardSettingsPaymentsRoute: DashboardSettingsPaymentsRoute,
   DashboardSettingsShippingRoute: DashboardSettingsShippingRoute,
   DashboardSettingsTaxesRoute: DashboardSettingsTaxesRoute,
+  DashboardStaffInviteRoute: DashboardStaffInviteRoute,
   DashboardStaffNewRoute: DashboardStaffNewRoute,
   DashboardAnalyticsIndexRoute: DashboardAnalyticsIndexRoute,
   DashboardCategoriesIndexRoute: DashboardCategoriesIndexRoute,
@@ -1761,6 +1822,7 @@ const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardCustomersIdIndexRoute: DashboardCustomersIdIndexRoute,
   DashboardOrdersIdIndexRoute: DashboardOrdersIdIndexRoute,
   DashboardProductsIdIndexRoute: DashboardProductsIdIndexRoute,
+  DashboardStaffIdIndexRoute: DashboardStaffIdIndexRoute,
 }
 
 const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(
@@ -1837,6 +1899,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRouteRoute: AdminRouteRouteWithChildren,
   DashboardRouteRoute: DashboardRouteRouteWithChildren,
   SSubdomainRouteRoute: SSubdomainRouteRouteWithChildren,
+  authAcceptInviteRoute: authAcceptInviteRoute,
   authForgetPasswordRoute: authForgetPasswordRoute,
   authLoginRoute: authLoginRoute,
   authRegisterRoute: authRegisterRoute,
