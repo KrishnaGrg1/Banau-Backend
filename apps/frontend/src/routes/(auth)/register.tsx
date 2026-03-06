@@ -138,7 +138,7 @@ function RegisterPage() {
             <Sparkles className="h-3.5 w-3.5 text-primary-foreground" />
           </div>
           <span className="text-base font-bold tracking-tight text-foreground">
-            banau
+            Banau
           </span>
         </a>
 

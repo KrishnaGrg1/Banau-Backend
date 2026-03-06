@@ -42,7 +42,7 @@ function RouteComponent() {
             <Sparkles className="h-4 w-4 text-primary-foreground" />
           </div>
           <span className="text-lg font-bold tracking-tight text-foreground">
-            banau
+            Banau
           </span>
         </a>
 
@@ -59,6 +59,10 @@ function RouteComponent() {
             <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
               Complete your profile to get started and begin collaborating with
               your team.
+            </p>
+            <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
+              After completing these details, your login credentials will be
+              sent to your email.
             </p>
           </div>
         </div>
@@ -195,7 +199,7 @@ function RouteComponent() {
                 <p className="text-center text-xs text-muted-foreground">
                   Having trouble?{' '}
                   <a
-                    href="mailto:support@banau.com"
+                    href="mailto:gkrishnabahadur618@gmail.com"
                     className="font-medium hover:underline underline-offset-4"
                   >
                     Contact support
