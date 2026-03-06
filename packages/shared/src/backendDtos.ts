@@ -183,13 +183,13 @@ export class CreateTenantSettingDto {
   backgroundTextColorCode: string;
 
   // Landing page info
+  @IsOptional()
   @IsString()
-  @IsNotEmpty()
-  landingPageTitle: string;
+  landingPageTitle?: string;
 
+  @IsOptional()
   @IsString()
-  @IsNotEmpty()
-  landingPageDescription: string;
+  landingPageDescription?: string;
 
   // Optional files (handled separately in controller)
   @IsOptional()

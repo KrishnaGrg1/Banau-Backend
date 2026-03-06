@@ -6,6 +6,7 @@ import Header from '@/components/ClientComponents/Headers'
 import StoreFooter from '@/components/ClientComponents/StoreFooter'
 
 export const Route = createFileRoute('/s/$subdomain')({
+  staleTime: 0,
   loader: async ({ params }) => {
     const { subdomain } = params
     if (!subdomain) throw redirect({ to: '/login' })
@@ -25,10 +26,8 @@ function RouteComponent() {
   const setting = data?.existingSetting
   const logo = data?.logo
   const favicon = data?.favicon
-
-  if (setting && tenant?.subdomain && logo && favicon) {
-    useBrandTheme(setting, logo, favicon, tenant.subdomain)
-  }
+  console.log('seting', setting)
+  useBrandTheme(setting, logo, favicon, tenant?.subdomain)
   useForceLightMode(true)
 
   return (

@@ -10,6 +10,8 @@ import { createServerFn } from '@tanstack/react-start'
 export const createTenantSetting = createServerFn({ method: 'POST' }).handler(
   async ({ data }: { data: any }) => {
     try {
+
+      console.log('tenant setting',data)
       // ✅ Build FormData
       const formData = new FormData()
 
@@ -23,12 +25,16 @@ export const createTenantSetting = createServerFn({ method: 'POST' }).handler(
       formData.append('landingPageTitle', data.landingPageTitle)
       formData.append('landingPageDescription', data.landingPageDescription)
 
-      // Append files if present
-      if (data.logo instanceof File) {
-        formData.append('logo', data.logo)
+      // Append files if present (stored as base64 data URLs in the form)
+      if (data.logo) {
+        const { buffer, mimeType } = base64ToBuffer(data.logo)
+        const blob = new Blob([buffer], { type: mimeType })
+        formData.append('logo', blob, data.logoName || 'logo')
       }
-      if (data.favicon instanceof File) {
-        formData.append('favicon', data.favicon)
+      if (data.favicon) {
+        const { buffer, mimeType } = base64ToBuffer(data.favicon)
+        const blob = new Blob([buffer], { type: mimeType })
+        formData.append('favicon', blob, data.faviconName || 'favicon')
       }
 
       console.log('[CREATE] Sending FormData to /tenant/setting')
@@ -36,9 +42,6 @@ export const createTenantSetting = createServerFn({ method: 'POST' }).handler(
       const response = await api<TenantSettingResponse>('/tenant/setting', {
         method: 'POST',
         data: formData,
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
       })
 
       console.log('[CREATE] Success:', response.data)
@@ -58,6 +61,7 @@ export const createTenantSetting = createServerFn({ method: 'POST' }).handler(
 export const updateTenantSetting = createServerFn({ method: 'POST' }).handler(
   async ({ data }: { data: any }) => {
     try {
+         console.log('tenant setting blood',data)
       // ✅ Build FormData
       const formData = new FormData()
 
@@ -86,9 +90,6 @@ export const updateTenantSetting = createServerFn({ method: 'POST' }).handler(
       const response = await api<TenantSettingResponse>('/tenant/setting', {
         method: 'PUT',
         data: formData,
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
       })
 
       console.log('[UPDATE] Success:', response.data)

@@ -76,12 +76,14 @@ export class TenantSettingController {
     @UploadedFiles(new FileSizeValidationPipe())
     files: { logo?: Express.Multer.File[]; favicon?: Express.Multer.File[] },
   ) {
+    console.log("update tenant",dto)
     const logoFile = files.logo?.[0];
     const faviconFile = files.favicon?.[0];
     const data = await this.settingServices.updateTenantSetting(req, dto, {
       logo: logoFile,
       favicon: faviconFile,
     });
+    console.log("after updated",data)
     return ApiResponseDto.success(data, 'Tenant settings updated');
   }
 

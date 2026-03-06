@@ -11,6 +11,8 @@ import {
   CheckCircle2,
   Sparkles,
   ArrowRight,
+  EyeOff,
+  Eye,
 } from 'lucide-react'
 
 export const Route = createFileRoute('/(auth)/register')({
@@ -21,7 +23,8 @@ function RegisterPage() {
   const navigate = useNavigate()
   const [passwordError, setPasswordError] = useState<string | null>(null)
   const [countdown, setCountdown] = useState<number | null>(null)
-
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const {
     mutate: registerMutation,
     isPending,
@@ -323,17 +326,30 @@ function RegisterPage() {
                     >
                       Password
                     </Label>
-                    <Input
-                      id={field.name}
-                      name={field.name}
-                      type="password"
-                      placeholder="Min. 6 characters"
-                      value={field.state.value}
-                      onChange={(e) => field.handleChange(e.target.value)}
-                      onBlur={field.handleBlur}
-                      className="rounded-xl h-11"
-                      autoComplete="new-password"
-                    />
+                    <div className="relative">
+                      <Input
+                        id={field.name}
+                        name={field.name}
+                        type={showPassword ? 'text' : 'password'}
+                        placeholder="Min. 6 characters"
+                        value={field.state.value}
+                        onChange={(e) => field.handleChange(e.target.value)}
+                        onBlur={field.handleBlur}
+                        className="rounded-xl h-11"
+                        autoComplete="new-password"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute top-1/2 right-3 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
+                      >
+                        {showPassword ? (
+                          <EyeOff className="h-4 w-4" />
+                        ) : (
+                          <Eye className="h-4 w-4" />
+                        )}
+                      </button>
+                    </div>
                     <FieldError errors={field.state.meta.errors} />
                   </div>
                 )}
@@ -355,17 +371,32 @@ function RegisterPage() {
                     >
                       Confirm password
                     </Label>
-                    <Input
-                      id={field.name}
-                      name={field.name}
-                      type="password"
-                      placeholder="••••••••"
-                      value={field.state.value}
-                      onChange={(e) => field.handleChange(e.target.value)}
-                      onBlur={field.handleBlur}
-                      className="rounded-xl h-11"
-                      autoComplete="new-password"
-                    />
+                    <div className="relative">
+                      <Input
+                        id={field.name}
+                        name={field.name}
+                        type={showConfirmPassword ? 'text' : 'password'}
+                        placeholder="••••••••"
+                        value={field.state.value}
+                        onChange={(e) => field.handleChange(e.target.value)}
+                        onBlur={field.handleBlur}
+                        className="rounded-xl h-11"
+                        autoComplete="new-password"
+                      />
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setShowConfirmPassword(!showConfirmPassword)
+                        }
+                        className="absolute top-1/2 right-3 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
+                      >
+                        {showConfirmPassword ? (
+                          <EyeOff className="h-4 w-4" />
+                        ) : (
+                          <Eye className="h-4 w-4" />
+                        )}
+                      </button>
+                    </div>
                     <FieldError errors={field.state.meta.errors} />
                   </div>
                 )}

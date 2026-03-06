@@ -101,8 +101,11 @@ axiosInstance.interceptors.response.use(
 export async function api<TResponse = any>(url: string, config: any = {}) {
   const session = await useAppSession()
 
-  const headers = {
-    'Content-Type': 'application/json',
+  // Don't set a default Content-Type for FormData — let Axios auto-set it
+  // with the correct multipart boundary. Forcing it here breaks file uploads.
+  const isFormData = config.data instanceof FormData
+  const headers: Record<string, string> = {
+    ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
     ...config.headers,
   }
 

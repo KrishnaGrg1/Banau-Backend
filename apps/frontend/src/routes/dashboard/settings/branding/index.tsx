@@ -14,14 +14,10 @@ import {
   ImageIcon,
   FileText,
 } from 'lucide-react'
-import { useState, useEffect } from 'react'
-import {
-  useSaveTenantSetting,
-  usegetTenantSettingAsset,
-  useTenantSetting,
-} from '@/hooks/use-setting'
+import { useEffect, useState } from 'react'
+import { useCreateTenantSetting, useTenantSetting } from '@/hooks/use-setting'
 
-export const Route = createFileRoute('/dashboard/settings/branding')({
+export const Route = createFileRoute('/dashboard/settings/branding/')({
   component: BrandingPage,
 })
 
@@ -56,19 +52,16 @@ const COLOR_FIELDS = [
   },
 ] as const
 
-type ColorFieldName = (typeof COLOR_FIELDS)[number]['name']
-
 // ── Component ─────────────────────────────────────────────────────────────────
 
 export default function BrandingPage() {
   const navigate = useNavigate()
   const [logoPreview, setLogoPreview] = useState<string | null>(null)
   const [faviconPreview, setFaviconPreview] = useState<string | null>(null)
-
   const { data: settingsData, isLoading } = useTenantSetting()
-  const { data: assetsData } = usegetTenantSettingAsset()
+
   const { mutateAsync, isSuccess, isError, error, isPending } =
-    useSaveTenantSetting()
+    useCreateTenantSetting()
 
   const form = useForm({
     defaultValues: {
@@ -91,19 +84,18 @@ export default function BrandingPage() {
   })
 
   useEffect(() => {
-    if (!settingsData) return
-    const fields: (keyof typeof settingsData)[] = [
-      'primaryColorCode',
-      'secondaryColorCode',
-      'primaryTextColorCode',
-      'secondaryTextColorCode',
-      'backgroundColorCode',
-      'backgroundTextColorCode',
-      'landingPageTitle',
-      'landingPageDescription',
-    ]
-    fields.forEach((f) => form.setFieldValue(f as any, settingsData[f] as any))
-  }, [settingsData])
+    if (settingsData && !isLoading) {
+      navigate({ to: '/dashboard/settings/branding/edit' })
+    }
+  }, [settingsData, isLoading, navigate])
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-1 items-center justify-center p-12">
+        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+      </div>
+    )
+  }
 
   // ── File handler factory ──────────────────────────────────────────────────
 
@@ -131,16 +123,6 @@ export default function BrandingPage() {
     }
   }
 
-  // ── Loading ───────────────────────────────────────────────────────────────
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-      </div>
-    )
-  }
-
   const vals = form.state.values
 
   return (
@@ -164,7 +146,7 @@ export default function BrandingPage() {
         <div className="flex items-center gap-3 rounded-xl border border-border bg-card px-4 py-3 text-sm">
           <CheckCircle2 className="h-4 w-4 shrink-0 text-primary" />
           <span className="text-foreground font-medium">
-            Settings {settingsData ? 'updated' : 'created'} successfully.
+            Settings created successfully.
           </span>
         </div>
       )}
@@ -181,7 +163,7 @@ export default function BrandingPage() {
         onSubmit={async (e) => {
           e.preventDefault()
           e.stopPropagation()
-          await mutateAsync({ data: vals })
+          await form.handleSubmit()
         }}
         className="space-y-8"
       >
@@ -203,12 +185,6 @@ export default function BrandingPage() {
                   hint="PNG, JPG, SVG · up to 10 MB"
                   previewSize="lg"
                   preview={logoPreview}
-                  existingUrl={assetsData?.logo?.url}
-                  existingLabel={
-                    assetsData?.logo && !logoPreview
-                      ? 'Current logo set'
-                      : undefined
-                  }
                   onClear={() => {
                     field.handleChange(null)
                     form.setFieldValue('logoName', '')
@@ -232,12 +208,6 @@ export default function BrandingPage() {
                   hint="32×32 or 16×16 px · ICO, PNG"
                   previewSize="sm"
                   preview={faviconPreview}
-                  existingUrl={assetsData?.favicon?.url}
-                  existingLabel={
-                    assetsData?.favicon && !faviconPreview
-                      ? 'Current favicon set'
-                      : undefined
-                  }
                   onClear={() => {
                     field.handleChange(null)
                     form.setFieldValue('faviconName', '')
@@ -317,7 +287,6 @@ export default function BrandingPage() {
                   Secondary Button
                 </button>
               </div>
-              {/* Mini nav bar preview */}
               <div
                 className="w-full max-w-sm rounded-xl px-4 py-2.5 flex items-center justify-between"
                 style={{ backgroundColor: vals.primaryColorCode }}
@@ -403,7 +372,6 @@ export default function BrandingPage() {
               )}
             </form.Field>
 
-            {/* Copy preview */}
             {(vals.landingPageTitle || vals.landingPageDescription) && (
               <div
                 className="rounded-2xl border border-border p-8 space-y-3"
@@ -453,10 +421,8 @@ export default function BrandingPage() {
             {isPending ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                {settingsData ? 'Updating…' : 'Saving…'}
+                Saving…
               </>
-            ) : settingsData ? (
-              'Update Settings'
             ) : (
               'Save Settings'
             )}
@@ -469,11 +435,6 @@ export default function BrandingPage() {
           >
             Cancel
           </Button>
-          {settingsData && (
-            <p className="ml-auto text-xs text-muted-foreground">
-              Last saved · settings exist
-            </p>
-          )}
         </div>
       </form>
     </div>
@@ -538,7 +499,6 @@ export function AssetUpload({
       </Label>
 
       <div className="flex items-start gap-4">
-        {/* Preview / placeholder */}
         <div className="relative shrink-0">
           {src ? (
             <>
@@ -567,7 +527,6 @@ export function AssetUpload({
           )}
         </div>
 
-        {/* Input */}
         <div className="flex-1 space-y-1.5">
           <Input
             id={id}
@@ -606,7 +565,6 @@ function ColorField({ id, label, desc, value, onChange }: ColorFieldProps) {
         <p className="text-[11px] text-muted-foreground">{desc}</p>
       </div>
       <div className="flex items-center gap-2">
-        {/* Swatch */}
         <div className="relative">
           <Input
             id={id}
@@ -616,7 +574,6 @@ function ColorField({ id, label, desc, value, onChange }: ColorFieldProps) {
             className="h-9 w-12 cursor-pointer rounded-lg border-border p-0.5"
           />
         </div>
-        {/* Hex text */}
         <Input
           type="text"
           value={value}
@@ -625,7 +582,6 @@ function ColorField({ id, label, desc, value, onChange }: ColorFieldProps) {
           className="flex-1 font-mono text-xs rounded-lg h-9"
           placeholder="#000000"
         />
-        {/* Color dot preview */}
         <div
           className="h-9 w-9 rounded-lg border border-border shrink-0"
           style={{ backgroundColor: value }}

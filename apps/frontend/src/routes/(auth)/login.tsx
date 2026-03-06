@@ -5,13 +5,15 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { LoginDtoSchema } from '@repo/shared'
 import { useLogin } from '@/hooks/user-auth'
-import { Loader2, AlertCircle, Sparkles } from 'lucide-react'
+import { Loader2, AlertCircle, Sparkles, Eye, EyeOff } from 'lucide-react'
+import { useState } from 'react'
 
 export const Route = createFileRoute('/(auth)/login')({
   component: LoginPage,
 })
 
 function LoginPage() {
+  const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate()
   const { mutate: login, isPending, error: loginError } = useLogin()
 
@@ -171,17 +173,30 @@ function LoginPage() {
                       Forgot password?
                     </button>
                   </div>
-                  <Input
-                    id={field.name}
-                    name={field.name}
-                    type="password"
-                    placeholder="••••••••"
-                    value={field.state.value}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                    onBlur={field.handleBlur}
-                    className="rounded-xl h-11"
-                    autoComplete="current-password"
-                  />
+                  <div className="relative">
+                    <Input
+                      id={field.name}
+                      name={field.name}
+                      type={showPassword ? 'text' : 'password'}
+                      placeholder="••••••••"
+                      value={field.state.value}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      onBlur={field.handleBlur}
+                      className="rounded-xl h-11 pr-10"
+                      autoComplete="current-password"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute top-1/2 right-3 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
+                    >
+                      {showPassword ? (
+                        <EyeOff className="h-4 w-4" />
+                      ) : (
+                        <Eye className="h-4 w-4" />
+                      )}
+                    </button>
+                  </div>
                   <FieldError errors={field.state.meta.errors} />
                 </div>
               )}

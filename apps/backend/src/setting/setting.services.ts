@@ -8,12 +8,14 @@ import { AssetType } from '@repo/db/dist/generated/prisma/enums';
 import { backendDtos } from '@repo/shared';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { CacheKey, RedisService } from 'src/redis/redis.service';
 
 @Injectable()
 export class SettingServices {
   constructor(
     private readonly prisma: PrismaService,
     private readonly cloudinaryService: CloudinaryService,
+    private readonly redis: RedisService,
   ) {}
 
   async getTenantSetting(req) {
@@ -75,7 +77,7 @@ export class SettingServices {
       );
     }
 
-    return await this.prisma.$transaction(async (tx) => {
+    const created = await this.prisma.$transaction(async (tx) => {
       let logoId: string | null = null;
       let faviconId: string | null = null;
 
@@ -123,6 +125,9 @@ export class SettingServices {
         },
       });
     });
+
+    this.redis.del(CacheKey.storeTenant(tenant.subdomain)).catch(() => {});
+    return created;
   }
 
   // ✅ NEW: Update method
@@ -166,19 +171,14 @@ export class SettingServices {
       );
     }
 
-    return await this.prisma.$transaction(async (tx) => {
+    const updated = await this.prisma.$transaction(async (tx) => {
       let logoId = existingSetting.logoId;
       let faviconId = existingSetting.faviconId;
+      const oldLogoId = existingSetting.logoId;
+      const oldFaviconId = existingSetting.faviconId;
 
-      // Create new logo asset if uploaded
+      // Create new logo asset first (before touching the old one)
       if (uploadedLogo) {
-        // Delete old logo asset if exists
-        if (existingSetting.logoId) {
-          await tx.asset.delete({
-            where: { id: existingSetting.logoId },
-          });
-        }
-
         const newLogo = await tx.asset.create({
           data: {
             fileName: logoFile!.originalname,
@@ -192,15 +192,8 @@ export class SettingServices {
         logoId = newLogo.id;
       }
 
-      // Create new favicon asset if uploaded
+      // Create new favicon asset first (before touching the old one)
       if (uploadedFavicon) {
-        // Delete old favicon asset if exists
-        if (existingSetting.faviconId) {
-          await tx.asset.delete({
-            where: { id: existingSetting.faviconId },
-          });
-        }
-
         const newFavicon = await tx.asset.create({
           data: {
             fileName: faviconFile!.originalname,
@@ -214,8 +207,8 @@ export class SettingServices {
         faviconId = newFavicon.id;
       }
 
-      // Update settings
-      return tx.setting.update({
+      // Update setting (drops FK references to old assets)
+      const result = await tx.setting.update({
         where: { tenantId: String(tenant.id) },
         data: {
           primaryColorCode: data.primaryColorCode,
@@ -230,7 +223,20 @@ export class SettingServices {
           faviconId,
         },
       });
+
+      // Now safe to delete old assets (setting no longer references them)
+      if (uploadedLogo && oldLogoId) {
+        await tx.asset.delete({ where: { id: oldLogoId } });
+      }
+      if (uploadedFavicon && oldFaviconId) {
+        await tx.asset.delete({ where: { id: oldFaviconId } });
+      }
+
+      return result;
     });
+
+    this.redis.del(CacheKey.storeTenant(tenant.subdomain)).catch(() => {});
+    return updated;
   }
 
   async getTenantAssets(req) {

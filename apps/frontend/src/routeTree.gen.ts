@@ -45,7 +45,6 @@ import { Route as DashboardSettingsPaymentsRouteImport } from './routes/dashboar
 import { Route as DashboardSettingsNotificationsRouteImport } from './routes/dashboard/settings/notifications'
 import { Route as DashboardSettingsGeneralRouteImport } from './routes/dashboard/settings/general'
 import { Route as DashboardSettingsDomainRouteImport } from './routes/dashboard/settings/domain'
-import { Route as DashboardSettingsBrandingRouteImport } from './routes/dashboard/settings/branding'
 import { Route as DashboardSettingsBillingRouteImport } from './routes/dashboard/settings/billing'
 import { Route as DashboardProductsNewRouteImport } from './routes/dashboard/products/new'
 import { Route as DashboardInventoryLowStockRouteImport } from './routes/dashboard/inventory/low-stock'
@@ -71,6 +70,7 @@ import { Route as SSubdomainProductsIndexRouteImport } from './routes/s/$subdoma
 import { Route as SSubdomainCheckoutIndexRouteImport } from './routes/s/$subdomain/checkout/index'
 import { Route as SSubdomainAccountIndexRouteImport } from './routes/s/$subdomain/account/index'
 import { Route as DashboardStaffIdIndexRouteImport } from './routes/dashboard/staff/$id/index'
+import { Route as DashboardSettingsBrandingIndexRouteImport } from './routes/dashboard/settings/branding/index'
 import { Route as DashboardProductsIdIndexRouteImport } from './routes/dashboard/products/$id/index'
 import { Route as DashboardOrdersIdIndexRouteImport } from './routes/dashboard/orders/$id/index'
 import { Route as DashboardCustomersIdIndexRouteImport } from './routes/dashboard/customers/$id/index'
@@ -84,6 +84,7 @@ import { Route as SSubdomainAccountRegisterRouteImport } from './routes/s/$subdo
 import { Route as SSubdomainAccountProfileRouteImport } from './routes/s/$subdomain/account/profile'
 import { Route as SSubdomainAccountLoginRouteImport } from './routes/s/$subdomain/account/login'
 import { Route as DashboardStaffIdEditRouteImport } from './routes/dashboard/staff/$id/edit'
+import { Route as DashboardSettingsBrandingEditRouteImport } from './routes/dashboard/settings/branding/edit'
 import { Route as DashboardProductsIdEditRouteImport } from './routes/dashboard/products/$id/edit'
 import { Route as DashboardOrdersIdEditRouteImport } from './routes/dashboard/orders/$id/edit'
 import { Route as DashboardCustomersIdEditRouteImport } from './routes/dashboard/customers/$id/edit'
@@ -281,12 +282,6 @@ const DashboardSettingsDomainRoute = DashboardSettingsDomainRouteImport.update({
   path: '/settings/domain',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
-const DashboardSettingsBrandingRoute =
-  DashboardSettingsBrandingRouteImport.update({
-    id: '/settings/branding',
-    path: '/settings/branding',
-    getParentRoute: () => DashboardRouteRoute,
-  } as any)
 const DashboardSettingsBillingRoute =
   DashboardSettingsBillingRouteImport.update({
     id: '/settings/billing',
@@ -420,6 +415,12 @@ const DashboardStaffIdIndexRoute = DashboardStaffIdIndexRouteImport.update({
   path: '/staff/$id/',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
+const DashboardSettingsBrandingIndexRoute =
+  DashboardSettingsBrandingIndexRouteImport.update({
+    id: '/settings/branding/',
+    path: '/settings/branding/',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
 const DashboardProductsIdIndexRoute =
   DashboardProductsIdIndexRouteImport.update({
     id: '/products/$id/',
@@ -492,6 +493,12 @@ const DashboardStaffIdEditRoute = DashboardStaffIdEditRouteImport.update({
   path: '/staff/$id/edit',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
+const DashboardSettingsBrandingEditRoute =
+  DashboardSettingsBrandingEditRouteImport.update({
+    id: '/settings/branding/edit',
+    path: '/settings/branding/edit',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
 const DashboardProductsIdEditRoute = DashboardProductsIdEditRouteImport.update({
   id: '/products/$id/edit',
   path: '/products/$id/edit',
@@ -588,7 +595,6 @@ export interface FileRoutesByFullPath {
   '/dashboard/inventory/low-stock': typeof DashboardInventoryLowStockRoute
   '/dashboard/products/new': typeof DashboardProductsNewRoute
   '/dashboard/settings/billing': typeof DashboardSettingsBillingRoute
-  '/dashboard/settings/branding': typeof DashboardSettingsBrandingRoute
   '/dashboard/settings/domain': typeof DashboardSettingsDomainRoute
   '/dashboard/settings/general': typeof DashboardSettingsGeneralRoute
   '/dashboard/settings/notifications': typeof DashboardSettingsNotificationsRoute
@@ -620,6 +626,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/customers/$id/edit': typeof DashboardCustomersIdEditRoute
   '/dashboard/orders/$id/edit': typeof DashboardOrdersIdEditRoute
   '/dashboard/products/$id/edit': typeof DashboardProductsIdEditRoute
+  '/dashboard/settings/branding/edit': typeof DashboardSettingsBrandingEditRoute
   '/dashboard/staff/$id/edit': typeof DashboardStaffIdEditRoute
   '/s/$subdomain/account/login': typeof SSubdomainAccountLoginRoute
   '/s/$subdomain/account/profile': typeof SSubdomainAccountProfileRoute
@@ -633,6 +640,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/customers/$id/': typeof DashboardCustomersIdIndexRoute
   '/dashboard/orders/$id/': typeof DashboardOrdersIdIndexRoute
   '/dashboard/products/$id/': typeof DashboardProductsIdIndexRoute
+  '/dashboard/settings/branding/': typeof DashboardSettingsBrandingIndexRoute
   '/dashboard/staff/$id/': typeof DashboardStaffIdIndexRoute
   '/s/$subdomain/account/': typeof SSubdomainAccountIndexRoute
   '/s/$subdomain/checkout/': typeof SSubdomainCheckoutIndexRoute
@@ -672,7 +680,6 @@ export interface FileRoutesByTo {
   '/dashboard/inventory/low-stock': typeof DashboardInventoryLowStockRoute
   '/dashboard/products/new': typeof DashboardProductsNewRoute
   '/dashboard/settings/billing': typeof DashboardSettingsBillingRoute
-  '/dashboard/settings/branding': typeof DashboardSettingsBrandingRoute
   '/dashboard/settings/domain': typeof DashboardSettingsDomainRoute
   '/dashboard/settings/general': typeof DashboardSettingsGeneralRoute
   '/dashboard/settings/notifications': typeof DashboardSettingsNotificationsRoute
@@ -704,6 +711,7 @@ export interface FileRoutesByTo {
   '/dashboard/customers/$id/edit': typeof DashboardCustomersIdEditRoute
   '/dashboard/orders/$id/edit': typeof DashboardOrdersIdEditRoute
   '/dashboard/products/$id/edit': typeof DashboardProductsIdEditRoute
+  '/dashboard/settings/branding/edit': typeof DashboardSettingsBrandingEditRoute
   '/dashboard/staff/$id/edit': typeof DashboardStaffIdEditRoute
   '/s/$subdomain/account/login': typeof SSubdomainAccountLoginRoute
   '/s/$subdomain/account/profile': typeof SSubdomainAccountProfileRoute
@@ -717,6 +725,7 @@ export interface FileRoutesByTo {
   '/dashboard/customers/$id': typeof DashboardCustomersIdIndexRoute
   '/dashboard/orders/$id': typeof DashboardOrdersIdIndexRoute
   '/dashboard/products/$id': typeof DashboardProductsIdIndexRoute
+  '/dashboard/settings/branding': typeof DashboardSettingsBrandingIndexRoute
   '/dashboard/staff/$id': typeof DashboardStaffIdIndexRoute
   '/s/$subdomain/account': typeof SSubdomainAccountIndexRoute
   '/s/$subdomain/checkout': typeof SSubdomainCheckoutIndexRoute
@@ -761,7 +770,6 @@ export interface FileRoutesById {
   '/dashboard/inventory/low-stock': typeof DashboardInventoryLowStockRoute
   '/dashboard/products/new': typeof DashboardProductsNewRoute
   '/dashboard/settings/billing': typeof DashboardSettingsBillingRoute
-  '/dashboard/settings/branding': typeof DashboardSettingsBrandingRoute
   '/dashboard/settings/domain': typeof DashboardSettingsDomainRoute
   '/dashboard/settings/general': typeof DashboardSettingsGeneralRoute
   '/dashboard/settings/notifications': typeof DashboardSettingsNotificationsRoute
@@ -793,6 +801,7 @@ export interface FileRoutesById {
   '/dashboard/customers/$id/edit': typeof DashboardCustomersIdEditRoute
   '/dashboard/orders/$id/edit': typeof DashboardOrdersIdEditRoute
   '/dashboard/products/$id/edit': typeof DashboardProductsIdEditRoute
+  '/dashboard/settings/branding/edit': typeof DashboardSettingsBrandingEditRoute
   '/dashboard/staff/$id/edit': typeof DashboardStaffIdEditRoute
   '/s/$subdomain/account/login': typeof SSubdomainAccountLoginRoute
   '/s/$subdomain/account/profile': typeof SSubdomainAccountProfileRoute
@@ -806,6 +815,7 @@ export interface FileRoutesById {
   '/dashboard/customers/$id/': typeof DashboardCustomersIdIndexRoute
   '/dashboard/orders/$id/': typeof DashboardOrdersIdIndexRoute
   '/dashboard/products/$id/': typeof DashboardProductsIdIndexRoute
+  '/dashboard/settings/branding/': typeof DashboardSettingsBrandingIndexRoute
   '/dashboard/staff/$id/': typeof DashboardStaffIdIndexRoute
   '/s/$subdomain/account/': typeof SSubdomainAccountIndexRoute
   '/s/$subdomain/checkout/': typeof SSubdomainCheckoutIndexRoute
@@ -851,7 +861,6 @@ export interface FileRouteTypes {
     | '/dashboard/inventory/low-stock'
     | '/dashboard/products/new'
     | '/dashboard/settings/billing'
-    | '/dashboard/settings/branding'
     | '/dashboard/settings/domain'
     | '/dashboard/settings/general'
     | '/dashboard/settings/notifications'
@@ -883,6 +892,7 @@ export interface FileRouteTypes {
     | '/dashboard/customers/$id/edit'
     | '/dashboard/orders/$id/edit'
     | '/dashboard/products/$id/edit'
+    | '/dashboard/settings/branding/edit'
     | '/dashboard/staff/$id/edit'
     | '/s/$subdomain/account/login'
     | '/s/$subdomain/account/profile'
@@ -896,6 +906,7 @@ export interface FileRouteTypes {
     | '/dashboard/customers/$id/'
     | '/dashboard/orders/$id/'
     | '/dashboard/products/$id/'
+    | '/dashboard/settings/branding/'
     | '/dashboard/staff/$id/'
     | '/s/$subdomain/account/'
     | '/s/$subdomain/checkout/'
@@ -935,7 +946,6 @@ export interface FileRouteTypes {
     | '/dashboard/inventory/low-stock'
     | '/dashboard/products/new'
     | '/dashboard/settings/billing'
-    | '/dashboard/settings/branding'
     | '/dashboard/settings/domain'
     | '/dashboard/settings/general'
     | '/dashboard/settings/notifications'
@@ -967,6 +977,7 @@ export interface FileRouteTypes {
     | '/dashboard/customers/$id/edit'
     | '/dashboard/orders/$id/edit'
     | '/dashboard/products/$id/edit'
+    | '/dashboard/settings/branding/edit'
     | '/dashboard/staff/$id/edit'
     | '/s/$subdomain/account/login'
     | '/s/$subdomain/account/profile'
@@ -980,6 +991,7 @@ export interface FileRouteTypes {
     | '/dashboard/customers/$id'
     | '/dashboard/orders/$id'
     | '/dashboard/products/$id'
+    | '/dashboard/settings/branding'
     | '/dashboard/staff/$id'
     | '/s/$subdomain/account'
     | '/s/$subdomain/checkout'
@@ -1023,7 +1035,6 @@ export interface FileRouteTypes {
     | '/dashboard/inventory/low-stock'
     | '/dashboard/products/new'
     | '/dashboard/settings/billing'
-    | '/dashboard/settings/branding'
     | '/dashboard/settings/domain'
     | '/dashboard/settings/general'
     | '/dashboard/settings/notifications'
@@ -1055,6 +1066,7 @@ export interface FileRouteTypes {
     | '/dashboard/customers/$id/edit'
     | '/dashboard/orders/$id/edit'
     | '/dashboard/products/$id/edit'
+    | '/dashboard/settings/branding/edit'
     | '/dashboard/staff/$id/edit'
     | '/s/$subdomain/account/login'
     | '/s/$subdomain/account/profile'
@@ -1068,6 +1080,7 @@ export interface FileRouteTypes {
     | '/dashboard/customers/$id/'
     | '/dashboard/orders/$id/'
     | '/dashboard/products/$id/'
+    | '/dashboard/settings/branding/'
     | '/dashboard/staff/$id/'
     | '/s/$subdomain/account/'
     | '/s/$subdomain/checkout/'
@@ -1346,13 +1359,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardSettingsDomainRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
-    '/dashboard/settings/branding': {
-      id: '/dashboard/settings/branding'
-      path: '/settings/branding'
-      fullPath: '/dashboard/settings/branding'
-      preLoaderRoute: typeof DashboardSettingsBrandingRouteImport
-      parentRoute: typeof DashboardRouteRoute
-    }
     '/dashboard/settings/billing': {
       id: '/dashboard/settings/billing'
       path: '/settings/billing'
@@ -1528,6 +1534,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardStaffIdIndexRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
+    '/dashboard/settings/branding/': {
+      id: '/dashboard/settings/branding/'
+      path: '/settings/branding'
+      fullPath: '/dashboard/settings/branding/'
+      preLoaderRoute: typeof DashboardSettingsBrandingIndexRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
     '/dashboard/products/$id/': {
       id: '/dashboard/products/$id/'
       path: '/products/$id'
@@ -1617,6 +1630,13 @@ declare module '@tanstack/react-router' {
       path: '/staff/$id/edit'
       fullPath: '/dashboard/staff/$id/edit'
       preLoaderRoute: typeof DashboardStaffIdEditRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/settings/branding/edit': {
+      id: '/dashboard/settings/branding/edit'
+      path: '/settings/branding/edit'
+      fullPath: '/dashboard/settings/branding/edit'
+      preLoaderRoute: typeof DashboardSettingsBrandingEditRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
     '/dashboard/products/$id/edit': {
@@ -1752,7 +1772,6 @@ interface DashboardRouteRouteChildren {
   DashboardInventoryLowStockRoute: typeof DashboardInventoryLowStockRoute
   DashboardProductsNewRoute: typeof DashboardProductsNewRoute
   DashboardSettingsBillingRoute: typeof DashboardSettingsBillingRoute
-  DashboardSettingsBrandingRoute: typeof DashboardSettingsBrandingRoute
   DashboardSettingsDomainRoute: typeof DashboardSettingsDomainRoute
   DashboardSettingsGeneralRoute: typeof DashboardSettingsGeneralRoute
   DashboardSettingsNotificationsRoute: typeof DashboardSettingsNotificationsRoute
@@ -1774,10 +1793,12 @@ interface DashboardRouteRouteChildren {
   DashboardCustomersIdEditRoute: typeof DashboardCustomersIdEditRoute
   DashboardOrdersIdEditRoute: typeof DashboardOrdersIdEditRoute
   DashboardProductsIdEditRoute: typeof DashboardProductsIdEditRoute
+  DashboardSettingsBrandingEditRoute: typeof DashboardSettingsBrandingEditRoute
   DashboardStaffIdEditRoute: typeof DashboardStaffIdEditRoute
   DashboardCustomersIdIndexRoute: typeof DashboardCustomersIdIndexRoute
   DashboardOrdersIdIndexRoute: typeof DashboardOrdersIdIndexRoute
   DashboardProductsIdIndexRoute: typeof DashboardProductsIdIndexRoute
+  DashboardSettingsBrandingIndexRoute: typeof DashboardSettingsBrandingIndexRoute
   DashboardStaffIdIndexRoute: typeof DashboardStaffIdIndexRoute
 }
 
@@ -1796,7 +1817,6 @@ const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardInventoryLowStockRoute: DashboardInventoryLowStockRoute,
   DashboardProductsNewRoute: DashboardProductsNewRoute,
   DashboardSettingsBillingRoute: DashboardSettingsBillingRoute,
-  DashboardSettingsBrandingRoute: DashboardSettingsBrandingRoute,
   DashboardSettingsDomainRoute: DashboardSettingsDomainRoute,
   DashboardSettingsGeneralRoute: DashboardSettingsGeneralRoute,
   DashboardSettingsNotificationsRoute: DashboardSettingsNotificationsRoute,
@@ -1818,10 +1838,12 @@ const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardCustomersIdEditRoute: DashboardCustomersIdEditRoute,
   DashboardOrdersIdEditRoute: DashboardOrdersIdEditRoute,
   DashboardProductsIdEditRoute: DashboardProductsIdEditRoute,
+  DashboardSettingsBrandingEditRoute: DashboardSettingsBrandingEditRoute,
   DashboardStaffIdEditRoute: DashboardStaffIdEditRoute,
   DashboardCustomersIdIndexRoute: DashboardCustomersIdIndexRoute,
   DashboardOrdersIdIndexRoute: DashboardOrdersIdIndexRoute,
   DashboardProductsIdIndexRoute: DashboardProductsIdIndexRoute,
+  DashboardSettingsBrandingIndexRoute: DashboardSettingsBrandingIndexRoute,
   DashboardStaffIdIndexRoute: DashboardStaffIdIndexRoute,
 }
 
