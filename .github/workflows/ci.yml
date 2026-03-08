@@ -23,10 +23,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Generate Prisma client
-        run: pnpm db:generate
+      - name: Build @repo/db
+        run: pnpm --filter=@repo/db build
         env:
-          DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/banau"
+          DATABASE_URL: "postgresql://fake:fake@localhost:5432/fake"
 
       - name: Type check
         run: pnpm check-types
