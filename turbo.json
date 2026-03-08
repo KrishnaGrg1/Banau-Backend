@@ -28,7 +28,8 @@
       "dependsOn": ["^check-types"]
     },
     "db:generate": {
-      "cache": false
+      "cache": false,
+      "passThroughEnv": ["DATABASE_URL"]
     },
     "db:push": {
       "cache": false
