@@ -163,7 +163,7 @@ export function base64ToBuffer(dataUrl: string): {
   const arrayBuffer = nodeBuffer.buffer.slice(
     nodeBuffer.byteOffset,
     nodeBuffer.byteOffset + nodeBuffer.byteLength,
-  ) as ArrayBuffer
+  )
   return {
     mimeType: matches[1],
     buffer: arrayBuffer,

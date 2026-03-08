@@ -36,7 +36,7 @@ import {
   ChevronRight,
   Download,
   ShoppingBag,
-  Trash2,
+  Trash2, MoreHorizontal 
 } from 'lucide-react'
 import { Spinner } from '@/components/ui/spinner'
 import type { OrderDto, OrderStatus } from '@repo/shared'
@@ -49,7 +49,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { MoreHorizontal } from 'lucide-react'
 import {
   AlertDialog,
   AlertDialogAction,

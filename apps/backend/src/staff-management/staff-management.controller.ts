@@ -62,8 +62,8 @@ export class StaffManagementController {
     @Request() req,
     @Body() dto: backendDtos.InviteStaffDto,
   ) {
-     await this.staffManagementService.inviteStaffMember(req, dto);
-    return ApiResponseDto.success( 'Invitation sent successfully');
+    await this.staffManagementService.inviteStaffMember(req, dto);
+    return ApiResponseDto.success('Invitation sent successfully');
   }
 
   @UseGuards(AuthGuard, TenantOwnerGuard)
@@ -83,7 +83,10 @@ export class StaffManagementController {
   @Get(':id/activity')
   async getStaffActivity(@Request() req, @Param('id') id: string) {
     const data = await this.staffManagementService.getStaffActivity(req, id);
-    return ApiResponseDto.success(data, 'Retrieved staff activity successfully');
+    return ApiResponseDto.success(
+      data,
+      'Retrieved staff activity successfully',
+    );
   }
 
   @UseGuards(AuthGuard, TenantOwnerGuard)

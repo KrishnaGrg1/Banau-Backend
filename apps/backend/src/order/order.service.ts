@@ -751,9 +751,7 @@ export class OrderServices {
 
     switch (event.type) {
       case 'checkout.session.completed':
-        await this.handleCheckoutCompleted(
-          event.data.object as Stripe.Checkout.Session,
-        );
+        await this.handleCheckoutCompleted(event.data.object);
         break;
 
       case 'payment_intent.succeeded':

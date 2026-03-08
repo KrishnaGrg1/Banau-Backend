@@ -677,9 +677,7 @@ export class CustomerServices {
 
     // Revoke the access token so it can't be used after logout
     if (req.accessToken) {
-      const decoded = this.jwtService.decode(req.accessToken) as {
-        exp?: number;
-      } | null;
+      const decoded = this.jwtService.decode(req.accessToken);
       const remaining = Math.max(
         (decoded?.exp ?? 0) - Math.floor(Date.now() / 1000),
         0,

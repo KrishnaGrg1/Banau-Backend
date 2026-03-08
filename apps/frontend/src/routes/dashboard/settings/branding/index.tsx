@@ -154,7 +154,7 @@ export default function BrandingPage() {
         <div className="flex items-center gap-3 rounded-xl border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm">
           <AlertCircle className="h-4 w-4 shrink-0 text-destructive" />
           <span className="text-destructive">
-            {(error as any)?.message || 'Failed to save settings.'}
+            {(error)?.message || 'Failed to save settings.'}
           </span>
         </div>
       )}

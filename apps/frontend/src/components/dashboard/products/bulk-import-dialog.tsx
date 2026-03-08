@@ -46,9 +46,9 @@ export function BulkImportDialog() {
     },
     onSubmit: async ({ value }) => {
       if (!value.file) return
-      //use client fn
+      // use client fn
       await mutateAsync({ file: value.file })
-      //use of server function
+      // use of server function
       //  await mutateAsync({
       //   data: { file: value.file, filename: value.filename },
       // })

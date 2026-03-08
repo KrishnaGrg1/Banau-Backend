@@ -83,7 +83,9 @@ export class StaffManagementService {
   async exportStaffMembers(req: any, format: string) {
     const existingTenant = await this.getTenant(req);
     const cacheKey = CacheKey.staffExport(existingTenant.id);
-    let cache = (await this.redis.get(cacheKey)) as (TenantStaff & { user: any })[];
+    let cache = (await this.redis.get(cacheKey)) as (TenantStaff & {
+      user: any;
+    })[];
 
     if (!cache) {
       cache = await this.prisma.tenantStaff.findMany({
@@ -136,7 +138,7 @@ export class StaffManagementService {
   async getStaffById(req, staffId: string): Promise<TenantStaff> {
     const existingTenant = await this.getTenant(req);
     const cacheKey = CacheKey.staffById(existingTenant.id, staffId);
-    const cache = await this.redis.get(cacheKey) as TenantStaff;
+    const cache = (await this.redis.get(cacheKey)) as TenantStaff;
     if (cache) {
       return cache;
     }
@@ -145,7 +147,7 @@ export class StaffManagementService {
         id: String(staffId),
         tenantId: String(existingTenant.id),
       },
-       include: { user: true },
+      include: { user: true },
     });
     if (!existingStaff) throw new NotFoundException('Staff doesnt exist');
     await this.redis.set(cacheKey, existingStaff, 3600);
@@ -161,19 +163,19 @@ export class StaffManagementService {
       },
     });
     if (exisitngUser) {
-     throw new ConflictException('Email already exists');
+      throw new ConflictException('Email already exists');
     }
-        const tempPassword = uuidv4().replace(/-/g, '').slice(0, 12);
-        const hashedPassword = await bcrypt.hash(tempPassword, 10);
-        const newUser = await this.prisma.user.create({
-          data: {
-            email: dto.email,
-            firstName: dto.firstName,
-            lastName: dto.lastName,
-            password: hashedPassword,
-            isVerified:true,
-            role:'TENANT_STAFF',
-            verifiedAt: new Date(),
+    const tempPassword = uuidv4().replace(/-/g, '').slice(0, 12);
+    const hashedPassword = await bcrypt.hash(tempPassword, 10);
+    const newUser = await this.prisma.user.create({
+      data: {
+        email: dto.email,
+        firstName: dto.firstName,
+        lastName: dto.lastName,
+        password: hashedPassword,
+        isVerified: true,
+        role: 'TENANT_STAFF',
+        verifiedAt: new Date(),
       },
     });
     const newStaffMember = await this.prisma.tenantStaff.create({
@@ -186,9 +188,9 @@ export class StaffManagementService {
         canManageStaff: dto.canManageStaff,
         canViewAnalytics: dto.canViewAnalytics,
       },
-      include:{
-        user:true
-      }
+      include: {
+        user: true,
+      },
     });
     await this.emailService.sendStaffWelcomeEmail({
       to: newUser.email,
@@ -197,7 +199,9 @@ export class StaffManagementService {
       tempPassword,
     });
 
-    await this.redis.invalidateByPrefix(CacheKey.staffPrefix(existingTenant.id));
+    await this.redis.invalidateByPrefix(
+      CacheKey.staffPrefix(existingTenant.id),
+    );
     return newStaffMember;
   }
 
@@ -264,15 +268,16 @@ export class StaffManagementService {
       };
       invitedById: string;
     }>(CacheKey.staffInvite(dto.token));
-    
-    if (!invite) throw new GoneException('Invite link is invalid or has expired');
+
+    if (!invite)
+      throw new GoneException('Invite link is invalid or has expired');
 
     let user = await this.prisma.user.findUnique({
       where: { email: invite.email },
     });
 
     let tempPassword: string | null = null;
-    
+
     if (!user) {
       tempPassword = dto.password || uuidv4();
       const hashedPassword = await bcrypt.hash(tempPassword, 10);
@@ -284,7 +289,7 @@ export class StaffManagementService {
           password: hashedPassword,
           role: 'TENANT_STAFF',
           isVerified: true,
-          verifiedAt:new Date()
+          verifiedAt: new Date(),
         },
       });
     } else {
@@ -303,14 +308,14 @@ export class StaffManagementService {
         userId: user.id,
         ...invite.permissions,
       },
-      include:{
-        user:true
-      }
+      include: {
+        user: true,
+      },
     });
 
     await this.redis.del(CacheKey.staffInvite(dto.token));
     await this.redis.invalidateByPrefix(CacheKey.staffPrefix(invite.tenantId));
-    
+
     if (tempPassword) {
       await this.emailService.sendStaffWelcomeEmail({
         to: invite.email,
@@ -319,7 +324,7 @@ export class StaffManagementService {
         tempPassword,
       });
     }
-    
+
     return newStaff;
   }
 
@@ -377,7 +382,7 @@ export class StaffManagementService {
     ]);
 
     await this.redis.invalidateByPrefix(
-      CacheKey.staffPrefix(existingTenant.id)
+      CacheKey.staffPrefix(existingTenant.id),
     );
   }
   async updateStaffPermission(
@@ -397,9 +402,9 @@ export class StaffManagementService {
         canManageStaff: dto.canManageStaff,
         canViewAnalytics: dto.canViewAnalytics,
       },
-      include:{
-        user:true
-      }
+      include: {
+        user: true,
+      },
     });
 
     await this.redis.invalidateByPrefix(

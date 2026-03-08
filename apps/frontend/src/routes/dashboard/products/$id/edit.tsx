@@ -138,7 +138,7 @@ function EditProductForm({ product, id }: { product: Product; id: string }) {
       compareAtPrice: (product.compareAtPrice ?? '') as string | number,
       quantity: String(product.quantity ?? ''),
       trackInventory: product.trackInventory ?? true,
-      status: (product.status ?? 'DRAFT') as 'DRAFT' | 'ACTIVE' | 'ARCHIVED',
+      status: (product.status ?? 'DRAFT'),
       featured: product.featured ?? false,
       sku: product.sku ?? '',
       barcode: product.barcode ?? '',
@@ -937,7 +937,7 @@ function EditProductForm({ product, id }: { product: Product; id: string }) {
               <div className="flex items-start gap-2.5 rounded-xl border border-destructive/30 bg-destructive/5 px-4 py-3">
                 <AlertCircle className="h-4 w-4 text-destructive shrink-0 mt-0.5" />
                 <p className="text-sm text-destructive">
-                  {(updateError as Error).message}
+                  {(updateError).message}
                 </p>
               </div>
             )}

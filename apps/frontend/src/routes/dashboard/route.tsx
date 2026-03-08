@@ -1,4 +1,4 @@
-import { createFileRoute, Outlet } from '@tanstack/react-router'
+import { createFileRoute, Outlet, useRouterState  } from '@tanstack/react-router'
 import {
   SidebarInset,
   SidebarProvider,
@@ -13,7 +13,6 @@ import {
 import { Separator } from '@/components/ui/separator'
 import { ModeToggle } from '@/components/mode-toggle'
 import { AppSidebar } from '@/components/AppSideBar'
-import { useRouterState } from '@tanstack/react-router'
 import { AuthMiddleware } from '@/utils/middleware'
 
 export const Route = createFileRoute('/dashboard')({

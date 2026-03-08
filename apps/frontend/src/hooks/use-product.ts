@@ -67,10 +67,10 @@ export function useExportAllProducts() {
 export function useBulkImportProducts() {
   const queryClient = useQueryClient()
   return useMutation({
-    //use client
+    // use client
     mutationFn: bulkImportProducts,
 
-    //use of server
+    // use of server
     // mutationFn: async ({ data }: { data: any }) => {
     //   return await bulkImportProducts({ data })
     // },

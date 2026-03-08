@@ -5,8 +5,7 @@ import {
 } from '@repo/shared'
 import { api } from '../axios'
 import { createServerFn } from '@tanstack/react-start'
-import { Tenant } from '@repo/db/dist/generated/prisma/client'
-import { Asset, Setting } from '@repo/db/dist/generated/prisma/client'
+import { Tenant, Asset, Setting  } from '@repo/db/dist/generated/prisma/client'
 
 export const createTenant = createServerFn({ method: 'POST' })
   .inputValidator((data) => CreateTenantDtoSchema.parse(data))
