@@ -8,7 +8,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Spinner } from '@/components/ui/spinner'
-import { useExportAllProducts } from '@/hooks/use-product'
 
 interface ExportButtonProps {
   onExport: (format: 'csv' | 'xlsx') => void

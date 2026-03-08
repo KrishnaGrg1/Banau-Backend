@@ -129,7 +129,7 @@ export function BulkImportDialog() {
                         <>
                           <div className="h-20 w-20 rounded-xl border border-border bg-muted/50 flex flex-col items-center justify-center gap-1">
                             <FileSpreadsheet className="h-7 w-7 text-primary" />
-                            <span className="text-[10px] text-muted-foreground text-center px-1 truncate w-full text-center">
+                            <span className="text-[10px] text-muted-foreground text-center px-1 truncate w-full ">
                               {filePreview.name.split('.').pop()?.toUpperCase()}
                             </span>
                           </div>
