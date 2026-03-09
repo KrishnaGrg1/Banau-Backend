@@ -11,9 +11,22 @@ import {
   getCustomerById,
   deleteCustomerById,
   createCustomer,
+  getCustomerOrdersById,
+  exportCustomers,
+  updateCustomer,
 } from '@/lib/services/customer.services'
 import { useCartStore } from '@/lib/stores/cart.store'
 import { paginationDto } from '@repo/shared'
+import { useNavigate } from '@tanstack/react-router'
+
+// Keep customer-related query keys centralized
+const customerKeys = {
+  all: ['customers'] as const,
+  list: (params: { limit: number; offset: number }) =>
+    ['customers', params] as const,
+  detail: (customerId: string) => ['customer', customerId] as const,
+  ordersById: (customerId: string) => ['customer-orders', customerId] as const,
+}
 
 export function useCustomerLogin() {
   const queryClient = useQueryClient()
@@ -110,17 +123,20 @@ export function useCustomerOrders(params: paginationDto = {}) {
 
 export function useListAllCustomers(params: { limit: number; offset: number }) {
   return useQuery({
-    queryKey: ['customers', params],
+    queryKey: customerKeys.list(params),
     queryFn: () => getAllCustomers({ data: params }),
     retry: false,
     staleTime: 5 * 60 * 1000,
   })
 }
 
-export function useGetCustomerById(customerId: string) {
+export function useGetCustomerOrdersById(
+  customerId: string,
+  params: { limit: number; offset: number } = { limit: 10, offset: 0 },
+) {
   return useQuery({
-    queryKey: ['customer', customerId],
-    queryFn: () => getCustomerById({ data: { customerId } }),
+    queryKey: [...customerKeys.ordersById(customerId), params],
+    queryFn: () => getCustomerOrdersById({ data: { customerId, ...params } }),
     enabled: !!customerId,
     retry: false,
     staleTime: 5 * 60 * 1000,
@@ -133,9 +149,12 @@ export function useDeleteCustomer() {
     mutationFn: ({ data }: { data: { customerId: string } }) =>
       deleteCustomerById({ data }),
     onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: ['customers'] })
+      queryClient.invalidateQueries({ queryKey: customerKeys.all })
       queryClient.removeQueries({
-        queryKey: ['customer', variables.data.customerId],
+        queryKey: customerKeys.detail(variables.data.customerId),
+      })
+      queryClient.removeQueries({
+        queryKey: customerKeys.ordersById(variables.data.customerId),
       })
       toast.success('Customer deleted successfully')
     },
@@ -145,6 +164,7 @@ export function useDeleteCustomer() {
     },
   })
 }
+
 export function useCustomerCreate() {
   const queryClient = useQueryClient()
   return useMutation({
@@ -152,12 +172,77 @@ export function useCustomerCreate() {
       return createCustomer({ data })
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['customers'] })
+      queryClient.invalidateQueries({ queryKey: customerKeys.all })
       toast.success('Customer created successfully!')
     },
     onError: (err: Error) => {
       const message = err?.message || 'Failed to create customer'
       toast.error(message)
     },
+  })
+}
+
+
+
+export function useUpdateCustomer() {
+  const queryClient = useQueryClient()
+  const navigate = useNavigate()
+
+  return useMutation({
+    mutationFn: updateCustomer,
+    onSuccess: (_res, variables: { data: { customerId: string } }) => {
+      queryClient.invalidateQueries({ queryKey: customerKeys.all })
+      queryClient.invalidateQueries({
+        queryKey: customerKeys.detail(variables.data.customerId),
+      })
+      queryClient.invalidateQueries({
+        queryKey: customerKeys.ordersById(variables.data.customerId),
+      })
+
+      toast.success('Customer updated successfully')
+      navigate({ to: '/dashboard/customers' })
+    },
+    onError: (err: Error) => {
+      toast.error(err.message)
+    },
+  })
+}
+
+export function useExportAllCustomers() {
+  return useMutation({
+    mutationFn: async (format: 'csv' | 'xlsx') => {
+      const result = await exportCustomers({ data: { format } })
+      if (!result?.base64) throw new Error('No data returned')
+
+      const byteCharacters = atob(result.base64)
+      const byteArray = new Uint8Array(byteCharacters.length)
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteArray[i] = byteCharacters.charCodeAt(i)
+      }
+
+      const blob = new Blob([byteArray], { type: result.mimeType })
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = result.filename
+      link.click()
+      URL.revokeObjectURL(url)
+
+      toast.success(`Successfully exported customers in ${format}`)
+    },
+    onError: (err: Error) => {
+      toast.error(err.message)
+    },
+  })
+}
+
+
+export function useGetCustomerById(customerId: string) {
+  return useQuery({
+    queryKey: customerKeys.detail(customerId),
+    queryFn: () => getCustomerById({ data: { customerId } }),
+    enabled: !!customerId,
+    retry: false,
+    staleTime: 5 * 60 * 1000,
   })
 }

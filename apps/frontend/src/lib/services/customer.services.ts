@@ -1,12 +1,17 @@
 import {
   CreateCustomerSchema,
   CustomerListResponse,
+  CustomerOrdersById,
   CustomerResponse,
   DeleteCustomerSchema,
+  exportProductParamsSchema,
+  getCustomerOrdersByIdSchema,
   LoginCustomerDtoSchema,
+  OrderResponse,
   OrdersListResponse,
   paginationDtoSchema,
   RegisterCustomerDtoSchema,
+  UpdateCustomerSchema,
 } from '@repo/shared'
 import { api } from '../axios'
 import { createServerFn } from '@tanstack/react-start'
@@ -228,5 +233,95 @@ export const createCustomer = createServerFn({ method: 'POST' })
       }
       const err = error as Error
       throw new Error(err.message || 'Failed to create customer')
+    }
+  })
+
+
+  export const exportCustomers=createServerFn({method:'POST'})
+  .inputValidator((data:unknown)=>exportProductParamsSchema.parse(data))
+   .handler(async ({ data }) => {
+    try {
+      const res = await api('/customers/export', {
+        method: 'GET',
+        params: data,
+        responseType: 'arraybuffer', // 👈 critical: get raw binary
+      })
+
+      if (res.status === 200) {
+        const buffer = Buffer.from(res.data)
+        const format = data.format ?? 'csv'
+        const filename = `customers-${Date.now()}.${format}`
+        const mimeType =
+          format === 'xlsx'
+            ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            : 'text/csv'
+
+        return {
+          success: true,
+          base64: buffer.toString('base64'), // 👈 serialize binary as base64
+          filename,
+          mimeType,
+        }
+      }
+    } catch (e: unknown) {
+      const err = e as Error
+      throw new Error(err.message || 'Failed to export customers')
+    }
+  })
+
+
+
+  export const getCustomerOrdersById = createServerFn({ method: 'GET' })
+  .inputValidator((data: unknown) => getCustomerOrdersByIdSchema.parse(data))
+  .handler(async ({ data }) => {
+    try {
+      const {customerId,...paramsBody}=data
+      const response = await api<CustomerOrdersById>(
+        `/customers/${data.customerId}/orders`,
+        {
+          method: 'GET',
+          params: paramsBody,
+        },
+      )
+      console.log("da",response.data)
+      return response.data.data
+    } catch (error: unknown) {
+      if (isAxiosError(error)) {
+        console.error(
+          '[getOrderById] error:',
+          JSON.stringify(error.response?.data, null, 2),
+        )
+      }
+      const err = error as Error
+      throw new Error(err.message || 'Failed to retrieve customer')
+    }
+  })
+
+
+  export const updateCustomer = createServerFn({ method: 'POST' })
+  .inputValidator((data) => UpdateCustomerSchema.parse(data))
+  .handler(async ({ data }) => {
+    try {
+      const { customerId, ...bodyData } = data
+      const response = await api<CustomerResponse>(
+        `/customers/${data.customerId}`,
+        {
+          method: 'PUT',
+          data: bodyData,
+        },
+      )
+      return response.data
+    } catch (error: unknown) {
+      if (isAxiosError(error)) {
+        console.error(
+          '[updateStaffPermission] error:',
+          JSON.stringify(error.response?.data, null, 2),
+        )
+        throw new Error(
+          error.response?.data.message || 'Failed to update staff permission',
+        )
+      }
+      const err = error as Error
+      throw new Error(err.message || 'Failed to update staff permission')
     }
   })

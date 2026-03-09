@@ -16,6 +16,7 @@ import { ApiResponseDto, AuthGuard } from 'src/common';
 import type { RequestWithUser } from 'src/common';
 import { CustomerServices } from './customer.service';
 import { backendDtos } from '@repo/shared';
+import { TenantOwnerGuard } from 'src/common/guard/tenant-owner.guard';
 
 @Controller('customers')
 export class CustomerController {
@@ -79,7 +80,7 @@ export class CustomerController {
 
   // ── Admin / tenant routes ──
 
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard,TenantOwnerGuard)
   @Get(':id')
   async getCustomerById(
     @Request() req: RequestWithUser,

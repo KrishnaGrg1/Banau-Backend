@@ -526,10 +526,11 @@ export const CreateCustomerSchema = z.object({
   phone: z.string().min(8).optional(),
 });
 export const UpdateCustomerSchema = z.object({
-  email: z.string().email("Email required").optional(),
-  firstName: z.string().min(2).optional(),
-  lastName: z.string().min(2).optional(),
-  phone: z.string().min(8).optional(),
+  customerId:z.string().min(8),
+  email: z.string().email("Email required"),
+  firstName: z.string().min(2),
+  lastName: z.string().min(2),
+  phone: z.string().min(8),
 });
 
 // UpdateTenantDto
@@ -984,3 +985,28 @@ export const AcceptInviteDtoSchema = z.object({
 });
 
 export type AcceptInviteDto = z.infer<typeof AcceptInviteDtoSchema>;
+
+
+export interface CustomerOrdersById {
+   success: boolean;
+    message: string;
+    data: {
+        orders: OrderDto[];
+        meta: {
+            total: number;
+            limit: number;
+            offset: number;
+            hasNextPage: boolean;
+            hasPreviousPage: boolean;
+        };
+    };
+    timestamp: Date;
+}
+
+export const getCustomerOrdersByIdSchema = z.object({
+  customerId: z.string().min(1, "Customer ID is required"),
+  limit: z.number().positive().optional(),
+  offset: z.number().min(0).optional(),
+});
+
+export type getCustomerOrdersByIdDto = z.infer<typeof getCustomerOrdersByIdSchema>;

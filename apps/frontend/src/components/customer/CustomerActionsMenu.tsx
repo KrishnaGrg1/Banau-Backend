@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from '@tanstack/react-router'
-import { Eye, MoreHorizontal, Trash2 } from 'lucide-react'
+import { Edit2, Eye, MoreHorizontal, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -49,6 +49,12 @@ export function CustomerActionsMenu({ id }: CustomerActionsMenuProps) {
           >
             <Eye className="mr-2 h-4 w-4" />
             View Details
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => navigate({ to: `/dashboard/customers/${id}/edit` })}
+          >
+            <Edit2 className="mr-2 h-4 w-4" />
+            Edit Customers
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => setConfirmOpen(true)}

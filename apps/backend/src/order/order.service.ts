@@ -512,7 +512,7 @@ export class OrderServices {
 
     const paymentIntent = await this.stripe.paymentIntents.create({
       amount: Math.round(total * 100),
-      currency: 'usd',
+      currency: 'npr',
       metadata: { tenantId: tenant.id, subdomain: tenant.subdomain },
     });
 
