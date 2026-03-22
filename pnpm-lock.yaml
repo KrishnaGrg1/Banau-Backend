@@ -499,6 +499,9 @@ importers:
       '@tanstack/store':
         specifier: latest
         version: 0.9.2
+      axios:
+        specifier: ^1.13.4
+        version: 1.13.5
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
