@@ -9,7 +9,6 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { useLogOut } from '@/hooks/user-auth'
-import { AuthMiddleware, getServerData } from '@/utils/middleware'
 import { useGetTenant } from '@/hooks/use-tenant'
 import { Spinner } from '@/components/ui/spinner'
 import { useGetMe } from '@/hooks/use-user'
@@ -40,13 +39,6 @@ import {
 } from 'lucide-react'
 
 export const Route = createFileRoute('/dashboard/')({
-  loader: async () => {
-    const data = await getServerData()
-    return data
-  },
-  server: {
-    middleware: [AuthMiddleware],
-  },
   component: DashboardPage,
 })
 

@@ -1008,9 +1008,7 @@ export default function AddProductPage() {
           {createError && (
             <div className="flex items-start gap-2.5 rounded-xl border border-destructive/30 bg-destructive/5 px-4 py-3">
               <AlertCircle className="h-4 w-4 text-destructive shrink-0 mt-0.5" />
-              <p className="text-sm text-destructive">
-                {(createError).message}
-              </p>
+              <p className="text-sm text-destructive">{createError.message}</p>
             </div>
           )}
 
