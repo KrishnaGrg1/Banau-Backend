@@ -5,6 +5,7 @@ import {
 import { createServerFn } from '@tanstack/react-start'
 import type{ Tenant, Asset, Setting  } from '@repo/db/dist/generated/prisma/client'
 import axiosInstance from '../axios'
+
 export const getTenantDetailsBySubdomain = createServerFn({ method: 'GET' })
   .inputValidator((input) => getTenantDetailsBySubdomainSchema.parse(input))
   .handler(async ({ data }) => {

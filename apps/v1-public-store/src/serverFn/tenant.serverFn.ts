@@ -7,7 +7,7 @@ import { getRequestUrl } from '@tanstack/react-start/server'
 
 const hostnameToSubdomain = (hostname: string): string => {
     const normalized = normalizeHostname(hostname).toLowerCase()
-    return normalized.split('.')[0] ?? normalized
+    return normalized.split('.')[0]
 }
 
 export const getTenantConfigByHostname = async ({
@@ -16,11 +16,13 @@ export const getTenantConfigByHostname = async ({
     hostname: string
 }) => {
     const subdomain = hostnameToSubdomain(hostname)
-    const data = await getTenantDetailsBySubdomain({
-        data: { subdomain },
-    })
-
-    return data ?? null
+    try {
+        return await getTenantDetailsBySubdomain({
+            data: { subdomain },
+        })
+    } catch {
+        return null
+    }
 }
 
 export const getTenantConfig = createServerFn().handler(async () => {

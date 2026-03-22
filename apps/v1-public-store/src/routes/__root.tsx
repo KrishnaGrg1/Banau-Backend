@@ -77,24 +77,35 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 
   head: (ctx) => {
     const tenant = ctx.loaderData?.tenantConfig
-    const tenantThemeCssVars = buildTenantThemeCssVars(tenant?.existingSetting)
+
+    if (!tenant) {
+      return {
+        meta: [
+          { title: 'Default App' },
+          { name: 'description', content: 'Welcome to our store' },
+          { name: 'theme-color', content: '#ffffff' },
+        ],
+        links: [{ rel: 'icon', href: '/favicon.ico' }],
+        styles: [],
+      }
+    }
+
+    const tenantThemeCssVars = buildTenantThemeCssVars(tenant.existingSetting)
 
     return {
       meta: [
-        { title: tenant?.existingTenant?.name ?? 'Default App' },
+        { title: tenant.existingTenant.name },
         {
           name: 'description',
-          content:
-            tenant?.existingSetting?.landingPageDescription ??
-            'Welcome to our store',
+          content: tenant.existingSetting.landingPageDescription,
         },
         {
           name: 'theme-color',
-          content: tenant?.existingSetting?.primaryColorCode ?? '#ffffff',
+          content: tenant.existingSetting.primaryColorCode,
         },
-        { property: 'og:image', content: tenant?.logo?.url },
+        { property: 'og:image', content: tenant.logo.url },
       ],
-      links: [{ rel: 'icon', href: tenant?.favicon?.url ?? '/favicon.ico' }],
+      links: [{ rel: 'icon', href: tenant.favicon.url }],
       styles: tenantThemeCssVars ? [{ children: tenantThemeCssVars }] : [],
     }
   },
