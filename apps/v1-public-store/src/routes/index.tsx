@@ -23,10 +23,7 @@ function HomePage() {
         logo={tenantConfig.logo ? { url: tenantConfig.logo.url } : undefined}
       />
       <main className="flex-1">
-        <PublicTenant
-          tenant={tenantConfig.existingTenant}
-          setting={tenantConfig.existingSetting}
-        />
+        <PublicTenant tenant={tenantConfig.existingTenant} setting={tenantConfig.existingSetting} />
         <StoreFooter tenant={tenantConfig.existingTenant} />
       </main>
     </div>

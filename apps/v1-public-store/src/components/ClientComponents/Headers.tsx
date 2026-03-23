@@ -1,13 +1,5 @@
 import { useState } from 'react'
-import {
-  Menu,
-  X,
-  ShoppingBag,
-  ArrowRight,
-  User,
-  LogOut,
-  ChevronDown,
-} from 'lucide-react'
+import { Menu, X, ShoppingBag, ArrowRight, User, LogOut, ChevronDown } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Link, useNavigate } from '@tanstack/react-router'
 import { useCartCount } from '@/lib/stores/cart.store'
@@ -64,11 +56,7 @@ export default function Header({ tenant, logo }: HeaderProps) {
             className="flex items-center gap-2.5 shrink-0 hover:opacity-80 transition-opacity"
           >
             {logo?.url ? (
-              <img
-                src={logo.url}
-                alt={tenant.name}
-                className="h-8 w-auto object-contain"
-              />
+              <img src={logo.url} alt={tenant.name} className="h-8 w-auto object-contain" />
             ) : (
               <>
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
@@ -128,9 +116,7 @@ export default function Header({ tenant, logo }: HeaderProps) {
                         {profile.firstName?.charAt(0).toUpperCase()}
                       </span>
                     </div>
-                    <span className="max-w-25 truncate text-sm">
-                      {profile.firstName}
-                    </span>
+                    <span className="max-w-25 truncate text-sm">{profile.firstName}</span>
                     <ChevronDown className="h-3 w-3 text-muted-foreground" />
                   </Button>
                 </DropdownMenuTrigger>
@@ -139,9 +125,7 @@ export default function Header({ tenant, logo }: HeaderProps) {
                     <p className="font-medium text-sm">
                       {profile.firstName} {profile.lastName}
                     </p>
-                    <p className="text-xs text-muted-foreground truncate">
-                      {profile.email}
-                    </p>
+                    <p className="text-xs text-muted-foreground truncate">{profile.email}</p>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
@@ -167,18 +151,14 @@ export default function Header({ tenant, logo }: HeaderProps) {
                   variant="ghost"
                   size="sm"
                   className="hidden md:inline-flex cursor-pointer"
-                  onClick={() =>
-                    navigate({ to: `/s/${subdomain}/account/login` })
-                  }
+                  onClick={() => navigate({ to: `/s/${subdomain}/account/login` })}
                 >
                   Log in
                 </Button>
                 <Button
                   size="sm"
                   className="rounded-lg hidden md:inline-flex cursor-pointer"
-                  onClick={() =>
-                    navigate({ to: `/s/${subdomain}/account/register` })
-                  }
+                  onClick={() => navigate({ to: `/s/${subdomain}/account/register` })}
                 >
                   Get Started
                   <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
@@ -194,11 +174,7 @@ export default function Header({ tenant, logo }: HeaderProps) {
               onClick={() => setMobileOpen((v) => !v)}
               aria-label="Toggle menu"
             >
-              {mobileOpen ? (
-                <X className="h-5 w-5" />
-              ) : (
-                <Menu className="h-5 w-5" />
-              )}
+              {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </Button>
           </div>
         </div>
@@ -226,9 +202,7 @@ export default function Header({ tenant, logo }: HeaderProps) {
                     <p className="text-sm font-medium">
                       {profile.firstName} {profile.lastName}
                     </p>
-                    <p className="text-xs text-muted-foreground">
-                      {profile.email}
-                    </p>
+                    <p className="text-xs text-muted-foreground">{profile.email}</p>
                   </div>
                   {/* <Link
                     to="//account/"

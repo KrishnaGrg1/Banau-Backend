@@ -36,10 +36,7 @@ export function useSearchProducts(params: {
   })
 }
 
-export function usePublicProductBySlug(params: {
-  subdomain: string
-  slug: string
-}) {
+export function usePublicProductBySlug(params: { subdomain: string; slug: string }) {
   return useQuery({
     queryKey: ['publicProduct', params.subdomain, params.slug],
     queryFn: () => getPublicProductBySlug({ data: params }),

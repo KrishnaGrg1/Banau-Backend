@@ -20,17 +20,9 @@ interface CartState {
 
 interface CartActions {
   // Actions
-  addItem: (
-    product: ProductDto,
-    variant?: ProductVariantDto,
-    quantity?: number,
-  ) => void
+  addItem: (product: ProductDto, variant?: ProductVariantDto, quantity?: number) => void
   removeItem: (productId: string, variantId?: string) => void
-  updateQuantity: (
-    productId: string,
-    quantity: number,
-    variantId?: string,
-  ) => void
+  updateQuantity: (productId: string, quantity: number, variantId?: string) => void
   clearCart: () => void
   getItem: (productId: string, variantId?: string) => CartItem | undefined
 
@@ -70,22 +62,17 @@ export const useCartStore = create<CartState & CartActions>()(
       addItem: (product, variant, quantity = 1) => {
         const state = get()
         const existingIndex = state.items.findIndex(
-          (item) =>
-            item.product.id === product.id && item.variant?.id === variant?.id,
+          (item) => item.product.id === product.id && item.variant?.id === variant?.id,
         )
 
-        const price = variant?.price
-          ? parseFloat(variant.price)
-          : parseFloat(product.price)
+        const price = variant?.price ? parseFloat(variant.price) : parseFloat(product.price)
 
         let newItems: CartItem[]
 
         if (existingIndex > -1) {
           // Update existing item quantity
           newItems = state.items.map((item, index) =>
-            index === existingIndex
-              ? { ...item, quantity: item.quantity + quantity }
-              : item,
+            index === existingIndex ? { ...item, quantity: item.quantity + quantity } : item,
           )
         } else {
           // Add new item
@@ -98,8 +85,7 @@ export const useCartStore = create<CartState & CartActions>()(
       removeItem: (productId, variantId) => {
         const state = get()
         const newItems = state.items.filter(
-          (item) =>
-            !(item.product.id === productId && item.variant?.id === variantId),
+          (item) => !(item.product.id === productId && item.variant?.id === variantId),
         )
         set({ items: newItems })
       },
@@ -108,10 +94,7 @@ export const useCartStore = create<CartState & CartActions>()(
         const state = get()
         if (quantity <= 0) {
           const newItems = state.items.filter(
-            (item) =>
-              !(
-                item.product.id === productId && item.variant?.id === variantId
-              ),
+            (item) => !(item.product.id === productId && item.variant?.id === variantId),
           )
           set({ items: newItems })
           return
@@ -131,8 +114,7 @@ export const useCartStore = create<CartState & CartActions>()(
 
       getItem: (productId, variantId) => {
         return get().items.find(
-          (item) =>
-            item.product.id === productId && item.variant?.id === variantId,
+          (item) => item.product.id === productId && item.variant?.id === variantId,
         )
       },
 

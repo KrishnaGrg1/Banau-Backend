@@ -1,9 +1,4 @@
-import {
-  HeadContent,
-  Link,
-  Scripts,
-  createRootRouteWithContext,
-} from '@tanstack/react-router'
+import { HeadContent, Link, Scripts, createRootRouteWithContext } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 
@@ -24,9 +19,7 @@ interface MyRouterContext {
 function NotFound() {
   return (
     <main className="mx-auto flex min-h-[50vh] w-full max-w-2xl flex-col items-center justify-center px-6 text-center">
-      <p className="text-sm uppercase tracking-[0.14em] text-muted-foreground">
-        404
-      </p>
+      <p className="text-sm uppercase tracking-[0.14em] text-muted-foreground">404</p>
       <h1 className="mt-3 text-3xl font-semibold">Page not found</h1>
       <p className="mt-3 text-muted-foreground">
         The page you requested does not exist or is no longer available.

@@ -1,11 +1,7 @@
 import { getTenantDetailsBySubdomainSchema } from '@repo/shared'
 
 import { createServerFn } from '@tanstack/react-start'
-import type {
-  Tenant,
-  Asset,
-  Setting,
-} from '@repo/db/dist/generated/prisma/client'
+import type { Tenant, Asset, Setting } from '@repo/db/dist/generated/prisma/client'
 import axiosInstance from '../axios'
 
 export const getTenantDetailsBySubdomain = createServerFn({ method: 'GET' })

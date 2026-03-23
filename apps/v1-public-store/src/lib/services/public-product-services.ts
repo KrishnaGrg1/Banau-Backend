@@ -13,10 +13,7 @@ export const publicProductsListSchema = z.object({
   minPrice: z.number().positive().optional(),
   maxPrice: z.number().positive().optional(),
   inStockOnly: z.boolean().optional(), // ✅ boolean not number
-  sortBy: z
-    .enum(['newest', 'oldest', 'price_asc', 'price_desc'])
-    .optional()
-    .default('newest'), // ✅ proper z.enum syntax
+  sortBy: z.enum(['newest', 'oldest', 'price_asc', 'price_desc']).optional().default('newest'), // ✅ proper z.enum syntax
 })
 
 export const publicProductsSearchSchema = z.object({
@@ -86,10 +83,7 @@ export const getPublicProducts = createServerFn({ method: 'GET' })
       return response.data.data
     } catch (error: unknown) {
       if (isAxiosError(error)) {
-        console.error(
-          '[getPublicProducts] error:',
-          JSON.stringify(error.response?.data, null, 2),
-        )
+        console.error('[getPublicProducts] error:', JSON.stringify(error.response?.data, null, 2))
       }
       const err = error as Error
       throw new Error(err.message || 'Failed to fetch products')

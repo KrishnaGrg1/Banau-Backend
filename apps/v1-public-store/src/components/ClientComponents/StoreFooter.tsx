@@ -24,13 +24,11 @@ const StoreFooter = ({ tenant }: StoreFooterProps) => {
                   {tenant.name.charAt(0).toUpperCase()}
                 </span>
               </div>
-              <span className="font-semibold text-foreground">
-                {tenant.name}
-              </span>
+              <span className="font-semibold text-foreground">{tenant.name}</span>
             </div>
             <p className="text-xs text-muted-foreground leading-relaxed max-w-xs">
-              A modern online store powered by Banau. Discover quality products
-              and enjoy a seamless shopping experience.
+              A modern online store powered by Banau. Discover quality products and enjoy a seamless
+              shopping experience.
             </p>
             <a
               href={`mailto:${tenant.email}`}
@@ -66,9 +64,7 @@ const StoreFooter = ({ tenant }: StoreFooterProps) => {
             <div className="space-y-2.5 text-xs text-muted-foreground">
               <div className="flex items-center justify-between border-b border-border pb-2">
                 <span>Subdomain</span>
-                <span className="font-mono text-foreground/70">
-                  {tenant.subdomain}
-                </span>
+                <span className="font-mono text-foreground/70">{tenant.subdomain}</span>
               </div>
               <div className="flex items-center justify-between border-b border-border pb-2">
                 <span>Status</span>

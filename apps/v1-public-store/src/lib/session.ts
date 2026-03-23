@@ -11,8 +11,7 @@ export function useAppSession() {
     // Session configuration
     name: 'app-session',
     password:
-      process.env.SESSION_SECRET ||
-      'dev-secret-at-least-32-characters-long-change-in-production', // At least 32 characters
+      process.env.SESSION_SECRET || 'dev-secret-at-least-32-characters-long-change-in-production', // At least 32 characters
     // Optional: customize cookie settings
     cookie: {
       secure: process.env.NODE_ENV === 'production',

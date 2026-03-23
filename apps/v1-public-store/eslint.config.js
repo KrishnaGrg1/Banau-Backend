@@ -8,6 +8,7 @@ export default [
       'eslint.config.js',
       'prettier.config.js',
       'vite.config.ts',
+      'src/components/ui/*',
     ],
   },
   ...tanstackConfig,
@@ -22,7 +23,7 @@ export default [
       'sort-imports': 'off',
 
       // ── TypeScript — practical relaxations ────────────────────────────
-      '@typescript-eslint/no-unnecessary-condition': 'warn',     // ← warn not off
+      '@typescript-eslint/no-unnecessary-condition': 'warn', // ← warn not off
       '@typescript-eslint/no-unnecessary-type-assertion': 'warn',
       '@typescript-eslint/array-type': 'off',
       '@typescript-eslint/require-await': 'warn',

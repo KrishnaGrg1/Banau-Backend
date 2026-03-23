@@ -1,37 +1,36 @@
 import {
   CreateCustomerSchema,
-  
-  
-  
   DeleteCustomerSchema,
   exportProductParamsSchema,
   getCustomerOrdersByIdSchema,
   LoginCustomerDtoSchema,
-  
   paginationDtoSchema,
   RegisterCustomerDtoSchema,
-  UpdateCustomerSchema
+  UpdateCustomerSchema,
 } from '@repo/shared'
-import type {CustomerListResponse, CustomerOrdersById, CustomerResponse, OrdersListResponse} from '@repo/shared';
+import type {
+  CustomerListResponse,
+  CustomerOrdersById,
+  CustomerResponse,
+  OrdersListResponse,
+} from '@repo/shared'
 import axiosInstance from '../axios'
 import { createServerFn } from '@tanstack/react-start'
 import { useAppSession } from '../session'
 import { isAxiosError } from 'axios'
 
 // Get my profile
-export const getMyProfile = createServerFn({ method: 'GET' }).handler(
-  async () => {
-    try {
-      const response = await axiosInstance<any>('/customers/me', {
-        method: 'GET',
-      })
-      return response.data
-    } catch (error: unknown) {
-      const err = error as Error
-      throw new Error(err.message || 'Failed to get profile')
-    }
-  },
-)
+export const getMyProfile = createServerFn({ method: 'GET' }).handler(async () => {
+  try {
+    const response = await axiosInstance<any>('/customers/me', {
+      method: 'GET',
+    })
+    return response.data
+  } catch (error: unknown) {
+    const err = error as Error
+    throw new Error(err.message || 'Failed to get profile')
+  }
+})
 
 // Update my profile
 export const updateMyProfile = createServerFn({ method: 'POST' })
@@ -67,10 +66,7 @@ export const customerLogin = createServerFn({ method: 'POST' })
       return response.data
     } catch (error: unknown) {
       if (isAxiosError(error)) {
-        console.error(
-          '[loginCustomer] error:',
-          JSON.stringify(error.response?.data, null, 2),
-        )
+        console.error('[loginCustomer] error:', JSON.stringify(error.response?.data, null, 2))
       }
       const err = error as Error
       throw new Error(err.message || 'Failed to login customer')
@@ -95,10 +91,7 @@ export const customerRegister = createServerFn({ method: 'POST' })
       return response.data
     } catch (error: unknown) {
       if (isAxiosError(error)) {
-        console.error(
-          '[loginCustomer] error:',
-          JSON.stringify(error.response?.data, null, 2),
-        )
+        console.error('[loginCustomer] error:', JSON.stringify(error.response?.data, null, 2))
       }
       const err = error as Error
       throw new Error(err.message || 'Failed to register')
@@ -106,46 +99,35 @@ export const customerRegister = createServerFn({ method: 'POST' })
   })
 
 // Customer logout
-export const customerLogout = createServerFn({ method: 'POST' }).handler(
-  async () => {
-    try {
-      const response = await axiosInstance('/customers/logout', {
-        method: 'POST',
-      })
-      const session = await useAppSession()
-      await session.clear()
-      return response.data
-    } catch (error: unknown) {
-      if (isAxiosError(error)) {
-        console.error(
-          '[logoutCustomer] error:',
-          JSON.stringify(error.response?.data, null, 2),
-        )
-      }
-      const err = error as Error
-      throw new Error(err.message || 'Failed to logout')
+export const customerLogout = createServerFn({ method: 'POST' }).handler(async () => {
+  try {
+    const response = await axiosInstance('/customers/logout', {
+      method: 'POST',
+    })
+    const session = await useAppSession()
+    await session.clear()
+    return response.data
+  } catch (error: unknown) {
+    if (isAxiosError(error)) {
+      console.error('[logoutCustomer] error:', JSON.stringify(error.response?.data, null, 2))
     }
-  },
-)
+    const err = error as Error
+    throw new Error(err.message || 'Failed to logout')
+  }
+})
 
 export const getCustomerOrders = createServerFn({ method: 'GET' })
   .inputValidator((data) => paginationDtoSchema.parse(data))
   .handler(async ({ data }) => {
     try {
-      const response = await axiosInstance<OrdersListResponse>(
-        '/customers/me/orders',
-        {
-          method: 'GET',
-          params: data,
-        },
-      )
+      const response = await axiosInstance<OrdersListResponse>('/customers/me/orders', {
+        method: 'GET',
+        params: data,
+      })
       return response.data
     } catch (error: unknown) {
       if (isAxiosError(error)) {
-        console.error(
-          '[getMyOrders] error:',
-          JSON.stringify(error.response?.data, null, 2),
-        )
+        console.error('[getMyOrders] error:', JSON.stringify(error.response?.data, null, 2))
       }
       const err = error as Error
       throw new Error(err.message || 'Failed to retrieve your orders')
@@ -164,10 +146,7 @@ export const getAllCustomers = createServerFn({ method: 'GET' })
       return response.data
     } catch (error: unknown) {
       if (isAxiosError(error)) {
-        console.error(
-          '[getMyCustomers] error:',
-          JSON.stringify(error.response?.data, null, 2),
-        )
+        console.error('[getMyCustomers] error:', JSON.stringify(error.response?.data, null, 2))
       }
       const err = error as Error
       throw new Error(err.message || 'Failed to retrieve your customers')
@@ -178,19 +157,13 @@ export const getCustomerById = createServerFn({ method: 'GET' })
   .inputValidator((data: unknown) => DeleteCustomerSchema.parse(data))
   .handler(async ({ data }) => {
     try {
-      const response = await axiosInstance<CustomerResponse>(
-        `/customers/${data.customerId}`,
-        {
-          method: 'GET',
-        },
-      )
+      const response = await axiosInstance<CustomerResponse>(`/customers/${data.customerId}`, {
+        method: 'GET',
+      })
       return response.data.data
     } catch (error: unknown) {
       if (isAxiosError(error)) {
-        console.error(
-          '[getOrderById] error:',
-          JSON.stringify(error.response?.data, null, 2),
-        )
+        console.error('[getOrderById] error:', JSON.stringify(error.response?.data, null, 2))
       }
       const err = error as Error
       throw new Error(err.message || 'Failed to retrieve customer')
@@ -207,10 +180,7 @@ export const deleteCustomerById = createServerFn({ method: 'POST' })
       return response.data
     } catch (error: unknown) {
       if (isAxiosError(error)) {
-        console.error(
-          '[deleteCustomer] error:',
-          JSON.stringify(error.response?.data, null, 2),
-        )
+        console.error('[deleteCustomer] error:', JSON.stringify(error.response?.data, null, 2))
       }
       const err = error as Error
       throw new Error(err.message || 'Failed to delete customer')
@@ -228,13 +198,8 @@ export const createCustomer = createServerFn({ method: 'POST' })
       return response.data
     } catch (error: unknown) {
       if (isAxiosError(error)) {
-        console.error(
-          '[createCustomer] error:',
-          JSON.stringify(error.response?.data, null, 2),
-        )
-        throw new Error(
-          error.response?.data.message || 'Failed to create customer',
-        )
+        console.error('[createCustomer] error:', JSON.stringify(error.response?.data, null, 2))
+        throw new Error(error.response?.data.message || 'Failed to create customer')
       }
       const err = error as Error
       throw new Error(err.message || 'Failed to create customer')
@@ -289,10 +254,7 @@ export const getCustomerOrdersById = createServerFn({ method: 'GET' })
       return response.data.data
     } catch (error: unknown) {
       if (isAxiosError(error)) {
-        console.error(
-          '[getOrderById] error:',
-          JSON.stringify(error.response?.data, null, 2),
-        )
+        console.error('[getOrderById] error:', JSON.stringify(error.response?.data, null, 2))
       }
       const err = error as Error
       throw new Error(err.message || 'Failed to retrieve customer')
@@ -304,13 +266,10 @@ export const updateCustomer = createServerFn({ method: 'POST' })
   .handler(async ({ data }) => {
     try {
       const { customerId, ...bodyData } = data
-      const response = await axiosInstance<CustomerResponse>(
-        `/customers/${data.customerId}`,
-        {
-          method: 'PUT',
-          data: bodyData,
-        },
-      )
+      const response = await axiosInstance<CustomerResponse>(`/customers/${data.customerId}`, {
+        method: 'PUT',
+        data: bodyData,
+      })
       return response.data
     } catch (error: unknown) {
       if (isAxiosError(error)) {
@@ -318,9 +277,7 @@ export const updateCustomer = createServerFn({ method: 'POST' })
           '[updateStaffPermission] error:',
           JSON.stringify(error.response?.data, null, 2),
         )
-        throw new Error(
-          error.response?.data.message || 'Failed to update staff permission',
-        )
+        throw new Error(error.response?.data.message || 'Failed to update staff permission')
       }
       const err = error as Error
       throw new Error(err.message || 'Failed to update staff permission')

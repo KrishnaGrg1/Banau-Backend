@@ -24,9 +24,7 @@ export function PublicTenant({ tenant, setting }: PublicTenantProps) {
             <AlertCircle className="h-8 w-8 text-muted-foreground" />
           </div>
           <div className="space-y-2">
-            <h1 className="text-xl font-semibold text-foreground">
-              Website Not Found
-            </h1>
+            <h1 className="text-xl font-semibold text-foreground">Website Not Found</h1>
             <p className="text-sm text-muted-foreground leading-relaxed">
               This website does not exist or has not been published yet.
             </p>
@@ -62,21 +60,17 @@ export function PublicTenant({ tenant, setting }: PublicTenantProps) {
             <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
               Coming Soon
             </p>
-            <h1 className="text-3xl font-bold tracking-tight text-foreground">
-              {tenant.name}
-            </h1>
+            <h1 className="text-3xl font-bold tracking-tight text-foreground">{tenant.name}</h1>
             <p className="text-sm text-muted-foreground leading-relaxed max-w-sm mx-auto">
-              This store is currently under construction. Check back soon —
-              something great is coming.
+              This store is currently under construction. Check back soon — something great is
+              coming.
             </p>
           </div>
 
           {/* Details pill */}
           <div className="inline-flex items-center gap-3 rounded-full border border-border bg-muted/40 px-5 py-2.5 text-xs">
             <span className="text-muted-foreground">Subdomain:</span>
-            <span className="font-semibold text-foreground font-mono">
-              {tenant.subdomain}
-            </span>
+            <span className="font-semibold text-foreground font-mono">{tenant.subdomain}</span>
             <span className="h-3 w-px bg-border" />
             <span className="text-muted-foreground">Status:</span>
             <span className="font-semibold text-foreground">Unpublished</span>
@@ -84,9 +78,7 @@ export function PublicTenant({ tenant, setting }: PublicTenantProps) {
 
           {/* Owner CTA */}
           <div className="pt-2 space-y-3">
-            <p className="text-xs text-muted-foreground">
-              Are you the owner of this website?
-            </p>
+            <p className="text-xs text-muted-foreground">Are you the owner of this website?</p>
             {/* {isSubdomain ? (
               <Button asChild size="sm">
                 <a href={dashboardUrl}>Go to Dashboard</a>
@@ -144,9 +136,7 @@ function StorefrontContent({
           <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
             Catalogue
           </p>
-          <h2 className="text-3xl font-bold tracking-tight text-foreground">
-            Our Products
-          </h2>
+          <h2 className="text-3xl font-bold tracking-tight text-foreground">Our Products</h2>
         </div>
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {isLoading ? (
@@ -228,13 +218,9 @@ function StorefrontContent({
                   {product.trackInventory && (
                     <div className="pt-1">
                       {product.quantity > 0 ? (
-                        <span className="text-xs text-emerald-600 font-medium">
-                          In Stock
-                        </span>
+                        <span className="text-xs text-emerald-600 font-medium">In Stock</span>
                       ) : (
-                        <span className="text-xs text-destructive font-medium">
-                          Out of Stock
-                        </span>
+                        <span className="text-xs text-destructive font-medium">Out of Stock</span>
                       )}
                     </div>
                   )}
@@ -265,14 +251,12 @@ function StorefrontContent({
               <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
                 About Us
               </p>
-              <h2 className="text-3xl font-bold tracking-tight text-foreground">
-                {tenant.name}
-              </h2>
+              <h2 className="text-3xl font-bold tracking-tight text-foreground">{tenant.name}</h2>
             </div>
             <p className="text-muted-foreground leading-relaxed">
-              Welcome to {tenant.name}. This store is powered by Banau — a
-              modern platform for building and managing online stores with ease.
-              Customize this page from your admin dashboard.
+              Welcome to {tenant.name}. This store is powered by Banau — a modern platform for
+              building and managing online stores with ease. Customize this page from your admin
+              dashboard.
             </p>
             <div className="flex items-center gap-3 text-xs text-muted-foreground">
               <span className="inline-flex items-center gap-1.5">
@@ -298,15 +282,11 @@ function StorefrontContent({
                 key={row.label}
                 className="flex items-center justify-between py-2.5 border-b border-border last:border-0"
               >
-                <span className="text-xs text-muted-foreground">
-                  {row.label}
-                </span>
+                <span className="text-xs text-muted-foreground">{row.label}</span>
                 <span
                   className={[
                     'text-xs font-medium',
-                    row.mono
-                      ? 'font-mono text-foreground/70'
-                      : 'text-foreground',
+                    row.mono ? 'font-mono text-foreground/70' : 'text-foreground',
                     row.highlight ? 'text-primary' : '',
                   ].join(' ')}
                 >

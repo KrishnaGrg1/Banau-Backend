@@ -7,11 +7,7 @@ const hostnameToSubdomain = (hostname: string): string => {
   return normalized.split('.')[0]
 }
 
-export const getTenantConfigByHostname = async ({
-  hostname,
-}: {
-  hostname: string
-}) => {
+export const getTenantConfigByHostname = async ({ hostname }: { hostname: string }) => {
   const subdomain = hostnameToSubdomain(hostname)
   try {
     return await getTenantDetailsBySubdomain({
@@ -31,7 +27,7 @@ export const getTenantConfig = createServerFn().handler(async () => {
   if (!tenantConfig) {
     // eslint-disable-next-line @typescript-eslint/only-throw-error
     throw new Response('Tenant Not Found', { status: 404 })
-    // throw notFound()  
+    // throw notFound()
   }
 
   return tenantConfig

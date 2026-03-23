@@ -22,8 +22,7 @@ import { useNavigate } from '@tanstack/react-router'
 // Keep customer-related query keys centralized
 const customerKeys = {
   all: ['customers'] as const,
-  list: (params: { limit: number; offset: number }) =>
-    ['customers', params] as const,
+  list: (params: { limit: number; offset: number }) => ['customers', params] as const,
   detail: (customerId: string) => ['customer', customerId] as const,
   ordersById: (customerId: string) => ['customer-orders', customerId] as const,
 }
@@ -32,11 +31,7 @@ export function useCustomerLogin() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async ({
-      data,
-    }: {
-      data: { email: string; password: string }
-    }) => {
+    mutationFn: async ({ data }: { data: { email: string; password: string } }) => {
       return customerLogin({ data })
     },
     onSuccess: () => {
@@ -146,8 +141,7 @@ export function useGetCustomerOrdersById(
 export function useDeleteCustomer() {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: ({ data }: { data: { customerId: string } }) =>
-      deleteCustomerById({ data }),
+    mutationFn: ({ data }: { data: { customerId: string } }) => deleteCustomerById({ data }),
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: customerKeys.all })
       queryClient.removeQueries({

@@ -58,29 +58,22 @@ const StoreHero = ({ setting }: StoreHeroProps) => {
                 <ArrowRight className="ml-2 h-4 w-4" />
               </a>
             </Button>
-            <Button
-              asChild
-              variant="outline"
-              size="lg"
-              className="rounded-xl px-8"
-            >
+            <Button asChild variant="outline" size="lg" className="rounded-xl px-8">
               <a href="#about">Learn More</a>
             </Button>
           </div>
 
           {/* Trust strip */}
           <div className="flex flex-wrap items-center gap-6 pt-4 border-t border-border">
-            {['Free Shipping', 'Secure Checkout', 'Easy Returns'].map(
-              (badge) => (
-                <span
-                  key={badge}
-                  className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground"
-                >
-                  <Sparkles className="h-3.5 w-3.5 text-primary" />
-                  {badge}
-                </span>
-              ),
-            )}
+            {['Free Shipping', 'Secure Checkout', 'Easy Returns'].map((badge) => (
+              <span
+                key={badge}
+                className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground"
+              >
+                <Sparkles className="h-3.5 w-3.5 text-primary" />
+                {badge}
+              </span>
+            ))}
           </div>
         </div>
       </div>
