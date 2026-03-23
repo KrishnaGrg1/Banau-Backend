@@ -1,18 +1,19 @@
 import {
   CreateCustomerSchema,
-  type CustomerListResponse,
-  type CustomerOrdersById,
-  type CustomerResponse,
+  
+  
+  
   DeleteCustomerSchema,
   exportProductParamsSchema,
   getCustomerOrdersByIdSchema,
   LoginCustomerDtoSchema,
-  type OrdersListResponse,
+  
   paginationDtoSchema,
   RegisterCustomerDtoSchema,
-  UpdateCustomerSchema,
+  UpdateCustomerSchema
 } from '@repo/shared'
-import axiosInstance  from '../axios'
+import type {CustomerListResponse, CustomerOrdersById, CustomerResponse, OrdersListResponse} from '@repo/shared';
+import axiosInstance from '../axios'
 import { createServerFn } from '@tanstack/react-start'
 import { useAppSession } from '../session'
 import { isAxiosError } from 'axios'
@@ -21,7 +22,9 @@ import { isAxiosError } from 'axios'
 export const getMyProfile = createServerFn({ method: 'GET' }).handler(
   async () => {
     try {
-      const response = await axiosInstance<any>('/customers/me', { method: 'GET' })
+      const response = await axiosInstance<any>('/customers/me', {
+        method: 'GET',
+      })
       return response.data
     } catch (error: unknown) {
       const err = error as Error
@@ -129,10 +132,13 @@ export const getCustomerOrders = createServerFn({ method: 'GET' })
   .inputValidator((data) => paginationDtoSchema.parse(data))
   .handler(async ({ data }) => {
     try {
-      const response = await axiosInstance<OrdersListResponse>('/customers/me/orders', {
-        method: 'GET',
-        params: data,
-      })
+      const response = await axiosInstance<OrdersListResponse>(
+        '/customers/me/orders',
+        {
+          method: 'GET',
+          params: data,
+        },
+      )
       return response.data
     } catch (error: unknown) {
       if (isAxiosError(error)) {
@@ -235,10 +241,9 @@ export const createCustomer = createServerFn({ method: 'POST' })
     }
   })
 
-
-  export const exportCustomers=createServerFn({method:'POST'})
-  .inputValidator((data:unknown)=>exportProductParamsSchema.parse(data))
-   .handler(async ({ data }) => {
+export const exportCustomers = createServerFn({ method: 'POST' })
+  .inputValidator((data: unknown) => exportProductParamsSchema.parse(data))
+  .handler(async ({ data }) => {
     try {
       const res = await axiosInstance('/customers/export', {
         method: 'GET',
@@ -268,13 +273,11 @@ export const createCustomer = createServerFn({ method: 'POST' })
     }
   })
 
-
-
-  export const getCustomerOrdersById = createServerFn({ method: 'GET' })
+export const getCustomerOrdersById = createServerFn({ method: 'GET' })
   .inputValidator((data: unknown) => getCustomerOrdersByIdSchema.parse(data))
   .handler(async ({ data }) => {
     try {
-      const {customerId,...paramsBody}=data
+      const { customerId, ...paramsBody } = data
       const response = await axiosInstance<CustomerOrdersById>(
         `/customers/${data.customerId}/orders`,
         {
@@ -282,7 +285,7 @@ export const createCustomer = createServerFn({ method: 'POST' })
           params: paramsBody,
         },
       )
-      console.log("da",response.data)
+      console.log('da', response.data)
       return response.data.data
     } catch (error: unknown) {
       if (isAxiosError(error)) {
@@ -296,8 +299,7 @@ export const createCustomer = createServerFn({ method: 'POST' })
     }
   })
 
-
-  export const updateCustomer = createServerFn({ method: 'POST' })
+export const updateCustomer = createServerFn({ method: 'POST' })
   .inputValidator((data) => UpdateCustomerSchema.parse(data))
   .handler(async ({ data }) => {
     try {

@@ -182,11 +182,9 @@ export function useCustomerCreate() {
   })
 }
 
-
-
 export function useUpdateCustomer() {
   const queryClient = useQueryClient()
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
 
   return useMutation({
     mutationFn: updateCustomer,
@@ -235,7 +233,6 @@ export function useExportAllCustomers() {
     },
   })
 }
-
 
 export function useGetCustomerById(customerId: string) {
   return useQuery({

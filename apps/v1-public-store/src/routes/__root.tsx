@@ -16,6 +16,7 @@ import type { Setting } from '@repo/db/dist/generated/prisma/client'
 import appCss from '../styles.css?url'
 import { ThemeProvider } from 'next-themes'
 import { Toaster } from 'sonner'
+
 interface MyRouterContext {
   queryClient: QueryClient
 }

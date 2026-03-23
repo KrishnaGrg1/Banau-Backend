@@ -182,8 +182,6 @@ export function useCustomerCreate() {
   })
 }
 
-
-
 export function useUpdateCustomer() {
   const queryClient = useQueryClient()
   const navigate = useNavigate()
@@ -235,7 +233,6 @@ export function useExportAllCustomers() {
     },
   })
 }
-
 
 export function useGetCustomerById(customerId: string) {
   return useQuery({

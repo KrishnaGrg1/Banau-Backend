@@ -1,4 +1,4 @@
-import { createFileRoute, Outlet, useRouterState  } from '@tanstack/react-router'
+import { createFileRoute, Outlet, useRouterState } from '@tanstack/react-router'
 import {
   SidebarInset,
   SidebarProvider,

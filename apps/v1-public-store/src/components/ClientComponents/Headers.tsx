@@ -49,7 +49,7 @@ export default function Header({ tenant, logo }: HeaderProps) {
 
   const handleLogout = () => {
     logout(undefined, {
-      onSuccess: () => navigate({ to: `/s/${subdomain}` }),
+      onSuccess: () => void navigate({ to: `/` }),
     })
   }
 

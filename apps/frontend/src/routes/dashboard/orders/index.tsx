@@ -36,7 +36,8 @@ import {
   ChevronRight,
   Download,
   ShoppingBag,
-  Trash2, MoreHorizontal 
+  Trash2,
+  MoreHorizontal,
 } from 'lucide-react'
 import { Spinner } from '@/components/ui/spinner'
 import type { OrderDto, OrderStatus } from '@repo/shared'

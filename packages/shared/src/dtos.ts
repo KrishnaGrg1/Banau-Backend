@@ -526,7 +526,7 @@ export const CreateCustomerSchema = z.object({
   phone: z.string().min(8).optional(),
 });
 export const UpdateCustomerSchema = z.object({
-  customerId:z.string().min(8),
+  customerId: z.string().min(8),
   email: z.string().email("Email required"),
   firstName: z.string().min(2),
   lastName: z.string().min(2),
@@ -877,7 +877,7 @@ export interface SearchTypes {
 }
 
 export interface StaffDto {
- id: string;
+  id: string;
   tenantId: string;
   userId: string;
   canManageProducts: boolean;
@@ -916,26 +916,25 @@ export interface StaffListResponse {
   timestamp: Date;
 }
 
-export interface getStaffByIdResponse{
-  success:boolean;
-  message:string;
-  data:StaffDto,
-  timeStamp:Date
+export interface getStaffByIdResponse {
+  success: boolean;
+  message: string;
+  data: StaffDto;
+  timeStamp: Date;
 }
 
-export interface deleteStaffResponse{
-  success:boolean;
-  message:string;
-  data:null,
-  timeStamp:Date
+export interface deleteStaffResponse {
+  success: boolean;
+  message: string;
+  data: null;
+  timeStamp: Date;
 }
 
-export const StaffById=z.object({
-  staffId:z.string({
-    message:'Staff id is required'
-  })
-})
-
+export const StaffById = z.object({
+  staffId: z.string({
+    message: "Staff id is required",
+  }),
+});
 
 // CreateTenantStaffDto
 export const CreateTenantStaffDtoSchema = z.object({
@@ -946,15 +945,15 @@ export const CreateTenantStaffDtoSchema = z.object({
   canManageOrders: z.boolean(),
   canManageCustomers: z.boolean(),
   canViewAnalytics: z.boolean(),
-  canManageStaff: z.boolean()
+  canManageStaff: z.boolean(),
 });
 
 export type CreateTenantStaffDto = z.infer<typeof CreateTenantStaffDtoSchema>;
 
 // UpdateTenantStaffPermission
 export const UpdateTenantStaffPermissionSchema = z.object({
-   staffId:z.string({
-    message:'Staff id is required'
+  staffId: z.string({
+    message: "Staff id is required",
   }),
   canManageProducts: z.boolean(),
   canManageOrders: z.boolean(),
@@ -963,7 +962,9 @@ export const UpdateTenantStaffPermissionSchema = z.object({
   canManageStaff: z.boolean(),
 });
 
-export type UpdateTenantStaffPermission = z.infer<typeof UpdateTenantStaffPermissionSchema>;
+export type UpdateTenantStaffPermission = z.infer<
+  typeof UpdateTenantStaffPermissionSchema
+>;
 
 // InviteStaffDto
 export const InviteStaffDtoSchema = z.object({
@@ -981,26 +982,25 @@ export type InviteStaffDto = z.infer<typeof InviteStaffDtoSchema>;
 export const AcceptInviteDtoSchema = z.object({
   token: z.string().min(1, "Token is required"),
   firstName: z.string().min(2, "First name must be at least 2 characters"),
-  lastName: z.string().min(2, "Last name must be at least 2 characters")
+  lastName: z.string().min(2, "Last name must be at least 2 characters"),
 });
 
 export type AcceptInviteDto = z.infer<typeof AcceptInviteDtoSchema>;
 
-
 export interface CustomerOrdersById {
-   success: boolean;
-    message: string;
-    data: {
-        orders: OrderDto[];
-        meta: {
-            total: number;
-            limit: number;
-            offset: number;
-            hasNextPage: boolean;
-            hasPreviousPage: boolean;
-        };
+  success: boolean;
+  message: string;
+  data: {
+    orders: OrderDto[];
+    meta: {
+      total: number;
+      limit: number;
+      offset: number;
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
     };
-    timestamp: Date;
+  };
+  timestamp: Date;
 }
 
 export const getCustomerOrdersByIdSchema = z.object({
@@ -1009,4 +1009,6 @@ export const getCustomerOrdersByIdSchema = z.object({
   offset: z.number().min(0).optional(),
 });
 
-export type getCustomerOrdersByIdDto = z.infer<typeof getCustomerOrdersByIdSchema>;
+export type getCustomerOrdersByIdDto = z.infer<
+  typeof getCustomerOrdersByIdSchema
+>;

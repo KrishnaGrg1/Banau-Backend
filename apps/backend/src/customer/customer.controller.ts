@@ -80,7 +80,7 @@ export class CustomerController {
 
   // ── Admin / tenant routes ──
 
-  @UseGuards(AuthGuard,TenantOwnerGuard)
+  @UseGuards(AuthGuard, TenantOwnerGuard)
   @Get(':id')
   async getCustomerById(
     @Request() req: RequestWithUser,

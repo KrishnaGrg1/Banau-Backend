@@ -10,8 +10,7 @@ import { createServerFn } from '@tanstack/react-start'
 export const createTenantSetting = createServerFn({ method: 'POST' }).handler(
   async ({ data }: { data: any }) => {
     try {
-
-      console.log('tenant setting',data)
+      console.log('tenant setting', data)
       // ✅ Build FormData
       const formData = new FormData()
 
@@ -61,7 +60,7 @@ export const createTenantSetting = createServerFn({ method: 'POST' }).handler(
 export const updateTenantSetting = createServerFn({ method: 'POST' }).handler(
   async ({ data }: { data: any }) => {
     try {
-         console.log('tenant setting blood',data)
+      console.log('tenant setting blood', data)
       // ✅ Build FormData
       const formData = new FormData()
 

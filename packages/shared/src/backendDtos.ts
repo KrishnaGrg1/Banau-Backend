@@ -776,7 +776,6 @@ export class CreateCheckoutSessionDto {
   items: CheckoutSessionItemDto[];
 }
 
-
 export class CreateTenantStaffDto {
   @IsEmail()
   email: string;
@@ -788,7 +787,6 @@ export class CreateTenantStaffDto {
   @IsString()
   @MinLength(2)
   lastName: string;
-
 
   @IsBoolean()
   canManageProducts: boolean;
@@ -806,7 +804,7 @@ export class CreateTenantStaffDto {
   canManageStaff: boolean;
 }
 
-export class UpdateTenantStaffPermission{
+export class UpdateTenantStaffPermission {
   @IsBoolean()
   canManageProducts: boolean;
 

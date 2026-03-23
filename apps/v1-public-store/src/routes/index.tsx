@@ -3,7 +3,7 @@ import Header from '#/components/ClientComponents/Headers'
 import StoreFooter from '#/components/ClientComponents/StoreFooter'
 import { PublicTenant } from '#/components/PublicTenant'
 import { createFileRoute, useLoaderData } from '@tanstack/react-router'
-import { useBrandTheme } from '#/hooks/use-brand-theme'
+
 export const Route = createFileRoute('/')({
   component: HomePage,
 })

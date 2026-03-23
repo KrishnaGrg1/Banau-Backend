@@ -1,4 +1,4 @@
-import type{ ProductDto, ProductVariantDto } from '@repo/shared'
+import type { ProductDto, ProductVariantDto } from '@repo/shared'
 import { createServerFn } from '@tanstack/react-start'
 import axiosInstance from '../axios'
 import { isAxiosError } from 'axios'
@@ -74,7 +74,7 @@ export const getPublicProducts = createServerFn({ method: 'GET' })
       if (data.maxPrice !== undefined) params.maxPrice = data.maxPrice
       if (data.inStockOnly) params.inStock = 'true' // backend expects 'inStock'
 
-      const response = await  axiosInstance<{
+      const response = await axiosInstance<{
         success: boolean
         message: string
         data: PublicProductsResponseData
@@ -103,7 +103,7 @@ export const searchPublicProducts = createServerFn({ method: 'GET' })
   .inputValidator((data) => publicProductsSearchSchema.parse(data))
   .handler(async ({ data }) => {
     try {
-      const response = await  axiosInstance<{
+      const response = await axiosInstance<{
         success: boolean
         message: string
         data: PublicProductSearchResponseData
@@ -136,7 +136,7 @@ export const getPublicProductBySlug = createServerFn({ method: 'GET' })
   .inputValidator((data) => publicProductBySlugSchema.parse(data))
   .handler(async ({ data }) => {
     try {
-      const response = await  axiosInstance<{
+      const response = await axiosInstance<{
         success: boolean
         message: string
         data: ProductDto
