@@ -1,5 +1,6 @@
 import {
   HeadContent,
+  Link,
   Scripts,
   createRootRouteWithContext,
 } from '@tanstack/react-router'
@@ -12,9 +13,31 @@ import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 import type { QueryClient } from '@tanstack/react-query'
 import { getTenantConfig } from '#/serverFn/tenant.serverFn'
 import type { Setting } from '@repo/db/dist/generated/prisma/client'
-
+import appCss from '../styles.css?url'
+import { ThemeProvider } from 'next-themes'
+import { Toaster } from 'sonner'
 interface MyRouterContext {
   queryClient: QueryClient
+}
+
+function NotFound() {
+  return (
+    <main className="mx-auto flex min-h-[50vh] w-full max-w-2xl flex-col items-center justify-center px-6 text-center">
+      <p className="text-sm uppercase tracking-[0.14em] text-muted-foreground">
+        404
+      </p>
+      <h1 className="mt-3 text-3xl font-semibold">Page not found</h1>
+      <p className="mt-3 text-muted-foreground">
+        The page you requested does not exist or is no longer available.
+      </p>
+      <Link
+        to="/"
+        className="mt-7 inline-flex items-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+      >
+        Back to home
+      </Link>
+    </main>
+  )
 }
 
 const buildTenantThemeCssVars = (setting?: Setting | null): string => {
@@ -51,8 +74,6 @@ const buildTenantThemeCssVars = (setting?: Setting | null): string => {
 
   return `${rootBlock}${bodyBlock}`
 }
-
-const THEME_INIT_SCRIPT = `(function(){try{var stored=window.localStorage.getItem('theme');var mode=(stored==='light'||stored==='dark'||stored==='auto')?stored:'auto';var prefersDark=window.matchMedia('(prefers-color-scheme: dark)').matches;var resolved=mode==='auto'?(prefersDark?'dark':'light'):mode;var root=document.documentElement;root.classList.remove('light','dark');root.classList.add(resolved);if(mode==='auto'){root.removeAttribute('data-theme')}else{root.setAttribute('data-theme',mode)}root.style.colorScheme=resolved;}catch(e){}})();`
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
   staleTime: Infinity,
@@ -99,16 +120,19 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
           name: 'description',
           content: tenant.existingSetting.landingPageDescription,
         },
-        {
-          name: 'theme-color',
-          content: tenant.existingSetting.primaryColorCode,
-        },
         { property: 'og:image', content: tenant.logo.url },
       ],
-      links: [{ rel: 'icon', href: tenant.favicon.url }],
+      links: [
+        { rel: 'icon', href: tenant.favicon.url },
+        {
+          rel: 'stylesheet',
+          href: appCss,
+        },
+      ],
       styles: tenantThemeCssVars ? [{ children: tenantThemeCssVars }] : [],
     }
   },
+  notFoundComponent: NotFound,
   shellComponent: RootDocument,
 })
 
@@ -116,26 +140,29 @@ function RootDocument({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+        {/* <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} /> */}
         <HeadContent />
       </head>
       <body className="font-sans antialiased [overflow-wrap:anywhere] selection:bg-[rgba(79,184,178,0.24)]">
-        <TanStackQueryProvider>
-          {children}
-          <TanStackDevtools
-            config={{
-              position: 'bottom-right',
-            }}
-            plugins={[
-              {
-                name: 'Tanstack Router',
-                render: <TanStackRouterDevtoolsPanel />,
-              },
-              TanStackQueryDevtools,
-            ]}
-          />
-        </TanStackQueryProvider>
-        <Scripts />
+        <ThemeProvider defaultTheme="light">
+          <TanStackQueryProvider>
+            {children}
+            <TanStackDevtools
+              config={{
+                position: 'bottom-right',
+              }}
+              plugins={[
+                {
+                  name: 'Tanstack Router',
+                  render: <TanStackRouterDevtoolsPanel />,
+                },
+                TanStackQueryDevtools,
+              ]}
+            />
+          </TanStackQueryProvider>
+          <Toaster position="bottom-right" />
+          <Scripts />
+        </ThemeProvider>
       </body>
     </html>
   )

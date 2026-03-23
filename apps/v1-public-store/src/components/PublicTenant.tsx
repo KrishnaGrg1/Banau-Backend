@@ -2,6 +2,7 @@ import type { Setting, Tenant } from '@repo/db/dist/generated/prisma/client'
 
 import { Sparkles, AlertCircle, Lock, ShoppingBag } from 'lucide-react'
 import { usePublicProducts } from '#/hooks/use-public-product'
+import StoreHero from './ClientComponents/StoreHero'
 
 interface PublicTenantProps {
   tenant?: Tenant | null
@@ -114,7 +115,7 @@ export function PublicTenant({ tenant, setting }: PublicTenantProps) {
   // ── Published ─────────────────────────────────────────────────────────────
   return (
     <>
-      {/* {setting && <StoreHero setting={setting} />} */}
+      {setting && <StoreHero setting={setting} />}
       <StorefrontContent
         tenant={tenant}
         products={Array.isArray(products) ? products : []}
