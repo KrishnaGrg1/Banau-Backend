@@ -640,8 +640,8 @@ export class OrderServices {
       payment_method_types: ['card'],
       line_items: lineItems,
       mode: 'payment',
-      success_url: `${this.frontendUrl}/s/${dto.subdomain}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${this.frontendUrl}/s/${dto.subdomain}/checkout`,
+      success_url: `${this.frontendUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${this.frontendUrl}/checkout`,
       customer_email: dto.email,
       metadata: {
         tenantId: tenant.id,

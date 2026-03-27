@@ -11,6 +11,7 @@ import type { Setting } from '@repo/db/dist/generated/prisma/client'
 import appCss from '../styles.css?url'
 import { ThemeProvider } from 'next-themes'
 import { Toaster } from 'sonner'
+import Header from '#/components/ClientComponents/Headers'
 
 interface MyRouterContext {
   queryClient: QueryClient
@@ -131,29 +132,43 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 })
 
 function RootDocument({ children }: { children: React.ReactNode }) {
+  const { tenantConfig } = Route.useLoaderData()
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} /> */}
         <HeadContent />
       </head>
-      <body className="font-sans antialiased [overflow-wrap:anywhere] selection:bg-[rgba(79,184,178,0.24)]">
+      <body className="font-sans antialiased  selection:bg-[rgba(79,184,178,0.24)]">
         <ThemeProvider defaultTheme="light">
-          <TanStackQueryProvider>
-            {children}
-            <TanStackDevtools
-              config={{
-                position: 'bottom-right',
-              }}
-              plugins={[
-                {
-                  name: 'Tanstack Router',
-                  render: <TanStackRouterDevtoolsPanel />,
-                },
-                TanStackQueryDevtools,
-              ]}
-            />
-          </TanStackQueryProvider>
+          {!tenantConfig ? (
+            <main className="flex min-h-screen items-center justify-center">
+              <h1 className="text-2xl font-semibold text-muted-foreground">Tenant not found</h1>
+            </main>
+          ) : (
+            <TanStackQueryProvider>
+              <div className="min-h-screen flex flex-col bg-background">
+                <Header
+                  tenant={tenantConfig.existingTenant}
+                  logo={tenantConfig.logo ? { url: tenantConfig.logo.url } : undefined}
+                />
+                <main className="flex-1">{children}</main>
+              </div>
+              {/* devtools */}
+              <TanStackDevtools
+                config={{
+                  position: 'bottom-right',
+                }}
+                plugins={[
+                  {
+                    name: 'Tanstack Router',
+                    render: <TanStackRouterDevtoolsPanel />,
+                  },
+                  TanStackQueryDevtools,
+                ]}
+              />
+            </TanStackQueryProvider>
+          )}
           <Toaster position="bottom-right" />
           <Scripts />
         </ThemeProvider>
