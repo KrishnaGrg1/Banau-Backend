@@ -287,6 +287,13 @@ export default function AddProductPage() {
   }
 
   const vals = form.state.values
+  const formatNPR = (value: number) => {
+    return new Intl.NumberFormat('en-NP', {
+      style: 'currency',
+      currency: 'NPR',
+      maximumFractionDigits: 2,
+    }).format(value)
+  }
 
   return (
     <div className="flex flex-col flex-1 gap-6 p-6 max-w-5xl">
@@ -530,7 +537,7 @@ export default function AddProductPage() {
                     </Label>
                     <div className="relative">
                       <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm pointer-events-none">
-                        $
+                        NPR
                       </span>
                       <Input
                         id={field.name}
@@ -542,7 +549,7 @@ export default function AddProductPage() {
                         value={field.state.value}
                         onChange={(e) => field.handleChange(e.target.value)}
                         onBlur={field.handleBlur}
-                        className="rounded-xl pl-7"
+                        className="rounded-xl pl-12"
                       />
                     </div>
                     <FieldError errors={field.state.meta.errors} />
@@ -572,7 +579,7 @@ export default function AddProductPage() {
                     </Label>
                     <div className="relative">
                       <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm pointer-events-none">
-                        $
+                        NPR
                       </span>
                       <Input
                         id={field.name}
@@ -584,7 +591,7 @@ export default function AddProductPage() {
                         value={field.state.value}
                         onChange={(e) => field.handleChange(e.target.value)}
                         onBlur={field.handleBlur}
-                        className="rounded-xl pl-7"
+                        className="rounded-xl pl-12"
                       />
                     </div>
                     <FieldError errors={field.state.meta.errors} />
@@ -1025,9 +1032,7 @@ export default function AddProductPage() {
                 {
                   label: 'Price',
                   value:
-                    vals.price !== ''
-                      ? `$${Number(vals.price).toFixed(2)}`
-                      : '—',
+                    vals.price !== '' ? formatNPR(Number(vals.price)) : '—',
                 },
                 { label: 'Status', value: vals.status },
                 { label: 'Stock', value: String(vals.quantity ?? 0) },

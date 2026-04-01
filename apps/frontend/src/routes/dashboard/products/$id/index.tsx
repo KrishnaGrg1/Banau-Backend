@@ -70,7 +70,11 @@ export const Route = createFileRoute('/dashboard/products/$id/')({
 
 function formatPrice(price: string | null) {
   if (!price) return '—'
-  return `Rs.${parseFloat(price).toFixed(2)}`
+  return new Intl.NumberFormat('en-NP', {
+    style: 'currency',
+    currency: 'NPR',
+    maximumFractionDigits: 2,
+  }).format(parseFloat(price))
 }
 
 function getStatusColor(status: string) {

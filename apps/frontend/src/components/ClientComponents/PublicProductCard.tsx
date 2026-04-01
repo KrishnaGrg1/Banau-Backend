@@ -3,17 +3,10 @@ import { Link } from '@tanstack/react-router'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Sparkles } from 'lucide-react'
+import { formatNprCurrency } from '@/lib/currency'
 
 interface PublicProductCardProps {
   product: ProductDto
-}
-
-function formatPrice(price: number | string): string {
-  const num = typeof price === 'string' ? parseFloat(price) : price
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-  }).format(num)
 }
 
 export default function PublicProductCard({ product }: PublicProductCardProps) {
@@ -71,10 +64,12 @@ export default function PublicProductCard({ product }: PublicProductCardProps) {
           )}
 
           <div className="flex items-end gap-2 mt-1">
-            <span className="font-bold text-lg">{formatPrice(price)}</span>
+            <span className="font-bold text-lg">
+              {formatNprCurrency(price)}
+            </span>
             {hasDiscount && (
               <span className="line-through text-sm text-muted-foreground">
-                {formatPrice(compareAtPrice)}
+                {formatNprCurrency(compareAtPrice)}
               </span>
             )}
           </div>

@@ -12,3 +12,6 @@ export * from './interfaces/request.interface';
 
 // Middleware
 export * from './middleware/subdomain.middleware';
+
+// Utils
+export * from './utils/currency';

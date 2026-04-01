@@ -48,9 +48,23 @@ function fmtDate(d: Date | string | null | undefined, fallback = '—') {
 }
 
 function fmtCurrency(v: string | null | undefined) {
-  if (!v) return '$0.00'
+  if (!v) {
+    return new Intl.NumberFormat('en-NP', {
+      style: 'currency',
+      currency: 'NPR',
+      maximumFractionDigits: 2,
+    }).format(0)
+  }
+
   const num = parseFloat(v)
-  return isNaN(num) ? v : `$${num.toFixed(2)}`
+
+  return isNaN(num)
+    ? v
+    : new Intl.NumberFormat('en-NP', {
+        style: 'currency',
+        currency: 'NPR',
+        maximumFractionDigits: 2,
+      }).format(num)
 }
 
 const STATUS_CONFIG: Record<

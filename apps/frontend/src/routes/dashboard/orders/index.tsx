@@ -60,6 +60,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
+import { formatNprCurrency } from '@/lib/currency'
 
 // Define search params for pagination
 interface OrdersSearch {
@@ -173,10 +174,6 @@ export default function OrdersPage() {
     if (!deleteTargetId) return
     await deleteOrder.mutateAsync({ data: { orderId: deleteTargetId } })
     setDeleteTargetId(null)
-  }
-
-  const formatPrice = (price: string) => {
-    return `$${parseFloat(price).toFixed(2)}`
   }
 
   if (error) {
@@ -373,7 +370,9 @@ export default function OrdersPage() {
                       </TableCell>
                       <TableCell>
                         <div className="font-medium">
-                          {formatPrice(order.total)}
+                          {formatNprCurrency(order.total, {
+                            fallback: formatNprCurrency(0),
+                          })}
                         </div>
                       </TableCell>
                       <TableCell className="text-right">

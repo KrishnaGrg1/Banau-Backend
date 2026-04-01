@@ -624,7 +624,7 @@ export class OrderServices {
 
       lineItems.push({
         price_data: {
-          currency: 'usd',
+          currency: 'npr',
           product_data: {
             name: product.name,
             description: item.variantName || product.description || undefined,

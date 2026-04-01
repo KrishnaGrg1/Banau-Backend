@@ -197,6 +197,13 @@ function EditProductForm({ product, id }: { product: Product; id: string }) {
   }
 
   const vals = form.state.values
+  const formatNPR = (value: number) => {
+    return new Intl.NumberFormat('en-NP', {
+      style: 'currency',
+      currency: 'NPR',
+      maximumFractionDigits: 2,
+    }).format(value)
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -445,7 +452,7 @@ function EditProductForm({ product, id }: { product: Product; id: string }) {
                       </Label>
                       <div className="relative">
                         <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm pointer-events-none">
-                          $
+                          NPR
                         </span>
                         <Input
                           id={field.name}
@@ -457,7 +464,7 @@ function EditProductForm({ product, id }: { product: Product; id: string }) {
                           value={field.state.value}
                           onChange={(e) => field.handleChange(e.target.value)}
                           onBlur={field.handleBlur}
-                          className="rounded-xl pl-7"
+                          className="rounded-xl pl-12"
                         />
                       </div>
                       <FieldError errors={field.state.meta.errors} />
@@ -491,7 +498,7 @@ function EditProductForm({ product, id }: { product: Product; id: string }) {
                       </Label>
                       <div className="relative">
                         <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm pointer-events-none">
-                          $
+                          NPR
                         </span>
                         <Input
                           id={field.name}
@@ -503,7 +510,7 @@ function EditProductForm({ product, id }: { product: Product; id: string }) {
                           value={field.state.value}
                           onChange={(e) => field.handleChange(e.target.value)}
                           onBlur={field.handleBlur}
-                          className="rounded-xl pl-7"
+                          className="rounded-xl pl-12"
                         />
                       </div>
                       <FieldError errors={field.state.meta.errors} />
@@ -955,9 +962,7 @@ function EditProductForm({ product, id }: { product: Product; id: string }) {
                   {
                     label: 'Price',
                     value:
-                      vals.price !== ''
-                        ? `$${Number(vals.price).toFixed(2)}`
-                        : '—',
+                      vals.price !== '' ? formatNPR(Number(vals.price)) : '—',
                   },
                   { label: 'Status', value: vals.status },
                   { label: 'Stock', value: String(vals.quantity ?? 0) },

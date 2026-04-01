@@ -1,6 +1,7 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Resend } from 'resend';
+import { formatNprCurrency } from 'src/common/utils/currency';
 
 // --- Enums ------------------------------------------------------------------
 
@@ -71,7 +72,7 @@ function itemTableHtml(items: any[]): string {
       <tr>
         <td style="padding:8px 12px;border-bottom:1px solid #f0f0f0;">${item.productName}${item.variantName ? ` &mdash; ${item.variantName}` : ''}</td>
         <td style="padding:8px 12px;border-bottom:1px solid #f0f0f0;text-align:center;">${item.quantity}</td>
-        <td style="padding:8px 12px;border-bottom:1px solid #f0f0f0;text-align:right;">$${Number(item.price).toFixed(2)}</td>
+        <td style="padding:8px 12px;border-bottom:1px solid #f0f0f0;text-align:right;">${formatNprCurrency(Number(item.price))}</td>
       </tr>`,
     )
     .join('');
@@ -188,7 +189,7 @@ export class EmailService {
       <p style="margin-top:0;">Hi <b>${fullName}</b>,</p>
       <p>Thank you for your order! We've received it and it's being processed.</p>
       <p style="margin:0 0 4px;"><b>Order ID:</b> <code style="font-size:13px;">${order.id}</code></p>
-      <p style="margin:0 0 20px;"><b>Total:</b> $${Number(order.total).toFixed(2)}</p>
+      <p style="margin:0 0 20px;"><b>Total:</b> ${formatNprCurrency(Number(order.total))}</p>
       ${itemTableHtml(order.items ?? [])}
       ${accountBlock}`;
 
@@ -217,7 +218,7 @@ export class EmailService {
       <p style="margin-top:0;">You have a new order on <b>${storeName}</b>!</p>
       <p style="margin:0 0 4px;"><b>Order ID:</b> <code style="font-size:13px;">${order.id}</code></p>
       <p style="margin:0 0 4px;"><b>Customer:</b> ${order.ShippingfirstName ?? ''} ${order.ShippinglastName ?? ''} (${order.ShippingEmail ?? ''})</p>
-      <p style="margin:0 0 20px;"><b>Total:</b> $${Number(order.total).toFixed(2)}</p>
+      <p style="margin:0 0 20px;"><b>Total:</b> ${formatNprCurrency(Number(order.total))}</p>
       ${itemTableHtml(order.items ?? [])}
       <div style="text-align:center;">
         <a href="${dashboardUrl}" style="display:inline-block;background:#16a34a;color:#fff;text-decoration:none;padding:12px 28px;border-radius:8px;font-weight:600;">View Order in Dashboard &rarr;</a>
@@ -225,7 +226,7 @@ export class EmailService {
 
     return this.sendEmail(
       ownerEmail,
-      `New Order on ${storeName} - $${Number(order.total).toFixed(2)}`,
+      `New Order on ${storeName} - ${formatNprCurrency(Number(order.total))}`,
       emailShell({
         headerColor: '#16a34a',
         headerText: 'New Order Received',

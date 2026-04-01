@@ -74,8 +74,19 @@ export default function OrderDetailPage() {
   const [showRefundDialog, setShowRefundDialog] = useState(false)
 
   const formatPrice = (price: string | null) => {
-    if (!price) return '$0.00'
-    return `$${parseFloat(price).toFixed(2)}`
+    if (!price) {
+      return new Intl.NumberFormat('en-NP', {
+        style: 'currency',
+        currency: 'NPR',
+        maximumFractionDigits: 2,
+      }).format(0)
+    }
+
+    return new Intl.NumberFormat('en-NP', {
+      style: 'currency',
+      currency: 'NPR',
+      maximumFractionDigits: 2,
+    }).format(parseFloat(price))
   }
 
   const handleAddTracking = async () => {

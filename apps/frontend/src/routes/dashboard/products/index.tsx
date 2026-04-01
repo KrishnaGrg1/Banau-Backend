@@ -115,7 +115,11 @@ export default function ProductsPage() {
   }
 
   const formatPrice = (price: string) => {
-    return `Rs${parseFloat(price).toFixed(2)}`
+    return new Intl.NumberFormat('en-NP', {
+      style: 'currency',
+      currency: 'NPR',
+      maximumFractionDigits: 2,
+    }).format(parseFloat(price))
   }
 
   const getStatusColor = (status: string) => {
