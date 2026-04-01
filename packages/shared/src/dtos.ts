@@ -30,6 +30,7 @@ export interface LoginResponse {
       name: string;
       createdAt: Date;
       updatedAt: Date;
+      role:string;
     };
     accessToken: string;
     refreshToken: string;

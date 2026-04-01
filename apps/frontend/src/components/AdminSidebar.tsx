@@ -28,173 +28,67 @@ import {
   CollapsibleTrigger,
 } from '@/components/ui/collapsible'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import { Badge } from '@/components/ui/badge'
 import { useLogOut } from '@/hooks/user-auth'
 import { useGetMe } from '@/hooks/use-user'
-import { useGetTenant } from '@/hooks/use-tenant'
 import {
   LayoutDashboard,
-  ShoppingBag,
-  ClipboardList,
+  BarChart3,
+  TrendingUp,
+  DollarSign,
+  Building2,
+  Users,
+  UserCog,
   Settings,
   Sparkles,
-  Eye,
-  ExternalLink,
   LogOut,
   ChevronUp,
   ChevronRight,
-  User,
-  Users,
-  BarChart3,
-  Tag,
-  Boxes,
-  UserCog,
-  Plus,
-  AlertTriangle,
-  Sliders,
-  TrendingUp,
-  Activity,
-  Globe,
-  CreditCard,
-  Truck,
-  Receipt,
-  Bell,
-  Banknote,
-  Palette,
-  Lock,
   UserCircle,
-  MailPlus,
+  Sliders,
 } from 'lucide-react'
-
-// ─── Nav config ──────────────────────────────────────────────────────────────
 
 const navMain = [
   {
     title: 'Overview',
     icon: LayoutDashboard,
-    to: '/dashboard',
+    to: '/admin',
     exact: true,
-  },
-  {
-    title: 'Products',
-    icon: ShoppingBag,
-    to: '/dashboard/products',
-    children: [
-      { title: 'All Products', icon: ShoppingBag, to: '/dashboard/products' },
-      { title: 'Add Product', icon: Plus, to: '/dashboard/products/new' },
-    ],
-  },
-  {
-    title: 'Orders',
-    icon: ClipboardList,
-    to: '/dashboard/orders',
-    children: [
-      { title: 'All Orders', icon: ClipboardList, to: '/dashboard/orders' },
-    ],
-  },
-  {
-    title: 'Customers',
-    icon: Users,
-    to: '/dashboard/customers',
-    children: [
-      { title: 'All Customers', icon: Users, to: '/dashboard/customers' },
-      { title: 'Add Customer', icon: Plus, to: '/dashboard/customers/new' },
-    ],
-  },
-  {
-    title: 'Categories',
-    icon: Tag,
-    to: '/dashboard/categories',
-    children: [
-      { title: 'All Categories', icon: Tag, to: '/dashboard/categories' },
-      { title: 'New Category', icon: Plus, to: '/dashboard/categories/new' },
-    ],
-  },
-  {
-    title: 'Inventory',
-    icon: Boxes,
-    to: '/dashboard/inventory',
-    children: [
-      { title: 'Overview', icon: Boxes, to: '/dashboard/inventory' },
-      {
-        title: 'Low Stock',
-        icon: AlertTriangle,
-        to: '/dashboard/inventory/low-stock',
-        badge: 'alert',
-      },
-      {
-        title: 'Adjustments',
-        icon: Sliders,
-        to: '/dashboard/inventory/adjustments',
-      },
-    ],
   },
   {
     title: 'Analytics',
     icon: BarChart3,
-    to: '/dashboard/analytics',
+    to: '/admin/analytics',
     children: [
-      { title: 'Overview', icon: BarChart3, to: '/dashboard/analytics' },
-      { title: 'Sales', icon: TrendingUp, to: '/dashboard/analytics/sales' },
-      { title: 'Customers', icon: Users, to: '/dashboard/analytics/customers' },
-      {
-        title: 'Products',
-        icon: ShoppingBag,
-        to: '/dashboard/analytics/products',
-      },
-      { title: 'Traffic', icon: Activity, to: '/dashboard/analytics/traffic' },
+      { title: 'Overview', icon: BarChart3, to: '/admin/analytics' },
+      { title: 'Growth', icon: TrendingUp, to: '/admin/analytics/growth' },
+      { title: 'Revenue', icon: DollarSign, to: '/admin/analytics/revenue' },
     ],
   },
   {
-    title: 'Staff',
-    icon: UserCog,
-    to: '/dashboard/staff',
+    title: 'Tenants',
+    icon: Building2,
+    to: '/admin/tenants',
+  },
+  {
+    title: 'Users',
+    icon: Users,
+    to: '/admin/users',
     children: [
-      { title: 'All Staff', icon: UserCog, to: '/dashboard/staff' },
-      { title: 'Add Member', icon: Plus, to: '/dashboard/staff/new' },
-      { title: 'Invite Member', icon: MailPlus, to: '/dashboard/staff/invite' },
+      { title: 'All Users', icon: Users, to: '/admin/users' },
+      { title: 'Roles', icon: UserCog, to: '/admin/users/roles' },
     ],
   },
   {
     title: 'Settings',
     icon: Settings,
-    to: '/dashboard/settings',
+    to: '/admin/setting',
     children: [
-      { title: 'General', icon: Settings, to: '/dashboard/settings/general' },
-      { title: 'Branding', icon: Palette, to: '/dashboard/settings/branding' },
-      { title: 'Domain', icon: Globe, to: '/dashboard/settings/domain' },
-      {
-        title: 'Payments',
-        icon: CreditCard,
-        to: '/dashboard/settings/payments',
-      },
-      { title: 'Shipping', icon: Truck, to: '/dashboard/settings/shipping' },
-      { title: 'Taxes', icon: Receipt, to: '/dashboard/settings/taxes' },
-      {
-        title: 'Notifications',
-        icon: Bell,
-        to: '/dashboard/settings/notifications',
-      },
-      { title: 'Billing', icon: Banknote, to: '/dashboard/settings/billing' },
-    ],
-  },
-  {
-    title: 'Account',
-    icon: User,
-    to: '/dashboard/account',
-    children: [
-      { title: 'Profile', icon: UserCircle, to: '/dashboard/account/profile' },
-      { title: 'Password', icon: Lock, to: '/dashboard/account/password' },
-      {
-        title: 'Notifications',
-        icon: Bell,
-        to: '/dashboard/account/notifications',
-      },
+      { title: 'Features', icon: Sliders, to: '/admin/setting/features' },
+      { title: 'Plans', icon: Settings, to: '/admin/setting/plans' },
+      { title: 'System', icon: Settings, to: '/admin/setting/system' },
     ],
   },
 ]
-
-// ─── Helpers ─────────────────────────────────────────────────────────────────
 
 function getInitials(firstName?: string, lastName?: string) {
   return `${firstName?.[0] || ''}${lastName?.[0] || ''}`.toUpperCase()
@@ -205,20 +99,15 @@ function isParentActive(item: (typeof navMain)[0], currentPath: string) {
   return currentPath.startsWith(item.to)
 }
 
-// ─── Component ───────────────────────────────────────────────────────────────
-
-export function AppSidebar() {
+export function AdminSidebar() {
   const navigate = useNavigate()
   const routerState = useRouterState()
   const currentPath = routerState.location.pathname
 
   const { user } = useGetMe()
-  const { data: tenant } = useGetTenant()
   const { mutate: logoutMutation } = useLogOut()
 
-  // Track which parent items are open
   const [openItems, setOpenItems] = useState<Record<string, boolean>>(() => {
-    // Auto-open the active section on mount
     const initial: Record<string, boolean> = {}
     navMain.forEach((item) => {
       if (item.children && isParentActive(item, currentPath)) {
@@ -236,7 +125,6 @@ export function AppSidebar() {
 
   return (
     <Sidebar variant="inset">
-      {/* ── Header ── */}
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
@@ -248,7 +136,7 @@ export function AppSidebar() {
                 <div className="flex flex-col gap-0.5 leading-none">
                   <span className="font-bold text-base">Banau</span>
                   <span className="text-xs text-muted-foreground">
-                    Website Builder
+                    Admin Console
                   </span>
                 </div>
               </div>
@@ -257,9 +145,7 @@ export function AppSidebar() {
         </SidebarMenu>
       </SidebarHeader>
 
-      {/* ── Content ── */}
       <SidebarContent>
-        {/* Main Nav */}
         <SidebarGroup>
           <SidebarGroupLabel>Navigation</SidebarGroupLabel>
           <SidebarMenu>
@@ -268,7 +154,6 @@ export function AppSidebar() {
               const isOpen = openItems[item.title] ?? false
 
               if (!item.children) {
-                // Simple item – no sub-menu
                 return (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton
@@ -284,7 +169,6 @@ export function AppSidebar() {
                 )
               }
 
-              // Collapsible item with children
               return (
                 <Collapsible
                   key={item.title}
@@ -318,14 +202,6 @@ export function AppSidebar() {
                               >
                                 <child.icon className="h-3.5 w-3.5 shrink-0 text-muted-foreground cursor-pointer" />
                                 <span className="flex-1">{child.title}</span>
-                                {child.badge === 'alert' && (
-                                  <Badge
-                                    variant="destructive"
-                                    className="h-4 px-1 text-[10px] font-semibold"
-                                  >
-                                    !
-                                  </Badge>
-                                )}
                               </SidebarMenuSubButton>
                             </SidebarMenuSubItem>
                           )
@@ -338,45 +214,8 @@ export function AppSidebar() {
             })}
           </SidebarMenu>
         </SidebarGroup>
-
-        {/* Site Quick Links */}
-        {tenant && (
-          <SidebarGroup>
-            <SidebarGroupLabel>Your Site</SidebarGroupLabel>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  onClick={() => navigate({ to: `/s/${tenant.subdomain}` })}
-                  tooltip="Preview"
-                  className="cursor-pointer"
-                >
-                  <Eye className="h-4 w-4 cursor-pointer" />
-                  <span>Preview</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              {tenant.published && (
-                <SidebarMenuItem>
-                  <SidebarMenuButton
-                    onClick={() =>
-                      window.open(
-                        `https://${tenant.subdomain}.banau.com`,
-                        '_blank',
-                      )
-                    }
-                    tooltip="View Live Site"
-                    className="cursor-pointer"
-                  >
-                    <ExternalLink className="h-4 w-4 cursor-pointer" />
-                    <span>View Live</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              )}
-            </SidebarMenu>
-          </SidebarGroup>
-        )}
       </SidebarContent>
 
-      {/* ── Footer / User ── */}
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
@@ -435,15 +274,6 @@ export function AppSidebar() {
                 >
                   <UserCircle className="mr-2 h-4 w-4 cursor-pointer" />
                   Profile
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  className="cursor-pointer"
-                  onClick={() =>
-                    navigate({ to: '/dashboard/settings/general' })
-                  }
-                >
-                  <Settings className="mr-2 h-4 w-4 cursor-pointer" />
-                  Settings
                 </DropdownMenuItem>
 
                 <DropdownMenuSeparator />

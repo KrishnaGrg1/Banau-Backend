@@ -17,10 +17,11 @@ export function useLogin() {
   // const { setUser, setAuthSession, setAuthenticated } = useAuthStore()
   return useMutation({
     mutationFn: login,
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['auth'] })
-      navigate({ to: '/dashboard' })
-      toast.success('Login successfully ')
+      const destination = data.data.user.role === 'SUPER_ADMIN' ? '/admin' : '/dashboard'
+      navigate({ to: destination })
+      toast.success('Login successfully')
     },
     onError: (err: Error) => {
       toast.error(err.message)

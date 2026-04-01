@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useAdminSystemSettings } from '@/hooks/use-admin'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
-export const Route = createFileRoute('/admin/setting/sysyem')({
+export const Route = createFileRoute('/admin/setting/system')({
   component: RouteComponent,
 })
 

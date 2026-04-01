@@ -13,13 +13,9 @@ import {
 import { Separator } from '@/components/ui/separator'
 import { ModeToggle } from '@/components/mode-toggle'
 import { AppSidebar } from '@/components/AppSideBar'
-import { AuthMiddleware } from '@/utils/middleware'
 
 export const Route = createFileRoute('/dashboard')({
   component: DashboardLayout,
-  server: {
-    middleware: [AuthMiddleware],
-  },
 })
 
 function DashboardLayout() {

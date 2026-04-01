@@ -22,7 +22,7 @@ export const register = createServerFn({ method: 'POST' })
         data: data,
         method: 'POST',
       })
-      console.log(response.data)
+      console.log("h",response.data)
       return response.data
     } catch (error: unknown) {
       // The axios interceptor already extracts and wraps the error message

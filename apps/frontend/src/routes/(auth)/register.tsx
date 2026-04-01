@@ -313,8 +313,8 @@ function RegisterPage() {
                   onChange: ({ value }) =>
                     !value
                       ? 'Password is required'
-                      : value.length < 6
-                        ? 'Password must be at least 6 characters'
+                      : value.length < 8
+                        ? 'Password must be at least 8 characters'
                         : undefined,
                 }}
               >
@@ -331,7 +331,7 @@ function RegisterPage() {
                         id={field.name}
                         name={field.name}
                         type={showPassword ? 'text' : 'password'}
-                        placeholder="Min. 6 characters"
+                        placeholder="Min. 8 characters"
                         value={field.state.value}
                         onChange={(e) => field.handleChange(e.target.value)}
                         onBlur={field.handleBlur}

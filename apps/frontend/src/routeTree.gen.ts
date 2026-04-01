@@ -60,6 +60,7 @@ import { Route as DashboardAccountPasswordRouteImport } from './routes/dashboard
 import { Route as DashboardAccountNotificationsRouteImport } from './routes/dashboard/account/notifications'
 import { Route as AdminUsersRolesRouteImport } from './routes/admin/users/roles'
 import { Route as AdminSettingSysyemRouteImport } from './routes/admin/setting/sysyem'
+import { Route as AdminSettingSystemRouteImport } from './routes/admin/setting/system'
 import { Route as AdminSettingPlansRouteImport } from './routes/admin/setting/plans'
 import { Route as AdminSettingFeaturesRouteImport } from './routes/admin/setting/features'
 import { Route as AdminAnalyticsRevenueRouteImport } from './routes/admin/analytics/revenue'
@@ -365,6 +366,11 @@ const AdminSettingSysyemRoute = AdminSettingSysyemRouteImport.update({
   path: '/setting/sysyem',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminSettingSystemRoute = AdminSettingSystemRouteImport.update({
+  id: '/setting/system',
+  path: '/setting/system',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminSettingPlansRoute = AdminSettingPlansRouteImport.update({
   id: '/setting/plans',
   path: '/setting/plans',
@@ -580,6 +586,7 @@ export interface FileRoutesByFullPath {
   '/admin/analytics/revenue': typeof AdminAnalyticsRevenueRoute
   '/admin/setting/features': typeof AdminSettingFeaturesRoute
   '/admin/setting/plans': typeof AdminSettingPlansRoute
+  '/admin/setting/system': typeof AdminSettingSystemRoute
   '/admin/setting/sysyem': typeof AdminSettingSysyemRoute
   '/admin/users/roles': typeof AdminUsersRolesRoute
   '/dashboard/account/notifications': typeof DashboardAccountNotificationsRoute
@@ -665,6 +672,7 @@ export interface FileRoutesByTo {
   '/admin/analytics/revenue': typeof AdminAnalyticsRevenueRoute
   '/admin/setting/features': typeof AdminSettingFeaturesRoute
   '/admin/setting/plans': typeof AdminSettingPlansRoute
+  '/admin/setting/system': typeof AdminSettingSystemRoute
   '/admin/setting/sysyem': typeof AdminSettingSysyemRoute
   '/admin/users/roles': typeof AdminUsersRolesRoute
   '/dashboard/account/notifications': typeof DashboardAccountNotificationsRoute
@@ -755,6 +763,7 @@ export interface FileRoutesById {
   '/admin/analytics/revenue': typeof AdminAnalyticsRevenueRoute
   '/admin/setting/features': typeof AdminSettingFeaturesRoute
   '/admin/setting/plans': typeof AdminSettingPlansRoute
+  '/admin/setting/system': typeof AdminSettingSystemRoute
   '/admin/setting/sysyem': typeof AdminSettingSysyemRoute
   '/admin/users/roles': typeof AdminUsersRolesRoute
   '/dashboard/account/notifications': typeof DashboardAccountNotificationsRoute
@@ -846,6 +855,7 @@ export interface FileRouteTypes {
     | '/admin/analytics/revenue'
     | '/admin/setting/features'
     | '/admin/setting/plans'
+    | '/admin/setting/system'
     | '/admin/setting/sysyem'
     | '/admin/users/roles'
     | '/dashboard/account/notifications'
@@ -931,6 +941,7 @@ export interface FileRouteTypes {
     | '/admin/analytics/revenue'
     | '/admin/setting/features'
     | '/admin/setting/plans'
+    | '/admin/setting/system'
     | '/admin/setting/sysyem'
     | '/admin/users/roles'
     | '/dashboard/account/notifications'
@@ -1020,6 +1031,7 @@ export interface FileRouteTypes {
     | '/admin/analytics/revenue'
     | '/admin/setting/features'
     | '/admin/setting/plans'
+    | '/admin/setting/system'
     | '/admin/setting/sysyem'
     | '/admin/users/roles'
     | '/dashboard/account/notifications'
@@ -1464,6 +1476,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminSettingSysyemRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/admin/setting/system': {
+      id: '/admin/setting/system'
+      path: '/setting/system'
+      fullPath: '/admin/setting/system'
+      preLoaderRoute: typeof AdminSettingSystemRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/admin/setting/plans': {
       id: '/admin/setting/plans'
       path: '/setting/plans'
@@ -1725,6 +1744,7 @@ interface AdminRouteRouteChildren {
   AdminAnalyticsRevenueRoute: typeof AdminAnalyticsRevenueRoute
   AdminSettingFeaturesRoute: typeof AdminSettingFeaturesRoute
   AdminSettingPlansRoute: typeof AdminSettingPlansRoute
+  AdminSettingSystemRoute: typeof AdminSettingSystemRoute
   AdminSettingSysyemRoute: typeof AdminSettingSysyemRoute
   AdminUsersRolesRoute: typeof AdminUsersRolesRoute
   AdminAnalyticsIndexRoute: typeof AdminAnalyticsIndexRoute
@@ -1742,6 +1762,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminAnalyticsRevenueRoute: AdminAnalyticsRevenueRoute,
   AdminSettingFeaturesRoute: AdminSettingFeaturesRoute,
   AdminSettingPlansRoute: AdminSettingPlansRoute,
+  AdminSettingSystemRoute: AdminSettingSystemRoute,
   AdminSettingSysyemRoute: AdminSettingSysyemRoute,
   AdminUsersRolesRoute: AdminUsersRolesRoute,
   AdminAnalyticsIndexRoute: AdminAnalyticsIndexRoute,
