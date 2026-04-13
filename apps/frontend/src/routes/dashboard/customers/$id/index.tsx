@@ -9,6 +9,7 @@ import {
   useGetCustomerById,
   useGetCustomerOrdersById,
 } from '@/hooks/use-customer'
+import { formatNprCurrency } from '@/lib/currency'
 import { OrderDto, OrderStatus, SearchTypes } from '@repo/shared'
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { format } from 'date-fns'
@@ -45,26 +46,6 @@ function fmtDate(d: Date | string | null | undefined, fallback = '—') {
   } catch {
     return fallback
   }
-}
-
-function fmtCurrency(v: string | null | undefined) {
-  if (!v) {
-    return new Intl.NumberFormat('en-NP', {
-      style: 'currency',
-      currency: 'NPR',
-      maximumFractionDigits: 2,
-    }).format(0)
-  }
-
-  const num = parseFloat(v)
-
-  return isNaN(num)
-    ? v
-    : new Intl.NumberFormat('en-NP', {
-        style: 'currency',
-        currency: 'NPR',
-        maximumFractionDigits: 2,
-      }).format(num)
 }
 
 const STATUS_CONFIG: Record<
@@ -199,7 +180,7 @@ function OrderRow({ order }: { order: OrderDto }) {
       </div>
       <div className="text-right shrink-0">
         <p className="text-sm font-semibold text-foreground">
-          {fmtCurrency(order.total)}
+          {formatNprCurrency(order.total, { fallback: formatNprCurrency(0) })}
         </p>
         {order.items && (
           <p className="text-xs text-muted-foreground">
@@ -407,7 +388,9 @@ function RouteComponent() {
           <StatCard
             icon={DollarSign}
             label="Total Spent"
-            value={fmtCurrency(customer.totalSpent)}
+            value={formatNprCurrency(customer.totalSpent, {
+              fallback: formatNprCurrency(0),
+            })}
             // accent
           />
           <StatCard

@@ -1,12 +1,11 @@
+import { formatNprCurrency } from '@/lib/currency'
+
 export function formatCurrency(value: string | number) {
-  const n = typeof value === 'string' ? parseFloat(value) : value
-  if (isNaN(n)) return '—'
-  return new Intl.NumberFormat('en-NP', {
-    style: 'currency',
-    currency: 'NPR',
+  return formatNprCurrency(value, {
+    fallback: '—',
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
-  }).format(n)
+  })
 }
 
 export function formatDate(value: Date | string | null | undefined) {

@@ -19,6 +19,7 @@ import { Spinner } from '@/components/ui/spinner'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
+import { formatNprCurrency } from '@/lib/currency'
 import type { OrderStatus } from '@repo/shared'
 import { format } from 'date-fns'
 import { useState } from 'react'
@@ -82,22 +83,6 @@ export default function OrderEditPage() {
       setNotes(order.notes || '')
     }
   })
-
-  const formatPrice = (price: string | null) => {
-    if (!price) {
-      return new Intl.NumberFormat('en-NP', {
-        style: 'currency',
-        currency: 'NPR',
-        maximumFractionDigits: 2,
-      }).format(0)
-    }
-
-    return new Intl.NumberFormat('en-NP', {
-      style: 'currency',
-      currency: 'NPR',
-      maximumFractionDigits: 2,
-    }).format(parseFloat(price))
-  }
 
   const handleSave = async () => {
     if (!status) {
@@ -306,24 +291,40 @@ export default function OrderEditPage() {
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Subtotal</span>
-                  <span>{formatPrice(order.subtotal)}</span>
+                  <span>
+                    {formatNprCurrency(order.subtotal, {
+                      fallback: formatNprCurrency(0),
+                    })}
+                  </span>
                 </div>
                 {order.shipping && (
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Shipping</span>
-                    <span>{formatPrice(order.shipping)}</span>
+                    <span>
+                      {formatNprCurrency(order.shipping, {
+                        fallback: formatNprCurrency(0),
+                      })}
+                    </span>
                   </div>
                 )}
                 {order.tax && (
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Tax</span>
-                    <span>{formatPrice(order.tax)}</span>
+                    <span>
+                      {formatNprCurrency(order.tax, {
+                        fallback: formatNprCurrency(0),
+                      })}
+                    </span>
                   </div>
                 )}
                 <Separator className="my-2" />
                 <div className="flex justify-between font-bold">
                   <span>Total</span>
-                  <span>{formatPrice(order.total)}</span>
+                  <span>
+                    {formatNprCurrency(order.total, {
+                      fallback: formatNprCurrency(0),
+                    })}
+                  </span>
                 </div>
               </div>
             </CardContent>
@@ -341,7 +342,11 @@ export default function OrderEditPage() {
                     <span>
                       {item.productName} x{item.quantity}
                     </span>
-                    <span>{formatPrice(item.price)}</span>
+                    <span>
+                      {formatNprCurrency(item.price, {
+                        fallback: formatNprCurrency(0),
+                      })}
+                    </span>
                   </div>
                 ))}
               </div>

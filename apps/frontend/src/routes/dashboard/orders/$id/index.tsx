@@ -14,6 +14,7 @@ import { Separator } from '@/components/ui/separator'
 import { Spinner } from '@/components/ui/spinner'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { formatNprCurrency } from '@/lib/currency'
 import type { OrderStatus } from '@repo/shared'
 import { format } from 'date-fns'
 import { useState } from 'react'
@@ -72,22 +73,6 @@ export default function OrderDetailPage() {
   const [refundAmount, setRefundAmount] = useState('')
   const [showTrackingDialog, setShowTrackingDialog] = useState(false)
   const [showRefundDialog, setShowRefundDialog] = useState(false)
-
-  const formatPrice = (price: string | null) => {
-    if (!price) {
-      return new Intl.NumberFormat('en-NP', {
-        style: 'currency',
-        currency: 'NPR',
-        maximumFractionDigits: 2,
-      }).format(0)
-    }
-
-    return new Intl.NumberFormat('en-NP', {
-      style: 'currency',
-      currency: 'NPR',
-      maximumFractionDigits: 2,
-    }).format(parseFloat(price))
-  }
 
   const handleAddTracking = async () => {
     if (!trackingNumber || !trackingCarrier) return
@@ -246,7 +231,7 @@ export default function OrderDetailPage() {
                     step="0.01"
                     value={refundAmount}
                     onChange={(e) => setRefundAmount(e.target.value)}
-                    placeholder={`Full refund: ${formatPrice(order.total)}`}
+                    placeholder={`Full refund: ${formatNprCurrency(order.total, { fallback: formatNprCurrency(0) })}`}
                   />
                 </div>
                 <div className="space-y-2">
@@ -283,7 +268,11 @@ export default function OrderDetailPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{formatPrice(order.total)}</div>
+            <div className="text-2xl font-bold">
+              {formatNprCurrency(order.total, {
+                fallback: formatNprCurrency(0),
+              })}
+            </div>
           </CardContent>
         </Card>
 
@@ -392,7 +381,11 @@ export default function OrderDetailPage() {
                         </div>
                         <div className="flex items-center gap-1">
                           <span className="text-muted-foreground">Price:</span>
-                          <span>{formatPrice(item.price)}</span>
+                          <span>
+                            {formatNprCurrency(item.price, {
+                              fallback: formatNprCurrency(0),
+                            })}
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -400,12 +393,16 @@ export default function OrderDetailPage() {
                     {/* Item Total */}
                     <div className="text-right shrink-0">
                       <p className="font-semibold text-lg">
-                        {formatPrice(
+                        {formatNprCurrency(
                           (parseFloat(item.price) * item.quantity).toString(),
+                          { fallback: formatNprCurrency(0) },
                         )}
                       </p>
                       <p className="text-sm text-muted-foreground">
-                        {item.quantity} × {formatPrice(item.price)}
+                        {item.quantity} ×{' '}
+                        {formatNprCurrency(item.price, {
+                          fallback: formatNprCurrency(0),
+                        })}
                       </p>
                     </div>
                   </div>
@@ -424,14 +421,18 @@ export default function OrderDetailPage() {
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Subtotal</span>
                   <span className="font-medium">
-                    {formatPrice(order.subtotal)}
+                    {formatNprCurrency(order.subtotal, {
+                      fallback: formatNprCurrency(0),
+                    })}
                   </span>
                 </div>
                 {order.shipping && parseFloat(order.shipping) > 0 && (
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Shipping</span>
                     <span className="font-medium">
-                      {formatPrice(order.shipping)}
+                      {formatNprCurrency(order.shipping, {
+                        fallback: formatNprCurrency(0),
+                      })}
                     </span>
                   </div>
                 )}
@@ -439,7 +440,9 @@ export default function OrderDetailPage() {
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Tax</span>
                     <span className="font-medium">
-                      {formatPrice(order.tax)}
+                      {formatNprCurrency(order.tax, {
+                        fallback: formatNprCurrency(0),
+                      })}
                     </span>
                   </div>
                 )}
@@ -447,14 +450,21 @@ export default function OrderDetailPage() {
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Discount</span>
                     <span className="text-green-600 font-medium">
-                      -{formatPrice(order.discount)}
+                      -
+                      {formatNprCurrency(order.discount, {
+                        fallback: formatNprCurrency(0),
+                      })}
                     </span>
                   </div>
                 )}
                 <Separator className="my-2" />
                 <div className="flex justify-between font-bold text-lg">
                   <span>Total</span>
-                  <span>{formatPrice(order.total)}</span>
+                  <span>
+                    {formatNprCurrency(order.total, {
+                      fallback: formatNprCurrency(0),
+                    })}
+                  </span>
                 </div>
                 {order.paidAt && (
                   <div className="pt-2 border-t">
@@ -720,7 +730,10 @@ export default function OrderDetailPage() {
                         {format(new Date(order.paidAt), 'PPP p')}
                       </p>
                       <p className="text-xs text-muted-foreground mt-1">
-                        Amount: {formatPrice(order.total)}
+                        Amount:{' '}
+                        {formatNprCurrency(order.total, {
+                          fallback: formatNprCurrency(0),
+                        })}
                       </p>
                     </div>
                   </div>

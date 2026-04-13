@@ -32,6 +32,7 @@ import {
 import { useState } from 'react'
 import { useCreateProduct } from '@/hooks/use-product'
 import { CreateProductFormSchema } from '@repo/shared'
+import { formatNprCurrency } from '@/lib/currency'
 
 export const Route = createFileRoute('/dashboard/products/new')({
   component: AddProductPage,
@@ -287,13 +288,6 @@ export default function AddProductPage() {
   }
 
   const vals = form.state.values
-  const formatNPR = (value: number) => {
-    return new Intl.NumberFormat('en-NP', {
-      style: 'currency',
-      currency: 'NPR',
-      maximumFractionDigits: 2,
-    }).format(value)
-  }
 
   return (
     <div className="flex flex-col flex-1 gap-6 p-6 max-w-5xl">
@@ -1032,7 +1026,9 @@ export default function AddProductPage() {
                 {
                   label: 'Price',
                   value:
-                    vals.price !== '' ? formatNPR(Number(vals.price)) : '—',
+                    vals.price !== ''
+                      ? formatNprCurrency(Number(vals.price))
+                      : '—',
                 },
                 { label: 'Status', value: vals.status },
                 { label: 'Stock', value: String(vals.quantity ?? 0) },

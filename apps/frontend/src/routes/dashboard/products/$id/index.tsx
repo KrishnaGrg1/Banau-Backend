@@ -63,19 +63,11 @@ import {
 import { useState } from 'react'
 import { ProductDto, ProductVariantDto } from '@repo/shared'
 import { useForm } from '@tanstack/react-form'
+import { formatNprCurrency } from '@/lib/currency'
 
 export const Route = createFileRoute('/dashboard/products/$id/')({
   component: ProductDetailPage,
 })
-
-function formatPrice(price: string | null) {
-  if (!price) return '—'
-  return new Intl.NumberFormat('en-NP', {
-    style: 'currency',
-    currency: 'NPR',
-    maximumFractionDigits: 2,
-  }).format(parseFloat(price))
-}
 
 function getStatusColor(status: string) {
   switch (status) {
@@ -627,7 +619,7 @@ export default function ProductDetailPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {formatPrice(product.price)}
+              {formatNprCurrency(product.price)}
             </div>
           </CardContent>
         </Card>
@@ -741,7 +733,7 @@ export default function ProductDetailPage() {
                   Compare-at Price
                 </p>
                 <p className="font-medium">
-                  {formatPrice(product.compareAtPrice)}
+                  {formatNprCurrency(product.compareAtPrice)}
                 </p>
               </div>
               <div>
@@ -850,7 +842,7 @@ export default function ProductDetailPage() {
                     <TableCell className="font-mono text-sm">
                       {variant.sku || '—'}
                     </TableCell>
-                    <TableCell>{formatPrice(variant.price)}</TableCell>
+                    <TableCell>{formatNprCurrency(variant.price)}</TableCell>
                     <TableCell>
                       <span
                         className={

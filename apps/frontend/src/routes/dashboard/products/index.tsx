@@ -32,6 +32,7 @@ import { ProductDto } from '@repo/shared'
 import { BulkImportDialog } from '@/components/dashboard/products/bulk-import-dialog'
 import { ExportButton } from '@/components/dashboard/products/export-button'
 import { ProductActionsMenu } from '@/components/dashboard/products/delete-product'
+import { formatNprCurrency } from '@/lib/currency'
 
 // ✅ Define search params for pagination
 interface ProductsSearch {
@@ -112,14 +113,6 @@ export default function ProductsPage() {
         offset: 0, // Reset to first page
       },
     })
-  }
-
-  const formatPrice = (price: string) => {
-    return new Intl.NumberFormat('en-NP', {
-      style: 'currency',
-      currency: 'NPR',
-      maximumFractionDigits: 2,
-    }).format(parseFloat(price))
   }
 
   const getStatusColor = (status: string) => {
@@ -302,11 +295,15 @@ export default function ProductsPage() {
                       </TableCell>
                       <TableCell>
                         <div className="font-medium">
-                          {formatPrice(product.price)}
+                          {formatNprCurrency(product.price, {
+                            fallback: formatNprCurrency(0),
+                          })}
                         </div>
                         {product.compareAtPrice && (
                           <div className="text-sm text-muted-foreground line-through">
-                            {formatPrice(product.compareAtPrice)}
+                            {formatNprCurrency(product.compareAtPrice, {
+                              fallback: formatNprCurrency(0),
+                            })}
                           </div>
                         )}
                       </TableCell>
